@@ -11,7 +11,7 @@
             <div class="content">
                 <p>
                     BCTracker is a browser for <a href="https://gtfs.org">GTFS</a> (General Transit Feed Specification) static and realtime data from transit agencies around British Columbia.
-                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down buses in BC communities.
+                    The data is presented here for the use of whoever is interested, with the goal of making it easier to browse schedules and track down vehicles in BC communities.
                 </p>
                 <p>Currently, we include information from these transit agencies:</p>
                 <div class="column gap-5">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="section">
                         <div class="header" onclick="toggleSection(this)">
-                            <h3>How long has BCTracker been recording bus history?</h3>
+                            <h3>How long has BCTracker been recording transit history?</h3>
                             % include('components/toggle')
                         </div>
                         <div class="content">
@@ -132,7 +132,7 @@
                     If you are curious about BCTracker, have questions, or something seems broken, you can contact us directly by emailing <a href="mailto:james@bctracker.ca">james@bctracker.ca</a>.
                     You can also chat with us more casually on the <a href="https://discord.gg/uMbxREE5b7">BCTracker Discord server</a> where we talk about transit in BC and occasionally discuss upcoming features for the website.
                 </p>
-                <i> - James & Perrin, 2025 </i> 
+                <i> - James & Perrin, 2026 </i> 
             </div>  
         </div>
     </div>

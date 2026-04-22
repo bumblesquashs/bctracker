@@ -15,6 +15,8 @@
     --status-bar-hover: #444444;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #CCCCCC;
+    
     --tooltip-background: #000000;
     
     --loading-background: #FFFFFF;
@@ -31,6 +33,13 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: #DDDDDD;
+    --amenity-color: #000000;
+    
+    --warning-box-background: #FFF9DF;
+    --warning-box-foreground: #664d03;
+    --warning-box-border: #F7C942;
 }
 
 a {
@@ -40,7 +49,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -64,7 +72,6 @@ input[type="text"]:focus {
 }
 
 table {
-    border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
 }
 
@@ -79,10 +86,6 @@ table tbody tr.header {
     background-image: linear-gradient(#6fACD5,#497BAE);
     text-shadow: 0 -1px 1px #3E6790;
     color: #FFFFFF;
-}
-
-table td {
-    border-color: #CCCCCC;
 }
 
 table th {
@@ -110,6 +113,41 @@ table tr.table-button {
 table tr.table-button:hover {
     background: #DFDFDF;
     background-image: linear-gradient(#F6F6F6, #E0E0E0);
+}
+
+#content {
+    background-color: #FFFFFF;
+}
+
+#favourite-systems-dropdown {
+    background-color: #EEEEEE;
+    border-color: #000000;
+}
+
+#favourite-systems-dropdown .system-button {
+    background-color: #EEEEEE;
+    color: #222222;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6,#E0E0E0);
+}
+
+#favourite-systems-dropdown .system-button.current {
+    border-color: #456F9A;;
+    background-color: #5E87B0;
+    background-image: linear-gradient(#6fACD5,#497BAE);
+    text-shadow: 0 -1px 1px #3E6790;
+    color: #FFFFFF;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: #000000;
 }
 
 #loading-stop {
@@ -286,6 +324,7 @@ table tr.table-button:hover {
     text-decoration: none;
     text-shadow: 0 1px 0 #FFFFFF;
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
 }
 
 #system-menu .system-button:hover {
@@ -423,6 +462,27 @@ table tr.table-button:hover {
     background-image: linear-gradient(#FFFFFF, #F1F1F1);
     border-color: #CCCCCC;
     box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    --table-border: #CBCBCB;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
+}
+
+.info-box table {
+    box-shadow: unset;
+}
+
+.info-box table tr {
+    background-image: unset;
+}
+
+.info-box table tr:hover {
+    background-image: unset;
+}
+
+.info-box table th {
+    background-image: unset;
 }
 
 .info-box .section {
@@ -431,6 +491,20 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #CBCBCB;
+}
+
+.info-box .toggle-button {
+    background: #EEEEEE;
+    color: #222222;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+    border: 1px solid #CCCCCC;
+    background-image: linear-gradient(#FFFFFF, #F1F1F1);
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background: #DFDFDF;
+    background-image: linear-gradient(#F6F6F6, #E0E0E0);
 }
 
 .lighter-text {
@@ -452,7 +526,7 @@ table tr.table-button:hover {
     text-shadow: none;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
     text-shadow: none;
 }
@@ -582,6 +656,14 @@ table tr.table-button:hover {
     color: #FFFFFF;
     text-shadow: 0 1px 1px #3373a5;
     background-image: linear-gradient( #5393c5,#6facd5 );
+}
+
+.table-border-wrapper {
+    box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+}
+
+.table-border-wraper table {
+    box-shadow: unset;
 }
 
 .timeline .now {

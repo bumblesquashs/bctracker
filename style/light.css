@@ -5,6 +5,16 @@
     
     --adherence-background: #989898;
     --adherence-text: #FFFFFF;
+    
+    --livery-border: #000000;
+    
+    --warning-box-background: #FFE9D3;
+    --warning-box-foreground: #FF9A3A;
+    --warning-box-border: #FF9A3A;
+}
+
+#map.offline .tile-layer {
+    filter: grayscale(1);
 }
 
 #map-controls .control.error {
@@ -21,6 +31,40 @@
 
 .custom-headsigns {
     --image-color: #666666;
+}
+
+.log-line.critical {
+    background-color: #D57C7C;
+    color: #7A0000;
+    --image-color: #7A0000;
+}
+
+.log-line.debug {
+    background-color: #E6E6E6;
+    color: #666666;
+    --image-color: #666666;
+}
+
+.log-line.error {
+    background-color: #FFA5A5;
+    color: #FF0000;
+    --image-color: #FF0000;
+}
+
+.log-line.info {
+    background-color: #F1F8FF;
+    color: #3C5ABE;
+    --image-color: #3C5ABE;
+}
+
+.log-line.warning {
+    background-color: #FFE9D3;
+    color: #FF9A3A;
+    --image-color: #FF9A3A;
+}
+
+.marker .icon.speed {
+    color: #FFFFFF;
 }
 
 .modified-service {
@@ -125,6 +169,10 @@
 
 .record-warnings {
     --image-color: #DC5050;
+}
+
+.transfer {
+    --image-color: #666666;
 }
 
 .very-ahead {

@@ -39,6 +39,42 @@ table th {
     overflow: hidden;
 }
 
+#favourite-systems-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    min-width: 100%;
+    flex-direction: column;
+    z-index: 100;
+    font-size: 12pt;
+    font-weight: normal;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#favourite-systems-dropdown .system-button {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none !important;
+    padding: 5px 20px;
+    text-wrap: nowrap;
+    --image-size: 18px;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    cursor: default;
+    font-weight: bold;
+}
+
 #main {
     font-size: 13pt;
     overflow: auto;
@@ -151,16 +187,16 @@ table th {
 
 #system {
     align-self: stretch;
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    align-items: center;
     cursor: pointer;
     padding: 10px 20px;
 }
 
 #system:hover {
     background-color: var(--status-bar-hover);
+}
+
+#system.enable-dropdown:hover #favourite-systems-dropdown {
+    display: flex;
 }
 
 #system-menu {
@@ -199,7 +235,7 @@ table th {
     text-decoration: underline;
 }
 
-.bus {
+.vehicle {
     min-width: 38px;
 }
 
@@ -224,7 +260,16 @@ table th {
     background-color: var(--hover-background);
 }
 
+.page-grid {
+    display: grid;
+    gap: 20px;
+}
+
 .sidebar table {
+    align-self: stretch;
+}
+
+.sidebar .table-border-wrapper {
     align-self: stretch;
 }
 
@@ -240,6 +285,10 @@ table th {
     align-self: flex-start;
 }
 
+.table-border-wrapper {
+    align-self: flex-start;
+}
+
 .tablet-only {
     display: none !important;
 }
@@ -250,7 +299,15 @@ table th {
         gap: 20px;
     }
     
+    .page-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
     table {
+        align-self: stretch;
+    }
+    
+    .table-border-wrapper {
         align-self: stretch;
     }
 }
@@ -260,7 +317,11 @@ table th {
         flex-direction: row;
         gap: 40px;
     }
-
+    
+    .page-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    
     .container.inline {
         flex-direction: row;
         flex-wrap: wrap;

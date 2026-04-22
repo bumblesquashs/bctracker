@@ -7,6 +7,8 @@ from glob import glob
 from database import Database
 from settings import Settings
 
+import services
+
 @dataclass(slots=True)
 class BackupService:
     
@@ -21,7 +23,7 @@ class BackupService:
         realtime_files = glob(f'archives/realtime/*_{formatted_date}-*.bin')
         
         if gtfs_files or realtime_files or include_db:
-            print(f'Creating backup for {formatted_date} ({len(gtfs_files)} GTFS, {len(realtime_files)} RT, {"DB" if include_db else "no DB"})')
+            services.log.info(f'Creating backup for {formatted_date} ({len(gtfs_files)} GTFS, {len(realtime_files)} RT, {"DB" if include_db else "no DB"})')
             with ZipFile(f'backups/{formatted_date}.zip', 'w') as zip:
                 if self.settings.enable_database_backups and include_db:
                     zip.write(f'archives/{self.database.name}.db', f'{self.database.name}.db')

@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from models.system import System
 
 from dataclasses import dataclass
-from datetime import timedelta
 from enum import IntEnum
 
 from models.context import Context
@@ -46,7 +45,7 @@ class Service:
     '''A set of dates when a transit service is operating'''
     
     system: System
-    id: int
+    id: str
     schedule: Schedule
     
     @classmethod

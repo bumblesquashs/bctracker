@@ -1,23 +1,18 @@
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from models.system import System
-
 from dataclasses import dataclass
 
-from models.bus import Bus
+from models.context import Context
 from models.date import Date
 from models.row import Row
 
 @dataclass(slots=True)
 class Assignment:
-    '''An association between a block and a bus for a specific date'''
+    '''An association between a block and a vehicle for a specific date'''
     
-    system: System
     block_id: str
-    bus_number: int
+    allocation_id: int
+    context: Context
+    vehicle_id: str
     date: Date
     
     @classmethod
@@ -25,21 +20,12 @@ class Assignment:
         '''Returns an assignment initialized from the given database row'''
         context = row.context()
         block_id = row['block_id']
-        bus_number = row['bus_number']
+        allocation_id = row['allocation_id']
+        vehicle_id = row['vehicle_id']
         date = Date.parse(row['date'], context.timezone)
-        return cls(context.system, block_id, bus_number, date)
+        return cls(block_id, allocation_id, context, vehicle_id, date)
     
     @property
-    def context(self):
-        '''The context for this assignment'''
-        return self.system.context
-    
-    @property
-    def key(self):
-        '''The unique identifier for this assignment'''
-        return (self.system.id, self.block_id)
-    
-    @property
-    def bus(self):
-        '''The bus for this assignment'''
-        return Bus.find(self.context, self.bus_number)
+    def vehicle(self):
+        '''The vehicle for this assignment'''
+        return self.context.find_vehicle(self.vehicle_id)

@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Vehicle History</h1>
+    <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
         <a href="{{ get_url(context, 'history') }}" class="tab-button">Last Seen</a>
         <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
@@ -11,52 +11,52 @@
 </div>
 
 <div class="page-container">
-    <div class="sidebar container flex-1">
-        % if context.system:
-            <div class="section {{ '' if filter else '' }}">
-                <div class="header" onclick="toggleSection(this)">
-                    <h2>Filters</h2>
-                    % include('components/toggle')
-                </div>
-                <div class="content">
-                    <div class="info-box">
-                        <div class="section">
-                            <div class="options-container">
-                                <div class="option" onclick="setFilter(null)">
-                                    <div class="radio-button {{ '' if filter else 'selected' }}"></div>
-                                    <div>All Transfers</div>
-                                </div>
-                                <div class="option" onclick="setFilter('from')">
-                                    <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
-                                    <div>From {{ context }}</div>
-                                </div>
-                                <div class="option" onclick="setFilter('to')">
-                                    <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
-                                    <div>To {{ context }}</div>
+    % if transfers:
+        <div class="sidebar container flex-1">
+            % if context.system:
+                <div class="section {{ '' if filter else '' }}">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>Filters</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        <div class="info-box">
+                            <div class="section">
+                                <div class="options-container">
+                                    <div class="option" onclick="setFilter(null)">
+                                        <div class="radio-button {{ '' if filter else 'selected' }}"></div>
+                                        <div>All Transfers</div>
+                                    </div>
+                                    <div class="option" onclick="setFilter('from')">
+                                        <div class="radio-button {{ 'selected' if filter == 'from' else '' }}"></div>
+                                        <div>From {{ context }}</div>
+                                    </div>
+                                    <div class="option" onclick="setFilter('to')">
+                                        <div class="radio-button {{ 'selected' if filter == 'to' else '' }}"></div>
+                                        <div>To {{ context }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <script>
-                        function setFilter(filter) {
-                            if (filter === null) {
-                                window.location = "{{ get_url(context, 'history', 'transfers') }}";
-                            } else {
-                                window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
+                        <script>
+                            function setFilter(filter) {
+                                if (filter === null) {
+                                    window.location = "{{ get_url(context, 'history', 'transfers') }}";
+                                } else {
+                                    window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
+                                }
                             }
-                        }
-                    </script>
+                        </script>
+                    </div>
                 </div>
-            </div>
-        % end
-        % if transfers:
+            % end
             <div class="section closed">
                 <div class="header" onclick="toggleSection(this)">
                     <h2>Statistics</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % models = sorted({t.bus.model for t in transfers if t.bus.model})
+                    % models = sorted({t.new_vehicle.model for t in transfers if t.new_vehicle.model})
                     % model_types = sorted({m.type for m in models})
                     <table>
                         <thead>
@@ -67,7 +67,7 @@
                         </thead>
                         <tbody>
                             % for model_type in model_types:
-                                % type_transfers = [t for t in transfers if t.bus.model and t.bus.model.type == model_type]
+                                % type_transfers = [t for t in transfers if t.new_vehicle.model and t.new_vehicle.model.type == model_type]
                                 <tr class="header">
                                     <td>{{ model_type }}</td>
                                     <td class="align-right">{{ len(type_transfers) }}</td>
@@ -75,7 +75,7 @@
                                 <tr class="display-none"></tr>
                                 % type_models = [m for m in models if m.type == model_type]
                                 % for model in type_models:
-                                    % model_transfers = [t for t in type_transfers if t.bus.model == model]
+                                    % model_transfers = [t for t in type_transfers if t.new_vehicle.model == model]
                                     <tr>
                                         <td>{{! model }}</td>
                                         <td class="align-right">{{ len(model_transfers) }}</td>
@@ -90,8 +90,8 @@
                     </table>
                 </div>
             </div>
-        % end
-    </div>
+        </div>
+    % end
     <div class="container flex-3">
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
@@ -100,59 +100,85 @@
             </div>
             <div class="content">
                 % if transfers:
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Bus</th>
-                                <th class="desktop-only">Model</th>
-                                <th class="non-mobile">From</th>
-                                <th class="non-mobile">To</th>
-                                <th class="mobile-only">Systems</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            % last_date = None
-                            % for transfer in transfers:
-                                % bus = transfer.bus
-                                % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
-                                    <tr class="header">
-                                        <td colspan="6">{{ transfer.date.format_month() }}</td>
-                                        <tr class="display-none"></tr>
+                    % if paged_transfers:
+                        % include('components/paging')
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>{{ context.vehicle_type }}</th>
+                                        <th class="desktop-only">Model</th>
+                                        <th class="non-mobile">From</th>
+                                        <th class="non-mobile">To</th>
+                                        <th class="mobile-only">Systems</th>
                                     </tr>
-                                % end
-                                % last_date = transfer.date
-                                <tr>
-                                    <td>{{ transfer.date.format_day() }}</td>
-                                    <td>
-                                        <div class="column">
-                                            % include('components/bus')
-                                            <span class="non-desktop smaller-font">
-                                                % include('components/order', order=bus.order)
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="desktop-only">
-                                        % include('components/order', order=bus.order)
-                                    </td>
-                                    <td class="non-mobile">{{ transfer.old_context }}</td>
-                                    <td class="non-mobile">{{ transfer.new_context }}</td>
-                                    <td class="mobile-only">
-                                        <div class="column">
-                                            <div>
-                                                <div class="smaller-font">From:</div>
-                                                {{ transfer.old_context }}
-                                            </div>
-                                            <div>
-                                                <div class="smaller-font">To:</div>
-                                                {{ transfer.new_context }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                </thead>
+                                <tbody>
+                                    % last_date = None
+                                    % for transfer in paged_transfers:
+                                        % vehicle = transfer.new_vehicle
+                                        % if not last_date or transfer.date.year != last_date.year or transfer.date.month != last_date.month:
+                                            <tr class="header">
+                                                <td colspan="6">{{ transfer.date.format_month() }}</td>
+                                                <tr class="display-none"></tr>
+                                            </tr>
+                                        % end
+                                        % last_date = transfer.date
+                                        <tr>
+                                            <td>{{ transfer.date.format_day() }}</td>
+                                            <td>
+                                                <div class="column">
+                                                    % include('components/vehicle')
+                                                    <span class="non-desktop smaller-font">
+                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="desktop-only">
+                                                % include('components/year_model', year_model=vehicle.year_model)
+                                            </td>
+                                            <td class="non-mobile">{{ transfer.old_context }}</td>
+                                            <td class="non-mobile">{{ transfer.new_context }}</td>
+                                            <td class="mobile-only">
+                                                <div class="column">
+                                                    <div>
+                                                        <div class="smaller-font">From:</div>
+                                                        {{ transfer.old_context }}
+                                                    </div>
+                                                    <div>
+                                                        <div class="smaller-font">To:</div>
+                                                        {{ transfer.new_context }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    % end
+                                </tbody>
+                            </table>
+                        </div>
+                        % include('components/paging')
+                    % else:
+                        <div class="placeholder">
+                            % if page == 0:
+                                <h3>Page {{ page }} does not exist...?</h3>
+                                <p>If you're a software developer you may be thinking right now, "Hey, wait a minute, why doesn't this list start at 0?!‽"</p>
+                                <p>
+                                    Look, we agree with you, it feels weird to be showing this error message at all.
+                                    Sadly too many people are expecting page 1 to be the first because "it makes more sense" or "0 isn't a real number" or something equally silly.
+                                    But you should know that we're right and they're just mad about it.
+                                </p>
+                                <p>Unfortunately you do still need to return to a <a href="?page=1">valid page</a> but remember that one day the zero-based indexers shall rise up and claim our rightful place once and for all!</p>
+                            % else:
+                                <h3>Page {{ page }} does not exist!</h3>
+                                <p>If you got to this page through <i>nefarious tomfoolery</i> or <i>skullduggery</i>, please return to a <a href="?page=1">valid page</a>, then go sit in a corner and think about what you've done.</p>
+                                <p>
+                                    If you got to this page by accident, we're very sorry.
+                                    Please email <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know!
+                                </p>
                             % end
-                        </tbody>
-                    </table>
+                        </div>
+                    % end
                 % else:
                     <div class="placeholder">
                         % if not context.system:
@@ -165,13 +191,13 @@
                                 % include('components/systems')
                             </div>
                         % elif filter == 'from':
-                            <h3>No buses have been transferred from {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred from {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % elif filter == 'to':
-                            <h3>No buses have been transferred to {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % else:
-                            <h3>No buses have been transferred to or from {{ context }}</h3>
+                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to or from {{ context }}</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

@@ -25,16 +25,22 @@
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-16.png" sizes="16x16" />
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
+        <link rel="apple-touch-icon" type="image/png" href="/img/bc-tracker/apple-touch-icon.png" sizes="180x180">
         
         % if context.system:
-            <meta name="description" content="{{ context }} Transit Schedules and Bus Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
+            <meta name="keywords" content="Transit, British Columbia, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
             <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
+        
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="date=no">
+        <meta name="format-detection" content="address=no">
+        <meta name="format-detection" content="email=no">
         
         % if get('disable_indexing', False):
             <meta name="robots" content="noindex">
@@ -106,8 +112,8 @@
         
         % if include_maps:
             <script src="/js/area.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
+            <script src="https://cdn.jsdelivr.net/npm/ol@v10.8.0/dist/ol.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.8.0/ol.css">
         % end
         
         % if enable_refresh and context.realtime_enabled:
@@ -150,11 +156,13 @@
         % end
         
         % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='ferry')
         % include('components/svg_script', name='model/type/bus-artic')
         % include('components/svg_script', name='model/type/bus-conventional')
         % include('components/svg_script', name='model/type/bus-decker')
         % include('components/svg_script', name='model/type/bus-midibus')
         % include('components/svg_script', name='model/type/bus-shuttle')
+        % include('components/svg_script', name='model/type/ferry')
         % include('components/svg_script', name='ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
@@ -220,9 +228,17 @@
                 document.cookie = "survey_banner=hide;expires=" + now.toUTCString() + ";domain={{ settings.cookie_domain if settings.cookie_domain else '' }};path=/";
             }
             
-            function toggleSection(header) {
+            function toggleSection(header, reloadMap = false) {
                 const section = header.parentElement;
                 section.classList.toggle("closed");
+                if (reloadMap && "map" in window) {
+                    if (section.classList.contains("closed")) {
+                        map.setTarget(null);
+                    } else {
+                        map.setTarget(document.getElementById("map"));
+                        map.updateSize();
+                    }
+                }
             }
             
             function getTimestampOffset() {
@@ -294,6 +310,15 @@
             
             <div class="flex-1"></div>
             
+            % if is_admin:
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <div class="tooltip left">
+                        <div class="title">Administration</div>
+                    </div>
+                </a>
+            % end
+            
             % if show_random:
                 <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
                     % include('components/svg', name='random')
@@ -302,6 +327,13 @@
                     </div>
                 </a>
             % end
+            
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <div class="tooltip left">
+                    <div class="title">Favourites</div>
+                </div>
+            </a>
             
             <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
@@ -377,6 +409,10 @@
                 % include('components/svg', name='about')
                 <span>About</span>
             </a>
+            <a class="menu-button" href="{{ get_url(context, 'favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <span>Favourites</span>
+            </a>
             <a class="menu-button" href="{{ get_url(context, 'nearby') }}">
                 % include('components/svg', name='nearby')
                 <span>Nearby</span>
@@ -391,19 +427,53 @@
                     <span>Random Page</span>
                 </a>
             % end
+            % if is_admin:
+                <a class="menu-button" href="{{ get_url(context, 'admin') }}">
+                    % include('components/svg', name='admin')
+                    <span>Administration</span>
+                </a>
+            % end
         </div>
         <div id="status-bar">
             <div id="system-menu-toggle" onclick="toggleSystemMenuMobile()">
                 % include('components/svg', name='system')
             </div>
             <div class="details">
-                <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
+                <div id="system" class="tooltip-anchor {{ 'enable-dropdown' if hide_systems else '' }}" onclick="toggleSystemMenuDesktop()">
                     % if context.system:
                         {{ context }}
+                        % if context.system_id in favourite_system_ids:
+                            % include('components/svg', name='action/favourite')
+                        % end
                     % else:
                         All Transit Systems
                     % end
                     <div class="tooltip right">Toggle Systems List</div>
+                    % if favourite_system_ids:
+                        <div id="favourite-systems-dropdown">
+                            % if context.system:
+                                <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
+                            % else:
+                                <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Systems</span>
+                            % end
+                            % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                            % for system in favourite_systems:
+                                % if system == context.system:
+                                    <div class="system-button current" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </div>
+                                % else:
+                                    <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </a>
+                                % end
+                            % end
+                        </div>
+                    % end
                 </div>
                 % if last_updated:
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
@@ -426,6 +496,25 @@
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end
+                % if favourite_system_ids:
+                    <div class="header">Favourites</div>
+                    % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                    % for system in favourite_systems:
+                        % if system == context.system:
+                            <div class="system-button current">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </div>
+                        % else:
+                            <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </a>
+                        % end
+                    % end
+                % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
                     % if region_systems:
@@ -434,12 +523,18 @@
                             % if system == context.system:
                                 <div class="system-button current">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </div>
                             % else:
                                 <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </a>
                             % end
                         % end
@@ -448,14 +543,7 @@
             </div>
             <div id="main">
                 <div id="banners">
-                    % if context.system_id == 'cowichan-valley':
-                        <div class="banner">
-                            <div class="content">
-                                <h1>Due to ongoing job action, service in the Cowichan Valley area is currently suspended.</h1>
-                                <p>For more information and updates please visit the <a target="_blank" href="https://www.bctransit.com/cowichan-valley/news">BC Transit News Page</a>.</p>
-                            </div>
-                        </div>
-                    % end
+                    <!-- No banners at the moment -->
                 </div>
                 % if full_map:
                     <div id="map" class="full-screen"></div>
@@ -501,31 +589,29 @@
                     <div id="search-bar">
                         <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                     </div>
-                    % if context.system:
-                        <div id="search-filters">
-                            <div class="flex-1">Filters:</div>
-                            % if context.realtime_enabled:
-                                <div id="search-filter-bus" class="button tooltip-anchor" onclick="toggleSearchBusFilter()">
-                                    % include('components/svg', name='bus')
-                                    <div class="tooltip left">Include Buses</div>
-                                </div>
-                            % end
-                            <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
-                                % include('components/svg', name='route')
-                                <div class="tooltip left">Include Routes</div>
+                    <div id="search-filters">
+                        <div class="flex-1">Filters:</div>
+                        % if context.realtime_enabled:
+                            <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
+                                % include('components/svg', name=context.filter_vehicles_image_name)
+                                <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
                             </div>
-                            <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
-                                % include('components/svg', name='stop')
-                                <div class="tooltip left">Include Stops</div>
-                            </div>
-                            % if context.enable_blocks:
-                                <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                                    % include('components/svg', name='block')
-                                    <div class="tooltip left">Include Blocks</div>
-                                </div>
-                            % end
+                        % end
+                        <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
+                            % include('components/svg', name='route')
+                            <div class="tooltip left">Include Routes</div>
                         </div>
-                    % end
+                        <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
+                            % include('components/svg', name='stop')
+                            <div class="tooltip left">Include Stops</div>
+                        </div>
+                        % if context.enable_blocks:
+                            <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
+                                % include('components/svg', name='block')
+                                <div class="tooltip left">Include Blocks</div>
+                            </div>
+                        % end
+                    </div>
                 </div>
                 <div id="search-placeholder">{{ context.search_placeholder_text() }}</div>
                 <div id="search-results" class="display-none">
@@ -558,8 +644,9 @@
     let loadingResults = false;
     let enterPending = false;
     let lastSearchTimestamp = Date.now();
+    let cachedResponses = {};
     
-    let searchIncludeBuses = true;
+    let searchIncludeVehicles = true;
     let searchIncludeRoutes = true;
     let searchIncludeStops = true;
     let searchIncludeBlocks = true;
@@ -591,8 +678,18 @@
         lastSearchTimestamp = timestamp;
         
         if (query === undefined || query === null || query === "") {
-            updateSearchView([], 0, "{{ f'Search for buses, routes, stops, and blocks in {context}' if context.system else 'Search for buses in all systems' }}");
+            updateSearchView([], 0, "{{ context.search_placeholder_text() }}");
         } else {
+            const cacheKey = query + "_" + searchPage;
+            if (cacheKey in cachedResponses) {
+                const response = cachedResponses[cacheKey];
+                const results = response.results;
+                const total = response.total;
+                
+                updateSearchView(results, total, total === 0 ? "No Results" : "Results");
+                return;
+            }
+            
             loadingResults = true;
             if (searchResults.length === 0) {
                 placeholderElement.innerHTML = "Loading...";
@@ -601,6 +698,7 @@
             request.open("POST", "{{ get_url(context, 'api', 'search') }}", true);
             request.responseType = "json";
             request.onload = function() {
+                cachedResponses[cacheKey] = request.response;
                 if (timestamp !== lastSearchTimestamp) {
                     // Discard outdated results
                     return;
@@ -626,7 +724,7 @@
             data.set("query", query);
             data.set("page", searchPage);
             data.set("count", resultsPerPage);
-            data.set("include_buses", searchIncludeBuses ? 1 : 0);
+            data.set("include_vehicles", searchIncludeVehicles ? 1 : 0);
             data.set("include_routes", searchIncludeRoutes ? 1 : 0);
             data.set("include_stops", searchIncludeStops ? 1 : 0);
             data.set("include_blocks", searchIncludeBlocks ? 1 : 0);
@@ -648,9 +746,16 @@
         details.classList.add("details");
         
         const name = document.createElement("div");
-        name.classList.add("name")
+        name.classList.add("name");
         name.innerHTML = result.name;
         details.appendChild(name);
+        
+        if (currentSystemID === null) {
+            const systemName = document.createElement("div");
+            systemName.classList.add("description");
+            systemName.innerHTML = result.system_name;
+            details.appendChild(systemName);
+        }
         
         const description = document.createElement("div");
         description.classList.add("description");
@@ -663,6 +768,7 @@
     }
     
     function updateSearchView(results, total, message) {
+        const inputElement = document.getElementById("search-input");
         const placeholderElement = document.getElementById("search-placeholder");
         const pagingElement = document.getElementById("search-paging");
         const countElement = document.getElementById("search-count");
@@ -674,6 +780,9 @@
         if (total === 0) {
             placeholderElement.classList.remove("display-none");
             placeholderElement.innerHTML = message;
+            if (inputElement.value !== "" && inputElement.value.length < 5 && searchIncludeBlocks) {
+                placeholderElement.innerHTML += "<div class='smaller-font'>Note: blocks are only shown after typing 5 or more characters</div>";
+            }
             pagingElement.classList.add("display-none");
             countElement.innerHTML = "";
             resultsElement.classList.add("display-none");
@@ -807,9 +916,9 @@
         selectedResultIndex = index;
     }
     
-    function toggleSearchBusFilter() {
-        searchIncludeBuses = !searchIncludeBuses;
-        toggleFilter(searchIncludeBuses, "search-filter-bus");
+    function toggleSearchVehicleFilter() {
+        searchIncludeVehicles = !searchIncludeVehicles;
+        toggleFilter(searchIncludeVehicles, "search-filter-vehicle");
     }
     
     function toggleSearchRouteFilter() {
@@ -834,6 +943,7 @@
         } else {
             element.classList.add("inactive");
         }
+        cachedResponses = {};
         searchPage = 0;
         search();
     }
@@ -861,6 +971,7 @@
     }
     
     function toggleSystemMenuDesktop() {
+        document.getElementById("system").classList.toggle("enable-dropdown");
         const element = document.getElementById("system-menu");
         element.classList.toggle("collapse-desktop");
         if (element.classList.contains("collapse-desktop")) {

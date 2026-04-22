@@ -1,19 +1,14 @@
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from models.system import System
-
 from dataclasses import dataclass
 
+from models.context import Context
 from models.row import Row
 
 @dataclass(slots=True)
 class Point:
     '''The coordinates and sequence number of a single point in a line'''
     
-    system: System
+    context: Context
     shape_id: str
     sequence: int
     lat: float
@@ -27,12 +22,7 @@ class Point:
         sequence = row['sequence']
         lat = row['lat']
         lon = row['lon']
-        return cls(context.system, shape_id, sequence, lat, lon)
-    
-    @property
-    def context(self):
-        '''The context for this point'''
-        return self.system.context
+        return cls(context, shape_id, sequence, lat, lon)
     
     def __eq__(self, other):
         return self.sequence == other.sequence

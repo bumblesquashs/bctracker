@@ -3,15 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
 from enum import Enum
-from random import randint, seed
 from math import sqrt
-from colorsys import hls_to_rgb
 
-from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.point import Point
@@ -74,6 +72,7 @@ class RouteType(Enum):
 class Route:
     '''A list of trips that follow a regular pattern with a given number'''
     
+    agency: Agency
     system: System
     id: str
     number: str
@@ -89,14 +88,18 @@ class Route:
     def from_db(cls, row: Row):
         '''Returns a route initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['route_id']
         number = row['number'] or id
         name = row['name']
-        colour = row['colour'] or generate_colour(context, number)
-        text_colour = row['text_colour'] or 'FFFFFF'
+        colour = row['colour']
+        if colour:
+            text_colour = row['text_colour'] or helpers.generate_text_colour(colour)
+        else:
+            colour = helpers.generate_colour(context, number)
+            text_colour = helpers.generate_text_colour(colour)
         type = RouteType.from_db(row['type'])
         sort_order = row['sort_order']
-        return cls(context.system, id, number, name, colour, text_colour, type, sort_order)
+        return cls(context.agency, context.system, id, number, name, colour, text_colour, type, sort_order)
     
     @property
     def context(self):
@@ -118,7 +121,7 @@ class Route:
     @property
     def cache(self):
         '''Returns the cache for this route'''
-        return self.system.get_route_cache(self)
+        return self.system.get_route_cache(self.id)
     
     @property
     def trips(self):
@@ -155,11 +158,15 @@ class Route:
     def __lt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order < other.sort_order
+        if self.key == other.key:
+            return self.name < other.name
         return self.key < other.key
     
     def __gt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order > other.sort_order
+        if self.key == other.key:
+            return self.name > other.name
         return self.key > other.key
     
     def get_json(self):
@@ -225,11 +232,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
-    
-    def find_departures(self):
-        '''Returns all departures for this route'''
-        return repositories.departure.find_all(self.context, route=self)
+        return Match(self.context, f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
@@ -238,23 +241,6 @@ class Route:
         self_key = tuple([k for k in self.key if type(k) == int])
         route_key = tuple([k for k in route.key if type(k) == int])
         return self_key and route_key and self_key == route_key
-
-def generate_colour(context: Context, number):
-    '''Generate a random colour based on context and route number'''
-    seed(context.system_id)
-    number_digits = ''.join([d for d in number if d.isdigit()])
-    if len(number_digits) == 0:
-        h = randint(1, 360) / 360.0
-    else:
-        h = (randint(1, 360) + (int(number_digits) * 137.508)) / 360.0
-    seed(context.system_id + number)
-    l = randint(30, 50) / 100.0
-    s = randint(50, 100) / 100.0
-    rgb = hls_to_rgb(h, l, s)
-    r = int(rgb[0] * 255)
-    g = int(rgb[1] * 255)
-    b = int(rgb[2] * 255)
-    return f'{r:02x}{g:02x}{b:02x}'
 
 @dataclass(slots=True)
 class RouteCache:
@@ -275,17 +261,31 @@ class RouteCache:
         else:
             schedule = None
         try:
-            sorted_trips = sorted(trips, key=lambda t: t.departure_count, reverse=True)
-            points = sorted_trips[0].find_points()
-            first_point = points[0]
-            last_point = points[-1]
-            distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
-            if distance <= 0.05:
-                count = min((len(points) // 500) + 1, 3)
+            shape_ids = {t.shape_id for t in trips}
+            if shape_ids:
+                all_points = repositories.point.find_all(system.context, shape_ids)
+                longest_points = None
+                longest_distance = None
+                for shape_id in shape_ids:
+                    shape_points = [p for p in all_points if p.shape_id == shape_id]
+                    if shape_points:
+                        first_point = shape_points[0]
+                        last_point = shape_points[-1]
+                        distance = sqrt(((first_point.lat - last_point.lat) ** 2) + ((first_point.lon - last_point.lon) ** 2))
+                        if not longest_distance or distance > longest_distance:
+                            longest_points = shape_points
+                            longest_distance = distance
+                if longest_points:
+                    if longest_distance <= 0.05:
+                        count = min((len(longest_points) // 500) + 1, 3)
+                    else:
+                        count = min(int(longest_distance * 8) + 1, 4)
+                    size = len(longest_points) // count
+                    indicator_points = [longest_points[(i * size) + (size // 2)] for i in range(count)]
+                else:
+                    indicator_points = []
             else:
-                count = min(int(distance * 8) + 1, 4)
-            size = len(points) // count
-            indicator_points = [points[(i * size) + (size // 2)] for i in range(count)]
+                indicator_points = []
         except IndexError:
             indicator_points = []
         return cls(trips, schedule, sheets, indicator_points)

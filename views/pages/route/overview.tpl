@@ -18,11 +18,11 @@
     % if route.trips:
         <div class="sidebar container flex-1">
             <div class="section">
-                <div class="header" onclick="toggleSection(this)">
+                <div class="header" onclick="toggleSection(this, true)">
                     <h2>Overview</h2>
                     % include('components/toggle')
                 </div>
-                <div class="content">
+                <div class="content gap-20">
                     % include('components/map', map_trips=route.trips, map_positions=positions)
                     
                     <div class="info-box">
@@ -63,14 +63,18 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Active Buses</h2>
+                    % if len(positions) == 1:
+                        <h2>Active {{ context.vehicle_type }}</h2>
+                    % else:
+                        <h2>Active {{ context.vehicle_type_plural }}</h2>
+                    % end
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 % if context.enable_blocks:
@@ -82,26 +86,26 @@
                         </thead>
                         <tbody>
                             % for position in positions:
-                                % bus = position.bus
+                                % vehicle = position.vehicle
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="non-desktop smaller-font">
-                                                % include('components/order', order=bus.order)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="desktop-only">
-                                        % include('components/order', order=bus.order)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     <td>
                                         <div class="column">
@@ -159,110 +163,112 @@
                                     <div class="content">
                                         % if context.realtime_enabled:
                                             <p>
-                                                <span>Buses with a</span>
+                                                <span>{{ context.vehicle_type_plural }} with a</span>
                                                 <span class="scheduled">
                                                     % include('components/svg', name='schedule')
                                                 </span>
                                                 <span>are scheduled but may be swapped off.</span>
                                             </p>
                                         % end
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th class="non-mobile">Start Time</th>
-                                                    <th class="mobile-only">Start</th>
-                                                    <th class="desktop-only">Headsign</th>
-                                                    % if context.enable_blocks:
-                                                        <th class="non-mobile">Block</th>
-                                                    % end
-                                                    <th>Trip</th>
-                                                    <th class="desktop-only">First Stop</th>
-                                                    % if context.realtime_enabled:
-                                                        <th>Bus</th>
-                                                        <th class="desktop-only">Model</th>
-                                                    % end
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                % last_start_time = None
-                                                % for trip in direction_trips:
-                                                    % first_stop = trip.first_stop
-                                                    % start_time = trip.start_time
-                                                    % if not start_time.is_unknown and not last_start_time:
-                                                        % last_start_time = start_time
-                                                    % end
-                                                    <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
-                                                        <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                        <td class="desktop-only">
-                                                            % include('components/headsign')
-                                                        </td>
+                                        <div class="table-border-wrapper">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="non-mobile">Start Time</th>
+                                                        <th class="mobile-only">Start</th>
+                                                        <th class="desktop-only">Headsign</th>
                                                         % if context.enable_blocks:
-                                                            <td class="non-mobile">
-                                                                % block = trip.block
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                            </td>
+                                                            <th class="non-mobile">Block</th>
                                                         % end
-                                                        <td>
-                                                            <div class="column">
-                                                                % include('components/trip')
-                                                                <span class="non-desktop smaller-font">
-                                                                    % include('components/headsign')
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="desktop-only">
-                                                            % include('components/stop', stop=first_stop)
-                                                        </td>
+                                                        <th>Trip</th>
+                                                        <th class="desktop-only">First Stop</th>
                                                         % if context.realtime_enabled:
-                                                            % if trip.id in recorded_today:
-                                                                % bus = recorded_today[trip.id]
-                                                                <td>
-                                                                    <div class="column">
-                                                                        <div class="row">
-                                                                            % include('components/bus')
-                                                                            % if trip.id in trip_positions:
-                                                                                % position = trip_positions[trip.id]
-                                                                                <div class="row gap-5">
-                                                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                                                                    % include('components/adherence', adherence=position.adherence)
-                                                                                </div>
-                                                                            % end
-                                                                        </div>
-                                                                        <span class="non-desktop smaller-font">
-                                                                            % include('components/order', order=bus.order)
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="desktop-only">
-                                                                    % include('components/order', order=bus.order)
-                                                                </td>
-                                                            % elif (trip.context.system_id, trip.block_id) in assignments and trip.end_time.is_later:
-                                                                % assignment = assignments[(trip.context.system_id, trip.block_id)]
-                                                                % bus = assignment.bus
-                                                                <td>
-                                                                    <div class="column">
-                                                                        <div class="row">
-                                                                            % include('components/bus')
-                                                                            % include('components/scheduled')
-                                                                        </div>
-                                                                        <span class="non-desktop smaller-font">
-                                                                            % include('components/order', order=bus.order)
-                                                                        </span>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="desktop-only">
-                                                                    % include('components/order', order=bus.order)
-                                                                </td>
-                                                            % else:
-                                                                <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
-                                                                <td class="non-desktop lighter-text">Unavailable</td>
-                                                            % end
+                                                            <th>{{ context.vehicle_type }}</th>
+                                                            <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>
-                                                    % last_start_time = start_time
-                                                % end
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    % last_start_time = None
+                                                    % for trip in direction_trips:
+                                                        % first_stop = trip.first_stop
+                                                        % start_time = trip.start_time
+                                                        % if not start_time.is_unknown and not last_start_time:
+                                                            % last_start_time = start_time
+                                                        % end
+                                                        <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
+                                                            <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                            <td class="desktop-only">
+                                                                % include('components/headsign')
+                                                            </td>
+                                                            % if context.enable_blocks:
+                                                                <td class="non-mobile">
+                                                                    % block = trip.block
+                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                </td>
+                                                            % end
+                                                            <td>
+                                                                <div class="column">
+                                                                    % include('components/trip')
+                                                                    <span class="non-desktop smaller-font">
+                                                                        % include('components/headsign')
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="desktop-only">
+                                                                % include('components/stop', stop=first_stop)
+                                                            </td>
+                                                            % if context.realtime_enabled:
+                                                                % if trip.id in recorded_today:
+                                                                    % vehicle = recorded_today[trip.id]
+                                                                    <td>
+                                                                        <div class="column">
+                                                                            <div class="row">
+                                                                                % include('components/vehicle')
+                                                                                % if trip.id in trip_positions:
+                                                                                    % position = trip_positions[trip.id]
+                                                                                    <div class="row gap-5">
+                                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                                        % include('components/adherence', adherence=position.adherence)
+                                                                                    </div>
+                                                                                % end
+                                                                            </div>
+                                                                            <span class="non-desktop smaller-font">
+                                                                                % include('components/year_model', year_model=vehicle.year_model)
+                                                                            </span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="desktop-only">
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                                    </td>
+                                                                % elif trip.block_id in assignments and trip.end_time.is_later:
+                                                                    % assignment = assignments[trip.block_id]
+                                                                    % vehicle = assignment.vehicle
+                                                                    <td>
+                                                                        <div class="column">
+                                                                            <div class="row">
+                                                                                % include('components/vehicle')
+                                                                                % include('components/scheduled')
+                                                                            </div>
+                                                                            <span class="non-desktop smaller-font">
+                                                                                % include('components/year_model', year_model=vehicle.year_model)
+                                                                            </span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="desktop-only">
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                                    </td>
+                                                                % else:
+                                                                    <td class="desktop-only lighter-text" colspan="2">Unavailable</td>
+                                                                    <td class="non-desktop lighter-text">Unavailable</td>
+                                                                % end
+                                                            % end
+                                                        </tr>
+                                                        % last_start_time = start_time
+                                                    % end
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             % end

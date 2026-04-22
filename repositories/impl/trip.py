@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from database import Database
 
 from models.context import Context
+from models.match import Match
 from models.trip import Trip
 
 @dataclass(slots=True)
@@ -11,39 +12,46 @@ class TripRepository:
     
     database: Database
     
-    def create(self, context: Context, row):
+    def create(self, context: Context, row: dict):
         '''Inserts a new trip into the database'''
         try:
             direction_id = int(row['direction_id'])
         except (KeyError, ValueError):
             direction_id = None
-        self.database.insert('trip', {
-            'system_id': context.system_id,
-            'trip_id': row['trip_id'],
-            'route_id': row['route_id'],
-            'service_id': row['service_id'],
-            'block_id': row.get('block_id'),
-            'direction_id': direction_id,
-            'shape_id': row['shape_id'],
-            'headsign': row['trip_headsign']
-        })
+        self.database.insert(
+            table='trip',
+            values={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'trip_id': row['trip_id'],
+                'route_id': row['route_id'],
+                'service_id': row['service_id'],
+                'block_id': row['block_id'],
+                'direction_id': direction_id,
+                'shape_id': row['shape_id'],
+                'headsign': row['trip_headsign']
+            }
+        )
     
-    def find(self, context: Context, trip_id) -> Trip | None:
+    def find(self, context: Context, trip_id: str) -> Trip | None:
         '''Returns the trip with the given context and trip ID'''
-        trips = self.database.select('trip',
-            columns={
-                'trip.system_id': 'system_id',
-                'trip.trip_id': 'id',
-                'trip.route_id': 'route_id',
-                'trip.service_id': 'service_id',
-                'trip.block_id': 'block_id',
-                'trip.direction_id': 'direction_id',
-                'trip.shape_id': 'shape_id',
-                'trip.headsign': 'headsign'
-            },
+        trips = self.database.select(
+            table='trip',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'trip_id',
+                'route_id',
+                'service_id',
+                'block_id',
+                'direction_id',
+                'shape_id',
+                'headsign'
+            ],
             filters={
-                'trip.system_id': context.system_id,
-                'trip.trip_id': trip_id
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'trip_id': trip_id
             },
             limit=1,
             initializer=Trip.from_db
@@ -53,32 +61,64 @@ class TripRepository:
         except IndexError:
             return None
     
-    def find_all(self, context: Context, route=None, block=None, limit=None) -> list[Trip]:
+    def find_all(self, context: Context, trip_id: str | None = None, route_id: str | None = None, block_id: str | None = None, limit: int | None = None) -> list[Trip]:
         '''Returns all trips that match the given context, route, and block'''
-        route_id = getattr(route, 'id', route)
-        block_id = getattr(block, 'id', block)
-        return self.database.select('trip',
-            columns={
-                'trip.system_id': 'system_id',
-                'trip.trip_id': 'id',
-                'trip.route_id': 'route_id',
-                'trip.service_id': 'service_id',
-                'trip.block_id': 'block_id',
-                'trip.direction_id': 'direction_id',
-                'trip.shape_id': 'shape_id',
-                'trip.headsign': 'headsign'
-            },
+        return self.database.select(
+            table='trip',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'trip_id',
+                'route_id',
+                'service_id',
+                'block_id',
+                'direction_id',
+                'shape_id',
+                'headsign'
+            ],
             filters={
-                'trip.system_id': context.system_id,
-                'trip.route_id': route_id,
-                'trip.block_id': block_id
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'trip_id': trip_id,
+                'route_id': route_id,
+                'block_id': block_id
             },
             limit=limit,
             initializer=Trip.from_db
         )
     
+    def find_block_matches(self, context: Context, query: str) -> list[Match]:
+        rows = self.database.select(
+            table='trip',
+            columns=[
+                # 'agency_id',
+                'system_id',
+                'block_id'
+            ],
+            distinct=True,
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id,
+                'block_id': {
+                    'LIKE': f'%{query}%'
+                }
+            }
+        )
+        matches = []
+        for row in rows:
+            context = row.context()
+            if context.system:
+                block = context.system.get_block(row['block_id'])
+                if block:
+                    matches.append(block.get_match(query))
+        return matches
+    
     def delete_all(self, context: Context):
         '''Deletes all trips for the given context from the database'''
-        self.database.delete('trip', {
-            'system_id': context.system_id
-        })
+        self.database.delete(
+            table='trip',
+            filters={
+                # 'agency_id': context.agency_id,
+                'system_id': context.system_id
+            }
+        )

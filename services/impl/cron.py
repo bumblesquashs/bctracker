@@ -47,19 +47,20 @@ class CronService:
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
+        date = Date.today()
+        services.log.info(f'Running GTFS cron job for {date}')
         for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
                     date = Date.today(context.timezone)
                     if date.weekday == Weekday.MON or not services.gtfs.validate(context):
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                 except Exception as e:
-                    print(f'Error loading GTFS data for {context}: {e}')
+                    services.log.error(f'Error loading GTFS data for {context}: {e}')
         if self.running:
             repositories.record.delete_stale_trip_records()
             self.database.archive()
-            date = Date.today()
             services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
     
     def handle_realtime(self):
@@ -68,18 +69,18 @@ class CronService:
             return
         self.updating_realtime = True
         date = Date.today()
-        time = Time.now()
-        print(f'--- {date} at {time} ---')
+        time = Time.now(accurate_seconds=False)
+        services.log.info(f'Running realtime cron job for {date} at {time}')
         for system in repositories.system.find_all():
             context = system.context
             if self.running:
                 try:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
-                        services.gtfs.load(context, True)
+                        services.gtfs.load(context, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
-                    print(f'Error loading data for {context}: {e}')
+                    services.log.error(f'Error loading data for {context}: {e}')
                 if system.gtfs_downloaded and services.realtime.validate(context):
                     system.reload_backoff.reset()
                 else:
@@ -88,5 +89,5 @@ class CronService:
             try:
                 services.realtime.update_records()
             except Exception as e:
-                print(f'Error updating records: {e}')
+                services.log.error(f'Error updating records: {e}')
         self.updating_realtime = False

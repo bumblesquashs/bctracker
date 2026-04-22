@@ -174,7 +174,7 @@ table th {
     --image-size: 28px;
 }
 
-.bus {
+.vehicle {
     min-width: 38px;
 }
 
@@ -232,6 +232,12 @@ button.compact {
     gap: 20px;
 }
 
+.page-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .placeholder {
     align-items: stretch;
 }
@@ -247,6 +253,10 @@ button.compact {
 .tab-button-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.table-border-wrapper {
+    width: 100%;
 }
 
 .tab-button {

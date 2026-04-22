@@ -28,6 +28,8 @@
     --status-bar-hover: #DDDDDD;
     --status-bar-foreground: #000000;
     
+    --table-border: #FFFFFF;
+    
     --tooltip-background: #888888;
     
     --loading-background: #FFFFFF;
@@ -44,6 +46,9 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: #DDDDDD;
+    --amenity-color: #000000;
 }
 
 a {
@@ -51,7 +56,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -73,10 +77,6 @@ input[type="text"]:focus {
     border-color: #AAAAAA;
 }
 
-table {
-    border-color: #FFFFFF;
-}
-
 table tbody tr:hover {
     background-color: #DDDDDD;
 }
@@ -86,13 +86,11 @@ table tbody tr.header {
 }
 
 table td {
-    border-color: #FFFFFF;
     border-width: 0px;
 }
 
 table th {
     background-color: #DDDDDD;
-    border-color: #FFFFFF;
     border-width: 0px;
 }
 
@@ -108,6 +106,32 @@ table tr.table-button {
 
 table tr.table-button:hover {
     background-color: #888888;
+}
+
+#content {
+    background-color: #FFFFFF;
+}
+
+#favourite-systems-dropdown {
+    background-color: #FFFFFF;
+    border-color: #EEEEEE;
+}
+
+#favourite-systems-dropdown .system-button {
+    color: #000000;
+    --image-color: #AAAAAA;
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background-color: #DDDDDD;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    background-color: #DDDDDD;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: #EEEEEE;
 }
 
 #loading-stop {
@@ -202,6 +226,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #000000;
+    --image-color: #AAAAAA;
 }
 
 #system-menu .system-button:hover {
@@ -292,6 +317,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: #EEEEEE;
     border-color: #DDDDDD;
+    --table-border: #DDDDDD;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
 }
 
 .info-box .section {
@@ -300,6 +330,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #DDDDDD;
+}
+
+.info-box .toggle-button {
+    background-color: #DDDDDD;
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #CCCCCC;
 }
 
 .lighter-text {
@@ -320,7 +359,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 

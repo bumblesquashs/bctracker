@@ -3,12 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from models.agency import Agency
     from models.system import System
 
 from dataclasses import dataclass, field
 from enum import Enum
 from math import sqrt
 
+from models.context import Context
 from models.daterange import DateRange
 from models.match import Match
 from models.route import Route
@@ -52,6 +54,7 @@ class StopType(Enum):
 class Stop:
     '''A location where a vehicle stops along a trip'''
     
+    agency: Agency
     system: System
     id: str
     number: str
@@ -67,19 +70,19 @@ class Stop:
     def from_db(cls, row: Row):
         '''Returns a stop initialized from the given database row'''
         context = row.context()
-        id = row['id']
+        id = row['stop_id']
         number = row['number'] or id
         name = row['name']
         lat = row['lat']
         lon = row['lon']
         parent_id = row['parent_id']
         type = StopType.from_db(row['type'])
-        return cls(context.system, id, number, name, lat, lon, parent_id, type)
+        return cls(context.agency, context.system, id, number, name, lat, lon, parent_id, type)
     
     @property
     def context(self):
         '''The context for this stop'''
-        return self.system.context
+        return Context(self.agency, self.system)
     
     @property
     def url_id(self):
@@ -91,7 +94,7 @@ class Stop:
     @property
     def cache(self):
         '''Returns the cache for this stop'''
-        return self.system.get_stop_cache(self)
+        return self.system.get_stop_cache(self.id)
     
     @property
     def schedule(self):
@@ -146,7 +149,7 @@ class Stop:
         number = self.number.lower()
         name = self.name.lower()
         value = 0
-        if query in number:
+        if query in number and self.context.show_stop_number:
             value += (len(query) / len(number)) * 100
             if number.startswith(query):
                 value += len(query)
@@ -158,7 +161,7 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
+        return Match(self.context, f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''
@@ -166,16 +169,12 @@ class Stop:
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
-        departures = repositories.departure.find_all(self.context, stop=self)
+        departures = repositories.departure.find_all(self.context, stop_id=self.id)
         if service_group:
             return sorted([d for d in departures if d.trip and d.trip.service in service_group])
         if date:
             return sorted([d for d in departures if d.trip and date in d.trip.service])
         return sorted(departures)
-    
-    def find_adjacent_departures(self):
-        '''Returns all departures on trips that serve this stop'''
-        return repositories.departure.find_adjacent(self.context, self)
 
 @dataclass(slots=True)
 class StopCache:

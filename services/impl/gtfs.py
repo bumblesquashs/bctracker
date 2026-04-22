@@ -19,6 +19,7 @@ from models.service import Service, ServiceException
 from models.sheet import Sheet
 
 import repositories
+import services
 
 @dataclass(slots=True)
 class GTFSService:
@@ -35,11 +36,6 @@ class GTFSService:
         if not context.system.gtfs_downloaded or force_download:
             self.download(context)
             update_db = True
-        
-        if update_db:
-            self.update_database(context)
-        
-        print(f'Loading GTFS data for {context}')
         
         try:
             exceptions = read_csv(context, 'calendar_dates', lambda r: ServiceException.from_csv(r, context))
@@ -58,12 +54,28 @@ class GTFSService:
             feed_date_range = None
         
         try:
-            services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
+            calendar_services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
         except:
-            services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
+            calendar_services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
-        context.system.services = {s.id: s for s in services}
-        context.system.sheets = combine_sheets(context, services)
+        gtfs_cutoff = context.gtfs_cutoff
+        if gtfs_cutoff:
+            cutoff_date = Date.parse(gtfs_cutoff, context.timezone)
+            if cutoff_date > Date.today(context.timezone):
+                calendar_services = [s for s in calendar_services if s.schedule.date_range.start <= cutoff_date]
+                filter_service_ids = {s.id for s in calendar_services}
+            else:
+                filter_service_ids = set()
+        else:
+            filter_service_ids = set()
+        
+        if update_db:
+            self.update_database(context, filter_service_ids)
+        
+        services.log.info(f'Loading GTFS data for {context}')
+        
+        context.system.services = {s.id: s for s in calendar_services}
+        context.system.sheets = combine_sheets(context, calendar_services)
         
         stops = repositories.stop.find_all(context)
         context.system.stops = {s.id: s for s in stops}
@@ -80,14 +92,14 @@ class GTFSService:
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        context.system.blocks = {id: Block(context.system, id, trips) for id, trips in block_trips.items()}
+        context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
         context.system.reset_caches()
     
     def download(self, context: Context):
         '''Downloads the GTFS for the given system'''
-        print(f'Downloading GTFS data for {context}')
+        services.log.info(f'Downloading GTFS data for {context}')
         
         data_zip_path = f'data/gtfs/{context.system_id}.zip'
         data_path = f'data/gtfs/{context.system_id}'
@@ -110,9 +122,9 @@ class GTFSService:
             zip.extractall(data_path)
         context.system.gtfs_downloaded = True
     
-    def update_database(self, context: Context):
+    def update_database(self, context: Context, filter_service_ids: set[str]):
         '''Updates cached GTFS data for the given system'''
-        print(f'Updating database with GTFS data for {context}')
+        services.log.info(f'Updating database with GTFS data for {context}')
         
         repositories.departure.delete_all(context)
         repositories.trip.delete_all(context)
@@ -122,8 +134,13 @@ class GTFSService:
         
         apply_csv(context, 'routes', repositories.route.create)
         apply_csv(context, 'stops', repositories.stop.create)
-        apply_csv(context, 'trips', repositories.trip.create)
-        apply_csv(context, 'stop_times', repositories.departure.create)
+        if filter_service_ids:
+            filtered_rows = apply_csv(context, 'trips', repositories.trip.create, filter=lambda r: r['service_id'] in filter_service_ids)
+            filtered_trip_ids = {r['trip_id'] for r in filtered_rows}
+            apply_csv(context, 'stop_times', repositories.departure.create, filter=lambda r: r['trip_id'] in filtered_trip_ids)
+        else:
+            apply_csv(context, 'trips', repositories.trip.create)
+            apply_csv(context, 'stop_times', repositories.departure.create)
         apply_csv(context, 'shapes', repositories.point.create)
         
         self.database.commit()
@@ -146,15 +163,21 @@ def read_csv(context: Context, name, initializer):
         columns = next(reader)
         return [initializer(dict(zip(columns, row))) for row in reader]
 
-def apply_csv(context: Context, name, function):
+def apply_csv(context: Context, name, function, filter=None):
     '''Opens a CSV file and applies a function to each row'''
     with open(f'./data/gtfs/{context.system_id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         columns = next(reader)
+        filtered_rows = []
         for row in reader:
-            function(context, dict(zip(columns, row)))
+            data = dict(zip(columns, row))
+            if not filter or filter(data):
+                function(context, data)
+                if filter:
+                    filtered_rows.append(data)
+        return filtered_rows
 
-def combine_sheets(context: Context, services):
+def combine_sheets(context: Context, services: list[Service]):
     '''Returns a list of sheets made from services with overlapping start/end dates'''
     if not services:
         return []
@@ -167,7 +190,8 @@ def combine_sheets(context: Context, services):
     sorted_dates = sorted(dates)[1:-1]
     i = iter(sorted_dates)
     
-    sheets = []
+    sheets: list[Sheet] = []
+    previous_date_range_services = set()
     for (start_date, end_date) in zip(i, i):
         date_range = DateRange(start_date, end_date)
         date_range_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
@@ -175,7 +199,7 @@ def combine_sheets(context: Context, services):
             continue
         if sheets:
             previous_sheet = sheets[-1]
-            if previous_sheet.services.issubset(date_range_services) or date_range_services.issubset(previous_sheet.services):
+            if previous_date_range_services.issubset(date_range_services) or date_range_services.issubset(previous_date_range_services):
                 date_range = DateRange.combine([previous_sheet.schedule.date_range, date_range])
                 new_services = {s for s in services if s.schedule.date_range.overlaps(date_range)}
                 sheets[-1] = Sheet(context.system, new_services, date_range)
@@ -183,6 +207,7 @@ def combine_sheets(context: Context, services):
                 sheets.append(Sheet(context.system, date_range_services, date_range))
         else:
             sheets.append(Sheet(context.system, date_range_services, date_range))
+        previous_date_range_services = date_range_services
     final_sheets = []
     for sheet in sheets:
         if final_sheets:

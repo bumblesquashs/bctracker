@@ -26,11 +26,11 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header" onclick="toggleSection(this)">
+            <div class="header" onclick="toggleSection(this, true)">
                 <h2>Overview</h2>
                 % include('components/toggle')
             </div>
-            <div class="content">
+            <div class="content gap-20">
                 % stop_departures = stop.find_departures()
                 % include('components/map', map_stop=stop, map_trips=[d.trip for d in stop_departures], zoom_trips=False)
                 
@@ -130,10 +130,10 @@
                 % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
                 % upcoming_count = 3 + floor(len(routes) / 3)
                 % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
-                % trips = [d.trip for d in upcoming_departures]
-                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trips)
-                % assignments = repositories.assignment.find_all(child_stop.context, stop=child_stop)
-                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip=trips)}
+                % trip_ids = [d.trip_id for d in upcoming_departures]
+                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trip_ids)
+                % assignments = {a.block_id: a for a in repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)}
+                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip_id=trip_ids)}
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <div class="column">
@@ -148,7 +148,7 @@
                         % if upcoming_departures:
                             % if context.realtime_enabled:
                                 <p>
-                                    <span>Buses with a</span>
+                                    <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
                                         % include('components/svg', name='schedule')
                                     </span>
@@ -165,7 +165,7 @@
                                         % end
                                         <th>Trip</th>
                                         % if context.realtime_enabled:
-                                            <th>Bus</th>
+                                            <th>{{ context.vehicle_type }}</th>
                                             <th class="desktop-only">Model</th>
                                         % end
                                     </tr>
@@ -204,7 +204,7 @@
                         % if upcoming_departures:
                             % if context.realtime_enabled:
                                 <p>
-                                    <span>Buses with a</span>
+                                    <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
                                         % include('components/svg', name='schedule')
                                     </span>
@@ -222,7 +222,7 @@
                                         % end
                                         <th>Trip</th>
                                         % if context.realtime_enabled:
-                                            <th>Bus</th>
+                                            <th>{{ context.vehicle_type }}</th>
                                             <th class="desktop-only">Model</th>
                                         % end
                                     </tr>
@@ -260,7 +260,7 @@
                     % if departures:
                         % if context.realtime_enabled:
                             <p>
-                                <span>Buses with a</span>
+                                <span>{{ context.vehicle_type_plural }} with a</span>
                                 <span class="scheduled">
                                     % include('components/svg', name='schedule')
                                 </span>
@@ -277,7 +277,7 @@
                                     % end
                                     <th>Trip</th>
                                     % if context.realtime_enabled:
-                                        <th>Bus</th>
+                                        <th>{{ context.vehicle_type }}</th>
                                         <th class="desktop-only">Model</th>
                                     % end
                                 </tr>

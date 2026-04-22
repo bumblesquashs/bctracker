@@ -24,15 +24,16 @@ if __name__ == '__main__':
     
     repositories.agency = AgencyRepository()
     repositories.decoration = DecorationRepository()
+    repositories.livery = LiveryRepository()
     repositories.model = ModelRepository()
     repositories.order = OrderRepository()
     repositories.region = RegionRepository()
     repositories.system = SystemRepository()
     repositories.theme = ThemeRepository()
     
+    repositories.allocation = AllocationRepository(database)
     repositories.assignment = AssignmentRepository(database)
     repositories.departure = DepartureRepository(database)
-    repositories.overview = OverviewRepository(database)
     repositories.point = PointRepository(database)
     repositories.position = PositionRepository(database)
     repositories.record = RecordRepository(database)
@@ -41,6 +42,7 @@ if __name__ == '__main__':
     repositories.transfer = TransferRepository(database)
     repositories.trip = TripRepository(database)
     
+    services.log = LogService()
     services.backup = BackupService(database, settings)
     services.gtfs = GTFSService(database, settings)
     services.realtime = RealtimeService(database, settings)

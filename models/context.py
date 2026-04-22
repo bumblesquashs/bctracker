@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.agency import Agency
     from models.system import System
+    from models.vehicle import Vehicle
 
 from dataclasses import dataclass
 
@@ -63,13 +64,15 @@ class Context:
     def gtfs_loaded(self):
         if self.system:
             return self.system.gtfs_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.gtfs_loaded for s in systems)
     
     @property
     def realtime_loaded(self):
         if self.system:
             return self.system.realtime_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.realtime_loaded for s in systems)
     
     @property
     def timezone(self):
@@ -125,6 +128,54 @@ class Context:
             return self.agency.enable_blocks
         return DEFAULT_ENABLE_BLOCKS
     
+    @property
+    def nis_colour(self):
+        if self.agency:
+            return self.agency.nis_colour
+        return DEFAULT_NIS_COLOUR
+    
+    @property
+    def default_route_colour(self):
+        if self.agency:
+            return self.agency.default_route_colour
+        return DEFAULT_ROUTE_COLOUR
+    
+    @property
+    def filter_vehicles_image_name(self):
+        if self.agency:
+            return self.agency.filter_vehicles_image_name
+        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    
+    @property
+    def vehicle_type(self):
+        if self.agency:
+            return self.agency.vehicle_type
+        return DEFAULT_VEHICLE_TYPE
+    
+    @property
+    def vehicle_type_plural(self):
+        if self.agency:
+            return self.agency.vehicle_type_plural
+        return DEFAULT_VEHICLE_TYPE_PLURAL
+    
+    @property
+    def ignore_route_colour(self):
+        if self.system:
+            return self.system.ignore_route_colour
+        return DEFAULT_IGNORE_ROUTE_COLOUR
+    
+    @property
+    def gtfs_cutoff(self):
+        if self.system:
+            return self.system.gtfs_cutoff
+        return DEFAULT_GTFS_CUTOFF
+    
+    @property
+    def max_invalid_positions(self):
+        if self.system:
+            return self.system.max_invalid_positions
+        return DEFAULT_MAX_INVALID_POSITIONS
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
@@ -159,20 +210,31 @@ class Context:
             return False
         return self.agency < other.agency
     
+    def without_system(self):
+        return Context(self.agency)
+    
+    def find_vehicle(self, id: str) -> Vehicle:
+        return repositories.order.find_vehicle(self, id)
+    
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''
+        values = []
+        if self.realtime_enabled:
+            values.append(self.vehicle_type_plural.lower())
+        values.append('routes')
+        values.append('stops')
+        if self.enable_blocks:
+            values.append('blocks')
         if self.system:
-            values = []
-            if self.realtime_enabled:
-                values.append('buses')
-            values.append('routes')
-            values.append('stops')
-            if self.enable_blocks:
-                values.append('blocks')
             if len(values) == 1:
                 return f'Search for {self} {values[0]}'
             if len(values) == 2:
                 return f'Search for {self} {values[0]} and {values[1]}'
-            values_string = ','.join(values[:-1])
+            values_string = ', '.join(values[:-1])
             return f'Search for {self} {values_string}, and {values[-1]}'
-        return 'Search for buses in all systems'
+        if len(values) == 1:
+            return f'Search for {values[0]} in all systems'
+        if len(values) == 2:
+            return f'Search for {values[0]} and {values[1]} in all systems'
+        values_string = ', '.join(values[:-1])
+        return f'Search for {values_string}, and {values[-1]} in all systems'

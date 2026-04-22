@@ -28,6 +28,8 @@
     --status-bar-hover: #7A0000;
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: #69BB65;
+    
     --tooltip-background: #69BB65;
     
     --loading-background: #FFFFFF;
@@ -44,6 +46,9 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: #C3E9C1;
+    --amenity-color: #000000;
 }
 
 a {
@@ -51,7 +56,6 @@ a {
 }
 
 body {
-    background-color: #FFFFFF;
     color: #000000;
 }
 
@@ -77,10 +81,6 @@ input[type="text"]:focus {
     border-color: #7A0000;
 }
 
-table {
-    border-color: #69BB65;
-}
-
 table tbody tr:hover {
     background-color: #C3E9C1;
 }
@@ -90,14 +90,9 @@ table tbody tr.header {
     color: #FFFFFF;
 }
 
-table td {
-    border-color: #69BB65;
-}
-
 table th {
     background-color: #D70000;
     color: #FFFFFF;
-    border-color: #69BB65;
 }
 
 table tr {
@@ -116,6 +111,32 @@ table tr.table-button {
 
 table tr.table-button:hover {
     background-color: #7A0000;
+}
+
+#content {
+    background-color: #FFFFFF;
+}
+
+#favourite-systems-dropdown {
+    background-color: #E4F6E3;
+    border-color: #69BB65;
+}
+
+#favourite-systems-dropdown .system-button {
+    color: #000000;
+    --image-color: #69BB65;
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background-color: #C3E9C1;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    background-color: #C3E9C1;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: #69BB65;
 }
 
 #loading-stop {
@@ -222,6 +243,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #000000;
+    --image-color: #69BB65;
 }
 
 #system-menu .system-button:hover {
@@ -312,6 +334,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: #E4F6E3;
     border-color: #69BB65;
+    --table-border: #C3E9C1;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
 }
 
 .info-box .section {
@@ -320,6 +347,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #C3E9C1;
+}
+
+.info-box .toggle-button {
+    background-color: #AB0000;
+    --image-color: #FFFFFF;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #7A0000;
 }
 
 .lighter-text {
@@ -340,7 +376,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 

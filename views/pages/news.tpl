@@ -9,6 +9,70 @@
 <div class="container">
     <div class="news-post">
         <div class="header">
+            <h3>Summer Update</h3>
+            July 21st, 2025
+        </div>
+        <div class="content">
+            <p>
+                Let's jump right in with the big news: BCTracker now includes schedule data for <b>BC Ferries</b>!
+                We're still figuring out the best way to integrate realtime data for tracking vessels, so that will be added down the road.
+                In the meantime we hope the schedule information is still useful!
+            </p>
+            <p>
+                As always, there's been a bunch of other improvements since our last update post that you may have noticed already.
+                This includes:
+            </p>
+            <ul>
+                <li>Stop icons on the main map page</li>
+                <li>Geolocation and dark mode for maps</li>
+                <li>Redesigned status bar on desktop</li>
+                <li>Trips with changing headsigns</li>
+                <li>The new <b>West Coast</b> system</li>
+            </ul>
+            <p>We've also been busy making some memory usage improvements to keep the site running smoothly and prepare for larger datasets such as Translink.</p>
+            <p>See you in the next update!</p>
+        </div>
+    </div>
+    <div class="news-post" id="abtracker">
+        <div class="header">
+            <h3>Introducing ABTracker</h3>
+            April 1, 2025
+        </div>
+        <div class="content">
+            <p>
+                Following the great success of BCTracker, we've decided it's time to expand to new territory.
+                The most obvious choice of course is our neighbours to the east, so without further ado we're very pleased to announce the launch of <b><a href="https://abtracker.ca">ABTracker</a></b>!
+            </p>
+            <p>
+                Like BCTracker, ABTracker pulls together transit data from a bunch of larger communities in Alberta into one place, making it easy to see buses running all over the province.
+                The following agencies/systems are supported as of this initial launch:
+            </p>
+            <ul>
+                <li>Calgary Transit (Calgary)</li>
+                <li>Edmonton Transit Service (Edmonton)</li>
+                <li>Grande Prairie Transit (Grande Prairie)</li>
+                <li>Lethbridge Transit (Lethbridge) <i>(no realtime)</i></li>
+                <li>Medicine Hat Transit (Medicine Hat)</li>
+                <li>Red Deer Transit (Red Deer) <i>(no realtime)</i></li>
+                <li>Roam (Banff)</li>
+                <li>Woosh (Fort McMurray)</li>
+            </ul>
+            <p>
+                We hope you find ABTracker useful as we all inevitably move to Alberta for cheaper housing!
+            </p>
+            <p><b>UPDATE:</b></p>
+            <p>
+                So, despite intending for this to be a one-day April Fools joke, a lot of people really want ABTracker permanently!
+                It turns out we were the fools all along for not anticipating this...
+            </p>
+            <p>
+                Instead of taking down the website at the end of the day, we're instead going to leave it available but advertised as being in <b>beta</b>, which means that some stuff could still break or get changed at any time.
+                Please see the <a href="https://abtracker.ca/about#beta-testing">ABTracker about page</a> for more info.
+            </p>
+        </div>
+    </div>
+    <div class="news-post">
+        <div class="header">
             <h3>Winter Update</h3>
             January 10th, 2025
         </div>

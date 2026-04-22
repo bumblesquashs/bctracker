@@ -11,6 +11,8 @@
     --status-bar-hover: rgba(0, 0, 0, 0.6);
     --status-bar-foreground: #FFFFFF;
     
+    --table-border: rgba(0, 0, 0, 0.5);
+    
     --tooltip-background: #000000;
     
     --loading-background: rgba(0, 0, 0, 0);
@@ -27,6 +29,13 @@
     --map-control-background: rgba(255, 255, 255, 0.7);
     --map-control-background-hover: rgba(255, 255, 255, 0.7);
     --map-control-icon: #000000;
+    
+    --amenity-background: rgba(255, 255, 255, 0.7);
+    --amenity-color: #000000;
+    
+    --warning-box-background: rgba(255, 233, 211, 0.7);
+    --warning-box-foreground: #FF9A3A;
+    --warning-box-border: #FF9A3A;
 }
 
 a {
@@ -69,10 +78,6 @@ input[type="text"]:focus {
     border-color: rgba(0, 0, 0, 0.8);
 }
 
-table {
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
 table tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.7);
 }
@@ -81,13 +86,8 @@ table tbody tr.header {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-table td {
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
 table th {
     background-color: rgba(255, 255, 255, 0.7);
-    border-color: rgba(0, 0, 0, 0.5);
 }
 
 table tr {
@@ -102,6 +102,28 @@ table tr.table-button {
 
 table tr.table-button:hover {
     background-color: rgba(255, 255, 255, 0.9);
+}
+
+#favourite-systems-dropdown {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+#favourite-systems-dropdown .system-button {
+    color: #FFFFFF;
+    --image-color: rgba(255, 255, 255, 0.7);
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#favourite-systems-dropdown .system-button.current {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
 }
 
 #loading-stop {
@@ -216,6 +238,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #FFFFFF;
+    --image-color: rgba(255, 255, 255, 0.7);
 }
 
 #system-menu .system-button:hover {
@@ -306,6 +329,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: rgba(255, 255, 255, 0.6);
     border-color: rgba(0, 0, 0, 0.5);
+    --table-border: rgba(0, 0, 0, 0.2);
+}
+
+.info-box h3 {
+    --stop-number-background: rgba(255, 255, 255, 0.7);
 }
 
 .info-box .section {
@@ -314,6 +342,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: rgba(255, 255, 255, 0.6);
+}
+
+.info-box .toggle-button {
+    background-color: rgba(255, 255, 255, 0.6);
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .lighter-text {
@@ -334,7 +371,7 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     color: #FFFFFF;
 }
 

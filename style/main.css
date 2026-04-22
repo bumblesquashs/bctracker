@@ -10,6 +10,7 @@ a {
 }
 
 body {
+    background-color: var(--navigation-bar-background);
     font-family: var(--serif-font);
 }
 
@@ -106,13 +107,10 @@ table {
     border-collapse: collapse;
     border-spacing: 0px;
     empty-cells: show;
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid var(--table-border);
 }
 
 table td {
-    border-width: 0 0 1 0px;
-    border-style: solid;
     margin: 0px;
     overflow: visible;
     padding: 0.5em 1em;
@@ -121,16 +119,21 @@ table td {
 table th {
     text-align: left;
     vertical-align: top;
-    border-width: 0 0 1 0px;
-    border-style: solid;
     margin: 0px;
     overflow: visible;
     padding: 0.5em 1em;
 }
 
+table tr {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--table-border);
+}
+
 table tr.divider {
     border-top-width: 4px;
     border-top-style: solid;
+    border-top-color: var(--table-border);
 }
 
 table tr.header td {
@@ -152,6 +155,10 @@ table tr.table-button {
 
 #content {
     flex: 1;
+}
+
+#favourite-systems-dropdown {
+    display: none;
 }
 
 #last-updated {
@@ -235,7 +242,6 @@ table tr.table-button {
 
 #map.preview {
     height: 300px;
-    margin-bottom: 20px;
     border-width: 1px;
     border-style: solid;
 }
@@ -498,8 +504,13 @@ table tr.table-button {
 }
 
 #system {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
     font-weight: bold;
     font-size: 14pt;
+    --image-size: 20px;
 }
 
 #system-menu {
@@ -516,6 +527,7 @@ table tr.table-button {
     flex-direction: row;
     gap: 10px;
     align-items: center;
+    --image-size: 18px;
 }
 
 #system-menu .system-button.current {
@@ -577,6 +589,14 @@ table tr.table-button {
     text-align: right;
 }
 
+.amenity {
+    background-color: var(--amenity-background);
+    border-radius: 50%;
+    padding: 4px;
+    --image-color: var(--amenity-color);
+    --image-size: 22px;
+}
+
 .banner {
     margin: 0px;
     padding: 10px 20px;
@@ -614,6 +634,10 @@ table tr.table-button {
     border-bottom-color: var(--occupancy-background);
 }
 
+.bearing.livery-style {
+    border-bottom-color: var(--livery-border);
+}
+
 .block-timeline {
     display: flex;
     flex-direction: column;
@@ -624,7 +648,7 @@ table tr.table-button {
     font-weight: bold;
 }
 
-.bus {
+.vehicle {
     display: flex;
     flex-direction: row;
     gap: 5px;
@@ -862,6 +886,52 @@ table tr.table-button {
     flex-direction: row;
 }
 
+.info-box h3 {
+    --image-size: 32px;
+}
+
+.info-box table {
+    width: 100%;
+    border-width: 0px;
+}
+
+.info-box table tr:last-child {
+    border-width: 0px;
+}
+
+.info-box table tr {
+    background-color: unset;
+}
+
+.info-box table tr:hover {
+    background-color: unset;
+}
+
+.info-box table tr th:first-child {
+    padding-left: 0px;
+}
+
+.info-box table tr th:last-child {
+    padding-right: 0px;
+}
+
+.info-box table tr td:first-child {
+    padding-left: 0px;
+}
+
+.info-box table tr td:last-child {
+    padding-right: 0px;
+}
+
+.info-box table th {
+    background-color: unset;
+    color: unset;
+}
+
+.info-box table thead tr {
+    border-bottom-width: 3px !important;
+}
+
 .info-box > .title {
     margin-bottom: 20px;
 }
@@ -914,8 +984,49 @@ table tr.table-button {
     text-align: right;
 }
 
+.info-box .toggle-button {
+    border-radius: 5px;
+    padding: 5px;
+    --image-size: 24px;
+}
+
+.info-box.collapsed .toggle-button svg {
+    transform: scaley(-1);
+}
+
+.info-box.collapsed .open-only {
+    display: none;
+}
+
+.info-box.open .collapsed-only {
+    display: none;
+}
+
 .italics {
     font-style: italic;
+}
+
+.livery {
+    border: 1px solid var(--livery-border);
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.log-line {
+    font-family: var(--mono-font);
+    font-size: 10pt;
+}
+
+.log-line .title {
+    font-weight: bold;
+    text-wrap: nowrap;
+    --image-size: 18px;
+}
+
+.log-line .level {
+    font-weight: bold;
 }
 
 .marker {
@@ -925,6 +1036,10 @@ table tr.table-button {
 
 .marker:hover {
     z-index: 10;
+}
+
+.marker.offline {
+    opacity: 0.75;
 }
 
 .marker .bearing {
@@ -1087,7 +1202,7 @@ table tr.table-button {
     text-decoration: none;
 }
 
-.marker .icon.bus_route {
+.marker .icon.vehicle_route {
     font-weight: bold;
     text-align: center;
     line-height: 24px;
@@ -1099,6 +1214,32 @@ table tr.table-button {
 .marker .icon.occupancy {
     background-color: var(--occupancy-background);
     --image-color: var(--occupancy-foreground);
+}
+
+.marker .icon.livery {
+    border-color: var(--livery-border);
+    padding: 0px;
+    width: 32px;
+    height: 32px;
+}
+
+.marker .icon.livery img {
+    width: 100%;
+    height: 100%;
+}
+
+.marker .icon.speed {
+    font-weight: bold;
+    text-align: center;
+    line-height: 13px;
+    font-size: 9pt;
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.marker .icon.speed .units {
+    line-height: 11px;
+    font-size: 6pt;
 }
 
 .marker.small .icon {
@@ -1217,6 +1358,12 @@ table tr.table-button {
     background-color: var(--radio-button-color);
 }
 
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .order-details .content {
     display: flex;
     flex-direction: row;
@@ -1226,7 +1373,6 @@ table tr.table-button {
 }
 
 .order-details .title {
-    margin-bottom: 5px;
     text-align: center;
     font-weight: bold;
 }
@@ -1467,6 +1613,18 @@ table tr.table-button {
     cursor: default !important;
 }
 
+.table-border-wrapper {
+    border: 1px solid var(--table-border);
+}
+
+.table-border-wrapper table {
+    border-width: 0px;
+}
+
+.table-border-wrapper table tr:last-child td {
+    border-bottom-width: 0px;
+}
+
 .timeline {
     position: relative;
     height: 15px;
@@ -1597,6 +1755,24 @@ table tr.table-button {
 
 .tooltip-anchor .tooltip .title {
     font-weight: bold;
+}
+
+.warning-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    font-style: italic;
+    background-color: var(--warning-box-background);
+    color: var(--warning-box-foreground);
+    border: 1px solid var(--warning-box-border);
+    --image-size: 24px;
+    --image-color: var(--warning-box-foreground);
+}
+
+.warning-box.align-start {
+    align-self: flex-start;
 }
 
 .weekdays {

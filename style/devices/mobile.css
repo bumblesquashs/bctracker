@@ -171,6 +171,7 @@ table th {
 
 #system {
     text-align: center;
+    align-self: center;
 }
 
 #system-menu {
@@ -206,7 +207,7 @@ table th {
     --image-size: 32px;
 }
 
-.bus {
+.vehicle {
     min-width: 34px;
 }
 
@@ -239,6 +240,10 @@ table th {
     gap: 20px;
 }
 
+.log-line .title {
+    font-size: 12pt;
+}
+
 .non-mobile {
     display: none !important;
 }
@@ -252,6 +257,12 @@ table th {
 }
 
 .page-container {
+    flex-direction: column;
+    gap: 20px;
+}
+
+.page-grid {
+    display: flex;
     flex-direction: column;
     gap: 20px;
 }
@@ -291,6 +302,10 @@ table th {
 .tab-button-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.table-border-wrapper {
+    width: 100%;
 }
 
 .tablet-only {

@@ -2,23 +2,21 @@
 from dataclasses import dataclass, field
 
 from models.agency import Agency
-from models.bus import Bus
 from models.model import Model
+from models.vehicle import Vehicle
 
 @dataclass(slots=True)
 class Order:
-    '''A range of buses of a specific model ordered in a specific year'''
+    '''A set of vehicles of a specific model'''
     
+    id: int
     agency: Agency
-    model: Model
-    low: int
-    high: int
-    year: int | None = None
-    visible: bool = True
-    demo: bool = False
-    exceptions: set[int] = field(default_factory=set)
+    model: Model | None
+    vehicles: list[Vehicle]
     
-    size: int = field(init=False)
+    key: tuple = field(init=False)
+    years: int = field(init=False)
+    visible: bool = field(init=False)
     
     @property
     def context(self):
@@ -26,60 +24,95 @@ class Order:
         return self.agency.context
     
     @property
-    def first_bus(self):
-        '''The first bus in the order'''
-        return Bus(self.agency, self.low, self)
-    
-    @property
-    def last_bus(self):
-        '''The last bus in the order'''
-        return Bus(self.agency, self.high, self)
+    def years_string(self) -> str:
+        if self.years:
+            if len(self.years) == 1:
+                return str(self.years[0])
+            return f'{self.years[0]}-{self.years[-1]}'
+        return 'Unknown Year'
     
     def __post_init__(self):
-        self.size = (self.high - self.low) + 1 - len(self.exceptions)
+        self.key = min([b.key for b in self.vehicles])
+        self.years = sorted({b.year for b in self.vehicles if b.year})
+        self.visible = any(b.visible for b in self.vehicles)
     
     def __str__(self):
-        model = self.model
-        year = self.year
-        if model and year:
-            return f'{year} {model}'
+        if self.model:
+            if self.years:
+                if len(self.years) == 1:
+                    return f'{self.years[0]} {self.model}'
+                return f'{self.years[0]}-{self.years[-1]} {self.model}'
+            return str(self.model)
         return 'Unknown year/model'
     
     def __hash__(self):
-        return hash((self.context, self.low, self.high))
+        return hash(self.id)
     
     def __eq__(self, other):
-        return self.context == other.context and self.low == other.low and self.high == other.high
+        return self.id == other.id
     
     def __lt__(self, other):
-        if self.context == other.context:
-            return self.low < other.low
-        return self.context < other.context
+        if self.agency == other.agency:
+            return self.key < other.key
+        return self.agency < other.agency
     
-    def __iter__(self):
-        for number in range(self.low, self.high + 1):
-            if number not in self.exceptions:
-                yield Bus(self.agency, number, self)
-    
-    def __contains__(self, bus_number):
-        if bus_number in self.exceptions:
-            return False
-        return self.low <= bus_number <= self.high
-    
-    def previous_bus(self, bus_number):
-        '''The previous bus before the given bus number'''
-        if bus_number <= self.low:
+    def previous_vehicle(self, vehicle):
+        '''The previous vehicle before the given vehicle'''
+        try:
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index - 1]
+        except (IndexError, ValueError):
             return None
-        previous_bus_number = bus_number - 1
-        if previous_bus_number in self.exceptions:
-            return self.previous_bus(previous_bus_number)
-        return Bus(self.agency, previous_bus_number, self)
     
-    def next_bus(self, bus_number):
-        '''The next bus following the given bus number'''
-        if bus_number >= self.high:
+    def next_vehicle(self, vehicle):
+        '''The next vehicle following the given vehicle'''
+        try:
+            index = self.vehicles.index(vehicle)
+            return self.vehicles[index + 1]
+        except (IndexError, ValueError):
             return None
-        next_bus_number = bus_number + 1
-        if next_bus_number in self.exceptions:
-            return self.next_bus(next_bus_number)
-        return Bus(self.agency, next_bus_number, self)
+    
+    @classmethod
+    def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
+        vehicles = []
+        for row in rows:
+            if 'id' in row:
+                id = row['id']
+                del row['id']
+                try:
+                    name = row['name']
+                    del row['name']
+                except:
+                    name = None
+                if agency.vehicle_name_length:
+                    if type(id) is int:
+                        if not name:
+                            name = f'{id:0{agency.vehicle_name_length}d}'
+                        id = str(id)
+                    else:
+                        id = str(id)
+                        if not name:
+                            name = id[:agency.vehicle_name_length]
+                else:
+                    id = str(id)
+                    if not name:
+                        name = id
+                vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+            else:
+                low = row['low']
+                high = row['high']
+                del row['low']
+                del row['high']
+                for id in range(low, high + 1):
+                    if agency.vehicle_name_length:
+                        if type(id) is int:
+                            name = f'{id:0{agency.vehicle_name_length}d}'
+                            id = str(id)
+                        else:
+                            id = str(id)
+                            name = id[:agency.vehicle_name_length]
+                    else:
+                        id = str(id)
+                        name = id
+                    vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+        return cls(order_id, agency, model, vehicles)

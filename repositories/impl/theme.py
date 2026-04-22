@@ -16,7 +16,7 @@ class ThemeRepository:
             for (id, values) in json.load(file).items():
                 self.themes[id] = Theme(id, **values)
     
-    def find(self, theme_id) -> Theme | None:
+    def find(self, theme_id: str) -> Theme | None:
         '''Returns the theme with the given ID'''
         return self.themes.get(theme_id)
     

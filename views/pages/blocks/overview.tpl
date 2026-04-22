@@ -50,11 +50,11 @@
                                     % if context.realtime_enabled:
                                         <div class="section row">
                                             <div class="name column">
-                                                <div>Assigned Buses</div>
+                                                <div>Assigned {{ context.vehicle_type_plural }}</div>
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
-                                                % include('components/percentage', numerator=len([b for b in blocks_so_far if b.id in recorded_buses]), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
+                                                % include('components/percentage', numerator=sum(1 for b in blocks_so_far if b.id in recorded_vehicles), denominator=len(blocks_so_far), low_cutoff=80, high_cutoff=95)
                                             </div>
                                         </div>
                                     % end
@@ -71,60 +71,62 @@
                         </div>
                         <div class="content">
                             % if today_blocks:
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Block</th>
-                                            <th>Routes</th>
-                                            <th class="non-mobile">Start Time</th>
-                                            <th class="non-mobile">End Time</th>
-                                            <th class="desktop-only">Duration</th>
-                                            % if context.realtime_enabled:
-                                                <th>Bus</th>
-                                                <th class="non-mobile">Model</th>
-                                            % end
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        % for block in today_blocks:
-                                            % start_time = block.get_start_time(date=today).format_web(time_format)
-                                            % end_time = block.get_end_time(date=today).format_web(time_format)
+                                <div class="table-border-wrapper">
+                                    <table>
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <div class="column">
-                                                        <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                                        <div class="mobile-only smaller-font">{{ start_time }} - {{ end_time }}</div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    % include('components/route_list', routes=block.get_routes(date=today))
-                                                </td>
-                                                <td class="non-mobile">{{ start_time }}</td>
-                                                <td class="non-mobile">{{ end_time }}</td>
-                                                <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
+                                                <th>Block</th>
+                                                <th>Routes</th>
+                                                <th class="non-mobile">Start Time</th>
+                                                <th class="non-mobile">End Time</th>
+                                                <th class="desktop-only">Duration</th>
                                                 % if context.realtime_enabled:
-                                                    % if block.id in recorded_buses:
-                                                        % bus = recorded_buses[block.id]
-                                                        <td>
-                                                            <div class="column">
-                                                                % include('components/bus')
-                                                                <span class="mobile-only smaller-font">
-                                                                    % include('components/order', order=bus.order)
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="non-mobile">
-                                                            % include('components/order', order=bus.order)
-                                                        </td>
-                                                    % else:
-                                                        <td class="non-mobile lighter-text" colspan="2">Unavailable</td>
-                                                        <td class="mobile-only lighter-text">Unavailable</td>
-                                                    % end
+                                                    <th>{{ context.vehicle_type }}</th>
+                                                    <th class="non-mobile">Model</th>
                                                 % end
                                             </tr>
-                                        % end
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            % for block in today_blocks:
+                                                % start_time = block.get_start_time(date=today).format_web(time_format)
+                                                % end_time = block.get_end_time(date=today).format_web(time_format)
+                                                <tr>
+                                                    <td>
+                                                        <div class="column">
+                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <div class="mobile-only smaller-font">{{ start_time }} - {{ end_time }}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        % include('components/route_list', routes=block.get_routes(date=today))
+                                                    </td>
+                                                    <td class="non-mobile">{{ start_time }}</td>
+                                                    <td class="non-mobile">{{ end_time }}</td>
+                                                    <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
+                                                    % if context.realtime_enabled:
+                                                        % if block.id in recorded_vehicles:
+                                                            % vehicle = recorded_vehicles[block.id]
+                                                            <td>
+                                                                <div class="column">
+                                                                    % include('components/vehicle')
+                                                                    <span class="mobile-only smaller-font">
+                                                                        % include('components/year_model', year_model=vehicle.year_model)
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="non-mobile">
+                                                                % include('components/year_model', year_model=vehicle.year_model)
+                                                            </td>
+                                                        % else:
+                                                            <td class="non-mobile lighter-text" colspan="2">Unavailable</td>
+                                                            <td class="mobile-only lighter-text">Unavailable</td>
+                                                        % end
+                                                    % end
+                                                </tr>
+                                            % end
+                                        </tbody>
+                                    </table>
+                                </div>
                             % else:
                                 <div class="placeholder">
                                     % if context.gtfs_loaded:
@@ -165,7 +167,7 @@
                 </thead>
                 <tbody>
                     % for region in regions:
-                        % region_systems = [s for s in systems if s.region == region]
+                        % region_systems = [s for s in systems if s.region == region and s.agency.enable_blocks]
                         % if region_systems:
                             <tr class="header">
                                 <td colspan="3">{{ region }}</td>

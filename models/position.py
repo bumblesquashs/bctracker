@@ -8,37 +8,39 @@ if TYPE_CHECKING:
 from dataclasses import dataclass
 
 from models.adherence import Adherence
-from models.bus import Bus
 from models.occupancy import Occupancy
 from models.row import Row
 from models.timestamp import Timestamp
+from models.vehicle import Vehicle
 
+import helpers
 import repositories
 
 @dataclass(slots=True)
 class Position:
-    '''Current information about a bus' coordinates, trip, and stop'''
+    '''Current information about a vehicle's coordinates, trip, and stop'''
     
     system: System
-    bus: Bus
-    trip_id: str | None
-    stop_id: str | None
-    block_id: str | None
-    route_id: str | None
-    sequence: int | None
-    lat: float | None
-    lon: float | None
-    bearing: float | None
-    speed: float | None
-    adherence: Adherence | None
-    occupancy: Occupancy | None
-    timestamp: Timestamp
+    vehicle: Vehicle
+    trip_id: str | None = None
+    stop_id: str | None = None
+    block_id: str | None = None
+    route_id: str | None = None
+    sequence: int | None = None
+    lat: float | None = None
+    lon: float | None = None
+    bearing: float | None = None
+    speed: float | None = None
+    adherence: Adherence | None = None
+    occupancy: Occupancy | None = None
+    timestamp: Timestamp | None = None
+    offline: bool = False
     
     @classmethod
     def from_db(cls, row: Row):
         '''Returns a position initialized from the given database row'''
         context = row.context()
-        bus = Bus.find(context, row['bus_number'])
+        vehicle = context.find_vehicle(row['vehicle_id'])
         trip_id = row['trip_id']
         stop_id = row['stop_id']
         block_id = row['block_id']
@@ -49,15 +51,14 @@ class Position:
         bearing = row['bearing']
         speed = row['speed']
         adherence_value = row['adherence']
+        layover = row['layover'] == 1
         if adherence_value is None:
             adherence = None
         else:
-            trip = context.system.get_trip(trip_id)
-            layover = sequence is not None and trip and trip.first_departure.sequence == sequence and adherence_value > 0
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)
-        return cls(context.system, bus, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        return cls(context.system, vehicle, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
     
     @property
     def context(self):
@@ -86,32 +87,32 @@ class Position:
     @property
     def block(self):
         '''Returns the block associated with this position'''
-        if not self.block_id:
+        if self.block_id:
             return self.system.get_block(self.block_id)
         return None
     
     @property
     def route(self):
         '''Returns the route associated with this position'''
-        if not self.route_id:
+        if self.route_id:
             return self.system.get_route(route_id=self.route_id)
         return None
     
     @property
     def colour(self):
         '''Returns the route colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.colour
-        return '989898'
+        route = self.route
+        if route:
+            return route.colour
+        return self.context.nis_colour
     
     @property
     def text_colour(self):
         '''Returns the route text colour associated with this position'''
-        trip = self.trip
-        if trip and trip.route:
-            return trip.route.text_colour
-        return 'FFFFFF'
+        route = self.route
+        if route:
+            return route.text_colour
+        return helpers.generate_text_colour(self.context.nis_colour)
     
     @property
     def departure(self):
@@ -119,40 +120,40 @@ class Position:
         return repositories.departure.find(self.context, self.trip_id, self.sequence)
     
     def __eq__(self, other):
-        return self.bus == other.bus
+        return self.vehicle == other.vehicle
     
     def __lt__(self, other):
-        return self.bus < other.bus
+        return self.vehicle < other.vehicle
     
     def get_json(self):
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
-            'bus_number': self.bus.number,
-            'bus_display': str(self.bus),
-            'bus_url_id': str(self.bus.url_id),
+            'vehicle_id': self.vehicle.id,
+            'vehicle_name': str(self.vehicle),
+            'vehicle_url_id': str(self.vehicle.url_id),
             'system': str(self.system),
             'agency_id': self.context.agency_id,
             'lon': self.lon,
             'lat': self.lat,
             'colour': self.colour,
             'text_colour': self.text_colour,
-            'occupancy_name': self.occupancy.value,
-            'occupancy_status_class': self.occupancy.status_class,
-            'occupancy_icon': self.occupancy.icon
+            'offline': self.offline
         }
-        order = self.bus.order
-        if order:
-            data['bus_order'] = str(order).replace("'", '&apos;')
-            if order.model and order.model.type:
-                data['bus_icon'] = f'model/type/bus-{order.model.type.name}'
-            else:
-                data['bus_icon'] = 'ghost'
+        year_model = self.vehicle.year_model
+        if year_model:
+            data['vehicle_year_model'] = year_model.replace("'", '&apos;')
         else:
-            data['bus_order'] = 'Unknown Year/Model'
-            data['bus_icon'] = 'ghost'
-        decoration = self.bus.find_decoration()
+            data['vehicle_year_model'] = 'Unknown Year/Model'
+        model = self.vehicle.model
+        if model and model.type:
+            data['vehicle_icon'] = f'model/type/{model.type.image_name}'
+        else:
+            data['vehicle_icon'] = 'ghost'
+        decoration = self.vehicle.find_decoration()
         if decoration and decoration.enabled:
             data['decoration'] = str(decoration)
+        if self.vehicle.livery:
+            data['livery'] = self.vehicle.livery
         trip = self.trip
         if trip:
             departure = self.departure
@@ -166,6 +167,11 @@ class Position:
         else:
             data['headsign'] = 'Not In Service'
             data['route_number'] = 'NIS'
+        occupancy = self.occupancy
+        if occupancy:
+            data['occupancy_name'] = occupancy.value,
+            data['occupancy_status_class'] = occupancy.status_class,
+            data['occupancy_icon'] = occupancy.icon,
         bearing = self.bearing
         if bearing is not None:
             data['bearing'] = bearing
@@ -179,9 +185,3 @@ class Position:
         if timestamp:
             data['timestamp'] = timestamp.value
         return data
-    
-    def find_upcoming_departures(self):
-        '''Returns the trip's upcoming departures'''
-        if self.sequence is None or not self.trip:
-            return []
-        return repositories.departure.find_upcoming(self.context, self.trip, self.sequence)

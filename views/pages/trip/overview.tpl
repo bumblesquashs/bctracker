@@ -26,11 +26,11 @@
 <div class="page-container">
     <div class="sidebar container flex-1">
         <div class="section">
-            <div class="header" onclick="toggleSection(this)">
+            <div class="header" onclick="toggleSection(this, true)">
                 <h2>Overview</h2>
                 % include('components/toggle')
             </div>
-            <div class="content">
+            <div class="content gap-20">
                 % include('components/map', map_trip=trip, map_positions=positions)
                 
                 <div class="info-box">
@@ -49,11 +49,13 @@
                         % end
                     </div>
                     % if context.enable_blocks:
-                        <div class="section">
-                            % include('components/block_timeline', block=trip.block)
-                        </div>
+                        % block = trip.block
+                        % if block:
+                            <div class="section">
+                                % include('components/block_timeline', block=trip.block)
+                            </div>
+                        % end
                         <div class="row section">
-                            % block = trip.block
                             <div class="name">Block</div>
                             <div class="value">
                                 % if block:
@@ -169,9 +171,9 @@
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
                     % if len(positions) == 1:
-                        <h2>Active Bus</h2>
+                        <h2>Active {{ context.vehicle_type }}</h2>
                     % else:
-                        <h2>Active Buses</h2>
+                        <h2>Active {{ context.vehicle_type_plural }}</h2>
                     % end
                     % include('components/toggle')
                 </div>
@@ -179,33 +181,33 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Bus</th>
+                                <th>{{ context.vehicle_type }}</th>
                                 <th class="non-mobile">Model</th>
                                 <th>Next Stop</th>
                             </tr>
                         </thead>
                         <tbody>
                             % for position in sorted(positions):
-                                % bus = position.bus
+                                % vehicle = position.vehicle
                                 % trip = position.trip
                                 % stop = position.stop
                                 <tr>
                                     <td>
                                         <div class="column">
                                             <div class="row">
-                                                % include('components/bus')
+                                                % include('components/vehicle')
                                                 <div class="row gap-5">
                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
                                             <span class="mobile-only smaller-font">
-                                                % include('components/order', order=bus.order)
+                                                % include('components/year_model', year_model=vehicle.year_model)
                                             </span>
                                         </div>
                                     </td>
                                     <td class="non-mobile">
-                                        % include('components/order', order=bus.order)
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     <td>
                                         % include('components/stop')
@@ -217,72 +219,89 @@
                 </div>
             </div>
         % elif assignment and trip.service.schedule.is_today and trip.end_time.is_later:
-            % bus = assignment.bus
-            % position = repositories.position.find(bus)
+            % vehicle = assignment.vehicle
+            % position = repositories.position.find(vehicle.agency.id, vehicle.id)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Scheduled Bus</h2>
+                    <h2>Scheduled {{ context.vehicle_type }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>This bus is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bus</th>
-                                <th class="non-mobile">Model</th>
-                                <th>Current Headsign</th>
-                                <th class="desktop-only">Current Trip</th>
-                                <th class="non-mobile">Next Stop</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="column">
-                                        <div class="row">
-                                            % include('components/bus')
-                                            % if position:
-                                                % include('components/adherence', adherence=position.adherence)
-                                            % end
-                                        </div>
-                                        <span class="mobile-only smaller-font">
-                                            % include('components/order', order=bus.order)
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="non-mobile">
-                                    % include('components/order', order=bus.order)
-                                </td>
-                                % if position and position.trip:
-                                    % stop = position.stop
+                    <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    <div class="table-border-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{{ context.vehicle_type }}</th>
+                                    <th class="non-mobile">Model</th>
+                                    <th>Current Headsign</th>
+                                    <th class="desktop-only">Current Trip</th>
+                                    <th class="non-mobile">Next Stop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
                                     <td>
                                         <div class="column">
-                                            % include('components/headsign', departure=position.departure, trip=position.trip)
-                                            <div class="non-desktop smaller-font">
-                                                Trip:
-                                                % include('components/trip', include_tooltip=False, trip=position.trip)
+                                            <div class="row">
+                                                % include('components/vehicle')
+                                                % if position:
+                                                    % include('components/adherence', adherence=position.adherence)
+                                                % end
                                             </div>
-                                            % if stop:
-                                                <div class="mobile-only smaller-font">
-                                                    <span class="align-middle">Next Stop:</span>
-                                                    % include('components/stop')
-                                                </div>
-                                            % end
+                                            <span class="mobile-only smaller-font">
+                                                % include('components/year_model', year_model=vehicle.year_model)
+                                            </span>
                                         </div>
                                     </td>
-                                    <td class="desktop-only">
-                                        % include('components/trip', include_tooltip=False, trip=position.trip)
-                                    </td>
                                     <td class="non-mobile">
-                                        % include('components/stop')
+                                        % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
-                                % else:
-                                    <td class="lighter-text" colspan="3">Not In Service</td>
-                                % end
-                            </tr>
-                        </tbody>
-                    </table>
+                                    % if position:
+                                        % position_trip = position.trip
+                                        % stop = position.stop
+                                        % if position_trip:
+                                            <td>
+                                                <div class="column">
+                                                    % include('components/headsign', departure=position.departure, trip=position_trip)
+                                                    <div class="non-desktop smaller-font">
+                                                        Trip:
+                                                        % include('components/trip', include_tooltip=False, trip=position_trip)
+                                                    </div>
+                                                    % if stop:
+                                                        <div class="mobile-only smaller-font">
+                                                            <span class="align-middle">Next Stop:</span>
+                                                            % include('components/stop')
+                                                        </div>
+                                                    % end
+                                                </div>
+                                            </td>
+                                            <td class="desktop-only">
+                                                % include('components/trip', include_tooltip=False, trip=position_trip)
+                                            </td>
+                                        % else:
+                                            <td colspan="2">
+                                                <div class="column">
+                                                    <div class="lighter-text">Not In Service</div>
+                                                    % if stop:
+                                                        <div class="mobile-only smaller-font">
+                                                            <span class="align-middle">Next Stop:</span>
+                                                            % include('components/stop')
+                                                        </div>
+                                                    % end
+                                                </div>
+                                            </td>
+                                        % end
+                                        <td class="non-mobile">
+                                            % include('components/stop')
+                                        </td>
+                                    % else:
+                                        <td class="lighter-text" colspan="3">Not In Service</td>
+                                    % end
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         % end
@@ -293,7 +312,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if [d for d in departures if d.timepoint]:
+                % if any(d.timepoint for d in departures):
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None

@@ -8,6 +8,8 @@
         "prefer_stop_id": true,
         "show_stop_number": false,
         "enable_blocks": false,
+        "nis_colour": "003769",
+        "default_route_colour": "003769",
         "custom_route_numbers": {
             "12443": "1",
             "12444": "2",
@@ -32,7 +34,10 @@
             "12432": "25",
             "12442": "26",
             "12393": "30"
-        }
+        },
+        "filter_vehicles_image_name": "ferry",
+        "vehicle_type": "Vessel",
+        "vehicle_type_plural": "Vessels"
     },
     "bc-transit": {
         "name": "BC Transit",
@@ -67,6 +72,14 @@
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
         "prefix_headsigns": true,
         "prefer_route_id": true,
+        "prefer_stop_id": true,
+        "show_stop_number": false
+    },
+    "tofino-shuttle": {
+        "name": "Tofino Free Shuttle",
+        "website": "https://tourismtofino.com/plan-your-trip/getting-around",
+        "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/TOFINO_feed/feed-tofino.zip",
+        "accurate_seconds": false,
         "prefer_stop_id": true,
         "show_stop_number": false
     },
