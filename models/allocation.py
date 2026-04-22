@@ -28,12 +28,6 @@ class Allocation:
     last_stop_name: str | None
     last_seen_timestamp: Timestamp | None
     
-    def __hash__(self):
-        return hash(self.id)
-    
-    def __eq__(self, other):
-        return self.id == other.id
-    
     @property
     def first_date(self):
         if self.first_record:
