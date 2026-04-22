@@ -5,11 +5,11 @@
     <h1>Realtime</h1>
     <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
+        <a href="{{ context.url('realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
         <span class="tab-button current">By Route</span>
-        <a href="{{ get_url(context, 'realtime', 'models') }}" class="tab-button">By Model</a>
+        <a href="{{ context.url('realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
-            <a href="{{ get_url(context, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ context.url('realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Dennis Hopper and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -42,7 +42,7 @@
                                 <div class="lighter-text">{{ route.context }}</div>
                                 <div class="lighter-text">•</div>
                             % end
-                            <a href="{{ get_url(route.context, 'routes', route) }}">View schedule and details</a>
+                            <a href="{{ route.url() }}">View schedule and details</a>
                         </div>
                     </div>
                     % include('components/toggle')
@@ -114,7 +114,7 @@
                                     </td>
                                     % if context.enable_blocks:
                                         <td class="non-mobile">
-                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                            <a href="{{ block.url() }}">{{ block.id }}</a>
                                         </td>
                                     % end
                                     <td class="non-mobile">
@@ -229,6 +229,6 @@
 
 <script>
     function toggleNISVehicles() {
-        window.location = "{{ get_url(context, 'realtime', 'routes', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ context.url('realtime', 'routes', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

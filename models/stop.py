@@ -128,6 +128,9 @@ class Stop:
             return self.key < other.key
         return self.name < other.name
     
+    def url(self, *args, **kwargs):
+        return self.context.url('stops', self, *args, **kwargs)
+    
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
         number = self.number if self.context.show_stop_number else None

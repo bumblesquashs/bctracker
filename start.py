@@ -4,7 +4,6 @@ import signal
 from argparse import ArgumentParser
 
 from database import Database
-from settings import Settings
 from server import Server
 
 import repositories
@@ -20,7 +19,6 @@ if __name__ == '__main__':
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
     
     database = Database()
-    settings = Settings()
     
     repositories.agency = AgencyRepository()
     repositories.decoration = DecorationRepository()
@@ -43,12 +41,12 @@ if __name__ == '__main__':
     repositories.trip = TripRepository(database)
     
     services.log = LogService()
-    services.backup = BackupService(database, settings)
-    services.gtfs = GTFSService(database, settings)
-    services.realtime = RealtimeService(database, settings)
-    services.cron = CronService(database, settings)
+    services.backup = BackupService(database)
+    services.gtfs = GTFSService(database)
+    services.realtime = RealtimeService(database)
+    services.cron = CronService(database)
     
-    server = Server(database, settings)
+    server = Server(database)
     
     def exit(sig, frame):
         server.stop()

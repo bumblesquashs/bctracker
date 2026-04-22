@@ -23,8 +23,8 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ vehicle.url() }}" class="tab-button">Overview</a>
+        <a href="{{ vehicle.url('map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -49,7 +49,7 @@
                         <h3>Allocation History</h3>
                         % for allocation in allocations:
                             <div class="section">
-                                <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                <a href="{{ allocation.context.url() }}">{{ allocation.context }}</a>
                                 <div class="smaller-font ligher-text">
                                     {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
                                 </div>
@@ -140,7 +140,7 @@
                                                         <div class="row space-between">
                                                             % if record.is_available:
                                                                 % block = record.block
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                <a href="{{ block.url() }}">{{ block.id }}</a>
                                                             % else:
                                                                 <span>{{ record.block_id }}</span>
                                                             % end

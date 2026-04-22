@@ -17,7 +17,7 @@
                     It may be from a different system - the following systems have a trip with that ID
                     <ul>
                         % for trip in alt_trips:
-                            <li>{{ trip.context }}: <a href="{{ get_url(trip.context, 'trips', trip) }}">{{ trip }}</a></li>
+                            <li>{{ trip.context }}: <a href="{{ trip.url() }}">{{ trip }}</a></li>
                         % end
                     </ul>
                 </li>

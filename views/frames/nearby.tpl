@@ -2,13 +2,10 @@
 % import repositories
 
 % from math import floor
-% from datetime import timedelta
-
-% from models.date import Date
 
 % if stops:
     % for stop in stops:
-        % departures = stop.find_departures(date=Date.today())
+        % departures = stop.find_departures(date=today)
         % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
         % upcoming_count = 3 + floor(len(routes) / 3)
         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
@@ -22,7 +19,7 @@
                     <h3>
                         % include('components/stop', include_link=False)
                     </h3>
-                    <a href="{{ get_url(stop.context, 'stops', stop) }}">View stop schedule and details</a>
+                    <a href="{{ stop.url() }}">View stop schedule and details</a>
                 </div>
                 % include('components/toggle')
             </div>
@@ -58,16 +55,15 @@
                                 % if not last_time:
                                     % last_time = departure.time
                                 % end
-                                % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                 % last_time = departure.time
                             % end
                         </tbody>
                     </table>
                 % else:
-                    % tomorrow = Date.today() + timedelta(days=1)
                     <p>
                         There are no departures for the rest of today.
-                        <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                        <a href="{{ stop.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
                     </p>
                 % end
             </div>

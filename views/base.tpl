@@ -57,8 +57,8 @@
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(context, *path) }}" />
-        <meta property="og:image" content="{{ get_url(context, 'img', 'bctracker', 'meta-logo.png') }}" />
+        <meta property="og:url" content="{{ context.url(*path) }}" />
+        <meta property="og:image" content="{{ context.url('img', 'bctracker', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -284,34 +284,34 @@
     
     <body class="{{ 'full-map' if full_map else '' }}">
         <div id="navigation-bar">
-            <a id="title" href="{{ get_url(context) }}">
+            <a id="title" href="{{ context.url() }}">
                 % include('components/svg', name='bctracker/bctracker')
                 <div>BCTracker</div>
             </a>
             
-            <a class="navigation-button non-mobile" href="{{ get_url(context, 'map') }}">Map</a>
+            <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
             % if context.realtime_enabled:
-                <a class="navigation-button non-mobile" href="{{ get_url(context, 'realtime') }}">Realtime</a>
-                <a class="navigation-button desktop-only" href="{{ get_url(context, 'history') }}">History</a>
+                <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
+                <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
             % else:
                 <div class="navigation-button non-mobile disabled">Realtime</div>
                 <div class="navigation-button desktop-only disabled">History</div>
             % end
             
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'routes') }}">Routes</a>
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'stops') }}">Stops</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('routes') }}">Routes</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('stops') }}">Stops</a>
             % if context.enable_blocks:
-                <a class="navigation-button desktop-only" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                <a class="navigation-button desktop-only" href="{{ context.url('blocks') }}">Blocks</a>
             % else:
                 <div class="navigation-button desktop-only disabled">Blocks</div>
             % end
             
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'about') }}">About</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('about') }}">About</a>
             
             <div class="flex-1"></div>
             
             % if is_admin:
-                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'admin') }}">
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
                     <div class="tooltip left">
                         <div class="title">Administration</div>
@@ -320,7 +320,7 @@
             % end
             
             % if show_random:
-                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
                     <div class="tooltip left">
                         <div class="title">Random Page</div>
@@ -328,21 +328,21 @@
                 </a>
             % end
             
-            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'favourites') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('favourites') }}">
                 % include('components/svg', name='action/favourite')
                 <div class="tooltip left">
                     <div class="title">Favourites</div>
                 </div>
             </a>
             
-            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'nearby') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('nearby') }}">
                 % include('components/svg', name='nearby')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
             </a>
             
-            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'personalize') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('personalize') }}">
                 % include('components/svg', name='personalize')
                 <div class="tooltip left">
                     <div class="title">Personalize</div>
@@ -363,16 +363,16 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            <a class="menu-button mobile-only" href="{{ get_url(context, 'map') }}">
+            <a class="menu-button mobile-only" href="{{ context.url('map') }}">
                 % include('components/svg', name='map')
                 <span>Map</span>
             </a>
             % if context.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(context, 'realtime') }}">
+                <a class="menu-button mobile-only" href="{{ context.url('realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(context, 'history') }}">
+                <a class="menu-button" href="{{ context.url('history') }}">
                     % include('components/svg', name='history')
                     <span>History</span>
                 </a>
@@ -386,16 +386,16 @@
                     <span>History</span>
                 </div>
             % end
-            <a class="menu-button" href="{{ get_url(context, 'routes') }}">
+            <a class="menu-button" href="{{ context.url('routes') }}">
                 % include('components/svg', name='route')
                 <span>Routes</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'stops') }}">
+            <a class="menu-button" href="{{ context.url('stops') }}">
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
             % if context.enable_blocks:
-                <a class="menu-button" href="{{ get_url(context, 'blocks') }}">
+                <a class="menu-button" href="{{ context.url('blocks') }}">
                     % include('components/svg', name='block')
                     <span>Blocks</span>
                 </a>
@@ -405,30 +405,30 @@
                     <span>Blocks</span>
                 </div>
             % end
-            <a class="menu-button" href="{{ get_url(context, 'about') }}">
+            <a class="menu-button" href="{{ context.url('about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'favourites') }}">
+            <a class="menu-button" href="{{ context.url('favourites') }}">
                 % include('components/svg', name='action/favourite')
                 <span>Favourites</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'nearby') }}">
+            <a class="menu-button" href="{{ context.url('nearby') }}">
                 % include('components/svg', name='nearby')
                 <span>Nearby</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'personalize') }}">
+            <a class="menu-button" href="{{ context.url('personalize') }}">
                 % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
             % if show_random:
-                <a class="menu-button" href="{{ get_url(context, 'random') }}">
+                <a class="menu-button" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
                     <span>Random Page</span>
                 </a>
             % end
             % if is_admin:
-                <a class="menu-button" href="{{ get_url(context, 'admin') }}">
+                <a class="menu-button" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
                     <span>Administration</span>
                 </a>
@@ -452,7 +452,7 @@
                     % if favourite_system_ids:
                         <div id="favourite-systems-dropdown">
                             % if context.system:
-                                <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
+                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
                             % else:
                                 <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Systems</span>
                             % end
@@ -465,7 +465,7 @@
                                         % include('components/svg', name='action/favourite')
                                     </div>
                                 % else:
-                                    <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button" onclick="event.stopPropagation()">
+                                    <a href="{{ system.context.url(*path, **path_args) }}" class="system-button" onclick="event.stopPropagation()">
                                         % include('components/agency_logo', agency=system.agency)
                                         <div class="flex-1">{{ system }}</div>
                                         % include('components/svg', name='action/favourite')
@@ -492,7 +492,7 @@
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
                 % if context.system:
-                    <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Systems</span>
                 % end
@@ -507,7 +507,7 @@
                                 % include('components/svg', name='action/favourite')
                             </div>
                         % else:
-                            <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
+                            <a href="{{ system.context.url(*path, **path_args) }}" class="system-button">
                                 % include('components/agency_logo', agency=system.agency)
                                 <div class="flex-1">{{ system }}</div>
                                 % include('components/svg', name='action/favourite')
@@ -529,7 +529,7 @@
                                     % end
                                 </div>
                             % else:
-                                <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
+                                <a href="{{ system.context.url(*path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=system.agency)
                                     <div class="flex-1">{{ system }}</div>
                                     % if system.id in favourite_system_ids:
@@ -695,7 +695,7 @@
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{ get_url(context, 'api', 'search') }}", true);
+            request.open("POST", "{{ context.url('api', 'search') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 cachedResponses[cacheKey] = request.response;
