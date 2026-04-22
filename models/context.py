@@ -228,7 +228,7 @@ class Context:
         return self.agency < other.agency
     
     def url(self, *args, **kwargs):
-        '''Returns a URL formatted based on the given context and path'''
+        '''Returns a URL formatted based on the given path'''
         components = []
         for arg in args:
             try:

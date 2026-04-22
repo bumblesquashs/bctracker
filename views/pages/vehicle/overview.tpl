@@ -308,7 +308,7 @@
                         </thead>
                         <tbody>
                             % for departure in upcoming_departures[:5]:
-                                % include('rows/upcoming_departure')
+                                % include('components/upcoming_departure_row')
                             % end
                             % if len(upcoming_departures) > 5:
                                 <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
@@ -321,7 +321,7 @@
                                 </tr>
                                 <tr class="display-none"></tr>
                                 % for departure in upcoming_departures[5:]:
-                                    % include('rows/upcoming_departure', hidden=True)
+                                    % include('components/upcoming_departure_row', hidden=True)
                                 % end
                             % end
                         </tbody>

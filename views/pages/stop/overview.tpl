@@ -172,7 +172,7 @@
                                         % if not last_time:
                                             % last_time = departure.time
                                         % end
-                                        % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                         % last_time = departure.time
                                     % end
                                 </tbody>
@@ -228,7 +228,7 @@
                                         % if not last_time:
                                             % last_time = departure.time
                                         % end
-                                        % include('rows/departure', show_divider=departure.time.hour > last_time.hour, show_time_estimate=True)
+                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour, show_time_estimate=True)
                                         % last_time = departure.time
                                     % end
                                 </tbody>
@@ -282,7 +282,7 @@
                                     % if not last_time:
                                         % last_time = departure.time
                                     % end
-                                    % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                    % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                     % last_time = departure.time
                                 % end
                             </tbody>
