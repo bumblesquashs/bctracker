@@ -5,7 +5,7 @@
     <h1>Routes</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">List</span>
-        <a href="{{ get_url(context, 'routes', 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('routes', 'map') }}" class="tab-button">Map</a>
     </div>
 </div>
 
@@ -35,15 +35,15 @@
                                             <div class="row">
                                                 % include('components/route')
                                                 <div class="column gap-5">
-                                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
                                                     <div class="mobile-only">
-                                                        % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
+                                                        % include('components/weekdays', context=route.context, schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="non-mobile">
-                                            % include('components/weekdays', schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
+                                            % include('components/weekdays', context=route.context, schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                                         </td>
                                     </tr>
                                 % end
@@ -90,7 +90,7 @@
                                         <div class="row">
                                             % include('components/agency_logo', agency=system.agency)
                                             <div class="column">
-                                                <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                <a href="{{ system.context.url(*path) }}">{{ system }}</a>
                                                 <span class="mobile-only smaller-font">
                                                     % if system.gtfs_loaded:
                                                         % if count == 1:

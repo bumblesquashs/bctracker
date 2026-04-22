@@ -61,6 +61,9 @@ class Block:
             return self.context < other.context
         return self.id < other.id
     
+    def url(self, *args, **kwargs):
+        return self.context.url('blocks', self, *args, **kwargs)
+    
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''
         if service_group:

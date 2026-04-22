@@ -494,7 +494,7 @@
     
     function updatePositionData() {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{ get_url(context, 'api', 'positions') }}", true);
+        request.open("GET", "{{ context.url('api', 'positions') }}", true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {

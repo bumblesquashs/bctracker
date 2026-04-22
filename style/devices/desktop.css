@@ -39,6 +39,42 @@ table th {
     overflow: hidden;
 }
 
+#favourite-systems-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    min-width: 100%;
+    flex-direction: column;
+    z-index: 100;
+    font-size: 12pt;
+    font-weight: normal;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+#favourite-systems-dropdown .system-button {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none !important;
+    padding: 5px 20px;
+    text-wrap: nowrap;
+    --image-size: 18px;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    cursor: default;
+    font-weight: bold;
+}
+
 #main {
     font-size: 13pt;
     overflow: auto;
@@ -157,6 +193,10 @@ table th {
 
 #system:hover {
     background-color: var(--status-bar-hover);
+}
+
+#system.enable-dropdown:hover #favourite-systems-dropdown {
+    display: flex;
 }
 
 #system-menu {

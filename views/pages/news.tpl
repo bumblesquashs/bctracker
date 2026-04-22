@@ -3,7 +3,7 @@
 
 <div id="page-header">
     <h1>News Archive</h1>
-    <a href="{{ get_url(context) }}">Return home</a>
+    <a href="{{ context.url() }}">Return home</a>
 </div>
 
 <div class="container">
@@ -146,7 +146,7 @@
                 We would say sorry if this causes any inconvenience, but apologizing would make us sound too Canadian.
             </p>
             <p>If you would like to file a formal complaint about this change, please start by pressing this large button.</p>
-            <a class="button" href="{{ get_url(context, 'personalize') }}#complaints">File a Complaint</a>
+            <a class="button" href="{{ context.url('personalize') }}#complaints">File a Complaint</a>
             <p>
                 <i>... Happy April Fools Day!</i>
             </p>

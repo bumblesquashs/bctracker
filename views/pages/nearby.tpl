@@ -85,7 +85,7 @@
                                                     <div class="lighter-text">{{ stop.context }}</div>
                                                     <div class="lighter-text">•</div>
                                                 % end
-                                                <a href="{{ get_url(stop.context, 'stops', stop) }}">View stop schedule and details</a>
+                                                <a href="{{ stop.url() }}">View stop schedule and details</a>
                                             </div>
                                         </div>
                                         % include('components/toggle')
@@ -131,7 +131,7 @@
                                             % tomorrow = today.next()
                                             <p>
                                                 There are no departures for the rest of today.
-                                                <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                                <a href="{{ stop.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
                                             </p>
                                         % end
                                     </div>

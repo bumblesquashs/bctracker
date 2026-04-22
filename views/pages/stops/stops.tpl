@@ -6,7 +6,7 @@
     % if show_stations_tab:
         <div class="tab-button-bar">
             <span class="tab-button current">Stops</span>
-            <a href="{{ get_url(context, 'stops', 'stations') }}" class="tab-button">Stations</a>
+            <a href="{{ context.url('stops', 'stations') }}" class="tab-button">Stations</a>
         </div>
     % end
 </div>
@@ -202,7 +202,7 @@
                                             % include('components/route_list', routes=stop.routes)
                                         </td>
                                         <td>
-                                            % include('components/weekdays', schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.url_id}/schedule')
+                                            % include('components/weekdays', context=stop.context, schedule=stop.schedule, compact=True, schedule_path=f'stops/{stop.url_id}/schedule')
                                         </td>
                                     </tr>
                                 % end
@@ -265,7 +265,7 @@
                                         <div class="row">
                                             % include('components/agency_logo', agency=system.agency)
                                             <div class="column">
-                                                <a href="{{ get_url(system.context, *path, search=search) }}">{{ system }}</a>
+                                                <a href="{{ system.context.url(*path, search=search) }}">{{ system }}</a>
                                                 <span class="mobile-only smaller-font">
                                                     % if system.gtfs_loaded:
                                                         % if count == 1:

@@ -157,6 +157,10 @@ table tr.table-button {
     flex: 1;
 }
 
+#favourite-systems-dropdown {
+    display: none;
+}
+
 #last-updated {
     font-size: 12pt;
 }
@@ -1753,10 +1757,6 @@ table tr.table-button {
 
 .tooltip-anchor .tooltip .title {
     font-weight: bold;
-}
-
-.trip {
-    align-self: flex-start;
 }
 
 .warning-box {

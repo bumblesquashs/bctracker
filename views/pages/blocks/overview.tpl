@@ -5,7 +5,7 @@
     <h1>Blocks</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'blocks', 'schedule') }}" class="tab-button">Schedule</a>
+        <a href="{{ context.url('blocks', 'schedule') }}" class="tab-button">Schedule</a>
     </div>
 </div>
 
@@ -93,7 +93,7 @@
                                                 <tr>
                                                     <td>
                                                         <div class="column">
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
                                                             <div class="mobile-only smaller-font">{{ start_time }} - {{ end_time }}</div>
                                                         </div>
                                                     </td>
@@ -131,7 +131,7 @@
                                 <div class="placeholder">
                                     % if context.gtfs_loaded:
                                         <h3>There are no blocks today</h3>
-                                        <p>You can check the <a href="{{ get_url(context, 'blocks', 'schedule') }}">full schedule</a> for more information about when this system operates.</p>
+                                        <p>You can check the <a href="{{ context.url('blocks', 'schedule') }}">full schedule</a> for more information about when this system operates.</p>
                                     % else:
                                         <h3>Blocks are unavailable</h3>
                                         <p>System data is currently loading and will be available soon.</p>
@@ -167,7 +167,7 @@
                 </thead>
                 <tbody>
                     % for region in regions:
-                        % region_systems = [s for s in systems if s.region == region]
+                        % region_systems = [s for s in systems if s.region == region and s.agency.enable_blocks]
                         % if region_systems:
                             <tr class="header">
                                 <td colspan="3">{{ region }}</td>
@@ -180,7 +180,7 @@
                                         <div class="row">
                                             % include('components/agency_logo', agency=system.agency)
                                             <div class="column">
-                                                <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                <a href="{{ system.context.url(*path) }}">{{ system }}</a>
                                                 <span class="mobile-only smaller-font">
                                                     % if system.gtfs_loaded:
                                                         % if count == 1:

@@ -1,16 +1,13 @@
 
-% from models.date import Date
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'blocks', block, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('blocks', block, 'map') }}" class="tab-button">Map</a>
         % if context.realtime_enabled:
-            <a href="{{ get_url(context, 'blocks', block, 'history') }}" class="tab-button">History</a>
+            <a href="{{ context.url('blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -18,8 +15,6 @@
 % sheets = block.sheets
 % routes = block.get_routes()
 % trips = block.get_trips()
-
-% today = Date.today(block.context.timezone)
 
 <div class="page-container">
     <div class="sidebar container flex-1">
@@ -39,7 +34,7 @@
                         % for route in routes:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ route.url() }}">{{! route.display_name }}</a>
                             </div>
                         % end
                     </div>
@@ -150,7 +145,7 @@
                         <tbody>
                             % for related_block in related_blocks:
                                 <tr>
-                                    <td><a href="{{ get_url(related_block.context, 'blocks', related_block) }}">{{ related_block.id }}</a></td>
+                                    <td><a href="{{ related_block.url() }}">{{ related_block.id }}</a></td>
                                     <td>
                                         <div class="column">
                                             % for sheet in related_block.sheets:

@@ -4,7 +4,7 @@
 <div id="page-header">
     <h1>Stations</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'stops') }}" class="tab-button">Stops</a>
+        <a href="{{ context.url('stops') }}" class="tab-button">Stops</a>
         <span class="tab-button current">Stations</span>
     </div>
 </div>

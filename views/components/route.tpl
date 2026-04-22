@@ -5,7 +5,7 @@
     % else:
         <span class="tooltip-anchor">
             % if get('include_link', False):
-                <a class="route {{ '' if compact else 'min-width' }}" style="background-color: #{{ route.colour }};" href="{{ get_url(route.context, 'routes', route) }}">{{ route.number }}</a>
+                <a class="route {{ '' if compact else 'min-width' }}" style="background-color: #{{ route.colour }};" href="{{ route.url() }}">{{ route.number }}</a>
             % else:
                 <span class="route {{ '' if compact else 'min-width' }}" style="background-color: #{{ route.colour }};">{{ route.number }}</span>
             % end

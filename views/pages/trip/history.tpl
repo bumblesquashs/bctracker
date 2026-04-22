@@ -11,8 +11,8 @@
         % end
     </h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'trips', trip) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ trip.url() }}" class="tab-button">Overview</a>
+        <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>

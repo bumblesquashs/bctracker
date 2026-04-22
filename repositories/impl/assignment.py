@@ -84,7 +84,6 @@ class AssignmentRepository:
     
     def find_all(self, context: Context, block_id: str | None = None, vehicle_id: str | None = None, trip_id: str | None = None, route_id: str | None = None, stop_id: str | None = None) -> list[Assignment]:
         '''Returns all assignments for the given block, vehicle, trip, route, and stop'''
-        date = Date.today(context.timezone)
         joins = {
             'allocation': {
                 'allocation.allocation_id': 'assignment.allocation_id'
@@ -95,7 +94,7 @@ class AssignmentRepository:
             'allocation.vehicle_id': vehicle_id,
             'allocation.system_id': context.system_id,
             'assignment.block_id': block_id,
-            'assignment.date': date.format_db()
+            'assignment.date': context.today.format_db()
         }
         if trip_id or route_id or stop_id:
             joins['trip'] = {
