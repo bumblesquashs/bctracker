@@ -5,8 +5,8 @@
     <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
-        <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
-        <a href="{{ get_url(context, 'history', 'transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ context.url('history', 'first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ context.url('history', 'transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -61,14 +61,14 @@
                 <script>
                     function setDays(days) {
                         if (days === null) {
-                            window.location = "{{ get_url(context, 'history') }}";
+                            window.location = "{{ context.url('history') }}";
                         } else {
-                            window.location = "{{ get_url(context, 'history') }}?days=" + days;
+                            window.location = "{{ context.url('history') }}?days=" + days;
                         }
                     }
                     
                     function toggleShowTransfers() {
-                        window.location = "{{! get_url(context, 'history', days=days, show_transfers='false' if show_transfers else 'true') }}"
+                        window.location = "{{! context.url('history', days=days, show_transfers='false' if show_transfers else 'true') }}"
                     }
                 </script>
             </div>
@@ -208,7 +208,7 @@
                                                             <div class="row space-between">
                                                                 % if record.is_available:
                                                                     % block = record.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     <span>{{ record.block_id }}</span>
                                                                 % end
@@ -282,7 +282,7 @@
                                                             <div class="row space-between">
                                                                 % if record.is_available:
                                                                     % block = record.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     <span>{{ record.block_id }}</span>
                                                                 % end

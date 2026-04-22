@@ -49,7 +49,7 @@
     % if context.enable_blocks:
         <td class="desktop-only">
             % if block:
-                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                <a href="{{ block.url() }}">{{ block.id }}</a>
             % else:
                 <span class="lighter-text">Loading</span>
             % end

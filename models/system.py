@@ -188,18 +188,6 @@ class System:
         '''Returns all trips'''
         return self.trips.values()
     
-    def search_blocks(self, query):
-        '''Returns all blocks that match the given query'''
-        return [b.get_match(query) for b in self.blocks.values()]
-    
-    def search_routes(self, query):
-        '''Returns all routes that match the given query'''
-        return [r.get_match(query) for r in self.routes.values()]
-    
-    def search_stops(self, query):
-        '''Returns all stops that match the given query'''
-        return [s.get_match(query) for s in self.stops.values()]
-    
     def update_route_caches(self, route_ids: list[str]):
         missing_route_ids = [id for id in route_ids if id not in self.route_caches]
         if not missing_route_ids:

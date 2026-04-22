@@ -1,5 +1,4 @@
 
-% from datetime import timedelta
 % from math import floor
 
 % rebase('base')
@@ -107,7 +106,7 @@
                                                             <div class="row">
                                                                 % if record.is_available:
                                                                     % block = record.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     {{ record.block_id }}
                                                                 % end
@@ -148,7 +147,7 @@
                                     <div class="column gap-5">
                                         <h3 class="row">
                                             % include('components/route', route=value, include_link=False)
-                                            <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
+                                            <a href="{{ value.url() }}">{{! value.display_name }}</a>
                                         </h3>
                                         <div class="row">
                                             <div>{{ value.context }}</div>
@@ -306,11 +305,10 @@
                                             </tbody>
                                         </table>
                                     % else:
-                                        % tomorrow = today.next()
                                         <div class="placeholder open-only">
                                             <p>
                                                 There are no departures for the rest of today.
-                                                <a href="{{ get_url(value.context, 'stops', value, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                                <a href="{{ value.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
                                             </p>
                                         </div>
                                     % end

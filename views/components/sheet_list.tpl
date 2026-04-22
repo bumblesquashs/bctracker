@@ -1,8 +1,6 @@
 
 % import calendar
 
-% from models.date import Date
-
 % schedule_path = get('schedule_path')
 % date_path = get('date_path', schedule_path)
 
@@ -35,7 +33,6 @@
     % end
     <div class="column gap-10">
         % for (i, sheet) in enumerate(sheets):
-            % today = Date.today(sheet.context.timezone)
             % schedule = sheet.schedule
             % dates = schedule.exceptions.union(sheet.modifications)
             % if not schedule.is_special or dates:
@@ -57,7 +54,7 @@
                                     % for date in month_dates:
                                         % status = sheet.get_date_status(date)
                                         % if schedule_path:
-                                            <a class="date {{ status }}" href="{{ get_url(context, date_path, date) }}">{{ date.day }}</a>
+                                            <a class="date {{ status }}" href="{{ context.url(date_path, date) }}">{{ date.day }}</a>
                                         % else:
                                             <span class="date {{ status }}">{{ date.day }}</span>
                                         % end

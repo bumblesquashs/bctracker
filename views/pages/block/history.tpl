@@ -4,8 +4,8 @@
 <div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'blocks', block) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(context, 'blocks', block, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('blocks', block) }}" class="tab-button">Overview</a>
+        <a href="{{ context.url('blocks', block, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>

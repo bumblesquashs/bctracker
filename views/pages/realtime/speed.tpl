@@ -5,9 +5,9 @@
     <h1>Realtime</h1>
     <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
-        <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
-        <a href="{{ get_url(context, 'realtime', 'models') }}" class="tab-button">By Model</a>
+        <a href="{{ context.url('realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
+        <a href="{{ context.url('realtime', 'routes') }}" class="tab-button">By Route</a>
+        <a href="{{ context.url('realtime', 'models') }}" class="tab-button">By Model</a>
         <span class="tab-button current">By Speed</span>
     </div>
 </div>
@@ -90,7 +90,7 @@
                             </td>
                             % if context.enable_blocks:
                                 <td class="non-mobile">
-                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                 </td>
                             % end
                             <td class="non-mobile">
@@ -155,6 +155,6 @@
 
 <script>
     function toggleNISVehicles() {
-        window.location = "{{ get_url(context, 'realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ context.url('realtime', 'speed', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

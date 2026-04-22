@@ -1,6 +1,4 @@
 
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
@@ -8,7 +6,7 @@
     <h2>Tools for server and system management</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Management</span>
-        <a href="{{ get_url(context, 'admin', 'logs') }}" class="tab-button">Logs</a>
+        <a href="{{ context.url('admin', 'logs') }}" class="tab-button">Logs</a>
     </div>
 </div>
 

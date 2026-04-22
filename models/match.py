@@ -22,12 +22,12 @@ class Match:
             return self.name < other.name
         return self.value > other.value
     
-    def get_json(self, get_url):
+    def get_json(self):
         '''Returns a representation of this match in JSON-compatible format'''
         return {
             'system_name': str(self.context),
             'name': self.name,
             'description': self.description,
             'icon': self.icon,
-            'url': get_url(self.context, self.path)
+            'url': self.context.url(self.path)
         }

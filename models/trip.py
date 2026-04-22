@@ -186,6 +186,9 @@ class Trip:
             return self.service < other.service
         return self.start_time < other.start_time
     
+    def url(self, *args, **kwargs):
+        return self.context.url('trips', self, *args, **kwargs)
+    
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''
         json = {

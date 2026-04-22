@@ -5,11 +5,11 @@
     <h1>Realtime</h1>
     <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
-        <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
+        <a href="{{ context.url('realtime') }}" class="tab-button">All {{ context.vehicle_type_plural }}</a>
+        <a href="{{ context.url('realtime', 'routes') }}" class="tab-button">By Route</a>
         <span class="tab-button current">By Model</span>
         % if show_speed:
-            <a href="{{ get_url(context, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ context.url('realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Keanu Reeves and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -130,7 +130,7 @@
                                                         </tr>
                                                         <tr class="display-none"></tr>
                                                         % for position in order_positions:
-                                                            % include('rows/realtime', position=position)
+                                                            % include('components/realtime_row', position=position)
                                                         % end
                                                     % end
                                                 </tbody>
@@ -169,7 +169,7 @@
                             </thead>
                             <tbody>
                                 % for position in unknown_positions:
-                                    % include('rows/realtime', position=position)
+                                    % include('components/realtime_row', position=position)
                                 % end
                             </tbody>
                         </table>
@@ -215,6 +215,6 @@
 
 <script>
     function toggleNISVehicles() {
-        window.location = "{{ get_url(context, 'realtime', 'models', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ context.url('realtime', 'models', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

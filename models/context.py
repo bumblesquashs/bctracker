@@ -11,7 +11,12 @@ from dataclasses import dataclass
 
 from constants import *
 
+from models.date import Date
+from models.time import Time
+from models.timestamp import Timestamp
+
 import repositories
+import settings
 
 @dataclass(init=False, slots=True)
 class Context:
@@ -176,6 +181,18 @@ class Context:
             return self.system.max_invalid_positions
         return DEFAULT_MAX_INVALID_POSITIONS
     
+    @property
+    def today(self) -> Date:
+        return Date.today(self.timezone)
+    
+    @property
+    def now(self) -> Time:
+        return Time.now(self.timezone, self.accurate_seconds)
+    
+    @property
+    def timestamp(self) -> Timestamp:
+        return Timestamp.now(self.timezone, self.accurate_seconds)
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
@@ -209,6 +226,25 @@ class Context:
         if not other.agency:
             return False
         return self.agency < other.agency
+    
+    def url(self, *args, **kwargs):
+        '''Returns a URL formatted based on the given path'''
+        components = []
+        for arg in args:
+            try:
+                components.append(str(arg.url_id))
+            except AttributeError:
+                components.append(str(arg))
+        path = '/'.join(components)
+        if self.system_id:
+            url = settings.current.system_domain.format(self.system_id, path).rstrip('/')
+        else:
+            url = settings.current.all_systems_domain.format(path).rstrip('/')
+        query_args = {k:v for k, v in kwargs.items() if v is not None}
+        if query_args:
+            query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
+            url += f'?{query}'
+        return url
     
     def without_system(self):
         return Context(self.agency)

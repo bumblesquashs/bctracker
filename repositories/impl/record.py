@@ -107,7 +107,6 @@ class RecordRepository:
     
     def find_recorded_today(self, context: Context, trip_ids: list[str]) -> dict[str: Vehicle]:
         '''Returns all vehicles matching the given context and trips that were recorded on the current date'''
-        date = Date.today(context.timezone)
         rows = self.database.select(
             table='trip_record',
             columns={
@@ -126,7 +125,7 @@ class RecordRepository:
             filters={
                 'allocation.agency_id': context.agency_id,
                 'allocation.system_id': context.system_id,
-                'record.date': date.format_db(),
+                'record.date': context.today.format_db(),
                 'trip_record.trip_id': trip_ids
             },
             order_by='record.last_seen ASC'
@@ -135,7 +134,6 @@ class RecordRepository:
     
     def find_recorded_today_by_block(self, context: Context) -> dict[str, Vehicle]:
         '''Returns all vehicles matching the given context that were recorded on the current date'''
-        date = Date.today(context.timezone)
         rows = self.database.select(
             table='record',
             columns={
@@ -146,7 +144,7 @@ class RecordRepository:
             filters={
                 'allocation.agency_id': context.agency_id,
                 'allocation.system_id': context.system_id,
-                'record.date': date.format_db()
+                'record.date': context.today.format_db()
             },
             joins={
                 'allocation': {

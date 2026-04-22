@@ -47,3 +47,5 @@ class Settings:
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
         self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
         self.await_realtime = config.get('await_realtime', 'false') == 'true'
+
+current = Settings()

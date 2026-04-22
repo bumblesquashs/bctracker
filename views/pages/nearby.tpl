@@ -62,7 +62,7 @@
                                                     <div class="row">
                                                         % include('components/agency_logo', agency=system.agency)
                                                         <div class="column">
-                                                            <a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+                                                            <a href="{{ context.url(*path) }}">{{ system }}</a>
                                                             <span class="mobile-only smaller-font">
                                                                 % if system.gtfs_loaded:
                                                                     % if count == 1:
@@ -148,7 +148,7 @@
         
         if (currentSystemID !== null) {
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ get_url(context, 'frame', 'nearby') }}?lat=" + lat + "&lon=" + lon, true);
+            request.open("GET", "{{ context.url('frame', 'nearby') }}?lat=" + lat + "&lon=" + lon, true);
             request.onload = function() {
                 if (request.status === 200) {
                     if (request.response === null) {
@@ -172,7 +172,7 @@
     
     function loadMapMarkers(lat, lon) {
         const request = new XMLHttpRequest();
-        request.open("GET", "{{ get_url(context, 'api', 'nearby.json') }}?lat=" + lat + "&lon=" + lon, true);
+        request.open("GET", "{{ context.url('api', 'nearby.json') }}?lat=" + lat + "&lon=" + lon, true);
         request.responseType = "json";
         request.onload = function() {
             if (request.status === 200) {

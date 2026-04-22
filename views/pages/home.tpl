@@ -1,6 +1,4 @@
 
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
@@ -57,14 +55,14 @@
                     function vehicleSearch() {
                         let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'bus') }}/" + value;
+                            window.location = "{{ context.url('bus') }}/" + value;
                         }
                     }
                     
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'routes') }}/" + value;
+                            window.location = "{{ context.url('routes') }}/" + value;
                         }
                     }
                     
@@ -72,9 +70,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(context, 'stops') }}?search=" + value;
+                                window.location = "{{ context.url('stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(context, 'stops') }}/" + value;
+                                window.location = "{{ context.url('stops') }}/" + value;
                             }
                         }
                     }
@@ -82,7 +80,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'blocks') }}/" + value;
+                            window.location = "{{ context.url('blocks') }}/" + value;
                         }
                     }
                 </script>
@@ -131,7 +129,7 @@
             </div>
             <div class="content">
                 <p>
-                    Favourites have been moved to a <a href="{{ get_url(context, 'favourites') }}">dedicated page</a> with more details!
+                    Favourites have been moved to a <a href="{{ context.url('favourites') }}">dedicated page</a> with more details!
                 </p>
             </div>
         </div>
@@ -152,9 +150,9 @@
                             <p>See all {{ context.vehicle_type_plural.lower() }} that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>
-                            <a class="button" href="{{ get_url(context, 'map') }}">Map</a>
-                            <a class="button" href="{{ get_url(context, 'history') }}">History</a>
+                            <a class="button" href="{{ context.url('realtime') }}">List</a>
+                            <a class="button" href="{{ context.url('map') }}">Map</a>
+                            <a class="button" href="{{ context.url('history') }}">History</a>
                         </div>
                     </div>
                     <div class="item">
@@ -164,10 +162,10 @@
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
-                            <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
+                            <a class="button" href="{{ context.url('routes') }}">Routes</a>
+                            <a class="button" href="{{ context.url('stops') }}">Stops</a>
                             % if context.enable_blocks:
-                                <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                                <a class="button" href="{{ context.url('blocks') }}">Blocks</a>
                             % end
                         </div>
                     </div>
@@ -194,7 +192,7 @@
                             <ul>
                                 <li>You can now add favourite systems, which are shown at the top of the systems list</li>
                                 <li>
-                                    Favourite buses, routes, and stops now have a <a href="{{ get_url(context, 'favourites') }}">dedicated page</a>
+                                    Favourite buses, routes, and stops now have a <a href="{{ context.url('favourites') }}">dedicated page</a>
                                     <ul>
                                         <li>On desktop this can be accessed via the star icon in the navigation bar, on mobile it can be found in the navigation menu</li>
                                     </ul>
@@ -224,14 +222,14 @@
                                 For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
                                 All responses are guaranteed to be 100% correct anyways — you probably won't even need the rest of the website anymore.
                             </p>
-                            <p>For more information, please see the AI chat section on the <a href="{{ get_url(context, 'about') }}#ai">About</a> page.</p>
+                            <p>For more information, please see the AI chat section on the <a href="{{ context.url('about') }}#ai">About</a> page.</p>
                             <p>We hope you enjoy, and have a safe summer!</p>
                             <p class="smaller-font lighter-text">Let me know if you'd like any modifications or something different.</p>
                             <i>... Happy April Fools Day!</i>
                         </div>
                     </div>
                     <div>
-                        <a href="{{ get_url(context, 'news') }}">See older news</a>
+                        <a href="{{ context.url('news') }}">See older news</a>
                     </div>
                 </div>
             </div>
