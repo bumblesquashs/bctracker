@@ -170,6 +170,9 @@ class Stop:
         '''Checks if this stop is near the given latitude and longitude'''
         return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2)) <= accuracy
     
+    def get_distance(self, lat, lon) -> float:
+        return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2))
+    
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''
         departures = repositories.departure.find_all(self.context, stop_id=self.id)

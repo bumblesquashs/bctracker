@@ -1,4 +1,8 @@
 
+% from math import floor
+
+% import repositories
+
 % rebase('base')
 
 <div id="page-header">
@@ -7,271 +11,197 @@
 
 % include('components/svg_script', name='nearby')
 
-<div class="page-container">
-    <div id="current-location" class="sidebar container flex-1 display-none">
-        <div class="section">
-            <div class="header" onclick="toggleSection(this, true)">
-                <h2>Current Location</h2>
-                % include('components/toggle')
-            </div>
-            <div class="content">
-                <div id="map" class="preview"></div>
+% if lat and lon:
+    <div class="page-container">
+        <div id="current-location" class="sidebar container flex-1">
+            <div class="section">
+                <div class="header" onclick="toggleSection(this, true)">
+                    <h2>Current Location</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
+                    % include('components/map', map_stops=stops, preview_padding=50)
+                    
+                    <script>
+                        function showCurrentLocation() {
+                            const element = document.createElement("div");
+                            element.className = "marker";
+                            
+                            const icon = document.createElement("div");
+                            icon.className = "icon";
+                            icon.innerHTML = getSVG("nearby");
+                            
+                            element.appendChild(icon);
+                            
+                            const lat = parseFloat("{{ lat }}");
+                            const lon = parseFloat("{{ lon }}");
+                            
+                            map.addOverlay(new ol.Overlay({
+                                position: ol.proj.fromLonLat([lon,lat]),
+                                positioning: "center-center",
+                                element: element,
+                                stopEvent: false
+                            }));
+                            
+                            if ("{{ len(stops) }}" === "0") {
+                                map.updateSize();
+                                map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
+                                map.getView().setZoom(17);
+                            } else if ("{{ len(stops) }}" === "1") {
+                                map.getView().setZoom(17);
+                            }
+                        }
+                        
+                        const existingOnLoad = document.body.onload
+                        document.body.onload = function() {
+                            existingOnLoad();
+                            showCurrentLocation();
+                        }
+                    </script>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="container flex-3">
-        <div class="section">
-            <div class="header" onclick="toggleSection(this)">
-                <h2>Upcoming Departures</h2>
-                % include('components/toggle')
-            </div>
-            <div class="content">
-                % if context.system:
-                    <div id="result" class="container">
-                        <div id="nearby-status" class="loading column">
-                            <div id="status-title">Loading upcoming departures...</div>
-                            <div id="status-message" class="display-none"></div>
-                        </div>
-                    </div>
-                % else:
-                    <div class="placeholder">
-                        <h3>Choose a system to see nearby stops</h3>
-                    </div>
-                    <div class="table-border-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>System</th>
-                                    <th class="non-mobile align-right">Stops</th>
-                                    <th>Service Days</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % for region in regions:
-                                    % region_systems = [s for s in systems if s.region == region]
-                                    % if region_systems:
-                                        <tr class="header">
-                                            <td colspan="3">{{ region }}</td>
-                                        </tr>
-                                        <tr class="display-none"></tr>
-                                        % for system in sorted(region_systems):
-                                            % count = len(system.get_stops())
-                                            <tr>
-                                                <td>
-                                                    <div class="row">
-                                                        % include('components/agency_logo', agency=system.agency)
-                                                        <div class="column">
-                                                            <a href="{{ context.url(*path) }}">{{ system }}</a>
-                                                            <span class="mobile-only smaller-font">
-                                                                % if system.gtfs_loaded:
-                                                                    % if count == 1:
-                                                                        1 Stop
-                                                                    % else:
-                                                                        {{ count }} Stops
-                                                                    % end
-                                                                % end
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                % if system.gtfs_loaded:
-                                                    <td class="non-mobile align-right">{{ count }}</td>
-                                                    <td>
-                                                        % include('components/weekdays', schedule=system.schedule, compact=True)
-                                                    </td>
-                                                % else:
-                                                    <td class="lighter-text" colspan="2">Stops are loading...</td>
+        
+        <div class="container flex-3">
+            <div class="section">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>Upcoming Departures</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
+                    <div class="container">
+                        % if stops:
+                            % for stop in sorted(stops, key=lambda s: s.get_distance(lat, lon)):
+                                % departures = stop.find_departures(date=today)
+                                % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
+                                % upcoming_count = 3 + floor(len(routes) / 3)
+                                % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
+                                % trip_ids = [d.trip_id for d in upcoming_departures]
+                                % recorded_today = repositories.record.find_recorded_today(stop.context, trip_ids)
+                                % assignments = {a.block_id: a for a in repositories.assignment.find_all(stop.context, stop_id=stop.id)}
+                                % positions = {p.trip.id: p for p in repositories.position.find_all(stop.context, trip_id=trip_ids)}
+                                <div class="section">
+                                    <div class="header" onclick="toggleSection(this)">
+                                        <div class="column">
+                                            <h3>
+                                                % include('components/stop', include_link=False)
+                                            </h3>
+                                            <div class="row">
+                                                % if not context.system:
+                                                    <div class="lighter-text">{{ stop.context }}</div>
+                                                    <div class="lighter-text">•</div>
                                                 % end
-                                            </tr>
+                                                <a href="{{ stop.url() }}">View stop schedule and details</a>
+                                            </div>
+                                        </div>
+                                        % include('components/toggle')
+                                    </div>
+                                    <div class="content">
+                                        % if upcoming_departures:
+                                            % if context.realtime_enabled:
+                                                <p>
+                                                    <span>{{ context.vehicle_type_plural }} with a</span>
+                                                    <span class="scheduled">
+                                                        % include('components/svg', name='schedule')
+                                                    </span>
+                                                    <span>are scheduled but may be swapped off.</span>
+                                                </p>
+                                            % end
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th class="non-mobile">Headsign</th>
+                                                        % if context.enable_blocks:
+                                                            <th class="desktop-only">Block</th>
+                                                        % end
+                                                        <th>Trip</th>
+                                                        % if context.realtime_enabled:
+                                                            <th>{{ context.vehicle_type }}</th>
+                                                            <th class="desktop-only">Model</th>
+                                                        % end
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    % last_time = None
+                                                    % for departure in upcoming_departures:
+                                                        % if not last_time:
+                                                            % last_time = departure.time
+                                                        % end
+                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
+                                                        % last_time = departure.time
+                                                    % end
+                                                </tbody>
+                                            </table>
+                                        % else:
+                                            % tomorrow = today.next()
+                                            <p>
+                                                There are no departures for the rest of today.
+                                                <a href="{{ stop.url('schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                            </p>
                                         % end
+                                    </div>
+                                </div>
+                            % end
+                        % else:
+                            <div class="section">
+                                <div class="placeholder">
+                                    <h3>No stops nearby</h3>
+                                    % if context.gtfs_loaded:
+                                        <p>You're gonna have to walk!</p>
+                                    % else:
+                                        <p>System data is currently loading and will be available soon.</p>
                                     % end
-                                % end
-                            </tbody>
-                        </table>
+                                </div>
+                            </div>
+                        % end
                     </div>
-                % end
+                </div>
             </div>
         </div>
     </div>
-</div>
-            
-<script>
-    const map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM(),
-                className: "ol-layer tile-layer"
-            }),
-        ],
-        view: new ol.View({
-            center: [0, 0],
-            zoom: 1,
-            maxZoom: 22
-        }),
-        interactions: [],
-        controls: ol.control.defaults.defaults({
-            zoom: false,
-            rotate: false
-        })
-    });
+% else:
+    % include('components/loading')
     
-    const statusElement = document.getElementById("nearby-status");
-    const statusTitleElement = document.getElementById("status-title");
-    const statusMessageElement = document.getElementById("status-message");
+    <div id="nearby-error" class="display-none">
+        % include('components/svg', name='nearby')
+        <h2 id="error-title"></h2>
+        <p id="error-message"></p>
+    </div>
     
-    let lat = null;
-    let lon = null;
-    
-    function onSuccess(position) {
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        
-        const element = document.createElement("div");
-        element.className = "marker";
-        
-        const icon = document.createElement("div");
-        icon.className = "icon";
-        icon.innerHTML = getSVG("nearby");
-        
-        element.appendChild(icon);
-        
-        map.addOverlay(new ol.Overlay({
-            position: ol.proj.fromLonLat([lon, lat]),
-            positioning: "center-center",
-            element: element,
-            stopEvent: false
-        }));
-        
-        updateMap();
-        
-        if (currentSystemID !== null) {
-            const request = new XMLHttpRequest();
-            request.open("GET", "{{ context.url('frame', 'nearby') }}?lat=" + lat + "&lon=" + lon, true);
-            request.onload = function() {
-                if (request.status === 200) {
-                    if (request.response === null) {
-                        setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
-                    } else {
-                        setStatus("success", "Success", "Showing stops near " + lat + ", " + lon);
-                        document.getElementById("result").innerHTML = request.response;
-                    }
-                } else {
-                    setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
-                }
-            };
-            request.onerror = function() {
-                setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
-            };
-            request.send();
-            
-            loadMapMarkers(lat, lon);
+    <script>
+        function onSuccess(position) {
+            window.location.href = getUrl(currentSystemID, "nearby", true, {
+                lat: position.coords.latitude,
+                lon: position.coords.longitude
+            });
         }
-    }
-    
-    function loadMapMarkers(lat, lon) {
-        const request = new XMLHttpRequest();
-        request.open("GET", "{{ context.url('api', 'nearby.json') }}?lat=" + lat + "&lon=" + lon, true);
-        request.responseType = "json";
-        request.onload = function() {
-            if (request.status === 200) {
-                const stops = request.response.stops;
         
-                for (const stop of stops) {
-                    const element = document.createElement("div");
-                    element.className = "marker small";
-                    
-                    const icon = document.createElement("a");
-                    icon.className = "icon";
-                    icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
-                    icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
-                    
-                    const details = document.createElement("div");
-                    details.className = "details";
-                    if (stop.number === null || stop.number === undefined) {
-                        details.classList.add("hover-only");
-                    }
-                    
-                    if (stop.number !== null && stop.number !== undefined) {
-                        const title = document.createElement("div");
-                        title.className = "title";
-                        title.innerHTML = stop.number;
-                        details.appendChild(title);
-                    }
-                    
-                    const content = document.createElement("div");
-                    content.classList = "content hover-only";
-                    content.innerHTML = stop.name
-                    
-                    const routeList = document.createElement("div");
-                    routeList.className = "route-list";
-                    for (const route of stop.routes) {
-                        routeList.innerHTML += "<span class='route' style='background-color: #" + route.colour + ";'>" + route.number + "</span>";
-                    }
-                    content.appendChild(routeList);
-                    
-                    details.appendChild(content);
-                    
-                    element.appendChild(icon);
-                    element.appendChild(details);
-                    
-                    map.addOverlay(new ol.Overlay({
-                        position: ol.proj.fromLonLat([stop.lon, stop.lat]),
-                        positioning: "center-center",
-                        element: element,
-                        stopEvent: false
-                    }));
-                }
+        function onError(error) {
+            stopLoading();
+            const code = error.code;
+            if (code == error.PERMISSION_DENIED) {
+                showError("Access to location is denied", "Give your browser access to your device's location to see nearby stops!");
+            } else if (code == error.POSITION_UNAVAILABLE) {
+                showError("Location unavailable", "Please try again!");
+            } else if (code == error.TIMEOUT) {
+                showError("Timed out", "Please try again!");
+            } else {
+                showError("Unknown error occurred", "Please try again!");
             }
-        };
-        request.send();
-    }
-    
-    function onError(error) {
-        const code = error.code;
-        if (code == error.PERMISSION_DENIED) {
-            setStatus("error", "Error loading upcoming departures", "Access to location is denied, give your browser access to your device's location to see nearby stops!");
-        } else if (code == error.POSITION_UNAVAILABLE) {
-            setStatus("error", "Error loading upcoming departures", "Location is unavailable, please try again!");
-        } else if (code == error.TIMEOUT) {
-            setStatus("error", "Error loading upcoming departures", "Timed out waiting for location, please try again!");
-        } else {
-            setStatus("error", "Error loading upcoming departures", "An unknown error occurred, please try again!");
         }
-    }
-    
-    function setStatus(status, title, message = null) {
-        statusElement.classList.remove("loading", "error", "success");
-        statusElement.classList.add(status)
         
-        statusTitleElement.innerHTML = title;
-        if (message == null) {
-            statusMessageElement.classList.add("display-none");
-            statusMessageElement.innerHTML = "";
+        function showError(title, message) {
+            document.getElementById("nearby-error").classList.remove("display-none");
+            document.getElementById("error-title").innerHTML = title;
+            document.getElementById("error-message").innerHTML = message;
+        }
+        
+        startLoading();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
         } else {
-            statusMessageElement.classList.remove("display-none");
-            statusMessageElement.innerHTML = message;
+            showError("Location is not supported", "Make sure you're using a device that has GPS");
         }
-    }
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    } else {
-        setStatus("error", "Error loading upcoming departures", "Location is not supported, make sure you're using a device that has GPS");
-    }
-    
-    document.body.onload = function() {
-        map.updateSize();
-        updateMap();
-    }
-    
-    function updateMap() {
-        if (lat !== null && lon !== null) {
-            document.getElementById("current-location").classList.remove("display-none");
-            map.updateSize();
-            map.getView().setCenter(ol.proj.fromLonLat([lon, lat]));
-            map.getView().setZoom(17);
-        }
-    }
-</script>
+    </script>
+% end

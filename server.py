@@ -88,9 +88,6 @@ class Server(Bottle):
         self.add('/admin', self.admin, require_admin=True)
         self.add('/admin/logs', self.admin_logs, require_admin=True)
         
-        # Frames
-        self.add('/frame/nearby', self.frame_nearby, append_slash=False)
-        
         # API endpoints
         self.add('/api/health-check', self.api_health_check, append_slash=False)
         self.add('/api/positions', self.api_positions, append_slash=False)
@@ -98,7 +95,6 @@ class Server(Bottle):
         self.add('/api/stops', self.api_stops, append_slash=False)
         self.add('/api/routes', self.api_routes, append_slash=False)
         self.add('/api/search', self.api_search, method='POST')
-        self.add('/api/nearby.json', self.api_nearby, append_slash=False)
         self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', require_admin=True)
         self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', require_admin=True)
         self.add('/api/admin/reload-systems', self.api_admin_reload_systems, method='POST', require_admin=True)
@@ -233,15 +229,6 @@ class Server(Bottle):
             now=now,
             timestamp=timestamp,
             svg_cache={},
-            **kwargs
-        )
-    
-    def frame(self, context: Context, name, **kwargs):
-        '''Returns an HTML element that can be inserted into a page'''
-        return template(f'frames/{name}',
-            context=context,
-            time_format=request.get_cookie('time_format'),
-            show_speed=request.get_cookie('speed') == '1994',
             **kwargs
         )
     
@@ -1471,12 +1458,28 @@ class Server(Bottle):
         )
     
     def nearby(self, context: Context):
+        lat = request.query.get('lat')
+        lon = request.query.get('lon')
+        if lat is not None and lon is not None:
+            lat = float(lat)
+            lon = float(lon)
+            size = 0.0015
+            stops = repositories.stop.find_all(context, lat=lat - (size / 2), lon=lon - (size / 2), size=size)
+        else:
+            stops = []
         return self.page(
             context=context,
             name='nearby',
             title='Nearby Stops',
             path=['nearby'],
-            include_maps=True
+            path_args={
+                'lat': lat,
+                'lon': lon
+            },
+            include_maps=lat and lon,
+            lat=lat,
+            lon=lon,
+            stops=stops
         )
     
     def themes(self, context: Context):
@@ -1616,23 +1619,6 @@ class Server(Bottle):
         )
     
     # =============================================================
-    # Frames
-    # =============================================================
-    
-    def frame_nearby(self, context: Context):
-        if not context.system:
-            response.status = 400
-            return None
-        stops = sorted(context.system.get_stops())
-        lat = float(request.query.get('lat'))
-        lon = float(request.query.get('lon'))
-        return self.frame(
-            context=context,
-            name='nearby',
-            stops=sorted([s for s in stops if s.is_near(lat, lon)])
-        )
-    
-    # =============================================================
     # API endpoints
     # =============================================================
     
@@ -1732,18 +1718,6 @@ class Server(Bottle):
         return {
             'results': [m.get_json() for m in matches[min:max]],
             'total': len(matches)
-        }
-    
-    def api_nearby(self, context: Context):
-        if not context.system:
-            return {
-                'stops': []
-            }
-        lat = float(request.query.get('lat'))
-        lon = float(request.query.get('lon'))
-        stops = sorted([s for s in context.system.get_stops() if s.is_near(lat, lon)])
-        return {
-            'stops': [s.get_json() for s in stops]
         }
     
     def api_admin_reload_decorations(self, context: Context):
