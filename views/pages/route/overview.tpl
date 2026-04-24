@@ -47,7 +47,7 @@
                                     % for variant in variants:
                                         <div class="row">
                                             % include('components/route', route=variant)
-                                            <a href="{{ variate.url() }}">{{! variant.display_name }}</a>
+                                            <a href="{{ variant.url() }}">{{! variant.display_name }}</a>
                                         </div>
                                     % end
                                 </div>
