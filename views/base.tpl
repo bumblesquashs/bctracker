@@ -229,6 +229,9 @@
             }
             
             function toggleSection(header, reloadMap = false) {
+                if (window.screen.width > 1000) {
+                    return;
+                }
                 const section = header.parentElement;
                 section.classList.toggle("closed");
                 if (reloadMap && "map" in window) {

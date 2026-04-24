@@ -1,3 +1,6 @@
+
+% from datetime import timedelta
+
 % trip = departure.trip
 % stop = departure.stop
 
