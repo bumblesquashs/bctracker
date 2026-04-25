@@ -22,7 +22,8 @@
                 { "year": 2022, "low": 9543, "high": 9550, "livery": "green-blue-stripes", "usb_charging": true }
             ],
             [
-                { "year": 2025, "low": 9551, "high": 9589, "livery": "green-front", "usb_charging": true }
+                { "year": 2025, "low": 9551, "high": 9579, "livery": "green-front", "usb_charging": true },
+                { "year": 2026, "low": 9580, "high": 9589, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "alexander-dennis-enviro500h": [
@@ -163,7 +164,10 @@
         ],
         "grande-west-vicinity-30": [
             [
-                { "year": 2017, "low": 4007, "high": 4070, "livery": "green-blue-stripes" }
+                { "year": 2017, "low": 4007, "high": 4061, "livery": "green-blue-stripes" }
+            ],
+            [
+                { "year": 2017, "low": 4062, "high": 4070, "livery": "green-blue-stripes" }
             ],
             [
                 { "year": 2018, "low": 4071, "high": 4073, "livery": "green-blue-stripes" }
@@ -186,6 +190,9 @@
         "international-eldorado-3200-advantage": [
             [
                 { "year": 2022, "low": 3029, "high": 3034, "livery": "green-blue-stripes" }
+            ],
+            [
+                { "year": 2026, "low": 3035, "high": 3045, "livery": "green-front" }
             ]
         ],
         "international-eldorado-3200-aero-elite": [
@@ -358,7 +365,10 @@
                 { "year": 2025, "low": 7010, "high": 7011, "livery": "green-front", "usb_charging": true }
             ],
             [
-                { "year": 2025, "low": 7012, "high": 7042, "livery": "green-front", "usb_charging": true }
+                { "year": 2025, "low": 7012, "high": 7034, "livery": "green-front", "usb_charging": true }
+            ],
+            [
+                { "year": 2026, "low": 7035, "high": 7042, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "proterra-zx5": [
