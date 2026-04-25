@@ -130,6 +130,10 @@ table tr {
     border-bottom-color: var(--table-border);
 }
 
+table tr:last-child {
+    border-bottom-width: 0px;
+}
+
 table tr.divider {
     border-top-width: 4px;
     border-top-style: solid;
@@ -1014,6 +1018,12 @@ table tr.table-button {
     height: 40px;
     overflow: hidden;
     border-radius: 5px;
+}
+
+.livery-row .livery {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
 }
 
 .log-line {

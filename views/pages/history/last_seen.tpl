@@ -242,7 +242,10 @@
                                     <tr class="header">
                                         <td colspan="5">
                                             <div class="row space-between">
-                                                <div>{{! order }}</div>
+                                                <div class="row">
+                                                    % include('components/livery_row', liveries=order.liveries)
+                                                    {{! order }}
+                                                </div>
                                                 <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
                                             </div>
                                         </td>
