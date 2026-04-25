@@ -115,7 +115,10 @@
                                                                 <tr class="header">
                                                                     <td colspan="5">
                                                                         <div class="row space-between">
-                                                                            <div>{{ order.years_string }}</div>
+                                                                            <div class="row">
+                                                                                % include('components/livery_row', liveries=order.liveries)
+                                                                                {{ order.years_string }}
+                                                                            </div>
                                                                             <div>{{ len(order.vehicles) }}</div>
                                                                         </div>
                                                                     </td>

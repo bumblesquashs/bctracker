@@ -28,7 +28,10 @@
                                 % for order in orders:
                                     % percentage = (sum(1 for r in records if r.vehicle.order_id == order.id) / len(records)) * 100
                                     <div class="row space-between">
-                                        <div>{{! order }}</div>
+                                        <div class="row">
+                                            % include('components/livery_row', liveries=order.liveries)
+                                            {{! order }}
+                                        </div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
                                     </div>
                                 % end

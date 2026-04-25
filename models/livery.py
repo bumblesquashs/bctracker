@@ -17,3 +17,6 @@ class Livery:
     
     def __eq__(self, other):
         return self.agency_id == other.agency_id and self.id == other.id
+    
+    def __lt__(self, other):
+        return self.name < other.name

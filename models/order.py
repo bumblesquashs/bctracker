@@ -5,6 +5,8 @@ from models.agency import Agency
 from models.model import Model
 from models.vehicle import Vehicle
 
+import repositories
+
 @dataclass(slots=True)
 class Order:
     '''A set of vehicles of a specific model'''
@@ -30,6 +32,12 @@ class Order:
                 return str(self.years[0])
             return f'{self.years[0]}-{self.years[-1]}'
         return 'Unknown Year'
+    
+    @property
+    def liveries(self):
+        livery_ids = {v.livery for v in self.vehicles if v.livery}
+        liveries = {repositories.livery.find(self.agency.id, id) for id in livery_ids}
+        return sorted(l for l in liveries if l)
     
     def __post_init__(self):
         self.key = min([b.key for b in self.vehicles])
