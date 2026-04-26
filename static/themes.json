@@ -50,5 +50,10 @@
         "name": "BC Ferries",
         "light": true,
         "dark": true
+    },
+    "translink": {
+        "name": "Translink",
+        "light": true,
+        "dark": true
     }
 }
