@@ -24,6 +24,7 @@ class Agency:
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
+    enable_route_variants: bool = DEFAULT_ENABLE_ROUTE_VARIANTS
     nis_colour: str = DEFAULT_NIS_COLOUR
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     custom_route_numbers: dict[str, str] = field(default_factory=dict)

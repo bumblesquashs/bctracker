@@ -86,6 +86,14 @@
     "translink": {
         "name": "Translink",
         "website": "https://translink.ca",
-        "enabled": false
+        "gtfs_url": "https://gtfs-static.translink.ca/gtfs/google_transit.zip",
+        "enable_route_variants": false,
+        "default_route_colour": "0082C8",
+        "custom_route_numbers": {
+            "30053": "EL",
+            "30052": "ML",
+            "13686": "CL",
+            "6771": "SB"
+        }
     }
 }
