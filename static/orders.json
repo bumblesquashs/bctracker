@@ -402,5 +402,315 @@
                 { "year": 2022, "low": 4234, "high": 4248, "livery": "green-blue-stripes" }
             ]
         ]
+    },
+    "translink": {
+        "alexander-dennis-enviro500-lhd": [
+            [
+                { "year": 2019, "low": 19401, "high": 19432, "livery": "blue-top", "usb_charging": true }
+            ],
+            [
+                { "year": 2021, "low": 21401, "high": 21425, "livery": "blue-top", "usb_charging": true }
+            ]
+        ],
+        "chevrolet-arboc-4500-sof-27": [
+            [
+                { "year": 2021, "low": 21501, "high": 21562, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2024, "low": 24501, "high": 24548, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2025, "low": 25501, "high": 25527, "livery": "blue-top" }
+            ]
+        ],
+        "chevrolet-arboc-4500-som-28": [
+            [
+                { "year": 2017, "low": 17501, "high": 17505, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2018, "low": 18501, "high": 18509, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2019, "low": 19501, "high": 19549, "livery": "blue-top" }
+            ]
+        ],
+        "chevrolet-girardin-4500-g5": [
+            [
+                { "year": 2016, "low": 16501, "high": 16562, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2017, "low": 17506, "high": 17564, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2018, "low": 18510, "high": 18527, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2019, "low": 19550, "high": 19554, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2023, "low": 23601, "high": 23606, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2024, "low": 24601, "high": 24634, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2025, "low": 25601, "high": 25627, "livery": "blue-top" }
+            ]
+        ],
+        "ford-girardin-e450-g5": [
+            [
+                { "year": 2023, "low": 23651, "high": 23665, "livery": "blue-top" }
+            ]
+        ],
+        "new-flyer-c40lf": [
+            [
+                { "year": 1998, "low": 3283, "high": 3299, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1998, "low": 3301, "high": 3308, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ]
+        ],
+        "new-flyer-c40lfr": [
+            [
+                { "year": 2006, "low": 3309, "high": 3358, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-d40lf": [
+            [
+                { "year": 1995, "low": 7101, "high": 7123, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1996, "low": 7124, "high": 7150, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 1996, "low": 7151, "high": 7243, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 1998, "low": 7247, "high": 7297, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 1999, "id": 7299, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1999, "low": 7301, "high": 7374, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 2000, "low": 7375, "high": 7399, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "low": 7401, "high": 7429, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 2001, "low": 7430, "high": 7446, "livery": "sweep", "air_conditioned": false, "cctv": false }
+            ]
+        ],
+        "new-flyer-d40lfr": [
+            [
+                { "year": 2006, "low": 7447, "high": 7499, "livery": "sweep-r-charcoal", "air_conditioned": false },
+                { "year": 2006, "low": 7501, "high": 7504, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-d60lf": [
+            [
+                { "year": 1998, "id": 8001, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 1998, "id": 8002, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1998, "low": 8003, "high": 8009, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 1998, "id": 8010, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1998, "low": 8011, "high": 8021, "livery": "b-line", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 1999, "low": 8022, "high": 8028, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 1999, "id": 8029, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 1999, "low": 8030, "high": 8047, "livery": "b-line", "air_conditioned": false, "cctv": false }
+            ],
+            [
+                { "year": 2000, "id": 8048, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "id": 8049, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "low": 8050, "high": 8052, "livery": "b-line", "air_conditioned": false , "cctv": false},
+                { "year": 2000, "low": 8053, "high": 8054, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "low": 8055, "high": 8092, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "id": 8093, "livery": "sweep", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "low": 8094, "high": 8099, "livery": "b-line", "air_conditioned": false, "cctv": false },
+                { "year": 2000, "id": 8101, "livery": "b-line", "air_conditioned": false, "cctv": false }
+            ]
+        ],
+        "new-flyer-d60lfr": [
+            [
+                { "year": 2007, "low": 8102, "high": 8117, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-de60lfr": [
+            [
+                { "year": 2009, "low": 8118, "high": 8156, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-e40lf": [
+            [
+                { "year": 2005, "id": 2101, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-e40lfr": [
+            [
+                { "year": 2006, "low": 2102, "high": 2186, "livery": "sweep-r-charcoal", "air_conditioned": false },
+                { "year": 2007, "low": 2187, "high": 2199, "livery": "sweep-r-charcoal", "air_conditioned": false },
+                { "year": 2007, "low": 2201, "high": 2289, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-e60lfr": [
+            [
+                { "year": 2007, "low": 2501, "high": 2540, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ],
+            [
+                { "year": 2009, "low": 2541, "high": 2574, "livery": "sweep-r-charcoal", "air_conditioned": false }
+            ]
+        ],
+        "new-flyer-xd40": [
+            [
+                { "year": 2012, "low": 1201, "high": 1217, "livery": "sweep-r-west-van-light" }
+            ],
+            [
+                { "year": 2016, "low": 1601, "high": 1605, "livery": "sweep-r-west-van-charcoal" },
+                { "year": 2016, "low": 1606, "high": 1614, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2016, "low": 16101, "high": 16130, "livery": "sweep-r-charcoal" },
+                { "year": 2016, "id": 16137, "livery": "sweep-r-charcoal" }
+            ]
+        ],
+        "new-flyer-xde60": [
+            [
+                { "year": 2012, "low": 12001, "high": 12023, "livery": "sweep-r-light" },
+                { "year": 2012, "id": 12024, "livery": "sweep-r-charcoal" },
+                { "year": 2012, "id": 12025, "livery": "sweep-r-light" }
+            ],
+            [
+                { "year": 2015, "low": 15001, "high": 15021, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2016, "low": 16201, "high": 16226, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2018, "low": 18001, "high": 18063, "livery": "rapidbus" }
+            ],
+            [
+                { "year": 2019, "low": 19001, "high": 19047, "livery": "rapidbus" }
+            ],
+            [
+                { "year": 2021, "low": 21001, "high": 21025, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2022, "low": 22001, "high": 22005, "livery": "blue-top" },
+                { "year": 2022, "low": 22006, "high": 22015, "livery": "rapidbus" }
+            ],
+            [
+                { "year": 2023, "low": 23001, "high": 23015, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2024, "low": 24001, "high": 24016, "livery": "blue-top" }
+            ]
+        ],
+        "new-flyer-xe40": [
+            [
+                { "year": 2019, "low": 19303, "high": 19304, "livery": "blue-top" }
+            ]
+        ],
+        "new-flyer-xn40": [
+            [
+                { "year": 2014, "low": 14001, "high": 14045, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2016, "low": 16001, "high": 16051, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2018, "low": 18101, "high": 18206, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2019, "low": 19101, "high": 19147, "livery": "blue-top" }
+            ]
+        ],
+        "nova-bus-lfs-2": [
+            [
+                { "year": 2007, "low": 701, "high": 706, "livery": "sweep-r-west-van-light", "air_conditioned": false }
+            ],
+            [
+                { "year": 2007, "low": 9605, "high": 9699, "livery": "sweep-r-light", "air_conditioned": false },
+                { "year": 2007, "low": 9701, "high": 9725, "livery": "sweep-r-light", "air_conditioned": false }
+            ],
+            [
+                { "year": 2008, "low": 9726, "high": 9791, "livery": "sweep-r-light", "air_conditioned": false },
+                { "year": 2008, "low": 9797, "high": 9799, "livery": "sweep-r-light", "air_conditioned": false }
+            ]
+        ],
+        "nova-bus-lfs-3": [
+            [
+                { "year": 2009, "low": 901, "high": 909, "livery": "sweep-r-west-van-light", "air_conditioned": false }
+            ],
+            [
+                { "year": 2009, "low": 9543, "high": 9581, "livery": "sweep-r-light", "air_conditioned": false },
+                { "year": 2009, "low": 9583, "high": 9590, "livery": "sweep-r-light", "air_conditioned": false }
+            ]
+        ],
+        "nova-bus-lfse": [
+            [
+                { "year": 2019, "low": 19301, "high": 19302 }
+            ]
+        ],
+        "nova-bus-lfse+": [
+            [
+                { "year": 2023, "low": 23201, "high": 23215, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2025, "low": 25201, "high": 25207, "livery": "blue-top" }
+            ]
+        ],
+        "nova-bus-lfs-cng-4": [
+            [
+                { "year": 2024, "low": 24101, "high": 24150, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2025, "low": 25101, "high": 25184, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2026, "low": 26101, "high": 26130, "livery": "blue-top" }
+            ]
+        ],
+        "nova-bus-lfs-hev-3": [
+            [
+                { "year": 2009, "low": 9401, "high": 9499, "livery": "sweep-r-light", "air_conditioned": false },
+                { "year": 2009, "low": 9501, "high": 9542, "livery": "sweep-r-light", "air_conditioned": false }
+            ]
+        ],
+        "nova-bus-lfs-hev-4": [
+            [
+                { "year": 2018, "low": 18301, "high": 18404, "livery": "sweep-r-charcoal" }
+            ]
+        ],
+        "nova-bus-lfs-suburban-4": [
+            [
+                { "year": 2018, "low": 18451, "high": 18473, "livery": "blue-top" }
+            ]
+        ],
+        "obi-orion-v-suburban": [
+            [
+                { "year": 2001, "low": 9201, "high": 9209, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9210, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9211, "high": 9224, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9225, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9226, "high": 9236, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9237, "livery": "sweep-suburban-white" },
+                { "year": 2001, "id": 9238, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9239, "livery": "sweep-suburban-white" },
+                { "year": 2001, "id": 9240, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9241, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9242, "high": 9244, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9245, "livery": "sweep-suburban-white" },
+                { "year": 2001, "id": 9246, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9247, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9248, "high": 9255, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9256, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9257, "high": 9259, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9260, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9261, "high": 9263, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "low": 9264, "high": 9265, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9266, "high": 9270, "livery": "sweep-suburban-grey" },
+                { "year": 2001, "id": 9271, "livery": "sweep-suburban-white" },
+                { "year": 2001, "low": 9272, "high": 9276, "livery": "sweep-suburban-grey" }
+            ],
+            [
+                { "year": 2008, "low": 9277, "high": 9285, "livery": "sweep-suburban-grey" }
+            ]
+        ]
     }
 }
