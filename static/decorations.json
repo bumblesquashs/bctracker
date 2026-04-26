@@ -64,6 +64,15 @@
             "text": "📣",
             "description": "Community Outreach Bus"
         },
+        "7455": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Dasher)",
+            "enabled": false
+        },
+        "9407": {
+            "text": "🧧",
+            "description": "Lunar New Year Bus"
+        },
         "9540": {
             "text": "🦌",
             "description": "Reindeer Bus (Vixen)",
@@ -99,9 +108,18 @@
             "description": "Reindeer Bus (Blitzen)",
             "enabled": false
         },
+        "18044": {
+            "text": "🌾",
+            "description": "Vaisakhi Bus"
+        },
         "18330": {
             "text": "🦌",
             "description": "Reindeer Bus (Rudolph)",
+            "enabled": false
+        },
+        "18386": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus",
             "enabled": false
         },
         "19301": {
