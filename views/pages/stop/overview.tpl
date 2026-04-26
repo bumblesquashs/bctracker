@@ -3,6 +3,8 @@
 
 % from models.stop import StopType
 
+% import repositories
+
 % rebase('base')
 
 <div id="page-header">
