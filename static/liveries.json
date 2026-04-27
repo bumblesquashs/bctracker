@@ -12,5 +12,37 @@
         "green-front": {
             "name": "Green Front"
         }
+    },
+    "translink": {
+        "b-line": {
+            "name": "B-Line"
+        },
+        "sweep": {
+            "name": "Sweep"
+        },
+        "sweep-suburban-white": {
+            "name": "Sweep Suburban (White)"
+        },
+        "sweep-suburban-grey": {
+            "name": "Sweep Suburban (Grey)"
+        },
+        "sweep-r-light": {
+            "name": "Sweep-R (Light Grey)"
+        },
+        "sweep-r-charcoal": {
+            "name": "Sweep-R (Charcoal)"
+        },
+        "sweep-r-west-van-light": {
+            "name": "Sweep-R (West Vancouver Light)"
+        },
+        "sweep-r-west-van-charcoal": {
+            "name": "Sweep-R (West Vancouver Charcoal)"
+        },
+        "rapidbus": {
+            "name": "RapidBus"
+        },
+        "blue-top": {
+            "name": "Blue Top"
+        }
     }
 }

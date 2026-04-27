@@ -427,7 +427,7 @@ class Server(Bottle):
     
     def fleet(self, context: Context):
         orders = repositories.order.find_all(context)
-        allocations = repositories.allocation.find_all(Context())
+        allocations = repositories.allocation.find_all(context.without_system())
         return self.page(
             context=context,
             name='fleet',

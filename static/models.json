@@ -1,4 +1,30 @@
 {
+    "artic": {
+        "new-flyer-d60lf": {
+            "manufacturer": "New Flyer",
+            "name": "D60LF",
+            "length": 60,
+            "fuel": "Diesel"
+        },
+        "new-flyer-d60lfr": {
+            "manufacturer": "New Flyer",
+            "name": "D60LFR",
+            "length": 60,
+            "fuel": "Diesel"
+        },
+        "new-flyer-de60lfr": {
+            "manufacturer": "New Flyer",
+            "name": "DE60LFR",
+            "length": 60,
+            "fuel": "Hybrid"
+        },
+        "new-flyer-xde60": {
+            "manufacturer": "New Flyer",
+            "name": "XDE60",
+            "length": 60,
+            "fuel": "Hybrid"
+        }
+    },
     "conventional": {
         "byd-k9": {
             "manufacturer": "BYD",
@@ -6,9 +32,27 @@
             "length": 39,
             "fuel": "Battery Electric"
         },
+        "new-flyer-c40lf": {
+            "manufacturer": "New Flyer",
+            "name": "C40LF",
+            "length": 40,
+            "fuel": "CNG"
+        },
+        "new-flyer-c40lfr": {
+            "manufacturer": "New Flyer",
+            "name": "C40LFR",
+            "length": 40,
+            "fuel": "CNG"
+        },
         "new-flyer-d40lf": {
             "manufacturer": "New Flyer",
             "name": "D40LF",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "new-flyer-d40lfr": {
+            "manufacturer": "New Flyer",
+            "name": "D40LFR",
             "length": 40,
             "fuel": "Diesel"
         },
@@ -16,13 +60,19 @@
             "manufacturer": "New Flyer",
             "name": "DE40LF",
             "length": 40,
-            "fuel": "Diesel"
+            "fuel": "Hybrid"
         },
         "new-flyer-h40lfr": {
             "manufacturer": "New Flyer",
             "name": "H40LFR",
             "length": 40,
             "fuel": "Hydrogen Fuel Cell"
+        },
+        "new-flyer-xd40": {
+            "manufacturer": "New Flyer",
+            "name": "XD40",
+            "length": 40,
+            "fuel": "Diesel"
         },
         "new-flyer-xe40": {
             "manufacturer": "New Flyer",
@@ -54,15 +104,51 @@
             "length": 40,
             "fuel": "Diesel"
         },
+        "nova-bus-lfse": {
+            "manufacturer": "Nova Bus",
+            "name": "LFSe",
+            "length": 40,
+            "fuel": "Battery Electric"
+        },
         "nova-bus-lfse+": {
             "manufacturer": "Nova Bus",
             "name": "LFSe+",
             "length": 40,
             "fuel": "Battery Electric"
         },
+        "nova-bus-lfs-cng-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS CNG (4th Gen)",
+            "length": 40,
+            "fuel": "CNG"
+        },
+        "nova-bus-lfs-hev-3": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (3rd Gen)",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
+        "nova-bus-lfs-hev-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (4th Gen)",
+            "length": 40,
+            "fuel": "Hybrid"
+        },
         "nova-bus-lfs-suburban-2": {
             "manufacturer": "Nova Bus",
             "name": "LFS Suburban (2nd Gen)",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "nova-bus-lfs-suburban-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS Suburban (4th Gen)",
+            "length": 40,
+            "fuel": "Diesel"
+        },
+        "obi-orion-v-suburban": {
+            "manufacturer": "OBI",
+            "name": "Orion V (Suburban)",
             "length": 40,
             "fuel": "Diesel"
         },
@@ -192,6 +278,12 @@
             "length": 24,
             "fuel": "Diesel"
         },
+        "ford-girardin-e450-g5": {
+            "manufacturer": "Ford/Girardin",
+            "name": "E-450/G5",
+            "length": 28,
+            "fuel": "Gasoline"
+        },
         "ford-girardin-t350-mbii": {
             "manufacturer": "Ford/Girardin",
             "name": "T-350/MB-II",
@@ -215,6 +307,26 @@
             "name": "Sprinter Minibus",
             "length": 24,
             "fuel": "Diesel"
+        }
+    },
+    "trolley": {
+        "new-flyer-e40lf": {
+            "manufacturer": "New Flyer",
+            "name": "E40LF",
+            "length": 40,
+            "fuel": "Trolley Electric"
+        },
+        "new-flyer-e40lfr": {
+            "manufacturer": "New Flyer",
+            "name": "E40LFR",
+            "length": 40,
+            "fuel": "Trolley Electric"
+        },
+        "new-flyer-e60lfr": {
+            "manufacturer": "New Flyer",
+            "name": "E60LFR",
+            "length": 60,
+            "fuel": "Trolley Electric"
         }
     }
 }
