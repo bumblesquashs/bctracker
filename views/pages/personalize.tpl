@@ -127,6 +127,26 @@
                 </div>
             </div>
         </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Show Help Text</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <p>
+                    This includes stuff like the meaning of some icons in tables and the colours for schedule indicators.
+                    If you're a regular on the site and know how it all works, you can disable this to reduce a bit of clutter.
+                </p>
+                <div class="options-container">
+                    <div class="option" onclick="setHelpText('{{ show_help_text }}' !== 'True')">
+                        <div class="checkbox {{ 'selected' if show_help_text else '' }}">
+                            % include('components/svg', name='status/check')
+                        </div>
+                        <div>Show Help Text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container flex-1">
         <div class="section">
@@ -187,6 +207,14 @@
             window.location = "?high_contrast=enabled";
         } else {
             window.location = "?high_contrast=disabled";
+        }
+    }
+    
+    function setHelpText(enabled) {
+        if (enabled) {
+            window.location = "?show_help_text=yes";
+        } else {
+            window.location = "?show_help_text=no";
         }
     }
     

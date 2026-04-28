@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="content">
                                         % if upcoming_departures:
-                                            % if context.realtime_enabled:
+                                            % if context.realtime_enabled and show_help_text:
                                                 <p>
                                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                                     <span class="scheduled">

@@ -144,7 +144,7 @@
                     </div>
                     <div class="content">
                         % if upcoming_departures:
-                            % if context.realtime_enabled:
+                            % if context.realtime_enabled and show_help_text:
                                 <p>
                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
@@ -199,7 +199,7 @@
                         % upcoming_count = 3 + floor(len(routes) / 3)
                         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                         % if upcoming_departures:
-                            % if context.realtime_enabled:
+                            % if context.realtime_enabled and show_help_text:
                                 <p>
                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
@@ -254,7 +254,7 @@
                 </div>
                 <div class="content">
                     % if departures:
-                        % if context.realtime_enabled:
+                        % if context.realtime_enabled and show_help_text:
                             <p>
                                 <span>{{ context.vehicle_type_plural }} with a</span>
                                 <span class="scheduled">

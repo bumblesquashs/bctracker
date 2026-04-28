@@ -51,17 +51,19 @@
                         % include('components/map', map_position=position)
                     % end
                 % else:
-                    % if last_position:
-                        <div class="warning-box">
-                            % include('components/svg', name='status/warning')
-                            <p>Offline — showing last known location</p>
-                        </div>
-                        % include('components/map', map_position=last_position, offline=True)
-                    % else:
-                        <div class="warning-box">
-                            % include('components/svg', name='status/warning')
-                            <p>Offline — last known location not available</p>
-                        </div>
+                    % if show_help_text:
+                        % if last_position:
+                            <div class="warning-box">
+                                % include('components/svg', name='status/warning')
+                                <p>Offline — showing last known location</p>
+                            </div>
+                            % include('components/map', map_position=last_position, offline=True)
+                        % else:
+                            <div class="warning-box">
+                                % include('components/svg', name='status/warning')
+                                <p>Offline — last known location not available</p>
+                            </div>
+                        % end
                     % end
                     % trip = None
                 % end
@@ -293,11 +295,13 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % if any(d.timepoint for d in upcoming_departures):
-                        <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
-                    % end
-                    % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
-                        <p>Times in brackets are estimates based on current location.</p>
+                    % if show_help_text:
+                        % if any(d.timepoint for d in upcoming_departures):
+                            <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
+                        % end
+                        % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
+                            <p>Times in brackets are estimates based on current location.</p>
+                        % end
                     % end
                     <table>
                         <thead>
@@ -344,7 +348,7 @@
             </div>
             <div class="content">
                 % if records:
-                    % if any(r.warnings for r in records):
+                    % if any(r.warnings for r in records) and show_help_text:
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">

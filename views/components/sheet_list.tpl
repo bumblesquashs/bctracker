@@ -9,7 +9,7 @@
 % has_no_service = any(s.has_no_service for s in sheets)
 
 <div class="sheet-list">
-    % if has_normal_service or has_modified_service or has_no_service:
+    % if (has_normal_service or has_modified_service or has_no_service) and show_help_text:
         <div class="legend">
             % if has_normal_service:
                 <div class="row gap-5">
@@ -67,7 +67,7 @@
             % end
         % end
     </div>
-    % if schedule_path:
+    % if schedule_path and show_help_text:
         <div class="footer">
             Click on a weekday or date to jump to the schedule for that day
         </div>

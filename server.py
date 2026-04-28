@@ -201,6 +201,7 @@ class Server(Bottle):
                 theme = repositories.theme.find('bc-transit')
         theme_variant = self.query_cookie('theme_variant')
         high_contrast = self.query_cookie('high_contrast') == 'enabled'
+        show_help_text = self.query_cookie('show_help_text', 'yes') == 'yes'
         return template(f'pages/{name}',
             settings=settings.current,
             version=VERSION,
@@ -219,6 +220,7 @@ class Server(Bottle):
             theme=theme,
             theme_variant=theme_variant,
             high_contrast=high_contrast,
+            show_help_text=show_help_text,
             time_format=time_format,
             vehicle_marker_style=vehicle_marker_style,
             hide_systems=hide_systems,
