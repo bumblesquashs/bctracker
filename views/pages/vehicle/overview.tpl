@@ -51,19 +51,17 @@
                         % include('components/map', map_position=position)
                     % end
                 % else:
-                    % if show_help_text:
-                        % if last_position:
-                            <div class="warning-box">
-                                % include('components/svg', name='status/warning')
-                                <p>Offline — showing last known location</p>
-                            </div>
-                            % include('components/map', map_position=last_position, offline=True)
-                        % else:
-                            <div class="warning-box">
-                                % include('components/svg', name='status/warning')
-                                <p>Offline — last known location not available</p>
-                            </div>
-                        % end
+                    % if last_position:
+                        <div class="warning-box">
+                            % include('components/svg', name='status/warning')
+                            <p>Offline — showing last known location</p>
+                        </div>
+                        % include('components/map', map_position=last_position, offline=True)
+                    % elif show_help_text:
+                        <div class="warning-box">
+                            % include('components/svg', name='status/warning')
+                            <p>Offline — last known location not available</p>
+                        </div>
                     % end
                     % trip = None
                 % end
