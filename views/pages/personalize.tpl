@@ -129,20 +129,19 @@
         </div>
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
-                <h2>Show Help Text</h2>
+                <h2>Hide Help Text</h2>
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>
-                    This includes stuff like the meaning of some icons in tables and the colours for schedule indicators.
-                    If you're a regular on the site and know how it all works, you can disable this to reduce a bit of clutter.
-                </p>
+                <p>Reduces visual clutter by hiding explanatory text across the site.</p>
+                <p>For example, it hides the text explaining what times in brackets mean for upcoming trips, or the text explaining what the accidental login icon means.</p>
+                <p>This is intended for regular users of the site who already know how everything works.</p>
                 <div class="options-container">
                     <div class="option" onclick="setHelpText('{{ show_help_text }}' !== 'True')">
-                        <div class="checkbox {{ 'selected' if show_help_text else '' }}">
+                        <div class="checkbox {{ '' if show_help_text else 'selected' }}">
                             % include('components/svg', name='status/check')
                         </div>
-                        <div>Show Help Text</div>
+                        <div>Hide Help Text</div>
                     </div>
                 </div>
             </div>
