@@ -127,6 +127,25 @@
                 </div>
             </div>
         </div>
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Hide Help Text</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                <p>Reduces visual clutter by hiding explanatory text across the site.</p>
+                <p>For example, it hides the text explaining what times in brackets mean for upcoming trips, or the text explaining what the accidental login icon means.</p>
+                <p>This is intended for regular users of the site who already know how everything works.</p>
+                <div class="options-container">
+                    <div class="option" onclick="setHelpText('{{ show_help_text }}' !== 'True')">
+                        <div class="checkbox {{ '' if show_help_text else 'selected' }}">
+                            % include('components/svg', name='status/check')
+                        </div>
+                        <div>Hide Help Text</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container flex-1">
         <div class="section">
@@ -187,6 +206,14 @@
             window.location = "?high_contrast=enabled";
         } else {
             window.location = "?high_contrast=disabled";
+        }
+    }
+    
+    function setHelpText(enabled) {
+        if (enabled) {
+            window.location = "?show_help_text=yes";
+        } else {
+            window.location = "?show_help_text=no";
         }
     }
     

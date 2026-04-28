@@ -227,7 +227,9 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    % if show_help_text:
+                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
@@ -312,7 +314,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if any(d.timepoint for d in departures):
+                % if any(d.timepoint for d in departures) and show_help_text:
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None

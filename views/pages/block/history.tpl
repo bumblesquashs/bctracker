@@ -50,7 +50,7 @@
                 </div>
                 <div class="content">
                     % if records:
-                        % if any(r.warnings for r in records):
+                        % if any(r.warnings for r in records) and show_help_text:
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

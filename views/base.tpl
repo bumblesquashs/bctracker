@@ -451,7 +451,9 @@
                     % else:
                         All Transit Systems
                     % end
-                    <div class="tooltip right">Toggle Systems List</div>
+                    % if show_help_text:
+                        <div class="tooltip right">Toggle Systems List</div>
+                    % end
                     % if favourite_system_ids:
                         <div id="favourite-systems-dropdown">
                             % if context.system:

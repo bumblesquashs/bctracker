@@ -244,7 +244,9 @@
                     <h2>Scheduled {{ context.vehicle_type }}</h2>
                 </div>
                 <div class="content">
-                    <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
+                    % if show_help_text:
+                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
+                    % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>

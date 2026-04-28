@@ -29,7 +29,7 @@
                         }
                     </script>
                 % end
-                % if any(a.first_record and a.first_record.warnings for a in allocations):
+                % if any(a.first_record and a.first_record.warnings for a in allocations) and show_help_text:
                     <p>
                         <span>Entries with a</span>
                         <span class="record-warnings">
@@ -38,7 +38,7 @@
                         <span>may be accidental logins.</span>
                     </p>
                 % end
-                % if context.system and any(not a.active for a in allocations):
+                % if context.system and any(not a.active for a in allocations) and show_help_text:
                     <p>
                         <span>Entries with a</span>
                         <span class="transfer">
