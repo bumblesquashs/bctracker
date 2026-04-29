@@ -244,6 +244,16 @@
                 }
             }
             
+            function setLiveryTheme(liveryID) {
+                if (liveryID === "green-blue-stripes" || liveryID == "green-blue-stripes-green-back") {
+                    window.location.href = "?theme=bc-transit";
+                } else if (liveryID === "red-blue-stripes") {
+                    window.location.href = "?theme=bc-transit-classic";
+                } else if (liveryID === "green-front") {
+                    window.location.href = "?theme=bc-transit-green";
+                }
+            }
+            
             function getTimestampOffset() {
                 const currentLocal = new Date().getTime();
                 const currentRemote = parseFloat("{{ timestamp.value }}") * 1000;
@@ -657,6 +667,8 @@
     let searchIncludeBlocks = true;
     
     function toggleSearch() {
+        document.getElementById("content").classList.toggle("search-visible");
+        
         const searchElement = document.getElementById("search");
         const inputElement = document.getElementById("search-input");
         const menuElement = document.getElementById("navigation-menu");
