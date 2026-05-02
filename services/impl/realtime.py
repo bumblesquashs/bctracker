@@ -55,7 +55,7 @@ class RealtimeService:
                 vehicle_id = str(-(index + 1))
             
             # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
-            if context.system_id == 'whistler' and vehicle_id == '9337':
+            if (context.system_id == 'whistler' or context.system_id == 'pemberton') and vehicle_id == '9337':
                 continue
             
             try:

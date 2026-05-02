@@ -38,7 +38,7 @@ database.execute(
     WHERE record_id IN (
         SELECT r.record_id FROM record r
         JOIN allocation a ON a.allocation_id = r.allocation_id
-        WHERE a.system_id = 'whistler' AND a.vehicle_id = '9337'
+        WHERE a.system_id = 'pemberton' AND a.vehicle_id = '9337'
     )
     '''
 )
@@ -56,7 +56,7 @@ database.execute(
     '''
     DELETE FROM record
     WHERE allocation_id IN (
-        SELECT allocation_id FROM allocation WHERE system_id = 'whistler' AND vehicle_id = '9337'
+        SELECT allocation_id FROM allocation WHERE system_id = 'pemberton' AND vehicle_id = '9337'
     )
     '''
 )
