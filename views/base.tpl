@@ -472,10 +472,10 @@
                     % end
                     % if favourite_system_ids:
                         <div id="favourite-systems-dropdown">
-                            % if context.system:
-                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
-                            % else:
+                            % if context.system is None and context.agency is None:
                                 <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Systems</span>
+                            % else:
+                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
                             % end
                             % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
                             % for system in favourite_systems:
