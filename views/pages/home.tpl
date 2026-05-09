@@ -55,14 +55,14 @@
                     function vehicleSearch() {
                         let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ context.url('bus') }}/" + value;
+                            window.location = getUrl(currentSystemID, "bus/" + value);
                         }
                     }
                     
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ context.url('routes') }}/" + value;
+                            window.location = getUrl(currentSystemID, "routes/" + value);
                         }
                     }
                     
@@ -70,9 +70,11 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ context.url('stops') }}?search=" + value;
+                                window.location = getUrl(currentSystemID, "stops", false, {
+                                    "search": value
+                                });
                             } else {
-                                window.location = "{{ context.url('stops') }}/" + value;
+                                window.location = getUrl(currentSystemID, "stops/" + value);
                             }
                         }
                     }
@@ -80,7 +82,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ context.url('blocks') }}/" + value;
+                            window.location = getUrl(currentSystemID, "blocks/" + value);
                         }
                     }
                 </script>

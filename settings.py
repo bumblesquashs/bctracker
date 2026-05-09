@@ -12,9 +12,9 @@ class Settings:
     admin_logs_count: int = DEFAULT_ADMIN_LOGS_COUNT
     
     # Domain settings
-    all_systems_domain: str | None = None
+    root_domain: str | None = None
     system_domain: str | None = None
-    system_domain_path: str | None = None
+    agency_domain: str | None = None
     cookie_domain: str | None = None
     
     # Key settings
@@ -35,9 +35,9 @@ class Settings:
         except:
             pass
         
-        self.all_systems_domain = config['all_systems_domain']
-        self.system_domain = config['system_domain']
-        self.system_domain_path = config['system_domain_path']
+        self.root_domain = config.get('root_domain')
+        self.system_domain = config.get('system_domain')
+        self.agency_domain = config.get('agency_domain')
         self.cookie_domain = config.get('cookie_domain')
         
         self.analytics_key = config.get('analytics_key')

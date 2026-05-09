@@ -60,11 +60,9 @@
                 % end
                 <script>
                     function setDays(days) {
-                        if (days === null) {
-                            window.location = "{{ context.url('history') }}";
-                        } else {
-                            window.location = "{{ context.url('history') }}?days=" + days;
-                        }
+                        window.location = getUrl(currentSystemID, "history", false, {
+                            "days": days
+                        });
                     }
                     
                     function toggleShowTransfers() {

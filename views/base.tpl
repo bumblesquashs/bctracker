@@ -182,16 +182,17 @@
                 return a
             }
             
-            function getUrl(systemID, path, forceSubdomain=false, params=null) {
+            function getUrl(systemID, path, internal=false, params=null) {
                 let url;
-                if (systemID === null || systemID === undefined) {
-                    url = "{{ settings.all_systems_domain }}".format(path);
-                } else if (currentSystemID !== null || forceSubdomain) {
-                    url = "{{ settings.system_domain }}".format(systemID, path);
-                } else {
-                    url = "{{ settings.system_domain_path }}".format(systemID, path);
-                }
                 const query = [];
+                if (systemID === null || systemID === undefined) {
+                    url = "{{ settings.root_domain }}".format(path);
+                } else if ((internal && currentSystemID === null) || "{{ settings.system_domain }}" === "None") {
+                    url = "{{ settings.root_domain }}".format(path);
+                    query.push("system=" + systemID);
+                } else {
+                    url = "{{ settings.system_domain }}".format(systemID, path);
+                }
                 if (params) {
                     for (const key in params) {
                         if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
@@ -202,7 +203,7 @@
                 if (query.length === 0) {
                     return url;
                 }
-                return url + "?" + query.join("&")
+                return url + "?" + query.join("&");
             }
             
             function setCookie(key, value) {
