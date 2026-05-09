@@ -249,10 +249,17 @@ class Context:
             else:
                 query_args['system'] = self.system_id
         elif self.agency_id:
-            if settings.current.agency_domain:
-                url = settings.current.agency_domain.format(self.agency_id, path)
+            if self.agency and self.agency.default_system:
+                system = repositories.system.find(self.agency.default_system)
+                if settings.current.system_domain:
+                    url = settings.current.system_domain.format(system.id, path)
+                else:
+                    query_args['system'] = system.id
             else:
-                query_args['agency'] = self.agency_id
+                if settings.current.agency_domain:
+                    url = settings.current.agency_domain.format(self.agency_id, path)
+                else:
+                    query_args['agency'] = self.agency_id
         
         if query_args:
             query = '&'.join([f'{k}={v}' for k, v in query_args.items()])

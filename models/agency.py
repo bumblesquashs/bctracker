@@ -15,6 +15,7 @@ class Agency:
     website: str | None = None
     gtfs_url: str | None = None
     realtime_url: str | None = None
+    default_system: str | None = None
     enabled: bool = True
     prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
     accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS

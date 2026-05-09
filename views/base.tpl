@@ -462,6 +462,8 @@
                         % if context.system_id in favourite_system_ids:
                             % include('components/svg', name='action/favourite')
                         % end
+                    % elif context.agency:
+                        All {{ context }}
                     % else:
                         All Transit Systems
                     % end
@@ -510,10 +512,25 @@
         </div>
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
-                % if context.system:
-                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
-                % else:
+                % if context.system is None and context.agency is None:
                     <span class="system-button current all-systems">All Transit Systems</span>
+                % else:
+                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                % end
+                % for agency in agencies:
+                    % if agency.default_system is None:
+                        % if context.system is None and context.agency == agency:
+                            <span class="system-button current">
+                                % include('components/agency_logo')
+                                <div class="flex-1">All {{ agency }}</div>
+                            </span>
+                        % else:
+                            <a href="{{ agency.context.url(*path, **path_args) }}" class="system-button">
+                                % include('components/agency_logo')
+                                <div class="flex-1">All {{ agency }}</div>
+                            </a>
+                        % end
+                    % end
                 % end
                 % if favourite_system_ids:
                     <div class="header">Favourites</div>
