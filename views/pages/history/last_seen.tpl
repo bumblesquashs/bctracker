@@ -60,7 +60,7 @@
                 % end
                 <script>
                     function setDays(days) {
-                        window.location = getUrl(currentSystemID, "history", false, {
+                        window.location = getURL(currentAgencyID, currentSystemID, "history", false, {
                             "days": days
                         });
                     }

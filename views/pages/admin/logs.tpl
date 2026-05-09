@@ -52,7 +52,7 @@
                 </div>
                 <script>
                     function setLevel(level) {
-                        window.location = getUrl(currentSystemID, "admin/logs", false, {
+                        window.location = getURL(currentAgencyID, currentSystemID, "admin/logs", false, {
                             "level": level
                         });
                     }

@@ -73,7 +73,7 @@
                 
                 const icon = document.createElement("a");
                 icon.className = "icon route";
-                icon.href = getUrl(route.system_id, "routes/" + route.url_id);
+                icon.href = getURL(null, route.system_id, "routes/" + route.url_id);
                 icon.style.backgroundColor = "#" + route.colour;
                 icon.innerHTML = "<div class='link'></div><span class='number'>" + route.number + "</span>";
                 

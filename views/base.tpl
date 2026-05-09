@@ -136,39 +136,15 @@
         
         <script>
             const svgs = {};
-            let currentSystemID;        
+            console.log("{{ context.agency_id }}")
+            const currentAgencyID = "{{ context.agency_id }}" === "" ? null : "{{ context.agency_id }}";
+            const currentSystemID = "{{ context.system_id }}" === "" ? null : "{{ context.system_id }}";   
+            const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
             
             function getSVG(name) {
                 return svgs[name];
             }
             
-            const showStopNumbers = "{{ context.show_stop_number }}" == "True";
-        </script>
-        
-        % if context.system:
-            <script>
-                currentSystemID = "{{ context.system_id }}";
-            </script>
-        % else:
-            <script>
-                currentSystemID = null;
-            </script>
-        % end
-        
-        % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='ferry')
-        % include('components/svg_script', name='model/type/bus-artic')
-        % include('components/svg_script', name='model/type/bus-conventional')
-        % include('components/svg_script', name='model/type/bus-decker')
-        % include('components/svg_script', name='model/type/bus-midibus')
-        % include('components/svg_script', name='model/type/bus-shuttle')
-        % include('components/svg_script', name='model/type/ferry')
-        % include('components/svg_script', name='ghost')
-        % include('components/svg_script', name='stop')
-        % include('components/svg_script', name='route')
-        % include('components/svg_script', name='block')
-        
-        <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search").classList.add("display-none");
@@ -182,17 +158,31 @@
                 return a
             }
             
-            function getUrl(systemID, path, internal=false, params=null) {
+            function getURL(agencyID, systemID, path, internal=false, params=null) {
                 let url;
                 const query = [];
-                if (systemID === null || systemID === undefined) {
-                    url = "{{ settings.root_domain }}".format(path);
-                } else if ((internal && currentSystemID === null) || "{{ settings.system_domain }}" === "None") {
-                    url = "{{ settings.root_domain }}".format(path);
-                    query.push("system=" + systemID);
+                
+                if ("{{ settings.root_domain }}" === "") {
+                    url = "/" + path;
+                    console.log(url)
                 } else {
-                    url = "{{ settings.system_domain }}".format(systemID, path);
+                    url = "{{ settings.root_domain }}".format(path)
                 }
+                
+                if (systemID) {
+                    if (internal || "{{ settings.system_domain }}" === "") {
+                        query.push("system=" + systemID);
+                    } else {
+                        url = "{{ settings.system_domain }}".format(systemID, path);
+                    }
+                } else if (agencyID) {
+                    if (internal || "{{ settings.agency_domain }}" === "") {
+                        query.push("agency=" + agencyID);
+                    } else {
+                        url = "{{ settings.agency_domain }}".format(agencyID, path);
+                    }
+                }
+                
                 if (params) {
                     for (const key in params) {
                         if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
@@ -208,7 +198,7 @@
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ settings.cookie_domain }}" == "None") {
+                if ("{{ settings.cookie_domain }}" == "") {
                     document.cookie = key + "=" + value + "; max-age=" + max_age + "; path=/";
                 } else {
                     document.cookie = key + "=" + value + "; max-age=" + max_age + "; domain={{ settings.cookie_domain }}; path=/";
@@ -294,6 +284,19 @@
                 return parts.join(" ") + " ago";
             }
         </script>
+        
+        % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='ferry')
+        % include('components/svg_script', name='model/type/bus-artic')
+        % include('components/svg_script', name='model/type/bus-conventional')
+        % include('components/svg_script', name='model/type/bus-decker')
+        % include('components/svg_script', name='model/type/bus-midibus')
+        % include('components/svg_script', name='model/type/bus-shuttle')
+        % include('components/svg_script', name='model/type/ferry')
+        % include('components/svg_script', name='ghost')
+        % include('components/svg_script', name='stop')
+        % include('components/svg_script', name='route')
+        % include('components/svg_script', name='block')
     </head>
     
     <body class="{{ 'full-map' if full_map else '' }}">

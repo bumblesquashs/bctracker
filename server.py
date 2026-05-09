@@ -51,9 +51,12 @@ class Server(Bottle):
         self.add('/realtime/models', self.realtime_models)
         self.add('/realtime/speed', self.realtime_speed)
         self.add('/fleet', self.fleet)
-        self.add('/bus/<vehicle_id>', self.vehicle_overview)
-        self.add('/bus/<vehicle_id>/map', self.vehicle_map)
-        self.add('/bus/<vehicle_id>/history', self.vehicle_history)
+        self.add('/fleet/<vehicle_id>', self.fleet_overview)
+        self.add('/fleet/<vehicle_id>/map', self.fleet_map)
+        self.add('/fleet/<vehicle_id>/history', self.fleet_history)
+        self.add('/bus/<vehicle_id>', self.bus_overview)
+        self.add('/bus/<vehicle_id>/map', self.bus_map)
+        self.add('/bus/<vehicle_id>/history', self.bus_history)
         self.add('/history', self.history_last_seen)
         self.add('/history/first-seen', self.history_first_seen)
         self.add('/history/transfers', self.history_transfers)
@@ -263,11 +266,11 @@ class Server(Bottle):
         else:
             try:
                 agency_id = request.query['agency']
-                agency = repositories.system.find(agency_id)
+                agency = repositories.agency.find(agency_id)
                 if validate and not agency:
                     raise HTTPError(404)
-            except:
-                agency = repositories.agency.find('bc-transit')
+            except KeyError:
+                agency = None
         return Context(agency, system)
     
     def query_options(self, key, options):
@@ -436,7 +439,7 @@ class Server(Bottle):
             allocations=allocations
         )
     
-    def vehicle_overview(self, context: Context, vehicle_id: str):
+    def fleet_overview(self, context: Context, vehicle_id: str):
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
@@ -452,7 +455,7 @@ class Server(Bottle):
             last_position = allocation.last_position
         else:
             last_position = None
-        records = repositories.record.find_all(vehicle_id=vehicle_id, limit=20)
+        records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=20)
         if vehicle.livery:
             livery = repositories.livery.find(context.agency_id, vehicle.livery)
         else:
@@ -483,7 +486,7 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def vehicle_map(self, context: Context, vehicle_id: str):
+    def fleet_map(self, context: Context, vehicle_id: str):
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
@@ -515,7 +518,7 @@ class Server(Bottle):
             favourites=self.get_favourites()
         )
     
-    def vehicle_history(self, context: Context, vehicle_id: str):
+    def fleet_history(self, context: Context, vehicle_id: str):
         vehicle = context.find_vehicle(vehicle_id)
         allocations = repositories.allocation.find_all(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocations) or not vehicle.visible:
@@ -570,6 +573,21 @@ class Server(Bottle):
             items_per_page=items_per_page,
             total_items=total_items
         )
+    
+    def bus_overview(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            context.agency = repositories.agency.find('bc-transit')
+        redirect(context.url('fleet', vehicle_id))
+    
+    def bus_map(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            context.agency = repositories.agency.find('bc-transit')
+        redirect(context.url('fleet', vehicle_id, 'map'))
+    
+    def bus_history(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            context.agency = repositories.agency.find('bc-transit')
+        redirect(context.url('fleet', vehicle_id, 'history'))
     
     def history_last_seen(self, context: Context):
         show_transfers = self.query_cookie('show_transfers', 'true') == 'true'
@@ -658,12 +676,10 @@ class Server(Bottle):
         )
     
     def routes_map(self, context: Context):
+        routes = repositories.route.find_all(context)
         if context.system:
-            routes = repositories.route.find_all(context)
             context.system.update_route_caches([r.id for r in routes])
         else:
-            # Workaround as default context is currently for BC Transit only
-            routes = repositories.route.find_all(Context())
             systems = {r.system for r in routes}
             for system in systems:
                 system_route_ids = [r.id for r in routes if r.system == system]
@@ -683,7 +699,7 @@ class Server(Bottle):
     def route_overview(self, context: Context, route_number: str):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            routes = repositories.route.find_all(Context(), route_number=route_number)
+            routes = repositories.route.find_all(context, route_number=route_number)
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
@@ -707,7 +723,7 @@ class Server(Bottle):
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            alt_routes = repositories.route.find_all(context.without_system(), route_number=route_number)
             return self.page(
                 context=context,
                 file='route/invalid',
@@ -734,7 +750,7 @@ class Server(Bottle):
     def route_map(self, context: Context, route_number: str):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            routes = repositories.route.find_all(Context(), route_number=route_number)
+            routes = repositories.route.find_all(context, route_number=route_number)
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
@@ -758,7 +774,7 @@ class Server(Bottle):
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            alt_routes = repositories.route.find_all(context.without_system(), route_number=route_number)
             return self.page(
                 context=context,
                 file='route/invalid',
@@ -781,7 +797,7 @@ class Server(Bottle):
     def route_schedule(self, context: Context, route_number: str):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            routes = repositories.route.find_all(Context(), route_number=route_number)
+            routes = repositories.route.find_all(context, route_number=route_number)
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
@@ -805,7 +821,7 @@ class Server(Bottle):
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            alt_routes = repositories.route.find_all(context.without_system(), route_number=route_number)
             return self.page(
                 context=context,
                 file='route/invalid',
@@ -826,7 +842,7 @@ class Server(Bottle):
     def route_schedule_date(self, context: Context, route_number: str, date_string: str):
         route_number=route_number.replace('-and-', '/')
         if not context.system:
-            routes = repositories.route.find_all(Context(), route_number=route_number)
+            routes = repositories.route.find_all(context, route_number=route_number)
             if routes:
                 if len(routes) == 1:
                     route = routes[0]
@@ -850,7 +866,7 @@ class Server(Bottle):
         else:
             route = context.system.get_route(number=route_number)
         if not route:
-            alt_routes = repositories.route.find_all(Context(), route_number=route_number)
+            alt_routes = repositories.route.find_all(context.without_system(), route_number=route_number)
             return self.page(
                 context=context,
                 file='route/invalid',
@@ -1041,7 +1057,7 @@ class Server(Bottle):
     
     def trip_overview(self, context: Context, trip_id: str):
         if not context.system:
-            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            trips = repositories.trip.find_all(context, trip_id=trip_id)
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
@@ -1062,7 +1078,7 @@ class Server(Bottle):
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            alt_trips = repositories.trip.find_all(context.without_system(), trip_id=trip_id)
             return self.page(
                 context=context,
                 file='trip/invalid',
@@ -1082,7 +1098,7 @@ class Server(Bottle):
     
     def trip_map(self, context: Context, trip_id: str):
         if not context.system:
-            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            trips = repositories.trip.find_all(context, trip_id=trip_id)
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
@@ -1103,7 +1119,7 @@ class Server(Bottle):
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            alt_trips = repositories.trip.find_all(context.without_system(), trip_id=trip_id)
             return self.page(
                 context=context,
                 file='trip/invalid',
@@ -1122,7 +1138,7 @@ class Server(Bottle):
     
     def trip_history(self, context: Context, trip_id: str):
         if not context.system:
-            trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            trips = repositories.trip.find_all(context, trip_id=trip_id)
             if trips:
                 if len(trips) == 1:
                     trip = trips[0]
@@ -1143,7 +1159,7 @@ class Server(Bottle):
             )
         trip = context.system.get_trip(trip_id)
         if not trip:
-            alt_trips = repositories.trip.find_all(Context(), trip_id=trip_id)
+            alt_trips = repositories.trip.find_all(context.without_system(), trip_id=trip_id)
             return self.page(
                 context=context,
                 file='trip/invalid',
@@ -1249,7 +1265,7 @@ class Server(Bottle):
     
     def stop_overview(self, context: Context, stop_number: str):
         if not context.system:
-            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            stops = repositories.stop.find_all(context, stop_number=stop_number)
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
@@ -1273,7 +1289,7 @@ class Server(Bottle):
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            alt_stops = repositories.stop.find_all(context.without_system(), stop_number=stop_number)
             return self.page(
                 context=context,
                 file='stop/invalid',
@@ -1314,7 +1330,7 @@ class Server(Bottle):
     
     def stop_map(self, context: Context, stop_number: str):
         if not context.system:
-            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            stops = repositories.stop.find_all(context, stop_number=stop_number)
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
@@ -1338,7 +1354,7 @@ class Server(Bottle):
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            alt_stops = repositories.stop.find_all(context.without_system(), stop_number=stop_number)
             return self.page(
                 context=context,
                 file='stop/invalid',
@@ -1359,7 +1375,7 @@ class Server(Bottle):
     
     def stop_schedule(self, context: Context, stop_number: str):
         if not context.system:
-            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            stops = repositories.stop.find_all(context, stop_number=stop_number)
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
@@ -1383,7 +1399,7 @@ class Server(Bottle):
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            alt_stops = repositories.stop.find_all(context.without_system(), stop_number=stop_number)
             return self.page(
                 context=context,
                 file='stop/invalid',
@@ -1403,7 +1419,7 @@ class Server(Bottle):
     
     def stop_schedule_date(self, context: Context, stop_number: str, date_string: str):
         if not context.system:
-            stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            stops = repositories.stop.find_all(context, stop_number=stop_number)
             if stops:
                 if len(stops) == 1:
                     stop = stops[0]
@@ -1427,7 +1443,7 @@ class Server(Bottle):
         else:
             stop = context.system.get_stop(number=stop_number)
         if not stop:
-            alt_stops = repositories.stop.find_all(Context(), stop_number=stop_number)
+            alt_stops = repositories.stop.find_all(context.without_system(), stop_number=stop_number)
             return self.page(
                 context=context,
                 file='stop/invalid',
@@ -1518,7 +1534,7 @@ class Server(Bottle):
             elif favourite.type == 'vehicle':
                 vehicle_positions[favourite.value.id] = repositories.position.find(favourite.value.agency.id, favourite.value.id)
                 vehicle_allocations[favourite.value.id] = repositories.allocation.find_active(favourite.value.context.without_system(), favourite.value.id)
-                vehicle_records[favourite.value.id] = repositories.record.find_all(vehicle_id=favourite.value.id, limit=5)
+                vehicle_records[favourite.value.id] = repositories.record.find_all(favourite.value.context.without_system(), vehicle_id=favourite.value.id, limit=5)
         order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
@@ -1563,7 +1579,7 @@ class Server(Bottle):
                 if not allocations:
                     redirect(context.url())
                 allocation = random.choice(allocations)
-                redirect(context.url('bus', allocation.vehicle))
+                redirect(context.url('fleet', allocation.vehicle))
             case 'route':
                 routes = system.get_routes()
                 if not routes:
@@ -1662,12 +1678,10 @@ class Server(Bottle):
         }
     
     def api_routes(self, context: Context):
+        routes = repositories.route.find_all(context)
         if context.system:
-            routes = repositories.route.find_all(context)
             context.system.update_route_caches([r.id for r in routes])
         else:
-            # Workaround as default context is currently for BC Transit only
-            routes = repositories.route.find_all(Context())
             systems = {r.system for r in routes}
             for system in systems:
                 system_route_ids = [r.id for r in routes if r.system == system]
@@ -1809,7 +1823,7 @@ class Server(Bottle):
     def error_403(self, error):
         services.log.warning(f'403 response to {request.path}')
         return self.page(
-            context=Context(),
+            context=self.query_context(validate=False),
             file='errors/403', 
             title='Forbidden',
             error=error
@@ -1819,7 +1833,7 @@ class Server(Bottle):
         # Not logging due to spam from bots on invalid pages, and browsers attempting to access non-existant icons
         # services.log.warning(f'404 response to {request.path}')
         return self.page(
-            context=Context(),
+            context=self.query_context(validate=False),
             file='errors/404',
             title='Not Found',
             error=error
@@ -1828,7 +1842,7 @@ class Server(Bottle):
     def error_500(self, error):
         services.log.error(f'500 response to {request.path}')
         return self.page(
-            context=Context(),
+            context=self.query_context(validate=False),
             file='errors/500',
             title='Internal Error',
             error=error

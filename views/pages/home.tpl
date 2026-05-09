@@ -55,14 +55,14 @@
                     function vehicleSearch() {
                         let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
-                            window.location = getUrl(currentSystemID, "bus/" + value);
+                            window.location = getURL(currentAgencyID, currentSystemID, "fleet/" + value);
                         }
                     }
                     
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = getUrl(currentSystemID, "routes/" + value);
+                            window.location = getURL(currentAgencyID, currentSystemID, "routes/" + value);
                         }
                     }
                     
@@ -70,11 +70,11 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = getUrl(currentSystemID, "stops", false, {
+                                window.location = getURL(currentAgencyID, currentSystemID, "stops", false, {
                                     "search": value
                                 });
                             } else {
-                                window.location = getUrl(currentSystemID, "stops/" + value);
+                                window.location = getURL(currentAgencyID, currentSystemID, "stops/" + value);
                             }
                         }
                     }
@@ -82,7 +82,7 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = getUrl(currentSystemID, "blocks/" + value);
+                            window.location = getURL(currentAgencyID, currentSystemID, "blocks/" + value);
                         }
                     }
                 </script>
