@@ -1,9 +1,10 @@
 <div class="vehicle">
     % if vehicle.is_known and get('enable_link', True):
-        % if context.system:
-            <a href="{{ get_url(context, 'bus', vehicle) }}">{{ vehicle }}</a>
+        % if context.realtime_enabled:
+            <a href="{{ context.url('bus', vehicle) }}">{{ vehicle }}</a>
         % else:
-            <a href="{{ get_url(context, 'bus', vehicle.context.agency, vehicle) }}">{{ vehicle }}</a>
+            % from models.context import Context
+            <a href="{{ Context().url('bus', vehicle.context.agency, vehicle) }}">{{ vehicle }}</a>
         % end
     % else:
         <div>{{ vehicle }}</div>

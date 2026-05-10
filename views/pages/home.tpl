@@ -1,16 +1,43 @@
 
-% import repositories
-
 % rebase('base')
 
 <div id="page-header">
     <h1>Welcome to ABTracker!</h1>
     % if context.system:
-        % if context.realtime_enabled:
-            <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
-        % else:
-            <h2>{{ context }} Transit Schedules</h2>
-        % end
+        <div class="row">
+            % if context.realtime_enabled:
+                <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+            % else:
+                <h2>{{ context }} Transit Schedules</h2>
+            % end
+            % if len(favourite_system_ids) >= 5 and context.system_id not in favourite_system_ids:
+                <div class="favourite disabled tooltip-anchor">
+                    % include('components/svg', name='action/non-favourite')
+                    <div class="tooltip right">You can only have 5 favourite systems at a time</div>
+                </div>
+            % else:
+                % new_favourite_systems = set(favourite_system_ids)
+                % if context.system_id in favourite_system_ids:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/favourite')
+                        <div class="tooltip right">Remove favourite system</div>
+                    </div>
+                    % new_favourite_systems.remove(context.system_id)
+                % else:
+                    <div class="favourite tooltip-anchor" onclick="updateFavouriteSystems()">
+                        % include('components/svg', name='action/non-favourite')
+                        <div class="tooltip right">Add favourite system</div>
+                    </div>
+                    % new_favourite_systems.add(context.system_id)
+                % end
+                % new_favourite_systems_string = ','.join(sorted(new_favourite_systems))
+                <script>
+                    function updateFavouriteSystems() {
+                        window.location = "?favourite_systems={{ new_favourite_systems_string }}";
+                    }
+                </script>
+            % end
+        </div>
     % else:
         <h2>Alberta Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
     % end
@@ -28,14 +55,14 @@
                     function vehicleSearch() {
                         let value = document.getElementById('vehicle_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'bus') }}/" + value;
+                            window.location = "{{ context.url('bus') }}/" + value;
                         }
                     }
                     
                     function routeSearch() {
                         let value = document.getElementById('route_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'routes') }}/" + value;
+                            window.location = "{{ context.url('routes') }}/" + value;
                         }
                     }
                     
@@ -43,9 +70,9 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = "{{ get_url(context, 'stops') }}?search=" + value;
+                                window.location = "{{ context.url('stops') }}?search=" + value;
                             } else {
-                                window.location = "{{ get_url(context, 'stops') }}/" + value;
+                                window.location = "{{ context.url('stops') }}/" + value;
                             }
                         }
                     }
@@ -53,48 +80,12 @@
                     function blockSearch() {
                         let value = document.getElementById('block_search').value;
                         if (value.length > 0) {
-                            window.location = "{{ get_url(context, 'blocks') }}/" + value;
+                            window.location = "{{ context.url('blocks') }}/" + value;
                         }
                     }
                 </script>
                 
-                % if context.system:
-                    % if context.realtime_enabled:
-                        <form onsubmit="vehicleSearch()" action="javascript:void(0)">
-                            <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
-                            <div class="input-container">
-                                <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                    
-                    <form onsubmit="routeSearch()" action="javascript:void(0)">
-                        <label for="route_search">Route Number:</label>
-                        <div class="input-container">
-                            <input type="text" id="route_search" name="route_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    <form onsubmit="stopSearch()" action="javascript:void(0)">
-                        <label for="stop_search">Stop Number or Name:</label>
-                        <div class="input-container">
-                            <input type="text" id="stop_search" name="stop_search" method="post" size="10">
-                            <input type="submit" value="Search" class="button">
-                        </div>
-                    </form>
-                    
-                    % if context.enable_blocks:
-                        <form onsubmit="blockSearch()" action="javascript:void(0)">
-                            <label for="block_search">Block ID:</label>
-                            <div class="input-container">
-                                <input type="text" id="block_search" name="block_search" method="post" size="10">
-                                <input type="submit" value="Search" class="button">
-                            </div>
-                        </form>
-                    % end
-                % else:
+                % if context.realtime_enabled:
                     <form onsubmit="vehicleSearch()" action="javascript:void(0)">
                         <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
                         <div class="input-container">
@@ -102,7 +93,32 @@
                             <input type="submit" value="Search" class="button">
                         </div>
                     </form>
-                    <p>Choose an agency to search for routes and stops</p>
+                % end
+                
+                <form onsubmit="routeSearch()" action="javascript:void(0)">
+                    <label for="route_search">Route Number:</label>
+                    <div class="input-container">
+                        <input type="text" id="route_search" name="route_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                <form onsubmit="stopSearch()" action="javascript:void(0)">
+                    <label for="stop_search">Stop Number or Name:</label>
+                    <div class="input-container">
+                        <input type="text" id="stop_search" name="stop_search" method="post" size="10">
+                        <input type="submit" value="Search" class="button">
+                    </div>
+                </form>
+                
+                % if context.enable_blocks:
+                    <form onsubmit="blockSearch()" action="javascript:void(0)">
+                        <label for="block_search">Block ID:</label>
+                        <div class="input-container">
+                            <input type="text" id="block_search" name="block_search" method="post" size="10">
+                            <input type="submit" value="Search" class="button">
+                        </div>
+                    </form>
                 % end
             </div>
         </div>
@@ -113,133 +129,8 @@
             </div>
             <div class="content">
                 <p>
-                    Add up to 20 favourites using the
-                    % include('components/svg', name='action/non-favourite')
-                    button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
+                    Favourites have been moved to a <a href="{{ context.url('favourites') }}">dedicated page</a> with more details!
                 </p>
-                % if favourites:
-                    % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
-                    % route_favourites = [f for f in favourites if f.type == 'route']
-                    % stop_favourites = [f for f in favourites if f.type == 'stop']
-                    <div class="container">
-                        % if vehicle_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>{{ context.vehicle_type }}</th>
-                                                <th>Headsign</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % for order in orders:
-                                                % order_favourites = [f for f in vehicle_favourites if f.value.order_id == order.id]
-                                                <tr class="header">
-                                                    <td colspan="2">{{! order }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in order_favourites:
-                                                    % value = favourite.value
-                                                    % position = repositories.position.find(value.agency.id, value.id)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="row">
-                                                                % include('components/vehicle', vehicle=value)
-                                                                % if position:
-                                                                    <div class="row gap-5">
-                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
-                                                                        % include('components/adherence', adherence=position.adherence)
-                                                                    </div>
-                                                                % end
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            % if position and position.trip:
-                                                                % include('components/headsign', departure=position.departure, trip=position.trip)
-                                                            % else:
-                                                                <div class="lighter-text">Not In Service</div>
-                                                            % end
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                        % if route_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Route</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % favourite_systems = {f.value.context.system for f in route_favourites}
-                                            % for system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in route_favourites if f.value.context.system == system]
-                                                <tr class="header">
-                                                    <td>{{ system }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in system_favourites:
-                                                    % value = favourite.value
-                                                    <tr>
-                                                        <td>
-                                                            <div class="row">
-                                                                % include('components/route', route=value, include_link=False)
-                                                                <a href="{{ get_url(value.context, 'routes', value) }}">{{! value.display_name }}</a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                        % if stop_favourites:
-                            <div class="section">
-                                <div class="content">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Stop</th>
-                                                <th>Routes</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            % favourite_systems = {f.value.context.system for f in stop_favourites}
-                                            % for system in sorted(favourite_systems):
-                                                % system_favourites = [f for f in stop_favourites if f.value.context.system == system]
-                                                <tr class="header">
-                                                    <td colspan="2">{{ system }}</td>
-                                                </tr>
-                                                <tr class="display-none"></tr>
-                                                % for favourite in system_favourites:
-                                                    % value = favourite.value
-                                                    <tr>
-                                                        <td>
-                                                            % include('components/stop', stop=value)
-                                                        </td>
-                                                        <td>
-                                                            % include('components/route_list', routes=value.routes)
-                                                        </td>
-                                                    </tr>
-                                                % end
-                                            % end
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        % end
-                    </div>
-                % end
             </div>
         </div>
     </div>
@@ -259,9 +150,9 @@
                             <p>See all {{ context.vehicle_type_plural.lower() }} that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(context, 'realtime') }}">List</a>
-                            <a class="button" href="{{ get_url(context, 'map') }}">Map</a>
-                            <a class="button" href="{{ get_url(context, 'history') }}">History</a>
+                            <a class="button" href="{{ context.url('realtime') }}">List</a>
+                            <a class="button" href="{{ context.url('map') }}">Map</a>
+                            <a class="button" href="{{ context.url('history') }}">History</a>
                         </div>
                     </div>
                     <div class="item">
@@ -271,10 +162,10 @@
                             <p>See departure times and routing details for routes, stops, blocks, and more</p>
                         </div>
                         <div class="button-container">
-                            <a class="button" href="{{ get_url(context, 'routes') }}">Routes</a>
-                            <a class="button" href="{{ get_url(context, 'stops') }}">Stops</a>
+                            <a class="button" href="{{ context.url('routes') }}">Routes</a>
+                            <a class="button" href="{{ context.url('stops') }}">Stops</a>
                             % if context.enable_blocks:
-                                <a class="button" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                                <a class="button" href="{{ context.url('blocks') }}">Blocks</a>
                             % end
                         </div>
                     </div>
@@ -305,7 +196,7 @@
                             </p>
                             <p>
                                 For now the website is going to be in <b>beta</b>, which means that some stuff could still break or get changed at any time.
-                                Please see the <a href="{{ get_url(context, 'about') }}#beta-testing">about page</a> for more info.
+                                Please see the <a href="{{ context.url('about') }}#beta-testing">about page</a> for more info.
                             </p>
                             <p>
                                 Enjoy!

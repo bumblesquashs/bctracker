@@ -128,6 +128,9 @@ class Stop:
             return self.key < other.key
         return self.name < other.name
     
+    def url(self, *args, **kwargs):
+        return self.context.url('stops', self, *args, **kwargs)
+    
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
         number = self.number if self.context.show_stop_number else None
@@ -149,7 +152,7 @@ class Stop:
         number = self.number.lower()
         name = self.name.lower()
         value = 0
-        if query in number:
+        if query in number and self.context.show_stop_number:
             value += (len(query) / len(number)) * 100
             if number.startswith(query):
                 value += len(query)
@@ -161,11 +164,14 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
+        return Match(self.context, f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''
         return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2)) <= accuracy
+    
+    def get_distance(self, lat, lon) -> float:
+        return sqrt(((self.lat - lat) ** 2) + ((self.lon - lon) ** 2))
     
     def find_departures(self, service_group=None, date=None):
         '''Returns all departures from this stop'''

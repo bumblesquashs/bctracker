@@ -180,9 +180,14 @@ class Trip:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.id == other.id:
+            return self.headsign < other.headsign
         if self.start_time == other.start_time:
             return self.service < other.service
         return self.start_time < other.start_time
+    
+    def url(self, *args, **kwargs):
+        return self.context.url('trips', self, *args, **kwargs)
     
     def get_json(self):
         '''Returns a representation of this trip in JSON-compatible format'''

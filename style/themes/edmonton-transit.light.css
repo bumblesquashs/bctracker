@@ -118,6 +118,28 @@ table tr.table-button:hover {
     background-color: #FFFFFF;
 }
 
+#favourite-systems-dropdown {
+    background-color: #E6E6E6;
+    border-color: #666666;
+}
+
+#favourite-systems-dropdown .system-button {
+    color: #000000;
+    --image-color: #2886B9;
+}
+
+#favourite-systems-dropdown .system-button:hover {
+    background-color: #CBCBCB;
+}
+
+#favourite-systems-dropdown .system-button.current {
+    background-color: #CBCBCB;
+}
+
+#favourite-systems-dropdown .system-button.all-systems {
+    border-bottom-color: #666666;
+}
+
 #loading-stop {
     --image-color: #FFFFFF;
 }
@@ -132,16 +154,6 @@ table tr.table-button:hover {
 
 #navigation-bar {
     --tooltip-background: #193A5A;
-}
-
-#nearby-status.loading {
-    background-color: #E6E6E6;
-    border-color: #666666;
-}
-
-#nearby-status.error {
-    border-color: #FF0000;
-    background-color: #FFCCCC;
 }
 
 #page {
@@ -222,6 +234,7 @@ table tr.table-button:hover {
 
 #system-menu .system-button {
     color: #000000;
+    --image-color: #2886B9;
 }
 
 #system-menu .system-button:hover {
@@ -312,6 +325,11 @@ table tr.table-button:hover {
 .info-box {
     background-color: #E6E6E6;
     border-color: #666666;
+    --table-border: #CBCBCB;
+}
+
+.info-box h3 {
+    --stop-number-background: #FFFFFF;
 }
 
 .info-box .section {
@@ -320,6 +338,15 @@ table tr.table-button:hover {
 
 .info-box .option {
     --hover-background: #CBCBCB;
+}
+
+.info-box .toggle-button {
+    background-color: #CBCBCB;
+    --image-color: #000000;
+}
+
+.info-box .toggle-button:hover {
+    background-color: #ABABAB;
 }
 
 .lighter-text {

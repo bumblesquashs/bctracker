@@ -8,22 +8,19 @@ import requests
 import protobuf.data.gtfs_realtime_pb2 as protobuf
 
 from database import Database
-from settings import Settings
 
 from models.context import Context
-from models.date import Date
-from models.time import Time
 from models.timestamp import Timestamp
 
 import repositories
 import services
+import settings
 
 @dataclass(slots=True)
 class RealtimeService:
     
     database: Database
-    settings: Settings
-    last_updated: Date | None = None
+    last_updated: Timestamp | None = None
     
     def update(self, context: Context):
         '''Downloads realtime data for the given context and stores it in the database'''
@@ -32,7 +29,7 @@ class RealtimeService:
         data_path = f'data/realtime/{context.system_id}.bin'
         
         if path.exists(data_path):
-            if self.settings.enable_realtime_backups:
+            if settings.current.enable_realtime_backups:
                 formatted_date = datetime.now().strftime('%Y-%m-%d-%H:%M')
                 archives_path = f'archives/realtime/{context.system_id}_{formatted_date}.bin'
                 rename(data_path, archives_path)
@@ -40,7 +37,7 @@ class RealtimeService:
                 remove(data_path)
         data = protobuf.FeedMessage()
         with requests.get(context.system.realtime_url, timeout=10) as r:
-            if self.settings.enable_realtime_backups:
+            if settings.current.enable_realtime_backups:
                 with open(data_path, 'wb') as f:
                     f.write(r.content)
             data.ParseFromString(r.content)
@@ -55,11 +52,21 @@ class RealtimeService:
                 vehicle_name_length = context.vehicle_name_length
                 if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                     vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
+                if vehicle_id == '':
+                    vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
-            repositories.position.create(context, vehicle_id, vehicle)
+            
+            # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
+            if (context.system_id == 'whistler' or context.system_id == 'pemberton') and vehicle_id == '9337':
+                continue
+            
+            try:
+                repositories.position.create(context, vehicle_id, vehicle)
+            except Exception as e:
+                services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         self.last_updated = Timestamp.now(accurate_seconds=False)
-        context.system.last_updated = Timestamp.now(context.timezone, context.accurate_seconds)
+        context.system.last_updated = context.timestamp
     
     def update_records(self):
         '''Updates records in the database based on the current positions in the database'''
@@ -69,8 +76,8 @@ class RealtimeService:
                 vehicle = position.vehicle
                 if not vehicle.is_known:
                     continue
-                date = Date.today(context.timezone)
-                time = Time.now(context.timezone)
+                date = context.today
+                time = context.now
                 
                 allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
                 if allocation:

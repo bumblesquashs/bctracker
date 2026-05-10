@@ -57,7 +57,12 @@ class Block:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.id == other.id:
+            return self.context < other.context
         return self.id < other.id
+    
+    def url(self, *args, **kwargs):
+        return self.context.url('blocks', self, *args, **kwargs)
     
     def get_trips(self, service_group=None, date=None):
         '''Returns all trips from this block'''
@@ -130,4 +135,4 @@ class Block:
             message = f'Route {routes}'
         else:
             message = f'Routes {routes}'
-        return Match(f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
+        return Match(self.context, f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)

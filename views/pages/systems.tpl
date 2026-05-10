@@ -34,7 +34,7 @@
                         <td>
                             <div class="row">
                                 % include('components/agency_logo', agency=system.agency)
-                                <a href="{{ get_url(system.context) }}">{{ system }}</a>
+                                <a href="{{ system.context.url() }}">{{ system }}</a>
                             </div>
                         </td>
                         <td class="non-desktop">

@@ -4,8 +4,8 @@
 <div id="page-header">
     <h1>Block {{ block.id }}</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'blocks', block) }}" class="tab-button">Overview</a>
-        <a href="{{ get_url(context, 'blocks', block, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('blocks', block) }}" class="tab-button">Overview</a>
+        <a href="{{ context.url('blocks', block, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>
@@ -28,7 +28,10 @@
                                 % for order in orders:
                                     % percentage = (sum(1 for r in records if r.vehicle.order_id == order.id) / len(records)) * 100
                                     <div class="row space-between">
-                                        <div>{{! order }}</div>
+                                        <div class="row">
+                                            % include('components/livery_row', liveries=order.liveries)
+                                            {{! order }}
+                                        </div>
                                         <div class="lighter-text">{{ round(percentage) }}%</div>
                                     </div>
                                 % end
@@ -47,7 +50,7 @@
                 </div>
                 <div class="content">
                     % if records:
-                        % if any(r.warnings for r in records):
+                        % if any(r.warnings for r in records) and show_help_text:
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">

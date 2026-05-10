@@ -81,6 +81,9 @@ class Vehicle:
     def __lt__(self, other):
         return self.key < other.key
     
+    def url(self, *args, **kwargs):
+        return self.context.url('bus', self, *args, **kwargs)
+    
     def find_decoration(self):
         '''Returns the decoration for this vehicle, if one exists'''
         return repositories.decoration.find(self.agency.id, self.id)

@@ -11,6 +11,7 @@ class ModelType(Enum):
     decker = "Double Decker"
     midibus = "Midibus"
     shuttle = "Shuttle"
+    trolley = "Trolley"
     ferry = "Ferry"
     
     def __str__(self):

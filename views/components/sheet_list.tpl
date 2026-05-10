@@ -1,8 +1,6 @@
 
 % import calendar
 
-% from models.date import Date
-
 % schedule_path = get('schedule_path')
 % date_path = get('date_path', schedule_path)
 
@@ -11,7 +9,7 @@
 % has_no_service = any(s.has_no_service for s in sheets)
 
 <div class="sheet-list">
-    % if has_normal_service or has_modified_service or has_no_service:
+    % if (has_normal_service or has_modified_service or has_no_service) and show_help_text:
         <div class="legend">
             % if has_normal_service:
                 <div class="row gap-5">
@@ -35,7 +33,6 @@
     % end
     <div class="column gap-10">
         % for (i, sheet) in enumerate(sheets):
-            % today = Date.today(sheet.context.timezone)
             % schedule = sheet.schedule
             % dates = schedule.exceptions.union(sheet.modifications)
             % if not schedule.is_special or dates:
@@ -57,7 +54,7 @@
                                     % for date in month_dates:
                                         % status = sheet.get_date_status(date)
                                         % if schedule_path:
-                                            <a class="date {{ status }}" href="{{ get_url(context, date_path, date) }}">{{ date.day }}</a>
+                                            <a class="date {{ status }}" href="{{ context.url(date_path, date) }}">{{ date.day }}</a>
                                         % else:
                                             <span class="date {{ status }}">{{ date.day }}</span>
                                         % end
@@ -70,7 +67,7 @@
             % end
         % end
     </div>
-    % if schedule_path:
+    % if schedule_path and show_help_text:
         <div class="footer">
             Click on a weekday or date to jump to the schedule for that day
         </div>

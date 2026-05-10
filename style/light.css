@@ -21,6 +21,10 @@
     --map-control-icon: #FF0000;
 }
 
+#nearby-error {
+    --image-color: #FF0000;
+}
+
 .ahead {
     --adherence-background: #FF9A3A;
 }

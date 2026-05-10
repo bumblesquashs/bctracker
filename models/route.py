@@ -158,12 +158,19 @@ class Route:
     def __lt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order < other.sort_order
+        if self.key == other.key:
+            return self.name < other.name
         return self.key < other.key
     
     def __gt__(self, other):
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order > other.sort_order
+        if self.key == other.key:
+            return self.name > other.name
         return self.key > other.key
+    
+    def url(self, *args, **kwargs):
+        return self.context.url('routes', self, *args, **kwargs)
     
     def get_json(self):
         '''Returns a representation of this route in JSON-compatible format'''
@@ -228,7 +235,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
+        return Match(self.context, f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''

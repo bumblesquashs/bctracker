@@ -102,5 +102,5 @@ class OrderRepository:
                 path = f'bus/{vehicle.url_id}'
             else:
                 path = f'bus/{vehicle.agency.url_id}/{vehicle.url_id}'
-            matches.append(Match(name, year_model, model_icon, path, value))
+            matches.append(Match(context, name, year_model, model_icon, path, value))
         return matches

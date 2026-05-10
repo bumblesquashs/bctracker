@@ -186,6 +186,7 @@ class Database:
             self.connection.execute('PRAGMA foreign_keys = 1')
         else:
             self.connection.execute('PRAGMA foreign_keys = 0')
+        self.connection.execute('PRAGMA case_sensitive_like = 0')
         
         if run_scripts:
             for sql in SQL_SCRIPTS:
@@ -392,7 +393,11 @@ class Database:
                 value = filters[key]
                 if value is None:
                     continue
-                if type(value) is list:
+                if key == 'AND' or key == 'OR':
+                    nested_expression, nested_args = self.build_where(value, key)
+                    expressions.append(f'({nested_expression})')
+                    args += nested_args
+                elif type(value) is list:
                     args += value
                     args_string = ', '.join(['?'] * len(value))
                     expressions.append(f'{key} IN ({args_string})')

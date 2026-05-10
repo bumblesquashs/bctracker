@@ -6,12 +6,10 @@
     <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
     <div class="tab-button-bar">
         <span class="tab-button current">All {{ context.vehicle_type_plural }}</span>
-        % if context.system:
-            <a href="{{ get_url(context, 'realtime', 'routes') }}" class="tab-button">By Route</a>
-        % end
-        <a href="{{ get_url(context, 'realtime', 'models') }}" class="tab-button">By Model</a>
+        <a href="{{ context.url('realtime', 'routes') }}" class="tab-button">By Route</a>
+        <a href="{{ context.url('realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
-            <a href="{{ get_url(context, 'realtime', 'speed') }}" class="tab-button">By Speed</a>
+            <a href="{{ context.url('realtime', 'speed') }}" class="tab-button">By Speed</a>
         % else:
             <!-- Oh, hello there! It's cool to see buses grouped in different ways, but I recently watched the movie Speed (1994) starring Sandra Bullock and now I want to see how fast these buses are going... if only there was a way to see realtime info by "speed"... -->
         % end
@@ -58,7 +56,7 @@
                     </tr>
                     <tr class="display-none"></tr>
                     % for position in unknown_positions:
-                        % include('rows/realtime')
+                        % include('components/realtime_row')
                     % end
                 % end
                 % for order in orders:
@@ -66,14 +64,17 @@
                     <tr class="header">
                         <td colspan="6">
                             <div class="row space-between">
-                                <div>{{! order }}</div>
+                                <div class="row">
+                                    % include('components/livery_row', liveries=order.liveries)
+                                    {{! order }}
+                                </div>
                                 <div>{{ len(order_positions) }} / {{ len(order.vehicles) }}</div>
                             </div>
                         </td>
                     </tr>
                     <tr class="display-none"></tr>
                     % for position in order_positions:
-                        % include('rows/realtime')
+                        % include('components/realtime_row')
                     % end
                 % end
             </tbody>
@@ -116,6 +117,6 @@
 
 <script>
     function toggleNISVehicles() {
-        window.location = "{{ get_url(context, 'realtime', show_nis='false' if show_nis else 'true') }}"
+        window.location = "{{ context.url('realtime', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

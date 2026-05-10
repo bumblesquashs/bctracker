@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 from crontab import CronTab
 
 from database import Database
-from settings import Settings
 
 from models.date import Date
 from models.time import Time
@@ -13,12 +12,12 @@ from models.weekday import Weekday
 
 import repositories
 import services
+import settings
 
 @dataclass(slots=True)
 class CronService:
     
     database: Database
-    settings: Settings
     running: bool = field(default=True, init=False)
     updating_realtime: bool = field(default=False, init=False)
     
@@ -31,19 +30,19 @@ class CronService:
         self.running = True
         pid = os.getpid()
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=self.settings.cron_id)
+            cron.remove_all(comment=settings.current.cron_id)
             
-            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=self.settings.cron_id)
+            gtfs_job = cron.new(command=f'kill -s USR1 {pid}', comment=settings.current.cron_id)
             gtfs_job.setall('0 4 * * */1')
             
-            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=self.settings.cron_id)
+            realtime_job = cron.new(command=f'kill -s USR2 {pid}', comment=settings.current.cron_id)
             realtime_job.minute.every(1)
     
     def stop(self):
         '''Removes all cron jobs'''
         self.running = False
         with CronTab(user=True) as cron:
-            cron.remove_all(comment=self.settings.cron_id)
+            cron.remove_all(comment=settings.current.cron_id)
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
@@ -53,8 +52,7 @@ class CronService:
             context = system.context
             if self.running:
                 try:
-                    date = Date.today(context.timezone)
-                    if date.weekday == Weekday.MON or not services.gtfs.validate(context):
+                    if context.today.weekday == Weekday.MON or not services.gtfs.validate(context):
                         services.gtfs.load(context, system.enable_force_gtfs)
                 except Exception as e:
                     services.log.error(f'Error loading GTFS data for {context}: {e}')

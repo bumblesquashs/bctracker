@@ -5,15 +5,14 @@ from zipfile import ZipFile
 from glob import glob
 
 from database import Database
-from settings import Settings
 
 import services
+import settings
 
 @dataclass(slots=True)
 class BackupService:
     
     database: Database
-    settings: Settings
     
     def run(self, date, include_db=False, delete_files=True):
         '''Zips all archives from the given date into a single file'''
@@ -25,14 +24,14 @@ class BackupService:
         if gtfs_files or realtime_files or include_db:
             services.log.info(f'Creating backup for {formatted_date} ({len(gtfs_files)} GTFS, {len(realtime_files)} RT, {"DB" if include_db else "no DB"})')
             with ZipFile(f'backups/{formatted_date}.zip', 'w') as zip:
-                if self.settings.enable_database_backups and include_db:
+                if settings.current.enable_database_backups and include_db:
                     zip.write(f'archives/{self.database.name}.db', f'{self.database.name}.db')
-                if self.settings.enable_gtfs_backups:
+                if settings.current.enable_gtfs_backups:
                     for file in gtfs_files:
                         zip.write(file, file[len('archives/'):])
                         if delete_files:
                             os.remove(file)
-                if self.settings.enable_realtime_backups:
+                if settings.current.enable_realtime_backups:
                     for file in realtime_files:
                         zip.write(file, file[len('archives/'):])
                         if delete_files:

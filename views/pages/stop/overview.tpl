@@ -1,11 +1,9 @@
 
-% import repositories
-
 % from math import floor
-% from datetime import timedelta
 
-% from models.date import Date
 % from models.stop import StopType
+
+% import repositories
 
 % rebase('base')
 
@@ -16,9 +14,9 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'stops', stop, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ stop.url('map') }}" class="tab-button">Map</a>
         % if stop.type != StopType.STATION:
-            <a href="{{ get_url(context, 'stops', stop, 'schedule') }}" class="tab-button">Schedule</a>
+            <a href="{{ stop.url('schedule') }}" class="tab-button">Schedule</a>
         % end
     </div>
 </div>
@@ -52,7 +50,7 @@
                             % for route in routes:
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
                                 </div>
                             % end
                         </div>
@@ -110,7 +108,7 @@
                         <tbody>
                             % for alt_stop in alt_stops:
                                 <tr>
-                                    <td><a href="{{ get_url(alt_stop.context, 'stops', alt_stop) }}">{{ alt_stop.context }}</a></td>
+                                    <td><a href="{{ alt_stop.url() }}">{{ alt_stop.context }}</a></td>
                                     <td>
                                         % include('components/route_list', routes=alt_stop.routes)
                                     </td>
@@ -126,7 +124,7 @@
     <div class="container flex-3">
         % if child_stops:
             % for child_stop in child_stops:
-                % departures = child_stop.find_departures(date=Date.today())
+                % departures = child_stop.find_departures(date=today)
                 % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
                 % upcoming_count = 3 + floor(len(routes) / 3)
                 % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
@@ -140,13 +138,13 @@
                             <h2>
                                 % include('components/stop', stop=child_stop, include_link=False)
                             </h2>
-                            <a href="{{ get_url(child_stop.context, 'stops', child_stop) }}">View stop schedule and details</a>
+                            <a href="{{ child_stop.url() }}">View stop schedule and details</a>
                         </div>
                         % include('components/toggle')
                     </div>
                     <div class="content">
                         % if upcoming_departures:
-                            % if context.realtime_enabled:
+                            % if context.realtime_enabled and show_help_text:
                                 <p>
                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
@@ -176,16 +174,15 @@
                                         % if not last_time:
                                             % last_time = departure.time
                                         % end
-                                        % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                         % last_time = departure.time
                                     % end
                                 </tbody>
                             </table>
                         % else:
-                            % tomorrow = Date.today() + timedelta(days=1)
                             <p>
                                 There are no departures for the rest of today.
-                                <a href="{{ get_url(child_stop.context, 'stops', child_stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                <a href="{{ child_stop.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
                             </p>
                         % end
                     </div>
@@ -202,7 +199,7 @@
                         % upcoming_count = 3 + floor(len(routes) / 3)
                         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                         % if upcoming_departures:
-                            % if context.realtime_enabled:
+                            % if context.realtime_enabled and show_help_text:
                                 <p>
                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                     <span class="scheduled">
@@ -233,17 +230,16 @@
                                         % if not last_time:
                                             % last_time = departure.time
                                         % end
-                                        % include('rows/departure', show_divider=departure.time.hour > last_time.hour, show_time_estimate=True)
+                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour, show_time_estimate=True)
                                         % last_time = departure.time
                                     % end
                                 </tbody>
                             </table>
                         % else:
-                            % tomorrow = Date.today().next()
                             <div class="placeholder">
                                 <p>
                                     There are no departures for the rest of today.
-                                    <a href="{{ get_url(stop.context, 'stops', stop, 'schedule', tomorrow) }}">Check tomorrow's schedule.</a>
+                                    <a href="{{ stop.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
                                 </p>
                             </div>
                         % end
@@ -258,7 +254,7 @@
                 </div>
                 <div class="content">
                     % if departures:
-                        % if context.realtime_enabled:
+                        % if context.realtime_enabled and show_help_text:
                             <p>
                                 <span>{{ context.vehicle_type_plural }} with a</span>
                                 <span class="scheduled">
@@ -288,7 +284,7 @@
                                     % if not last_time:
                                         % last_time = departure.time
                                     % end
-                                    % include('rows/departure', show_divider=departure.time.hour > last_time.hour)
+                                    % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                     % last_time = departure.time
                                 % end
                             </tbody>
@@ -297,7 +293,7 @@
                         <div class="placeholder">
                             % if context.gtfs_loaded:
                                 <h3>There are no departures from this stop today</h3>
-                                <p>You can check the <a href="{{ get_url(stop.context, 'stops', stop, 'schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                                <p>You can check the <a href="{{ stop.url('schedule') }}">full schedule</a> for more information about when this stop has service.</p>
                             % else:
                                 <h3>Departures for this stop are unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>

@@ -28,7 +28,7 @@
             % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ context }} {{ context.vehicle_type_plural.lower() }}, visit the <a href="{{ get_url(context, 'history') }}">history</a> page.
+                    To see only {{ context }} {{ context.vehicle_type_plural.lower() }}, visit the <a href="{{ context.url('history') }}">history</a> page.
                 </p>
             % end
         </div>
@@ -81,106 +81,111 @@
                 </div>
                 <div class="container flex-3">
                     % for fleet_agency in agencies:
-                        <div class="section">
-                            <div class="header" onclick="toggleSection(this)">
-                                <h2>{{ fleet_agency }}</h2>
-                                % include('components/toggle')
-                            </div>
-                            <div class="content">
-                                % agency_orders = [o for o in orders if o.agency == fleet_agency]
-                                % agency_models = sorted({o.model for o in agency_orders})
-                                % agency_model_types = sorted({m.type for m in agency_models})
-                                <div class="container">
-                                    % for type in agency_model_types:
-                                        <div class="section">
-                                            <div class="header" onclick="toggleSection(this)">
-                                                <h3>{{ type }}</h3>
-                                                % include('components/toggle')
-                                            </div>
-                                            <div class="content">
-                                                <div class="container">
-                                                    % type_models = [m for m in agency_models if m.type == type]
-                                                    % for model in type_models:
-                                                        % model_orders = [o for o in agency_orders if o.model == model]
-                                                        <div id="{{ model.id }}" class="section">
-                                                            <div class="header" onclick="toggleSection(this)">
-                                                                <h4>{{! model }}</h4>
-                                                                % include('components/toggle')
-                                                            </div>
-                                                            <div class="content">
-                                                                <div class="table-border-wrapper">
-                                                                    <table>
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Vehicle</th>
-                                                                                <th>First Seen</th>
-                                                                                <th class="non-mobile">First System</th>
-                                                                                <th>Last Seen</th>
-                                                                                <th class="non-mobile">Last System</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            % for order in model_orders:
-                                                                                <tr class="header">
-                                                                                    <td colspan="5">
-                                                                                        <div class="row space-between">
-                                                                                            <div>{{ order.years_string }}</div>
-                                                                                            <div>{{ len(order.vehicles) }}</div>
-                                                                                        </div>
-                                                                                    </td>
+                        % agency_orders = [o for o in orders if o.agency == fleet_agency]
+                        % if agency_orders:
+                            <div class="section">
+                                <div class="header" onclick="toggleSection(this)">
+                                    <h2>{{ fleet_agency }}</h2>
+                                    % include('components/toggle')
+                                </div>
+                                <div class="content">
+                                    % agency_models = sorted({o.model for o in agency_orders})
+                                    % agency_model_types = sorted({m.type for m in agency_models})
+                                    <div class="container">
+                                        % for type in agency_model_types:
+                                            <div class="section">
+                                                <div class="header" onclick="toggleSection(this)">
+                                                    <h3>{{ type }}</h3>
+                                                    % include('components/toggle')
+                                                </div>
+                                                <div class="content">
+                                                    <div class="container">
+                                                        % type_models = [m for m in agency_models if m.type == type]
+                                                        % for model in type_models:
+                                                            % model_orders = [o for o in agency_orders if o.model == model]
+                                                            <div class="section">
+                                                                <div class="header" onclick="toggleSection(this)">
+                                                                    <h4>{{! model }}</h4>
+                                                                    % include('components/toggle')
+                                                                </div>
+                                                                <div class="content">
+                                                                    <div class="table-border-wrapper">
+                                                                        <table>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Vehicle</th>
+                                                                                    <th>First Seen</th>
+                                                                                    <th class="non-mobile">First System</th>
+                                                                                    <th>Last Seen</th>
+                                                                                    <th class="non-mobile">Last System</th>
                                                                                 </tr>
-                                                                                <tr class="display-none"></tr>
-                                                                                % for vehicle in order.vehicles:
-                                                                                    % vehicle_allocations = [a for a in allocations if a.vehicle == vehicle]
-                                                                                    % if vehicle_allocations:
-                                                                                        % first_seen_date = min(a.first_seen for a in vehicle_allocations)
-                                                                                        % first_seen_context = min(vehicle_allocations).context
-                                                                                        % last_seen_date = max(a.last_seen for a in vehicle_allocations)
-                                                                                        % last_seen_context = max(vehicle_allocations).context
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                % include('components/vehicle')
-                                                                                            </td>
-                                                                                            <td class="desktop-only">{{ first_seen_date.format_long() }}</td>
-                                                                                            <td class="non-desktop">
-                                                                                                <div class="column">
-                                                                                                    {{ first_seen_date.format_short() }}
-                                                                                                    <span class="mobile-only smaller-font">{{ first_seen_context }}</span>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                % for order in model_orders:
+                                                                                    <tr class="header">
+                                                                                        <td colspan="5">
+                                                                                            <div class="row space-between">
+                                                                                                <div class="row">
+                                                                                                    % include('components/livery_row', liveries=order.liveries)
+                                                                                                    {{ order.years_string }}
                                                                                                 </div>
-                                                                                            </td>
-                                                                                            <td class="non-mobile">{{ first_seen_context }}</td>
-                                                                                            <td class="desktop-only">{{ last_seen_date.format_long() }}</td>
-                                                                                            <td class="non-desktop">
-                                                                                                <div class="column">
-                                                                                                    {{ last_seen_date.format_short() }}
-                                                                                                    <span class="mobile-only smaller-font">{{ last_seen_context }}</span>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                            <td class="non-mobile">{{ last_seen_context }}</td>
-                                                                                        </tr>
-                                                                                    % else:
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                % include('components/vehicle', enable_link=False)
-                                                                                            </td>
-                                                                                            <td class="lighter-text" colspan="4">Unavailable</td>
-                                                                                        </tr>
+                                                                                                <div>{{ len(order.vehicles) }}</div>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr class="display-none"></tr>
+                                                                                    % for vehicle in order.vehicles:
+                                                                                        % vehicle_allocations = [a for a in allocations if a.vehicle == vehicle]
+                                                                                        % if vehicle_allocations:
+                                                                                            % first_seen_date = min(a.first_seen for a in vehicle_allocations)
+                                                                                            % first_seen_context = min(vehicle_allocations).context
+                                                                                            % last_seen_date = max(a.last_seen for a in vehicle_allocations)
+                                                                                            % last_seen_context = max(vehicle_allocations).context
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    % include('components/vehicle')
+                                                                                                </td>
+                                                                                                <td class="desktop-only">{{ first_seen_date.format_long() }}</td>
+                                                                                                <td class="non-desktop">
+                                                                                                    <div class="column">
+                                                                                                        {{ first_seen_date.format_short() }}
+                                                                                                        <span class="mobile-only smaller-font">{{ first_seen_context }}</span>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td class="non-mobile">{{ first_seen_context }}</td>
+                                                                                                <td class="desktop-only">{{ last_seen_date.format_long() }}</td>
+                                                                                                <td class="non-desktop">
+                                                                                                    <div class="column">
+                                                                                                        {{ last_seen_date.format_short() }}
+                                                                                                        <span class="mobile-only smaller-font">{{ last_seen_context }}</span>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td class="non-mobile">{{ last_seen_context }}</td>
+                                                                                            </tr>
+                                                                                        % else:
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    % include('components/vehicle', enable_link=False)
+                                                                                                </td>
+                                                                                                <td class="lighter-text" colspan="4">Unavailable</td>
+                                                                                            </tr>
+                                                                                        % end
                                                                                     % end
                                                                                 % end
-                                                                            % end
-                                                                        </tbody>
-                                                                    </table>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    % end
+                                                        % end
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    % end
+                                        % end
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        % end
                     % end
                 </div>
             </div>

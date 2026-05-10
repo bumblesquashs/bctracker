@@ -56,8 +56,8 @@
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="{{ get_url(context, *path) }}" />
-        <meta property="og:image" content="{{ get_url(context, 'img', 'abtracker', 'meta-logo.png') }}" />
+        <meta property="og:url" content="{{ context.url(*path) }}" />
+        <meta property="og:image" content="{{ context.url('img', 'abtracker', 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -111,8 +111,8 @@
         
         % if include_maps:
             <script src="/js/area.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css">
+            <script src="https://cdn.jsdelivr.net/npm/ol@v10.8.0/dist/ol.js"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.8.0/ol.css">
         % end
         
         % if enable_refresh and context.realtime_enabled:
@@ -229,6 +229,9 @@
             }
             
             function toggleSection(header, reloadMap = false) {
+                if (window.screen.width > 1000) {
+                    return;
+                }
                 const section = header.parentElement;
                 section.classList.toggle("closed");
                 if (reloadMap && "map" in window) {
@@ -284,35 +287,35 @@
     
     <body class="{{ 'full-map' if full_map else '' }}">
         <div id="navigation-bar">
-            <a id="title" href="{{ get_url(context) }}">
+            <a id="title" href="{{ context.url() }}">
                 % include('components/svg', name='abtracker/abtracker')
                 <div>ABTracker</div>
                 <div class="beta-tag">BETA</div>
             </a>
             
-            <a class="navigation-button non-mobile" href="{{ get_url(context, 'map') }}">Map</a>
+            <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
             % if context.realtime_enabled:
-                <a class="navigation-button non-mobile" href="{{ get_url(context, 'realtime') }}">Realtime</a>
-                <a class="navigation-button desktop-only" href="{{ get_url(context, 'history') }}">History</a>
+                <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
+                <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
             % else:
                 <div class="navigation-button non-mobile disabled">Realtime</div>
                 <div class="navigation-button desktop-only disabled">History</div>
             % end
             
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'routes') }}">Routes</a>
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'stops') }}">Stops</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('routes') }}">Routes</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('stops') }}">Stops</a>
             % if context.enable_blocks:
-                <a class="navigation-button desktop-only" href="{{ get_url(context, 'blocks') }}">Blocks</a>
+                <a class="navigation-button desktop-only" href="{{ context.url('blocks') }}">Blocks</a>
             % else:
                 <div class="navigation-button desktop-only disabled">Blocks</div>
             % end
             
-            <a class="navigation-button desktop-only" href="{{ get_url(context, 'about') }}">About</a>
+            <a class="navigation-button desktop-only" href="{{ context.url('about') }}">About</a>
             
             <div class="flex-1"></div>
             
             % if is_admin:
-                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'admin') }}">
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
                     <div class="tooltip left">
                         <div class="title">Administration</div>
@@ -321,7 +324,7 @@
             % end
             
             % if show_random:
-                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'random') }}">
+                <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
                     <div class="tooltip left">
                         <div class="title">Random Page</div>
@@ -329,14 +332,21 @@
                 </a>
             % end
             
-            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'nearby') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <div class="tooltip left">
+                    <div class="title">Favourites</div>
+                </div>
+            </a>
+            
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('nearby') }}">
                 % include('components/svg', name='nearby')
                 <div class="tooltip left">
                     <div class="title">Nearby Stops</div>
                 </div>
             </a>
             
-            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ get_url(context, 'personalize') }}">
+            <a class="navigation-button compact desktop-only tooltip-anchor" href="{{ context.url('personalize') }}">
                 % include('components/svg', name='personalize')
                 <div class="tooltip left">
                     <div class="title">Personalize</div>
@@ -357,16 +367,16 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            <a class="menu-button mobile-only" href="{{ get_url(context, 'map') }}">
+            <a class="menu-button mobile-only" href="{{ context.url('map') }}">
                 % include('components/svg', name='map')
                 <span>Map</span>
             </a>
             % if context.realtime_enabled:
-                <a class="menu-button mobile-only" href="{{ get_url(context, 'realtime') }}">
+                <a class="menu-button mobile-only" href="{{ context.url('realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
                 </a>
-                <a class="menu-button" href="{{ get_url(context, 'history') }}">
+                <a class="menu-button" href="{{ context.url('history') }}">
                     % include('components/svg', name='history')
                     <span>History</span>
                 </a>
@@ -380,16 +390,16 @@
                     <span>History</span>
                 </div>
             % end
-            <a class="menu-button" href="{{ get_url(context, 'routes') }}">
+            <a class="menu-button" href="{{ context.url('routes') }}">
                 % include('components/svg', name='route')
                 <span>Routes</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'stops') }}">
+            <a class="menu-button" href="{{ context.url('stops') }}">
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
             % if context.enable_blocks:
-                <a class="menu-button" href="{{ get_url(context, 'blocks') }}">
+                <a class="menu-button" href="{{ context.url('blocks') }}">
                     % include('components/svg', name='block')
                     <span>Blocks</span>
                 </a>
@@ -399,26 +409,30 @@
                     <span>Blocks</span>
                 </div>
             % end
-            <a class="menu-button" href="{{ get_url(context, 'about') }}">
+            <a class="menu-button" href="{{ context.url('about') }}">
                 % include('components/svg', name='about')
                 <span>About</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'nearby') }}">
+            <a class="menu-button" href="{{ context.url('favourites') }}">
+                % include('components/svg', name='action/favourite')
+                <span>Favourites</span>
+            </a>
+            <a class="menu-button" href="{{ context.url('nearby') }}">
                 % include('components/svg', name='nearby')
                 <span>Nearby</span>
             </a>
-            <a class="menu-button" href="{{ get_url(context, 'personalize') }}">
+            <a class="menu-button" href="{{ context.url('personalize') }}">
                 % include('components/svg', name='personalize')
                 <span>Personalize</span>
             </a>
             % if show_random:
-                <a class="menu-button" href="{{ get_url(context, 'random') }}">
+                <a class="menu-button" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
                     <span>Random Page</span>
                 </a>
             % end
             % if is_admin:
-                <a class="menu-button" href="{{ get_url(context, 'admin') }}">
+                <a class="menu-button" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
                     <span>Administration</span>
                 </a>
@@ -429,13 +443,43 @@
                 % include('components/svg', name='system')
             </div>
             <div class="details">
-                <div id="system" class="tooltip-anchor" onclick="toggleSystemMenuDesktop()">
+                <div id="system" class="tooltip-anchor {{ 'enable-dropdown' if hide_systems else '' }}" onclick="toggleSystemMenuDesktop()">
                     % if context.system:
                         {{ context }}
+                        % if context.system_id in favourite_system_ids:
+                            % include('components/svg', name='action/favourite')
+                        % end
                     % else:
                         All Transit Agencies
                     % end
-                    <div class="tooltip right">Toggle Agencies List</div>
+                    % if show_help_text:
+                        <div class="tooltip right">Toggle Agencies List</div>
+                    % end
+                    % if favourite_system_ids:
+                        <div id="favourite-systems-dropdown">
+                            % if context.system:
+                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Agencies</a>
+                            % else:
+                                <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Agencies</span>
+                            % end
+                            % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                            % for system in favourite_systems:
+                                % if system == context.system:
+                                    <div class="system-button current" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </div>
+                                % else:
+                                    <a href="{{ system.context.url(*path, **path_args) }}" class="system-button" onclick="event.stopPropagation()">
+                                        % include('components/agency_logo', agency=system.agency)
+                                        <div class="flex-1">{{ system }}</div>
+                                        % include('components/svg', name='action/favourite')
+                                    </a>
+                                % end
+                            % end
+                        </div>
+                    % end
                 </div>
                 % if last_updated:
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
@@ -454,9 +498,28 @@
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
                 % if context.system:
-                    <a href="{{ get_url(Context(), *path, **path_args) }}" class="system-button all-systems">All Transit Agencies</a>
+                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Agencies</a>
                 % else:
                     <span class="system-button current all-systems">All Transit Agencies</span>
+                % end
+                % if favourite_system_ids:
+                    <div class="header">Favourites</div>
+                    % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
+                    % for system in favourite_systems:
+                        % if system == context.system:
+                            <div class="system-button current">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </div>
+                        % else:
+                            <a href="{{ system.context.url(*path, **path_args) }}" class="system-button">
+                                % include('components/agency_logo', agency=system.agency)
+                                <div class="flex-1">{{ system }}</div>
+                                % include('components/svg', name='action/favourite')
+                            </a>
+                        % end
+                    % end
                 % end
                 % for region in regions:
                     % region_systems = [s for s in systems if s.region == region]
@@ -466,12 +529,18 @@
                             % if system == context.system:
                                 <div class="system-button current">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </div>
                             % else:
-                                <a href="{{ get_url(system.context, *path, **path_args) }}" class="system-button">
+                                <a href="{{ system.context.url(*path, **path_args) }}" class="system-button">
                                     % include('components/agency_logo', agency=system.agency)
-                                    <div>{{ system }}</div>
+                                    <div class="flex-1">{{ system }}</div>
+                                    % if system.id in favourite_system_ids:
+                                        % include('components/svg', name='action/favourite')
+                                    % end
                                 </a>
                             % end
                         % end
@@ -526,31 +595,29 @@
                     <div id="search-bar">
                         <input type="text" id="search-input" placeholder="Search" oninput="searchInputChanged()">
                     </div>
-                    % if context.system:
-                        <div id="search-filters">
-                            <div class="flex-1">Filters:</div>
-                            % if context.realtime_enabled:
-                                <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
-                                    % include('components/svg', name=context.filter_vehicles_image_name)
-                                    <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
-                                </div>
-                            % end
-                            <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
-                                % include('components/svg', name='route')
-                                <div class="tooltip left">Include Routes</div>
+                    <div id="search-filters">
+                        <div class="flex-1">Filters:</div>
+                        % if context.realtime_enabled:
+                            <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
+                                % include('components/svg', name=context.filter_vehicles_image_name)
+                                <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
                             </div>
-                            <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
-                                % include('components/svg', name='stop')
-                                <div class="tooltip left">Include Stops</div>
-                            </div>
-                            % if context.enable_blocks:
-                                <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
-                                    % include('components/svg', name='block')
-                                    <div class="tooltip left">Include Blocks</div>
-                                </div>
-                            % end
+                        % end
+                        <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
+                            % include('components/svg', name='route')
+                            <div class="tooltip left">Include Routes</div>
                         </div>
-                    % end
+                        <div id="search-filter-stop" class="button tooltip-anchor" onclick="toggleSearchStopFilter()">
+                            % include('components/svg', name='stop')
+                            <div class="tooltip left">Include Stops</div>
+                        </div>
+                        % if context.enable_blocks:
+                            <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
+                                % include('components/svg', name='block')
+                                <div class="tooltip left">Include Blocks</div>
+                            </div>
+                        % end
+                    </div>
                 </div>
                 <div id="search-placeholder">{{ context.search_placeholder_text() }}</div>
                 <div id="search-results" class="display-none">
@@ -583,6 +650,7 @@
     let loadingResults = false;
     let enterPending = false;
     let lastSearchTimestamp = Date.now();
+    let cachedResponses = {};
     
     let searchIncludeVehicles = true;
     let searchIncludeRoutes = true;
@@ -590,6 +658,8 @@
     let searchIncludeBlocks = true;
     
     function toggleSearch() {
+        document.getElementById("content").classList.toggle("search-visible");
+        
         const searchElement = document.getElementById("search");
         const inputElement = document.getElementById("search-input");
         const menuElement = document.getElementById("navigation-menu");
@@ -618,14 +688,25 @@
         if (query === undefined || query === null || query === "") {
             updateSearchView([], 0, "{{ context.search_placeholder_text() }}");
         } else {
+            const cacheKey = query + "_" + searchPage;
+            if (cacheKey in cachedResponses) {
+                const response = cachedResponses[cacheKey];
+                const results = response.results;
+                const total = response.total;
+                
+                updateSearchView(results, total, total === 0 ? "No Results" : "Results");
+                return;
+            }
+            
             loadingResults = true;
             if (searchResults.length === 0) {
                 placeholderElement.innerHTML = "Loading...";
             }
             const request = new XMLHttpRequest();
-            request.open("POST", "{{ get_url(context, 'api', 'search') }}", true);
+            request.open("POST", "{{ context.url('api', 'search') }}", true);
             request.responseType = "json";
             request.onload = function() {
+                cachedResponses[cacheKey] = request.response;
                 if (timestamp !== lastSearchTimestamp) {
                     // Discard outdated results
                     return;
@@ -673,9 +754,16 @@
         details.classList.add("details");
         
         const name = document.createElement("div");
-        name.classList.add("name")
+        name.classList.add("name");
         name.innerHTML = result.name;
         details.appendChild(name);
+        
+        if (currentSystemID === null) {
+            const systemName = document.createElement("div");
+            systemName.classList.add("description");
+            systemName.innerHTML = result.system_name;
+            details.appendChild(systemName);
+        }
         
         const description = document.createElement("div");
         description.classList.add("description");
@@ -688,6 +776,7 @@
     }
     
     function updateSearchView(results, total, message) {
+        const inputElement = document.getElementById("search-input");
         const placeholderElement = document.getElementById("search-placeholder");
         const pagingElement = document.getElementById("search-paging");
         const countElement = document.getElementById("search-count");
@@ -699,6 +788,9 @@
         if (total === 0) {
             placeholderElement.classList.remove("display-none");
             placeholderElement.innerHTML = message;
+            if (inputElement.value !== "" && inputElement.value.length < 5 && searchIncludeBlocks) {
+                placeholderElement.innerHTML += "<div class='smaller-font'>Note: blocks are only shown after typing 5 or more characters</div>";
+            }
             pagingElement.classList.add("display-none");
             countElement.innerHTML = "";
             resultsElement.classList.add("display-none");
@@ -859,6 +951,7 @@
         } else {
             element.classList.add("inactive");
         }
+        cachedResponses = {};
         searchPage = 0;
         search();
     }
@@ -886,6 +979,7 @@
     }
     
     function toggleSystemMenuDesktop() {
+        document.getElementById("system").classList.toggle("enable-dropdown");
         const element = document.getElementById("system-menu");
         element.classList.toggle("collapse-desktop");
         if (element.classList.contains("collapse-desktop")) {

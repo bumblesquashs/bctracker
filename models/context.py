@@ -11,7 +11,12 @@ from dataclasses import dataclass
 
 from constants import *
 
+from models.date import Date
+from models.time import Time
+from models.timestamp import Timestamp
+
 import repositories
+import settings
 
 @dataclass(init=False, slots=True)
 class Context:
@@ -64,13 +69,15 @@ class Context:
     def gtfs_loaded(self):
         if self.system:
             return self.system.gtfs_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.gtfs_loaded for s in systems)
     
     @property
     def realtime_loaded(self):
         if self.system:
             return self.system.realtime_loaded
-        return False
+        systems = [s for s in repositories.system.find_all() if s.agency == self.agency]
+        return all(s.realtime_loaded for s in systems)
     
     @property
     def timezone(self):
@@ -180,6 +187,18 @@ class Context:
             return self.system.max_invalid_positions
         return DEFAULT_MAX_INVALID_POSITIONS
     
+    @property
+    def today(self) -> Date:
+        return Date.today(self.timezone)
+    
+    @property
+    def now(self) -> Time:
+        return Time.now(self.timezone, self.accurate_seconds)
+    
+    @property
+    def timestamp(self) -> Timestamp:
+        return Timestamp.now(self.timezone, self.accurate_seconds)
+    
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
             raise ValueError('Agency mismatch')
@@ -214,6 +233,25 @@ class Context:
             return False
         return self.agency < other.agency
     
+    def url(self, *args, **kwargs):
+        '''Returns a URL formatted based on the given path'''
+        components = []
+        for arg in args:
+            try:
+                components.append(str(arg.url_id))
+            except AttributeError:
+                components.append(str(arg))
+        path = '/'.join(components)
+        if self.system_id:
+            url = settings.current.system_domain.format(self.system_id, path).rstrip('/')
+        else:
+            url = settings.current.all_systems_domain.format(path).rstrip('/')
+        query_args = {k:v for k, v in kwargs.items() if v is not None}
+        if query_args:
+            query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
+            url += f'?{query}'
+        return url
+    
     def without_system(self):
         return Context(self.agency)
     
@@ -222,18 +260,23 @@ class Context:
     
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''
+        values = []
+        if self.realtime_enabled:
+            values.append(self.vehicle_type_plural.lower())
+        values.append('routes')
+        values.append('stops')
+        if self.enable_blocks:
+            values.append('blocks')
         if self.system:
-            values = []
-            if self.realtime_enabled:
-                values.append(self.vehicle_type_plural.lower())
-            values.append('routes')
-            values.append('stops')
-            if self.enable_blocks:
-                values.append('blocks')
             if len(values) == 1:
                 return f'Search for {self} {values[0]}'
             if len(values) == 2:
                 return f'Search for {self} {values[0]} and {values[1]}'
             values_string = ', '.join(values[:-1])
             return f'Search for {self} {values_string}, and {values[-1]}'
-        return f'Search for {self.vehicle_type_plural.lower()} in all systems'
+        if len(values) == 1:
+            return f'Search for {values[0]} in all systems'
+        if len(values) == 2:
+            return f'Search for {values[0]} and {values[1]} in all systems'
+        values_string = ', '.join(values[:-1])
+        return f'Search for {values_string}, and {values[-1]} in all systems'

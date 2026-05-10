@@ -2,7 +2,7 @@
     <div class="stop">
         % if get('show_name', True):
             % if get('include_link', True):
-                <a class="stop-name {{ 'timing-point' if get('timepoint', False) else '' }}" href="{{ get_url(stop.context, 'stops', stop) }}">{{ stop }}</a>
+                <a class="stop-name {{ 'timing-point' if get('timepoint', False) else '' }}" href="{{ stop.url() }}">{{ stop }}</a>
             % else:
                 <span class="stop-name {{ 'timing-point' if get('timepoint', False) else '' }}">{{ stop }}</span>
             % end

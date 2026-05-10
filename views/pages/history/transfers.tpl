@@ -4,8 +4,8 @@
 <div id="page-header">
     <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'history') }}" class="tab-button">Last Seen</a>
-        <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ context.url('history') }}" class="tab-button">Last Seen</a>
+        <a href="{{ context.url('history', 'first-seen') }}" class="tab-button">First Seen</a>
         <span class="tab-button current">Transfers</span>
     </div>
 </div>
@@ -41,9 +41,9 @@
                         <script>
                             function setFilter(filter) {
                                 if (filter === null) {
-                                    window.location = "{{ get_url(context, 'history', 'transfers') }}";
+                                    window.location = "{{ context.url('history', 'transfers') }}";
                                 } else {
-                                    window.location = "{{ get_url(context, 'history', 'transfers') }}?filter=" + filter;
+                                    window.location = "{{ context.url('history', 'transfers') }}?filter=" + filter;
                                 }
                             }
                         </script>

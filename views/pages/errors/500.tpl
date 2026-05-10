@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Error: 500 Internal Server Error</h1>
+    <h1>Error 500: Internal Server Error</h1>
 </div>
 
 <div class="placeholder">

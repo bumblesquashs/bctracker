@@ -7,7 +7,7 @@
     <h1>Administration</h1>
     <h2>Tools for server and system management</h2>
     <div class="tab-button-bar">
-        <a href="{{ get_url(context, 'admin') }}" class="tab-button">Management</a>
+        <a href="{{ context.url('admin') }}" class="tab-button">Management</a>
         <span class="tab-button current">Logs</span>
     </div>
 </div>
@@ -53,9 +53,9 @@
                 <script>
                     function setLevel(level) {
                         if (level === null) {
-                            window.location = "{{ get_url(context, 'admin', 'logs') }}";
+                            window.location = "{{ context.url('admin', 'logs') }}";
                         } else {
-                            window.location = "{{ get_url(context, 'admin', 'logs') }}?level=" + level;
+                            window.location = "{{ context.url('admin', 'logs') }}?level=" + level;
                         }
                     }
                 </script>

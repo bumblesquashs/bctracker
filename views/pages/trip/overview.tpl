@@ -14,9 +14,9 @@
     </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ get_url(context, 'trips', trip, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
         % if context.realtime_enabled:
-            <a href="{{ get_url(context, 'trips', trip, 'history') }}" class="tab-button">History</a>
+            <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -42,22 +42,24 @@
                         % if route:
                             <div class="row">
                                 % include('components/route')
-                                <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                <a href="{{ route.url() }}">{{! route.display_name }}</a>
                             </div>
                         % else:
                             <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
                     % if context.enable_blocks:
-                        <div class="section">
-                            % include('components/block_timeline', block=trip.block)
-                        </div>
+                        % block = trip.block
+                        % if block:
+                            <div class="section">
+                                % include('components/block_timeline', block=trip.block)
+                            </div>
+                        % end
                         <div class="row section">
-                            % block = trip.block
                             <div class="name">Block</div>
                             <div class="value">
                                 % if block:
-                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                 % else:
                                     <span class="lighter-text">Loading</span>
                                 % end
@@ -141,7 +143,7 @@
                                     % if context.enable_blocks:
                                         <td class="non-mobile">
                                             % if block:
-                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                <a href="{{ block.url() }}">{{ block.id }}</a>
                                             % else:
                                                 <div class="lighter-text">Unknown</div>
                                             % end
@@ -225,7 +227,9 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    % if show_help_text:
+                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                    % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
@@ -310,7 +314,7 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                % if any(d.timepoint for d in departures):
+                % if any(d.timepoint for d in departures) and show_help_text:
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None

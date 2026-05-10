@@ -24,12 +24,12 @@
     % end
     <div class="tab-button-bar">
        % if context.system:
-            <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
-            <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ context.url('bus', vehicle) }}" class="tab-button">Overview</a>
+            <a href="{{ context.url('bus', vehicle, 'map') }}" class="tab-button">Map</a>
             <span class="tab-button current">History</span>
         % else:
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle) }}" class="tab-button">Overview</a>
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle) }}" class="tab-button">Overview</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle, 'map') }}" class="tab-button">Map</a>
             <span class="tab-button current">History</span>
         % end
     </div>
@@ -55,7 +55,7 @@
                         <h3>Allocation History</h3>
                         % for allocation in allocations:
                             <div class="section">
-                                <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                <a href="{{ allocation.context.url() }}">{{ allocation.context }}</a>
                                 <div class="smaller-font ligher-text">
                                     {{ allocation.first_seen.format_long() }} - {{ allocation.last_seen.format_long() }}
                                 </div>
@@ -95,7 +95,7 @@
                         % dates = {r.date for r in records}
                         <h3>{{ min(dates).format_long() }} - {{ max(dates).format_long() }}</h3>
                         
-                        % if any(r.warnings for r in records):
+                        % if any(r.warnings for r in records) and show_help_text:
                             <p>
                                 <span>Entries with a</span>
                                 <span class="record-warnings">
@@ -146,7 +146,7 @@
                                                         <div class="row space-between">
                                                             % if record.is_available:
                                                                 % block = record.block
-                                                                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                <a href="{{ block.url() }}">{{ block.id }}</a>
                                                             % else:
                                                                 <span>{{ record.block_id }}</span>
                                                             % end

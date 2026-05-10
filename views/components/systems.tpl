@@ -18,7 +18,7 @@
 	<tbody>
 		% if context.system:
 			<td>
-				<a href="{{ get_url(Context(), *path) }}">All Systems</a>
+				<a href="{{ Context().url(*path) }}">All Systems</a>
 			</td>
 		% end
 		% for region in regions:
@@ -34,7 +34,7 @@
 						<td>
 							<div class="row">
 								% include('components/agency_logo', agency=system.agency)
-								<a href="{{ get_url(system.context, *path) }}">{{ system }}</a>
+								<a href="{{ system.context.url(*path) }}">{{ system }}</a>
 							</div>
 						</td>
 					</tr>

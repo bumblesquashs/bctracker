@@ -37,7 +37,7 @@ class Adherence:
                 if time_difference >= MINIMUM_MINUTES:
                     expected_scheduled_mins = previous_departure_mins + linear_interpolate(lat, lon, previous_departure.stop, stop, time_difference)
             if not timestamp:
-                timestamp = Timestamp.now(trip.context.timezone)
+                timestamp = trip.context.timestamp
             value = expected_scheduled_mins - timestamp.time.get_minutes(round_seconds=True)
             layover = trip.first_departure and sequence == trip.first_departure.sequence and value > 0
             return cls(value, layover)

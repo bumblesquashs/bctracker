@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Error: 403 Forbidden</h1>
+    <h1>Error 403: Forbidden</h1>
 </div>
 
 <div class="placeholder">

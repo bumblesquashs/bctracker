@@ -22,13 +22,13 @@
     % end
     <div class="tab-button-bar">
         % if context.system:
-            <a href="{{ get_url(context, 'bus', vehicle) }}" class="tab-button">Overview</a>
+            <a href="{{ context.url('bus', vehicle) }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
-            <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
+            <a href="{{ context.url('bus', vehicle, 'history') }}" class="tab-button">History</a>
         % else:
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle) }}" class="tab-button">Overview</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle) }}" class="tab-button">Overview</a>
             <span class="tab-button current">Map</span>
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle, 'history') }}" class="tab-button">History</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>

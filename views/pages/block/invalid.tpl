@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Error: Block {{ block_id }} Not Found</h1>
+    <h1>Block {{ block_id }} Not Found</h1>
 </div>
 
 <div class="placeholder">
@@ -12,13 +12,12 @@
         <ol>
             <li>It may be from an older sheet that is no longer active</li>
             <li>It may be the wrong ID - are you sure block <b>{{ block_id }}</b> is the one you want?</li>
-            % alt_blocks = [s.get_block(block_id) for s in systems if s.get_block(block_id)]
             % if alt_blocks:
                 <li>
                     It may be from a different system - the following systems have a block with that ID
                     <ul>
                         % for block in alt_blocks:
-                            <li>{{ block.context }}: <a href="{{ get_url(block.context, 'blocks', block) }}">Block {{ block.id }}</a></li>
+                            <li>{{ block.context }}: <a href="{{ block.url() }}">Block {{ block.id }}</a></li>
                         % end
                     </ul>
                 </li>

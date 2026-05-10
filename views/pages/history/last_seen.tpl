@@ -5,8 +5,8 @@
     <h1>{{ context.vehicle_type }} History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
-        <a href="{{ get_url(context, 'history', 'first-seen') }}" class="tab-button">First Seen</a>
-        <a href="{{ get_url(context, 'history', 'transfers') }}" class="tab-button">Transfers</a>
+        <a href="{{ context.url('history', 'first-seen') }}" class="tab-button">First Seen</a>
+        <a href="{{ context.url('history', 'transfers') }}" class="tab-button">Transfers</a>
     </div>
 </div>
 
@@ -61,14 +61,14 @@
                 <script>
                     function setDays(days) {
                         if (days === null) {
-                            window.location = "{{ get_url(context, 'history') }}";
+                            window.location = "{{ context.url('history') }}";
                         } else {
-                            window.location = "{{ get_url(context, 'history') }}?days=" + days;
+                            window.location = "{{ context.url('history') }}?days=" + days;
                         }
                     }
                     
                     function toggleShowTransfers() {
-                        window.location = "{{! get_url(context, 'history', days=days, show_transfers='false' if show_transfers else 'true') }}"
+                        window.location = "{{! context.url('history', days=days, show_transfers='false' if show_transfers else 'true') }}"
                     }
                 </script>
             </div>
@@ -128,7 +128,7 @@
                 % if allocations:
                     % known_allocations = [a for a in allocations if a.vehicle.order_id]
                     % unknown_allocations = [a for a in allocations if not a.vehicle.order_id]
-                    % if any(a.last_record and a.last_record.warnings for a in allocations):
+                    % if any(a.last_record and a.last_record.warnings for a in allocations) and show_help_text:
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
@@ -137,7 +137,7 @@
                             <span>may be accidental logins.</span>
                         </p>
                     % end
-                    % if context.system and any(not a.active for a in allocations):
+                    % if context.system and any(not a.active for a in allocations) and show_help_text:
                         <p>
                             <span>Entries with a</span>
                             <span class="transfer">
@@ -208,7 +208,7 @@
                                                             <div class="row space-between">
                                                                 % if record.is_available:
                                                                     % block = record.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     <span>{{ record.block_id }}</span>
                                                                 % end
@@ -242,7 +242,10 @@
                                     <tr class="header">
                                         <td colspan="5">
                                             <div class="row space-between">
-                                                <div>{{! order }}</div>
+                                                <div class="row">
+                                                    % include('components/livery_row', liveries=order.liveries)
+                                                    {{! order }}
+                                                </div>
                                                 <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
                                             </div>
                                         </td>
@@ -282,7 +285,7 @@
                                                             <div class="row space-between">
                                                                 % if record.is_available:
                                                                     % block = record.block
-                                                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     <span>{{ record.block_id }}</span>
                                                                 % end

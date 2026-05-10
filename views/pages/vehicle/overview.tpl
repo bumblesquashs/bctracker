@@ -1,7 +1,4 @@
 
-% from datetime import timedelta
-
-% from models.date import Date
 % from models.model import ModelType
 
 % rebase('base')
@@ -34,12 +31,12 @@
     <div class="tab-button-bar">
         % if context.system:
             <span class="tab-button current">Overview</span>
-            <a href="{{ get_url(context, 'bus', vehicle, 'map') }}" class="tab-button">Map</a>
-            <a href="{{ get_url(context, 'bus', vehicle, 'history') }}" class="tab-button">History</a>
+            <a href="{{ context.url('bus', vehicle, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ context.url('bus', vehicle, 'history') }}" class="tab-button">History</a>
         % else:
             <span class="tab-button current">Overview</span>
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle, 'map') }}" class="tab-button">Map</a>
-            <a href="{{ get_url(context, 'bus', vehicle.agency, vehicle, 'history') }}" class="tab-button">History</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle, 'map') }}" class="tab-button">Map</a>
+            <a href="{{ context.url('bus', vehicle.agency, vehicle, 'history') }}" class="tab-button">History</a>
         % end
     </div>
 </div>
@@ -66,7 +63,7 @@
                             <p>Offline — showing last known location</p>
                         </div>
                         % include('components/map', map_position=last_position, offline=True)
-                    % else:
+                    % elif show_help_text:
                         <div class="warning-box">
                             % include('components/svg', name='status/warning')
                             <p>Offline — last known location not available</p>
@@ -105,25 +102,24 @@
                             <div class="section">
                                 <div class="row">
                                     % include('components/route')
-                                    <a href="{{ get_url(route.context, 'routes', route) }}">{{! route.display_name }}</a>
+                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
                                 </div>
                             </div>
                         % end
                         % if context.enable_blocks:
                             % if block:
                                 <div class="section">
-                                    % include('components/block_timeline', date=Date.today(block.context.timezone))
+                                    % include('components/block_timeline', date=today)
                                 </div>
                             % elif allocation:
                                 % last_record = allocation.last_record
                                 % if last_record and last_record.date.is_today:
                                     % last_block = last_record.block
                                     % if last_block:
-                                        % date = Date.today(last_block.context.timezone)
-                                        % end_time = last_block.get_end_time(date=date)
+                                        % end_time = last_block.get_end_time(date=today)
                                         % if end_time and end_time.is_later:
                                             <div class="section no-flex">
-                                                % include('components/block_timeline', block=last_block, date=date)
+                                                % include('components/block_timeline', block=last_block, date=today)
                                             </div>
                                         % end
                                     % end
@@ -145,7 +141,7 @@
                         <div class="row section">
                             <div class="name">System</div>
                             <div class="value">
-                                <a href="{{ get_url(position.context) }}">{{ position.context }}</a>
+                                <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
                         <div class="row section">
@@ -167,11 +163,10 @@
                             <div class="row section">
                                 <div class="name">Block</div>
                                 <div class="value">
-                                    <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
-                                    % date = Date.today(block.context.timezone)
-                                    % start_time = block.get_start_time(date=date).format_web(time_format)
-                                    % end_time = block.get_end_time(date=date).format_web(time_format)
-                                    % duration = block.get_duration(date=date)
+                                    <a href="{{ block.url() }}">{{ block.id }}</a>
+                                    % start_time = block.get_start_time(date=today).format_web(time_format)
+                                    % end_time = block.get_end_time(date=today).format_web(time_format)
+                                    % duration = block.get_duration(date=today)
                                     <span class="smaller-font">{{ start_time }} - {{ end_time }} ({{ duration }})</span>
                                 </div>
                             </div>
@@ -219,7 +214,7 @@
                             <div class="row section">
                                 <div class="name">System</div>
                                 <div class="value">
-                                    <a href="{{ get_url(allocation.context) }}">{{ allocation.context }}</a>
+                                    <a href="{{ allocation.context.url() }}">{{ allocation.context }}</a>
                                 </div>
                             </div>
                         % end
@@ -304,11 +299,13 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
-                    % if any(d.timepoint for d in upcoming_departures):
-                        <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
-                    % end
-                    % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
-                        <p>Times in brackets are estimates based on current location.</p>
+                    % if show_help_text:
+                        % if any(d.timepoint for d in upcoming_departures):
+                            <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
+                        % end
+                        % if position.adherence and position.adherence.value != 0 and not position.adherence.layover:
+                            <p>Times in brackets are estimates based on current location.</p>
+                        % end
                     % end
                     <table>
                         <thead>
@@ -319,7 +316,7 @@
                         </thead>
                         <tbody>
                             % for departure in upcoming_departures[:5]:
-                                % include('rows/upcoming_departure')
+                                % include('components/upcoming_departure_row')
                             % end
                             % if len(upcoming_departures) > 5:
                                 <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
@@ -332,7 +329,7 @@
                                 </tr>
                                 <tr class="display-none"></tr>
                                 % for departure in upcoming_departures[5:]:
-                                    % include('rows/upcoming_departure', hidden=True)
+                                    % include('components/upcoming_departure_row', hidden=True)
                                 % end
                             % end
                         </tbody>
@@ -355,7 +352,7 @@
             </div>
             <div class="content">
                 % if records:
-                    % if any(r.warnings for r in records):
+                    % if any(r.warnings for r in records) and show_help_text:
                         <p>
                             <span>Entries with a</span>
                             <span class="record-warnings">
@@ -406,7 +403,7 @@
                                                     <div class="row space-between">
                                                         % if record.is_available:
                                                             % block = record.block
-                                                            <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
                                                         % else:
                                                             <span>{{ record.block_id }}</span>
                                                         % end

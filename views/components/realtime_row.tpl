@@ -40,7 +40,7 @@
         </td>
         % if context.enable_blocks:
             <td class="non-mobile">
-                <a href="{{ get_url(block.context, 'blocks', block) }}">{{ block.id }}</a>
+                <a href="{{ block.url() }}">{{ block.id }}</a>
             </td>
         % end
         <td class="non-mobile">
