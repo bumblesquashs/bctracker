@@ -463,7 +463,7 @@
                             % include('components/svg', name='action/favourite')
                         % end
                     % elif context.agency:
-                        All {{ context }}
+                        {{ context }}
                     % else:
                         All Transit Systems
                     % end
@@ -522,12 +522,12 @@
                         % if context.system is None and context.agency == agency:
                             <span class="system-button current">
                                 % include('components/agency_logo')
-                                <div class="flex-1">All {{ agency }}</div>
+                                <div class="flex-1">{{ agency }}</div>
                             </span>
                         % else:
                             <a href="{{ agency.context.url(*path, **path_args) }}" class="system-button">
                                 % include('components/agency_logo')
-                                <div class="flex-1">All {{ agency }}</div>
+                                <div class="flex-1">{{ agency }}</div>
                             </a>
                         % end
                     % end
