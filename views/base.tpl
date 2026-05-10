@@ -136,7 +136,6 @@
         
         <script>
             const svgs = {};
-            console.log("{{ context.agency_id }}")
             const currentAgencyID = "{{ context.agency_id }}" === "" ? null : "{{ context.agency_id }}";
             const currentSystemID = "{{ context.system_id }}" === "" ? null : "{{ context.system_id }}";   
             const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
