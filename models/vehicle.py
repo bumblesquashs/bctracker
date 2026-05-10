@@ -79,6 +79,8 @@ class Vehicle:
         return self.agency == other.agency and self.id == other.id and self.order_id == other.order_id
     
     def __lt__(self, other):
+        if self.key == other.key:
+            return self.agency < other.agency
         return self.key < other.key
     
     def url(self, *args, **kwargs):

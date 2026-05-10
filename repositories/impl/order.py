@@ -68,6 +68,16 @@ class OrderRepository:
                 return []
         return sorted([o for a in self.orders.values() for o in a.values()])
     
+    def find_vehicles(self, id: str) -> list[Vehicle]:
+        '''Returns all vehicles with the given ID'''
+        vehicles = []
+        for agency_vehicles in self.vehicles.values():
+            if id in agency_vehicles:
+                vehicle = agency_vehicles[id]
+                if vehicle.agency.enabled and vehicle.visible:
+                    vehicles.append(vehicle)
+        return vehicles
+    
     def find_matches(self, context: Context, query: str, recorded_vehicle_ids: set[str]) -> list[Match]:
         '''Returns matching vehicles for a given query'''
         matches = []
@@ -76,7 +86,7 @@ class OrderRepository:
         except KeyError:
             vehicles = [b for a in self.vehicles.values() for b in a.values()]
         for vehicle in vehicles:
-            if not vehicle.visible:
+            if not vehicle.agency.enabled or not vehicle.visible:
                 continue
             year_model = vehicle.year_model or 'Unknown year/model'
             if vehicle.model and vehicle.model.type:
@@ -98,5 +108,5 @@ class OrderRepository:
                 name += f' {decoration}'
             if title_prefix:
                 name = f'{title_prefix} {name}'
-            matches.append(Match(context, name, year_model, model_icon, f'fleet/{vehicle.url_id}', value))
+            matches.append(Match(vehicle.context, name, year_model, model_icon, f'fleet/{vehicle.url_id}', value))
         return matches

@@ -440,6 +440,25 @@ class Server(Bottle):
         )
     
     def fleet_overview(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            vehicles = repositories.order.find_vehicles(vehicle_id)
+            if vehicles:
+                if len(vehicles) == 1:
+                    vehicle = vehicles[0]
+                    redirect(vehicle.url())
+                return self.page(
+                    context=context,
+                    file='vehicle/choose',
+                    title=f'Choose a {context.vehicle_type}',
+                    vehicle_id=vehicle_id,
+                    vehicles=sorted(vehicles)
+                )
+            return self.page(
+                context=context,
+                file='vehicle/invalid',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
+            )
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
@@ -487,6 +506,25 @@ class Server(Bottle):
         )
     
     def fleet_map(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            vehicles = repositories.order.find_vehicles(vehicle_id)
+            if vehicles:
+                if len(vehicles) == 1:
+                    vehicle = vehicles[0]
+                    redirect(vehicle.url())
+                return self.page(
+                    context=context,
+                    file='vehicle/choose',
+                    title=f'Choose a {context.vehicle_type}',
+                    vehicle_id=vehicle_id,
+                    vehicles=sorted(vehicles)
+                )
+            return self.page(
+                context=context,
+                file='vehicle/invalid',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
+            )
         vehicle = context.find_vehicle(vehicle_id)
         allocation = repositories.allocation.find_active(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocation) or not vehicle.visible:
@@ -519,6 +557,25 @@ class Server(Bottle):
         )
     
     def fleet_history(self, context: Context, vehicle_id: str):
+        if not context.agency:
+            vehicles = repositories.order.find_vehicles(vehicle_id)
+            if vehicles:
+                if len(vehicles) == 1:
+                    vehicle = vehicles[0]
+                    redirect(vehicle.url())
+                return self.page(
+                    context=context,
+                    file='vehicle/choose',
+                    title=f'Choose a {context.vehicle_type}',
+                    vehicle_id=vehicle_id,
+                    vehicles=sorted(vehicles)
+                )
+            return self.page(
+                context=context,
+                file='vehicle/invalid',
+                title=f'Unknown {context.vehicle_type}',
+                vehicle_id=vehicle_id
+            )
         vehicle = context.find_vehicle(vehicle_id)
         allocations = repositories.allocation.find_all(context.without_system(), vehicle_id)
         if (not vehicle.order_id and not allocations) or not vehicle.visible:
