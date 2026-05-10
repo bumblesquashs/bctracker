@@ -117,207 +117,224 @@
     </div>
     
     <div class="container flex-3">
-        <div class="section">
-            <div class="header" onclick="toggleSection(this)">
-                <h2>{{ context.vehicle_type_plural }}</h2>
-                % include('components/toggle')
-            </div>
-            <div class="content">
-                % if allocations:
-                    % known_allocations = [a for a in allocations if a.vehicle.order_id]
-                    % unknown_allocations = [a for a in allocations if not a.vehicle.order_id]
-                    % if any(a.last_record and a.last_record.warnings for a in allocations) and show_help_text:
-                        <p>
-                            <span>Entries with a</span>
-                            <span class="record-warnings">
-                                % include('components/svg', name='status/warning')
-                            </span>
-                            <span>may be accidental logins.</span>
-                        </p>
-                    % end
-                    % if context.system and any(not a.active for a in allocations) and show_help_text:
-                        <p>
-                            <span>Entries with a</span>
-                            <span class="transfer">
-                                % include('components/svg', name='transfer')
-                            </span>
-                            <span>have been transferred elsewhere.</span>
-                        </p>
-                    % end
-                    <div class="table-border-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ context.vehicle_type }}</th>
-                                    <th>Last Seen</th>
-                                    % if not context.system:
-                                        <th class="non-mobile">System</th>
-                                    % end
-                                    % if context.enable_blocks:
-                                        <th>Block</th>
-                                        <th class="desktop-only">Routes</th>
-                                    % else:
-                                        <th>Routes</th>
-                                    % end
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % if unknown_allocations:
-                                    <tr class="header">
-                                        <td colspan="5">
-                                            <div class="row space-between">
-                                                <div>Unknown Year/Model</div>
-                                                <div>{{ len(unknown_allocations) }}</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="display-none"></tr>
-                                    % for allocation in unknown_allocations:
-                                        % vehicle = allocation.vehicle
-                                        % record = allocation.last_record
-                                        <tr>
-                                            <td>
-                                                <div class="row space-between">
-                                                    % include('components/vehicle')
-                                                    % if context.system and not allocation.active:
-                                                        <div class="transfer tooltip-anchor">
-                                                            % include('components/svg', name='transfer')
-                                                            <div class="tooltip right">Transferred</div>
-                                                        </div>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
-                                            <td class="non-desktop">
-                                                <div class="column">
-                                                    {{ allocation.last_date.format_short() }}
-                                                    % if not context.system:
-                                                        <span class="mobile-only smaller-font">{{ allocation.context }}</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            % if not context.system:
-                                                <td class="non-mobile">{{ allocation.context }}</td>
-                                            % end
-                                            % if context.enable_blocks:
-                                                % if record:
-                                                    <td>
-                                                        <div class="column stretch">
-                                                            <div class="row space-between">
-                                                                % if record.is_available:
-                                                                    % block = record.block
-                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                % else:
-                                                                    <span>{{ record.block_id }}</span>
-                                                                % end
-                                                                % include('components/record_warnings')
-                                                            </div>
-                                                            <div class="non-desktop">
-                                                                % include('components/route_list', routes=record.routes)
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="desktop-only">
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </td>
-                                                % else:
-                                                    <td colspan="2" class="lighter-text">No records for this system</td>
-                                                % end
-                                            % else:
-                                                % if record:
-                                                    <td>
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </td>
-                                                % else:
-                                                    <td class="lighter-text">No records for this system</td>
-                                                % end
-                                            % end
-                                        </tr>
-                                    % end
-                                % end
-                                % for order in orders:
-                                    % order_allocations = [a for a in known_allocations if a.vehicle.order_id == order.id]
-                                    <tr class="header">
-                                        <td colspan="5">
-                                            <div class="row space-between">
-                                                <div class="row">
-                                                    % include('components/livery_row', liveries=order.liveries)
-                                                    {{! order }}
-                                                </div>
-                                                <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="display-none"></tr>
-                                    % for allocation in order_allocations:
-                                        % vehicle = allocation.vehicle
-                                        % record = allocation.last_record
-                                        <tr>
-                                            <td>
-                                                <div class="row space-between">
-                                                    % include('components/vehicle')
-                                                    % if context.system and not allocation.active:
-                                                        <div class="transfer tooltip-anchor">
-                                                            % include('components/svg', name='transfer')
-                                                            <div class="tooltip right">Transferred</div>
-                                                        </div>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
-                                            <td class="non-desktop">
-                                                <div class="column">
-                                                    {{ allocation.last_date.format_short() }}
-                                                    % if not context.system:
-                                                        <span class="mobile-only smaller-font">{{ allocation.context }}</span>
-                                                    % end
-                                                </div>
-                                            </td>
-                                            % if not context.system:
-                                                <td class="non-mobile">{{ allocation.context }}</td>
-                                            % end
-                                            % if context.enable_blocks:
-                                                % if record:
-                                                    <td>
-                                                        <div class="column stretch">
-                                                            <div class="row space-between">
-                                                                % if record.is_available:
-                                                                    % block = record.block
-                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                % else:
-                                                                    <span>{{ record.block_id }}</span>
-                                                                % end
-                                                                % include('components/record_warnings')
-                                                            </div>
-                                                            <div class="non-desktop">
-                                                                % include('components/route_list', routes=record.routes)
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="desktop-only">
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </td>
-                                                % else:
-                                                    <td colspan="2" class="lighter-text">No records for this system</td>
-                                                % end
-                                            % else:
-                                                % if record:
-                                                    <td>
-                                                        % include('components/route_list', routes=record.routes)
-                                                    </td>
-                                                % else:
-                                                    <td class="lighter-text">No records for this system</td>
-                                                % end
-                                            % end
-                                        </tr>
-                                    % end
-                                % end
-                            </tbody>
-                        </table>
+        % if allocations:
+            % available_agencies = sorted({a.context.agency for a in allocations})
+            % for agency in available_agencies:
+                % agency_allocations = [a for a in allocations if a.context.agency == agency]
+                % agency_orders = [o for o in orders if o.agency == agency]
+                <div class="section">
+                    <div class="header" onclick="toggleSection(this)">
+                        % if len(available_agencies) > 1:
+                            <h2>{{ agency }}</h2>
+                        % else:
+                            <h2>{{ context.vehicle_type_plural }}</h2>
+                        % end
+                        % include('components/toggle')
                     </div>
-        
-                    % include('components/top_button')
-                % else:
+                    <div class="content">
+                        % known_allocations = [a for a in agency_allocations if a.vehicle.order_id]
+                        % unknown_allocations = [a for a in agency_allocations if not a.vehicle.order_id]
+                        % if any(a.last_record and a.last_record.warnings for a in agency_allocations) and show_help_text:
+                            <p>
+                                <span>Entries with a</span>
+                                <span class="record-warnings">
+                                    % include('components/svg', name='status/warning')
+                                </span>
+                                <span>may be accidental logins.</span>
+                            </p>
+                        % end
+                        % if context.system and any(not a.active for a in agency_allocations) and show_help_text:
+                            <p>
+                                <span>Entries with a</span>
+                                <span class="transfer">
+                                    % include('components/svg', name='transfer')
+                                </span>
+                                <span>have been transferred elsewhere.</span>
+                            </p>
+                        % end
+                        <div class="table-border-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{{ context.vehicle_type }}</th>
+                                        <th>Last Seen</th>
+                                        % if not context.system:
+                                            <th class="non-mobile">System</th>
+                                        % end
+                                        % if agency.enable_blocks:
+                                            <th>Block</th>
+                                            <th class="desktop-only">Routes</th>
+                                        % else:
+                                            <th>Routes</th>
+                                        % end
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % if unknown_allocations:
+                                        <tr class="header">
+                                            <td colspan="5">
+                                                <div class="row space-between">
+                                                    <div>Unknown Year/Model</div>
+                                                    <div>{{ len(unknown_allocations) }}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="display-none"></tr>
+                                        % for allocation in unknown_allocations:
+                                            % vehicle = allocation.vehicle
+                                            % record = allocation.last_record
+                                            <tr>
+                                                <td>
+                                                    <div class="row space-between">
+                                                        % include('components/vehicle')
+                                                        % if context.system and not allocation.active:
+                                                            <div class="transfer tooltip-anchor">
+                                                                % include('components/svg', name='transfer')
+                                                                <div class="tooltip right">Transferred</div>
+                                                            </div>
+                                                        % end
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
+                                                <td class="non-desktop">
+                                                    <div class="column">
+                                                        {{ allocation.last_date.format_short() }}
+                                                        % if not context.system:
+                                                            <span class="mobile-only smaller-font">{{ allocation.context }}</span>
+                                                        % end
+                                                    </div>
+                                                </td>
+                                                % if not context.system:
+                                                    <td class="non-mobile">{{ allocation.context }}</td>
+                                                % end
+                                                % if agency.enable_blocks:
+                                                    % if record:
+                                                        <td>
+                                                            <div class="column stretch">
+                                                                <div class="row space-between">
+                                                                    % if record.is_available:
+                                                                        % block = record.block
+                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                    % else:
+                                                                        <span>{{ record.block_id }}</span>
+                                                                    % end
+                                                                    % include('components/record_warnings')
+                                                                </div>
+                                                                <div class="non-desktop">
+                                                                    % include('components/route_list', routes=record.routes)
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="desktop-only">
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </td>
+                                                    % else:
+                                                        <td colspan="2" class="lighter-text">No records for this system</td>
+                                                    % end
+                                                % else:
+                                                    % if record:
+                                                        <td>
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </td>
+                                                    % else:
+                                                        <td class="lighter-text">No records for this system</td>
+                                                    % end
+                                                % end
+                                            </tr>
+                                        % end
+                                    % end
+                                    % for order in agency_orders:
+                                        % order_allocations = [a for a in known_allocations if a.vehicle.order_id == order.id]
+                                        <tr class="header">
+                                            <td colspan="5">
+                                                <div class="row space-between">
+                                                    <div class="row">
+                                                        % include('components/livery_row', liveries=order.liveries)
+                                                        {{! order }}
+                                                    </div>
+                                                    <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="display-none"></tr>
+                                        % for allocation in order_allocations:
+                                            % vehicle = allocation.vehicle
+                                            % record = allocation.last_record
+                                            <tr>
+                                                <td>
+                                                    <div class="row space-between">
+                                                        % include('components/vehicle')
+                                                        % if context.system and not allocation.active:
+                                                            <div class="transfer tooltip-anchor">
+                                                                % include('components/svg', name='transfer')
+                                                                <div class="tooltip right">Transferred</div>
+                                                            </div>
+                                                        % end
+                                                    </div>
+                                                </td>
+                                                <td class="desktop-only">{{ allocation.last_date.format_long() }}</td>
+                                                <td class="non-desktop">
+                                                    <div class="column">
+                                                        {{ allocation.last_date.format_short() }}
+                                                        % if not context.system:
+                                                            <span class="mobile-only smaller-font">{{ allocation.context }}</span>
+                                                        % end
+                                                    </div>
+                                                </td>
+                                                % if not context.system:
+                                                    <td class="non-mobile">{{ allocation.context }}</td>
+                                                % end
+                                                % if agency.enable_blocks:
+                                                    % if record:
+                                                        <td>
+                                                            <div class="column stretch">
+                                                                <div class="row space-between">
+                                                                    % if record.is_available:
+                                                                        % block = record.block
+                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                    % else:
+                                                                        <span>{{ record.block_id }}</span>
+                                                                    % end
+                                                                    % include('components/record_warnings')
+                                                                </div>
+                                                                <div class="non-desktop">
+                                                                    % include('components/route_list', routes=record.routes)
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="desktop-only">
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </td>
+                                                    % else:
+                                                        <td colspan="2" class="lighter-text">No records for this system</td>
+                                                    % end
+                                                % else:
+                                                    % if record:
+                                                        <td>
+                                                            % include('components/route_list', routes=record.routes)
+                                                        </td>
+                                                    % else:
+                                                        <td class="lighter-text">No records for this system</td>
+                                                    % end
+                                                % end
+                                            </tr>
+                                        % end
+                                    % end
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            % end
+                        
+            % include('components/top_button')
+        % else:
+            <div class="section">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>{{ context.vehicle_type_plural }}</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
                     <div class="placeholder">
                         % if not context.system:
                             % if days:
@@ -341,8 +358,8 @@
                             <p>Please check again later!</p>
                         % end
                     </div>
-                % end
+                </div>
             </div>
-        </div>
+        % end
     </div>
 </div>

@@ -26,59 +26,75 @@
 </div>
 
 % if positions:
-    % known_positions = [p for p in positions if p.vehicle.order_id]
-    % unknown_positions = sorted([p for p in positions if not p.vehicle.order_id])
-    <div class="table-border-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>{{ context.vehicle_type }}</th>
-                    % if not context.system:
-                        <th class="desktop-only">System</th>
-                    % end
-                    <th>Headsign</th>
-                    % if context.enable_blocks:
-                        <th class="non-mobile">Block</th>
-                    % end
-                    <th class="non-mobile">Trip</th>
-                    <th class="desktop-only">Next Stop</th>
-                </tr>
-            </thead>
-            <tbody>
-                % if unknown_positions:
-                    <tr class="header">
-                        <td colspan="6">
-                            <div class="row space-between">
-                                <div>Unknown Year/Model</div>
-                                <div>{{ len(unknown_positions) }}</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                    % for position in unknown_positions:
-                        % include('components/realtime_row')
-                    % end
+    % available_agencies = sorted({p.vehicle.agency for p in positions})
+    <div class="container">
+        % for agency in available_agencies:
+            % agency_positions = [p for p in positions if p.vehicle.agency == agency]
+            <div class="section">
+                % if len(available_agencies) > 1:
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>{{ agency }}</h2>
+                        % include('components/toggle')
+                    </div>
                 % end
-                % for order in orders:
-                    % order_positions = sorted([p for p in known_positions if p.vehicle.order_id == order.id])
-                    <tr class="header">
-                        <td colspan="6">
-                            <div class="row space-between">
-                                <div class="row">
-                                    % include('components/livery_row', liveries=order.liveries)
-                                    {{! order }}
-                                </div>
-                                <div>{{ len(order_positions) }} / {{ len(order.vehicles) }}</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="display-none"></tr>
-                    % for position in order_positions:
-                        % include('components/realtime_row')
-                    % end
-                % end
-            </tbody>
-        </table>
+                <div class="content">
+                    % known_positions = [p for p in agency_positions if p.vehicle.order_id]
+                    % unknown_positions = sorted([p for p in agency_positions if not p.vehicle.order_id])
+                    <div class="table-border-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>{{ context.vehicle_type }}</th>
+                                    % if not context.system:
+                                        <th class="desktop-only">System</th>
+                                    % end
+                                    <th>Headsign</th>
+                                    % if context.enable_blocks:
+                                        <th class="non-mobile">Block</th>
+                                    % end
+                                    <th class="non-mobile">Trip</th>
+                                    <th class="desktop-only">Next Stop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % if unknown_positions:
+                                    <tr class="header">
+                                        <td colspan="6">
+                                            <div class="row space-between">
+                                                <div>Unknown Year/Model</div>
+                                                <div>{{ len(unknown_positions) }}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for position in unknown_positions:
+                                        % include('components/realtime_row')
+                                    % end
+                                % end
+                                % for order in orders:
+                                    % order_positions = sorted([p for p in known_positions if p.vehicle.order_id == order.id])
+                                    <tr class="header">
+                                        <td colspan="6">
+                                            <div class="row space-between">
+                                                <div class="row">
+                                                    % include('components/livery_row', liveries=order.liveries)
+                                                    {{! order }}
+                                                </div>
+                                                <div>{{ len(order_positions) }} / {{ len(order.vehicles) }}</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="display-none"></tr>
+                                    % for position in order_positions:
+                                        % include('components/realtime_row')
+                                    % end
+                                % end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        % end
     </div>
     
     % include('components/top_button')
