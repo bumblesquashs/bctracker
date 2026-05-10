@@ -164,7 +164,6 @@
                 
                 if ("{{ settings.root_domain }}" === "") {
                     url = "/" + path;
-                    console.log(url)
                 } else {
                     url = "{{ settings.root_domain }}".format(path)
                 }

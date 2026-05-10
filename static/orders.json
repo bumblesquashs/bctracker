@@ -1,4 +1,110 @@
 {
+    "bc-ferries": {
+        "c-class": [
+            [
+                { "year": 1976, "id": "queen-of-alberni", "name": "Queen of Alberni", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 1976, "id": "queen-of-coquitlam", "name": "Queen of Coquitlam", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 1976, "id": "queen-of-cowichan", "name": "Queen of Cowichan", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ],
+            [
+                { "year": 1981, "id": "queen-of-oak-bay", "name": "Queen of Oak Bay", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 1981, "id": "queen-of-surrey", "name": "Queen of Surrey", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true }
+            ]
+        ],
+        "century-class": [
+            [
+                { "year": 1997, "id": "skeena-queen", "name": "Skeena Queen" }
+            ]
+        ],
+        "coastal-class": [
+            [
+                { "year": 2007, "id": "coastal-celebration", "name": "Coastal Celebration", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 2007, "id": "coastal-inspiration", "name": "Coastal Inspiration", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 2007, "id": "coastal-renaissance", "name": "Coastal Renaissance", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ]
+        ],
+        "i-class": [
+            [
+                { "year": 1991, "id": "queen-of-capilano", "name": "Queen of Capilano", "dining": true, "pet_area": true },
+                { "year": 1992, "id": "queen-of-cumberland", "name": "Queen of Cumberland", "dining": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ],
+            [
+                { "year": 2008, "id": "malaspina-sky", "name": "Malaspina Sky", "dining": true, "pet_area": true }
+            ]
+        ],
+        "island-class": [
+            [
+                { "year": 2019, "id": "island-aurora", "name": "Island Aurora", "pet_area": true },
+                { "year": 2019, "id": "island-discovery", "name": "Island Discovery", "pet_area": true },
+                { "year": 2020, "id": "island-kuluta", "name": "Island K'ulut'a", "pet_area": true },
+                { "year": 2020, "id": "island-nagalis", "name": "Island Nagalis", "pet_area": true },
+                { "year": 2021, "id": "island-gwawis", "name": "Island Gwawis", "pet_area": true },
+                { "year": 2021, "id": "island-kwigwis", "name": "Island Kwigwis", "pet_area": true }
+            ]
+        ],
+        "k-class": [
+            [
+                { "year": 1972, "id": "klitsa", "name": "Klitsa" },
+                { "year": 1973, "id": "kahloke", "name": "Kahloke" },
+                { "year": 1975, "id": "kwuna", "name": "Kwuna" }
+            ],
+            [
+                { "year": 1985, "id": "puneluxutth", "name": "Pune'luxutth" }
+            ]
+        ],
+        "n-class": [
+            [
+                { "year": 1960, "id": "spirit-of-lax-kwalaams", "name": "Spirit of Lax Kw'alaams" }
+            ]
+        ],
+        "q-class": [
+            [
+                { "year": 1977, "id": "quinitsa", "name": "Quinitsa" }
+            ],
+            [
+                { "year": 1982, "id": "quinsam", "name": "Quinsam" }
+            ]
+        ],
+        "salish-class": [
+            [
+                { "year": 2016, "id": "salish-eagle", "name": "Salish Eagle", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 2016, "id": "salish-raven", "name": "Salish Raven", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 2016, "id": "salish-orca", "name": "Salish Orca", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ],
+            [
+                { "year": 2020, "id": "salish-heron", "name": "Salish Heron" }
+            ]
+        ],
+        "spirit-class": [
+            [
+                { "year": 1993, "id": "spirit-of-british-columbia", "name": "Spirit of British Columbia", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                { "year": 1994, "id": "spirit-of-vancouver-island", "name": "Spirit of Vancouver Island", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ]
+        ],
+        "t-class": [
+            [
+                { "year": 1969, "id": "quadra-queen-ii", "name": "Quadra Queen II" },
+                { "year": 1969, "id": "tachek", "name": "Tachek" }
+            ]
+        ],
+        "none": [
+            [
+                { "year": 2015, "id": "baynes-sound-connector", "name": "Baynes Sound Connector", "pet_area": true }
+            ],
+            [
+                { "year": 2009, "id": "northern-expedition", "name": "Northern Expedition", "dining": true, "gift_shop": true, "cabins": true, "kids_area": true, "pet_area": true }
+            ],
+            [
+                { "year": 2004, "id": "northern-adventure", "name": "Northern Adventure", "dining": true, "gift_shop": true, "cabins": true, "kids_area": true, "pet_area": true }
+            ],
+            [
+                { "year": 2000, "id": "northern-sea-wolf", "name": "Northern Sea Wolf", "dining": true }
+            ],
+            [
+                { "year": 1964, "id": "queen-of-new-west", "name": "Queen of New Westminster", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+            ]
+        ]
+    },
     "bc-transit": {
         "alexander-dennis-enviro500": [
             [

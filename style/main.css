@@ -1379,9 +1379,15 @@ table tr.table-button {
 .order-details .content {
     display: flex;
     flex-direction: row;
+    flex-wrap: row;
     align-items: center;
     gap: 5px;
     justify-content: center;
+    text-align: center;
+}
+
+.order-details .content svg {
+    min-width: 18px;
 }
 
 .order-details .title {
@@ -1496,6 +1502,10 @@ table tr.table-button {
 
 .row.space-between {
     justify-content: space-between;
+}
+
+.row.wrap {
+    flex-wrap: wrap;
 }
 
 .sheet {

@@ -29,6 +29,13 @@ class Vehicle:
     air_conditioned: bool = True
     usb_charging: bool = False
     cctv: bool = True
+    wifi: bool = False
+    dining: bool = False
+    gift_shop: bool = False
+    cabins: bool = False
+    kids_area: bool = False
+    pet_area: bool = False
+    work_area: bool = False
     
     key: tuple = field(init=False)
     

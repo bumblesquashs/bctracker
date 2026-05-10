@@ -1,5 +1,5 @@
 <div class="order-details">
-    <div class="row space-between">
+    <div class="row {{ 'space-between' if livery else 'justify-center' }}">
         % if livery:
             <div style="width: 40px"></div>
         % end
