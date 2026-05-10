@@ -142,7 +142,8 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                icon.href = getURL(position.agency_id, null, "fleet/" + position.vehicle_url_id);
+                const systemID = currentSystemID === null ? null : position.system_id;
+                icon.href = getURL(position.agency_id, systemID, "fleet/" + position.vehicle_url_id);
                 icon.innerHTML = "<div class='link'></div>";
             }
             icon.className = "icon";

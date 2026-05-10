@@ -33,7 +33,10 @@
             <div class="section">
                 % if len(available_agencies) > 1:
                     <div class="header" onclick="toggleSection(this)">
-                        <h2>{{ agency }}</h2>
+                        <h2 class="row">
+                            % include('components/agency_logo')
+                            {{ agency }}
+                        </h2>
                         % include('components/toggle')
                     </div>
                 % end

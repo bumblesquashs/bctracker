@@ -103,12 +103,15 @@
                                     </div>
                                     <div class="content">
                                         <div class="container">
-                                            % available_agencies = sorted([o.agency for o in model_orders])
+                                            % available_agencies = sorted({o.agency for o in model_orders})
                                             % for agency in available_agencies:
                                                 <div class="section">
                                                     % if len(all_available_agencies) > 1:
                                                         <div class="header" onclick="toggleSection(this)">
-                                                            <h4>{{ agency }}</h4>
+                                                            <h4 class="row">
+                                                                % include('components/agency_logo')
+                                                                {{ agency }}
+                                                            </h4>
                                                             % include('components/toggle')
                                                         </div>
                                                     % end

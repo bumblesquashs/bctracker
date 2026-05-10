@@ -125,7 +125,10 @@
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         % if len(available_agencies) > 1:
-                            <h2>{{ agency }}</h2>
+                            <h2 class="row">
+                                % include('components/agency_logo')
+                                {{ agency }}
+                            </h2>
                         % else:
                             <h2>{{ context.vehicle_type_plural }}</h2>
                         % end

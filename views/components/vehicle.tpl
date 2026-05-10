@@ -1,6 +1,10 @@
 <div class="vehicle">
     % if vehicle.is_known and get('enable_link', True):
-        <a href="{{ vehicle.url() }}">{{ vehicle }}</a>
+        % if context.agency and context.agency == vehicle.agency:
+            <a href="{{ context.url('fleet', vehicle) }}">{{ vehicle }}</a>
+        % else:
+            <a href="{{ vehicle.url() }}">{{ vehicle }}</a>
+        % end
     % else:
         <div>{{ vehicle }}</div>
     % end
