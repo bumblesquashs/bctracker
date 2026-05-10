@@ -23,7 +23,7 @@ class TripRepository:
         self.database.insert(
             table='trip',
             values={
-                # 'agency_id': context.agency_id,
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id,
                 'route_id': row['route_id'],
@@ -40,7 +40,7 @@ class TripRepository:
         trips = self.database.select(
             table='trip',
             columns=[
-                # 'agency_id',
+                'agency_id',
                 'system_id',
                 'trip_id',
                 'route_id',
@@ -51,7 +51,7 @@ class TripRepository:
                 'headsign'
             ],
             filters={
-                # 'agency_id': context.agency_id,
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id
             },
@@ -68,7 +68,7 @@ class TripRepository:
         return self.database.select(
             table='trip',
             columns=[
-                # 'agency_id',
+                'agency_id',
                 'system_id',
                 'trip_id',
                 'route_id',
@@ -79,7 +79,7 @@ class TripRepository:
                 'headsign'
             ],
             filters={
-                # 'agency_id': context.agency_id,
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'trip_id': trip_id,
                 'route_id': route_id,
@@ -93,13 +93,13 @@ class TripRepository:
         rows = self.database.select(
             table='trip',
             columns=[
-                # 'agency_id',
+                'agency_id',
                 'system_id',
                 'block_id'
             ],
             distinct=True,
             filters={
-                # 'agency_id': context.agency_id,
+                'agency_id': context.agency_id,
                 'system_id': context.system_id,
                 'block_id': {
                     'LIKE': f'%{query}%'
@@ -120,7 +120,7 @@ class TripRepository:
         self.database.delete(
             table='trip',
             filters={
-                # 'agency_id': context.agency_id,
+                'agency_id': context.agency_id,
                 'system_id': context.system_id
             }
         )

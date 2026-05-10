@@ -217,11 +217,8 @@
                 icon = document.createElement("div");
             } else {
                 icon = document.createElement("a");
-                if (currentSystemID === null) {
-                    icon.href = getUrl(currentSystemID, "bus/" + position.agency_id + "/" + position.vehicle_url_id, true);
-                } else {
-                    icon.href = getUrl(currentSystemID, "bus/" + position.vehicle_url_id, true);
-                }
+                const systemID = currentSystemID === null ? null : position.system_id;
+                icon.href = getURL(position.agency_id, systemID, "fleet/" + position.vehicle_url_id);
                 icon.innerHTML = "<div class='link'></div>"
             }
             icon.className = "icon";
@@ -527,7 +524,7 @@
                 continue;
             }
             const request = new XMLHttpRequest();
-            request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id), true);
+            request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id, true), true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -585,7 +582,7 @@
                 shapes[shapeID].setVisible(true);
             } else {
                 const request = new XMLHttpRequest();
-                request.open("GET", getUrl(position.system_id, "api/shape/" + position.shape_id), true);
+                request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id, true), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
@@ -681,7 +678,7 @@
         if (key in cachedStops) {
             updateStopMarkers(key);
         } else {
-            const url = getUrl(currentSystemID, "api/stops", false, {
+            const url = getURL(currentAgencyID, currentSystemID, "api/stops", true, {
                 "lat": lat,
                 "lon": lon,
                 "size": size
@@ -710,7 +707,7 @@
             
             const icon = document.createElement("a");
             icon.className = "icon";
-            icon.href = getUrl(stop.system_id, "stops/" + stop.url_id, true);
+            icon.href = getURL(null, stop.system_id, "stops/" + stop.url_id);
             icon.innerHTML = "<div class='link'></div>" + getSVG("stop");
             if (stop.routes.length > 0) {
                 icon.style.backgroundColor = "#" + stop.routes[0].colour;

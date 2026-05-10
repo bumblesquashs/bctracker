@@ -146,7 +146,7 @@ table th {
     order: 1;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
+    align-items: stretch;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     font-size: 12pt;
@@ -164,10 +164,6 @@ table th {
 #system-menu .system-button {
     padding: 5px 20px;
     font-weight: normal;
-}
-
-#system-menu .system-button.all-systems {
-    grid-column-end: span 3;
 }
 
 #system-menu-toggle {

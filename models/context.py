@@ -241,12 +241,32 @@ class Context:
                 components.append(str(arg.url_id))
             except AttributeError:
                 components.append(str(arg))
-        path = '/'.join(components)
-        if self.system_id:
-            url = settings.current.system_domain.format(self.system_id, path).rstrip('/')
-        else:
-            url = settings.current.all_systems_domain.format(path).rstrip('/')
+        path = '/'.join(components).rstrip('/')
         query_args = {k:v for k, v in kwargs.items() if v is not None}
+        
+        if settings.current.root_domain:
+            url = settings.current.root_domain.format(path)
+        else:
+            url = '/' + path
+        
+        if self.system_id:
+            if settings.current.system_domain:
+                url = settings.current.system_domain.format(self.system_id, path)
+            else:
+                query_args['system'] = self.system_id
+        elif self.agency_id:
+            if self.agency and self.agency.default_system:
+                system = repositories.system.find(self.agency.default_system)
+                if settings.current.system_domain:
+                    url = settings.current.system_domain.format(system.id, path)
+                else:
+                    query_args['system'] = system.id
+            else:
+                if settings.current.agency_domain:
+                    url = settings.current.agency_domain.format(self.agency_id, path)
+                else:
+                    query_args['agency'] = self.agency_id
+        
         if query_args:
             query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
             url += f'?{query}'

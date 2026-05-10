@@ -28,11 +28,19 @@
                 <td>
                     % include('components/trip')
                 </td>
-                <td class="non-mobile">{{ trip.context }}</td>
+                <td class="non-mobile">
+                    <div class="row">
+                        % include('components/agency_logo', agency=trip.agency)
+                        {{ trip.context }}
+                    </div>
+                </td>
                 <td>
                     <div class="column">
                         % include('components/headsign')
-                        <div class="mobile-only smaller-font">{{ trip.context }}</div>
+                        <div class="mobile-only smaller-font row">
+                            % include('components/agency_logo', agency=trip.agency)
+                            {{ trip.context }}
+                        </div>
                     </div>
                 </td>
                 <td class="non-mobile">{{ trip.start_time }}</td>

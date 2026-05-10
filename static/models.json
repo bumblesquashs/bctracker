@@ -163,6 +163,44 @@
             "fuel": "Diesel"
         }
     },
+    "ferry": {
+        "c-class": {
+            "name": "C Class"
+        },
+        "century-class": {
+            "name": "Century Class"
+        },
+        "coastal-class": {
+            "name": "Coastal Class"
+        },
+        "i-class": {
+            "name": "I Class"
+        },
+        "island-class": {
+            "name": "Island Class"
+        },
+        "k-class": {
+            "name": "K Class"
+        },
+        "n-class": {
+            "name": "N Class"
+        },
+        "q-class": {
+            "name": "Q Class"
+        },
+        "salish-class": {
+            "name": "Salish Class"
+        },
+        "spirit-class": {
+            "name": "Spirit Class"
+        },
+        "t-class": {
+            "name": "T Class"
+        },
+        "none": {
+            "name": "(Unclassed)"
+        }
+    },
     "midibus": {
         "byd-k7m": {
             "manufacturer": "BYD",

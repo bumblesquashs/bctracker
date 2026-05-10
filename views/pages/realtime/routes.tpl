@@ -51,10 +51,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ route.context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                % if context.enable_blocks:
+                                % if route.context.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th class="non-mobile">Trip</th>
@@ -112,7 +112,7 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if context.enable_blocks:
+                                    % if route.context.enable_blocks:
                                         <td class="non-mobile">
                                             <a href="{{ block.url() }}">{{ block.id }}</a>
                                         </td>

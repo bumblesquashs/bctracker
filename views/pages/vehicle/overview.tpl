@@ -256,7 +256,7 @@
                             <div class="row section">
                                 <div class="name">Amenities</div>
                                 <div class="value">
-                                    <div class="row gap-5">
+                                    <div class="row gap-5 wrap justify-right">
                                         % if vehicle.accessible:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/accessible')
@@ -279,6 +279,48 @@
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/cctv')
                                                 <div class="tooltip right">CCTV cameras</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.wifi:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/wifi')
+                                                <div class="tooltip right">WIFI</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.dining:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/dining')
+                                                <div class="tooltip right">Dining</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.gift_shop:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/gift-shop')
+                                                <div class="tooltip right">Gift shop</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.cabins:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/cabins')
+                                                <div class="tooltip right">Cabins</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.kids_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/kids-area')
+                                                <div class="tooltip right">Kids area</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.pet_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/pet-area')
+                                                <div class="tooltip right">Pet area</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.work_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/work-area')
+                                                <div class="tooltip right">Work area</div>
                                             </div>
                                         % end
                                     </div>

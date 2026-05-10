@@ -15,12 +15,14 @@ class Agency:
     website: str | None = None
     gtfs_url: str | None = None
     realtime_url: str | None = None
+    default_system: str | None = None
     enabled: bool = True
     prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
     accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS
     prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
     prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
+    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
