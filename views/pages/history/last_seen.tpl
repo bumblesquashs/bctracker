@@ -159,7 +159,7 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>{{ context.vehicle_type }}</th>
+                                        <th>{{ agency.vehicle_type }}</th>
                                         <th>Last Seen</th>
                                         % if not context.system:
                                             <th class="non-mobile">System</th>

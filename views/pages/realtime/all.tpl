@@ -47,12 +47,12 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{{ context.vehicle_type }}</th>
+                                    <th>{{ agency.vehicle_type }}</th>
                                     % if not context.system:
                                         <th class="desktop-only">System</th>
                                     % end
                                     <th>Headsign</th>
-                                    % if context.enable_blocks:
+                                    % if agency.enable_blocks:
                                         <th class="non-mobile">Block</th>
                                     % end
                                     <th class="non-mobile">Trip</th>
@@ -71,7 +71,7 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for position in unknown_positions:
-                                        % include('components/realtime_row')
+                                        % include('components/realtime_row', enable_blocks=agency.enable_blocks)
                                     % end
                                 % end
                                 % for order in orders:
@@ -89,7 +89,7 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for position in order_positions:
-                                        % include('components/realtime_row')
+                                        % include('components/realtime_row', enable_blocks=agency.enable_blocks)
                                     % end
                                 % end
                             </tbody>

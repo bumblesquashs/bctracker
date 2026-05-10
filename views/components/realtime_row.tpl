@@ -38,9 +38,11 @@
                 % end
             </div>
         </td>
-        % if context.enable_blocks:
+        % if enable_blocks:
             <td class="non-mobile">
-                <a href="{{ block.url() }}">{{ block.id }}</a>
+                % if block:
+                    <a href="{{ block.url() }}">{{ block.id }}</a>
+                % end
             </td>
         % end
         <td class="non-mobile">
