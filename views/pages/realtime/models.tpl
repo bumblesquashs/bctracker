@@ -105,6 +105,8 @@
                                         <div class="container">
                                             % available_agencies = sorted({o.agency for o in model_orders})
                                             % for agency in available_agencies:
+                                                % agency_orders = [o for o in model_orders if o.agency == agency]
+                                                % agency_positions = [p for p in model_positions if p.vehicle.agency == agency]
                                                 <div class="section">
                                                     % if len(all_available_agencies) > 1:
                                                         <div class="header" onclick="toggleSection(this)">
@@ -133,8 +135,8 @@
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    % for order in model_orders:
-                                                                        % order_positions = [p for p in model_positions if p.vehicle.order_id == order.id]
+                                                                    % for order in agency_orders:
+                                                                        % order_positions = [p for p in agency_positions if p.vehicle.order_id == order.id]
                                                                         <tr class="header">
                                                                             <td colspan="6">
                                                                                 <div class="row space-between">

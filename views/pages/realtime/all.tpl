@@ -29,6 +29,7 @@
     % available_agencies = sorted({p.vehicle.agency for p in positions})
     <div class="container">
         % for agency in available_agencies:
+            % agency_orders = [o for o in orders if o.agency == agency]
             % agency_positions = [p for p in positions if p.vehicle.agency == agency]
             <div class="section">
                 % if len(available_agencies) > 1:
@@ -74,7 +75,7 @@
                                         % include('components/realtime_row', enable_blocks=agency.enable_blocks)
                                     % end
                                 % end
-                                % for order in orders:
+                                % for order in agency_orders:
                                     % order_positions = sorted([p for p in known_positions if p.vehicle.order_id == order.id])
                                     <tr class="header">
                                         <td colspan="6">
