@@ -8,6 +8,7 @@
         "accurate_seconds": false,
         "prefer_stop_id": true,
         "show_stop_number": false,
+        "show_full_orders": true,
         "enable_blocks": false,
         "nis_colour": "003769",
         "default_route_colour": "003769",

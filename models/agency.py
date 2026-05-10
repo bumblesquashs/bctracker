@@ -22,6 +22,7 @@ class Agency:
     prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
     prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
+    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
