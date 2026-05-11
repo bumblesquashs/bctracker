@@ -5,7 +5,7 @@ from datetime import datetime
 
 import requests
 
-import protobuf.data.gtfs_realtime_pb2 as protobuf
+import google.transit.gtfs_realtime_pb2 as protobuf
 
 from database import Database
 
