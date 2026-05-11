@@ -233,13 +233,10 @@
                 }
             }
             
-            function setLiveryTheme(liveryID) {
-                if (liveryID === "green-blue-stripes" || liveryID == "green-blue-stripes-green-back") {
-                    window.location.href = "?theme=bc-transit";
-                } else if (liveryID === "red-blue-stripes") {
-                    window.location.href = "?theme=bc-transit-classic";
-                } else if (liveryID === "green-front") {
-                    window.location.href = "?theme=bc-transit-green";
+            function setLiveryTheme(theme) {
+                if (theme !== "") {
+                    setCookie("theme", theme);
+                    location.reload();
                 }
             }
             
