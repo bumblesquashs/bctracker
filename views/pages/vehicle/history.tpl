@@ -23,8 +23,8 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        <a href="{{ vehicle.url() }}" class="tab-button">Overview</a>
-        <a href="{{ vehicle.url('map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('fleet', vehicle) }}" class="tab-button">Overview</a>
+        <a href="{{ context.url('fleet', vehicle, 'map') }}" class="tab-button">Map</a>
         <span class="tab-button current">History</span>
     </div>
 </div>

@@ -30,8 +30,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ vehicle.url('map') }}" class="tab-button">Map</a>
-        <a href="{{ vehicle.url('history') }}" class="tab-button">History</a>
+        <a href="{{ context.url('fleet', vehicle, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('fleet', vehicle, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
