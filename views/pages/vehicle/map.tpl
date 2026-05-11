@@ -21,15 +21,9 @@
         <h2 class="lighter-text">Unknown Year/Model</h2>
     % end
     <div class="tab-button-bar">
-        % if context.system:
-            <a href="{{ context.url('bus', vehicle) }}" class="tab-button">Overview</a>
-            <span class="tab-button current">Map</span>
-            <a href="{{ context.url('bus', vehicle, 'history') }}" class="tab-button">History</a>
-        % else:
-            <a href="{{ context.url('bus', vehicle.agency, vehicle) }}" class="tab-button">Overview</a>
-            <span class="tab-button current">Map</span>
-            <a href="{{ context.url('bus', vehicle.agency, vehicle, 'history') }}" class="tab-button">History</a>
-        % end
+        <a href="{{ context.url('fleet', vehicle) }}" class="tab-button">Overview</a>
+        <span class="tab-button current">Map</span>
+        <a href="{{ context.url('fleet', vehicle, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
