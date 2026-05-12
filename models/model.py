@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 class ModelType(Enum):
@@ -52,7 +52,9 @@ class Model:
     name: str
     manufacturer: str | None = None
     length: float | None = None
+    length_units: str | None = None
     fuel: str | None = None
+    capacity: dict[str, str] = field(default_factory=dict)
     
     @property
     def display_manufacturer(self):

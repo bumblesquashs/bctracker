@@ -2,7 +2,20 @@
     "bc-ferries": {
         "c-class": [
             [
-                { "year": 1976, "id": "queen-of-alberni", "name": "Queen of Alberni", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
+                {
+                    "year": 1976,
+                    "id": "queen-of-alberni",
+                    "name": "Queen of Alberni",
+                    "capacity": {
+                        "Passengers/Crew": 1200,
+                        "Vehicles": 280
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "kids_area": true,
+                    "pet_area": true,
+                    "work_area": true
+                },
                 { "year": 1976, "id": "queen-of-coquitlam", "name": "Queen of Coquitlam", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true },
                 { "year": 1976, "id": "queen-of-cowichan", "name": "Queen of Cowichan", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
             ],
@@ -25,11 +38,46 @@
         ],
         "i-class": [
             [
-                { "year": 1991, "id": "queen-of-capilano", "name": "Queen of Capilano", "dining": true, "pet_area": true },
-                { "year": 1992, "id": "queen-of-cumberland", "name": "Queen of Cumberland", "dining": true, "kids_area": true, "pet_area": true, "work_area": true }
+                {
+                    "year": 1991,
+                    "id": "queen-of-capilano",
+                    "name": "Queen of Capilano",
+                    "length": 96,
+                    "capacity": {
+                        "Passengers/Crew": 600,
+                        "Vehicles": 100
+                    },
+                    "dining": true,
+                    "pet_area": true
+                },
+                {
+                    "year": 1992,
+                    "id": "queen-of-cumberland",
+                    "name": "Queen of Cumberland",
+                    "length": 96,
+                    "capacity": {
+                        "Passengers/Crew": 462,
+                        "Vehicles": 80
+                    },
+                    "dining": true,
+                    "kids_area": true,
+                    "pet_area": true,
+                    "work_area": true
+                }
             ],
             [
-                { "year": 2008, "id": "malaspina-sky", "name": "Malaspina Sky", "dining": true, "pet_area": true }
+                {
+                    "year": 2008,
+                    "id": "malaspina-sky",
+                    "name": "Malaspina Sky",
+                    "length": 102,
+                    "capacity": {
+                        "Passengers/Crew": 462,
+                        "Vehicles": 112
+                    },
+                    "dining": true,
+                    "pet_area": true
+                }
             ]
         ],
         "island-class": [
@@ -44,12 +92,48 @@
         ],
         "k-class": [
             [
-                { "year": 1972, "id": "klitsa", "name": "Klitsa" },
-                { "year": 1973, "id": "kahloke", "name": "Kahloke" },
-                { "year": 1975, "id": "kwuna", "name": "Kwuna" }
+                {
+                    "year": 1972,
+                    "id": "klitsa",
+                    "name": "Klitsa",
+                    "length": 47.55,
+                    "capacity": {
+                        "Passengers/Crew": 150,
+                        "Vehicles": 19
+                    }
+                },
+                {
+                    "year": 1973,
+                    "id": "kahloke",
+                    "name": "Kahloke",
+                    "length": 54.71,
+                    "capacity": {
+                        "Passengers/Crew": 200,
+                        "Vehicles": 21
+                    }
+                },
+                {
+                    "year": 1975,
+                    "id": "kwuna",
+                    "name": "Kwuna",
+                    "length": 71.64,
+                    "capacity": {
+                        "Passengers/Crew": 150,
+                        "Vehicles": 16
+                    }
+                }
             ],
             [
-                { "year": 1985, "id": "puneluxutth", "name": "Pune'luxutth" }
+                {
+                    "year": 1985,
+                    "id": "puneluxutth",
+                    "name": "Pune'luxutth",
+                    "length": 52.21,
+                    "capacity": {
+                        "Passengers/Crew": 269,
+                        "Vehicles": 26
+                    }
+                }
             ]
         ],
         "n-class": [
@@ -59,10 +143,28 @@
         ],
         "q-class": [
             [
-                { "year": 1977, "id": "quinitsa", "name": "Quinitsa" }
+                {
+                    "year": 1977,
+                    "id": "quinitsa",
+                    "name": "Quinitsa",
+                    "length": 74.68,
+                    "capacity": {
+                        "Passengers/Crew": 300,
+                        "Vehicles": 44
+                    }
+                }
             ],
             [
-                { "year": 1982, "id": "quinsam", "name": "Quinsam" }
+                {
+                    "year": 1982,
+                    "id": "quinsam",
+                    "name": "Quinsam",
+                    "length": 86.85,
+                    "capacity": {
+                        "Passengers/Crew": 400,
+                        "Vehicles": 63
+                    }
+                }
             ]
         ],
         "salish-class": [
@@ -72,7 +174,7 @@
                 { "year": 2016, "id": "salish-orca", "name": "Salish Orca", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
             ],
             [
-                { "year": 2020, "id": "salish-heron", "name": "Salish Heron" }
+                { "year": 2020, "id": "salish-heron", "name": "Salish Heron", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
             ]
         ],
         "spirit-class": [
@@ -83,25 +185,107 @@
         ],
         "t-class": [
             [
-                { "year": 1969, "id": "quadra-queen-ii", "name": "Quadra Queen II" },
-                { "year": 1969, "id": "tachek", "name": "Tachek" }
+                {
+                    "year": 1969,
+                    "id": "quadra-queen-ii",
+                    "name": "Quadra Queen II",
+                    "length": 49.61
+                },
+                {
+                    "year": 1969,
+                    "id": "tachek",
+                    "name": "Tachek",
+                    "length": 49.53
+                }
             ]
         ],
         "none": [
             [
-                { "year": 2015, "id": "baynes-sound-connector", "name": "Baynes Sound Connector", "pet_area": true }
+                {
+                    "year": 2015,
+                    "id": "baynes-sound-connector",
+                    "name": "Baynes Sound Connector",
+                    "length": 78.5,
+                    "length_units": "metres",
+                    "fuel": "Cable",
+                    "capacity": {
+                        "Passengers/Crew": 150,
+                        "Vehicles": 45
+                    },
+                    "pet_area": true
+                }
             ],
             [
-                { "year": 2009, "id": "northern-expedition", "name": "Northern Expedition", "dining": true, "gift_shop": true, "cabins": true, "kids_area": true, "pet_area": true }
+                {
+                    "year": 2009,
+                    "id": "northern-expedition",
+                    "name": "Northern Expedition",
+                    "length": 151.75,
+                    "length_units": "metres",
+                    "fuel": "Diesel",
+                    "capacity": {
+                        "Passengers/Crew": 638,
+                        "Vehicles": 115
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "cabins": true,
+                    "kids_area": true,
+                    "pet_area": true
+                }
             ],
             [
-                { "year": 2004, "id": "northern-adventure", "name": "Northern Adventure", "dining": true, "gift_shop": true, "cabins": true, "kids_area": true, "pet_area": true }
+                {
+                    "year": 2004,
+                    "id": "northern-adventure",
+                    "name": "Northern Adventure",
+                    "length": 117,
+                    "length_units": "metres",
+                    "fuel": "Diesel",
+                    "capacity": {
+                        "Passengers/Crew": 500,
+                        "Vehicles": 87
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "cabins": true,
+                    "kids_area": true,
+                    "pet_area": true
+                }
             ],
             [
-                { "year": 2000, "id": "northern-sea-wolf", "name": "Northern Sea Wolf", "dining": true }
+                {
+                    "year": 2000,
+                    "id": "northern-sea-wolf",
+                    "name": "Northern Sea Wolf",
+                    "length": 76.38,
+                    "length_units": "metres",
+                    "fuel": "Diesel",
+                    "capacity": {
+                        "Passengers/Crew": 150,
+                        "Vehicles": 35
+                    },
+                    "dining": true
+                }
             ],
             [
-                { "year": 1964, "id": "queen-of-new-west", "name": "Queen of New Westminster", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
+                {
+                    "year": 1964,
+                    "id": "queen-of-new-west",
+                    "name": "Queen of New Westminster",
+                    "length": 129.9,
+                    "length_units": "metres",
+                    "fuel": "Diesel",
+                    "capacity": {
+                        "Passengers/Crew": 1332,
+                        "Vehicles": 254
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "kids_area": true,
+                    "pet_area": true,
+                    "work_area": true
+                }
             ]
         ]
     },

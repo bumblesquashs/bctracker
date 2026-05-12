@@ -233,16 +233,31 @@
                                 <div class="name">Vehicle Type</div>
                                 <div class="value">{{ model.type }}</div>
                             </div>
-                            % if model.length:
+                            % length = vehicle.length or model.length
+                            % if length:
+                                % units = vehicle.length_units or model.length_units
                                 <div class="row section">
                                     <div class="name">Length</div>
-                                    <div class="value">{{ model.length }} feet</div>
+                                    <div class="value">{{ length }} {{ units }}</div>
                                 </div>
                             % end
-                            % if model.fuel:
+                            % fuel = vehicle.fuel or model.fuel
+                            % if fuel:
                                 <div class="row section">
                                     <div class="name">Fuel Type</div>
-                                    <div class="value">{{ model.fuel }}</div>
+                                    <div class="value">{{ fuel }}</div>
+                                </div>
+                            % end
+                            % capacity = vehicle.capacity or model.capacity
+                            % if capacity:
+                                <div class="column gap-5 section">
+                                    <div class="smaller-font lighter-text">Capacity</div>
+                                    % for (capacity_type, capacity_count) in capacity.items():
+                                        <div class="row">
+                                            <div class="flex-1">{{ capacity_type }}</div>
+                                            <div>{{ capacity_count }}</div>
+                                        </div>
+                                    % end
                                 </div>
                             % end
                         % end
