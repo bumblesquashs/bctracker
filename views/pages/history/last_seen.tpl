@@ -252,6 +252,9 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for allocation in order_allocations:
+                                        % if allocation.last_date is None:
+                                            % print(allocation.last_record is None)
+                                        % end
                                         % vehicle = allocation.vehicle
                                         % record = allocation.last_record
                                         <tr>

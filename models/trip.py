@@ -26,7 +26,7 @@ class Trip:
     id: str
     route_id: str
     service_id: str
-    block_id: str
+    block_id: str | None
     direction_id: int
     shape_id: str
     headsign: str
@@ -72,7 +72,9 @@ class Trip:
     @property
     def block(self):
         '''Returns the block associated with this trip'''
-        return self.system.get_block(self.block_id)
+        if self.block_id:
+            return self.system.get_block(self.block_id)
+        return None
     
     @property
     def service(self):
