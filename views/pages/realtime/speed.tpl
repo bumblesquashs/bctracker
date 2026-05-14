@@ -71,7 +71,6 @@
                         % end
                         <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                         % if trip:
-                            % block = trip.block
                             <td>
                                 <div class="column">
                                     % include('components/headsign', departure=position.departure)
@@ -89,8 +88,11 @@
                                 </div>
                             </td>
                             % if context.enable_blocks:
+                                % block = trip.block
                                 <td class="non-mobile">
-                                    <a href="{{ block.url() }}">{{ block.id }}</a>
+                                    % if block:
+                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                    % end
                                 </td>
                             % end
                             <td class="non-mobile">
