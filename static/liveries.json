@@ -1,16 +1,30 @@
 {
-    "bc-transit": {
-        "red-blue-stripes": {
-            "name": "Red/Blue Stripes"
+    "calgary-transit": {
+        "three-stripes": {
+            "name": "Three Stripes"
         },
-        "green-blue-stripes": {
-            "name": "Green/Blue Stripes"
+        "wave": {
+            "name": "Wave"
+        }
+    },
+    "edmonton-transit-service": {
+        "ets": {
+            "name": "ETS"
         },
-        "green-blue-stripes-green-back": {
-            "name": "Green/Blue Stripes with Green Back"
+        "spruce-grove": {
+            "name": "Spruce Grove"
         },
-        "green-front": {
-            "name": "Green Front"
+        "st-albert-stripes": {
+            "name": "St Albert Stripes"
+        },
+        "st-albert-green": {
+            "name": "St Albert Green"
+        },
+        "fort-saskatchewan": {
+            "name": "Fort Saskatchewan"
+        },
+        "strathcona": {
+            "name": "Strathcona County"
         }
     }
 }

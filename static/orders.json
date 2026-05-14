@@ -2,380 +2,392 @@
     "calgary-transit": {
         "chevrolet-arboc-4500-sof-27": [
             [
-                { "year": 2017, "low": 1200, "high": 1336 }
+                { "year": 2017, "low": 1200, "high": 1336, "livery": "wave" }
             ],
             [
-                { "year": 2023, "low": 1337, "high": 1356 }
+                { "year": 2023, "low": 1337, "high": 1356, "livery": "wave" }
             ],
             [
-                { "year": 2024, "low": 1357, "high": 1516 }
+                { "year": 2024, "low": 1357, "high": 1516, "livery": "wave" }
             ]
         ],
         "chevrolet-arboc-4500-sof27d": [
             [
-                { "year": 2013, "low": 1824, "high": 1834 }
+                { "year": 2013, "low": 1824, "high": 1834, "livery": "wave" }
             ],
             [
-                { "year": 2015, "low": 1846, "high": 1875 }
+                { "year": 2015, "low": 1846, "high": 1875, "livery": "wave" }
             ]
         ],
         "chevrolet-arboc-4500-sof27g": [
             [
-                { "year": 2013, "low": 1835, "high": 1844 }
+                { "year": 2013, "low": 1835, "high": 1844, "livery": "wave" }
             ],
             [
-                { "year": 2015, "low": 1876, "high": 1880 }
+                { "year": 2015, "low": 1876, "high": 1880, "livery": "wave" }
             ]
         ],
         "new-flyer-d40lf": [
             [
-                { "year": 2002, "low": 7783, "high": 7817 }
+                { "year": 2002, "low": 7783, "high": 7787, "livery": "wave" },
+                { "year": 2002, "id": 7788, "livery": "three-stripes" },
+                { "year": 2002, "low": 7789, "high": 7804, "livery": "wave" },
+                { "year": 2002, "id": 7805, "livery": "three-stripes" },
+                { "year": 2002, "low": 7806, "high": 7817, "livery": "wave" }
             ],
             [
-                { "year": 2003, "low": 7818, "high": 7858 }
+                { "year": 2003, "low": 7818, "high": 7856, "livery": "wave" },
+                { "year": 2003, "id": 7857, "livery": "three-stripes" },
+                { "year": 2003, "id": 7858, "livery": "wave" }
             ],
             [
-                { "year": 2004, "low": 7859, "high": 7890 }
+                { "year": 2004, "low": 7859, "high": 7880, "livery": "wave" },
+                { "year": 2004, "low": 7881, "high": 7887, "livery": "three-stripes" },
+                { "year": 2004, "low": 7888, "high": 7889, "livery": "wave" },
+                { "year": 2004, "id": 7890, "livery": "three-stripes" }
             ],
             [
-                { "year": 2005, "low": 7891, "high": 7962 }
+                { "year": 2005, "low": 7891, "high": 7920, "livery": "three-stripes" },
+                { "year": 2005, "id": 7921, "livery": "wave" },
+                { "year": 2005, "low": 7922, "high": 7962, "livery": "three-stripes" }
             ],
             [
-                { "year": 2006, "low": 7963, "high": 7980 }
+                { "year": 2006, "low": 7963, "high": 7980, "livery": "three-stripes" }
             ],
             [
-                { "year": 2007, "low": 7981, "high": 8065 }
+                { "year": 2007, "low": 7981, "high": 8015, "livery": "three-stripes" },
+                { "year": 2007, "low": 8016, "high": 8065, "livery": "wave" }
             ]
         ],
         "new-flyer-d40lfr": [
             [
-                { "year": 2008, "low": 8066, "high": 8095 }
+                { "year": 2008, "low": 8066, "high": 8095, "livery": "wave" }
             ]
         ],
         "new-flyer-d60lfr": [
             [
-                { "year": 2007, "low": 6001, "high": 6006 }
+                { "year": 2007, "low": 6001, "high": 6006, "livery": "wave" }
             ],
             [
-                { "year": 2007, "low": 6007, "high": 6012 },
-                { "year": 2008, "low": 6013, "high": 6021 }
+                { "year": 2007, "low": 6007, "high": 6012, "livery": "wave" },
+                { "year": 2008, "low": 6013, "high": 6021, "livery": "wave" }
             ],
             [
-                { "year": 2008, "low": 6022, "high": 6041 }
+                { "year": 2008, "low": 6022, "high": 6041, "livery": "wave" }
             ],
             [
-                { "year": 2009, "low": 6042, "high": 6063 }
+                { "year": 2009, "low": 6042, "high": 6063, "livery": "wave" }
             ]
         ],
         "new-flyer-xd40": [
             [
-                { "year": 2013, "low": 8205, "high": 8304 },
-                { "year": 2014, "low": 8305, "high": 8354 }
+                { "year": 2013, "low": 8205, "high": 8304, "livery": "wave" },
+                { "year": 2014, "low": 8305, "high": 8354, "livery": "wave" }
             ]
         ],
         "new-flyer-xd60": [
             [
-                { "year": 2013, "low": 6064, "high": 6073 }
+                { "year": 2013, "low": 6064, "high": 6073, "livery": "wave" }
             ],
             [
-                { "year": 2014, "low": 6074, "high": 6093 }
+                { "year": 2014, "low": 6074, "high": 6093, "livery": "wave" }
             ],
             [
-                { "year": 2014, "id": 6094 }
+                { "year": 2014, "id": 6094, "livery": "wave" }
             ]
         ],
         "new-flyer-xn40": [
             [
-                { "year": 2012, "low": 8201, "high": 8202 }
+                { "year": 2012, "low": 8201, "high": 8202, "livery": "wave" }
             ]
         ],
         "nova-bus-lfs-3": [
             [
-                { "year": 2010, "low": 8101, "high": 8130 }
+                { "year": 2010, "low": 8101, "high": 8130, "livery": "wave" }
             ],
             [
-                { "year": 2010, "low": 8131, "high": 8146 },
-                { "year": 2011, "low": 8147, "high": 8158 }
+                { "year": 2010, "low": 8131, "high": 8146, "livery": "wave" },
+                { "year": 2011, "low": 8147, "high": 8158, "livery": "wave" }
             ],
             [
-                { "year": 2011, "low": 8159, "high": 8180 }
+                { "year": 2011, "low": 8159, "high": 8180, "livery": "wave" }
             ],
             [
-                { "year": 2012, "low": 8181, "high": 8200 }
+                { "year": 2012, "low": 8181, "high": 8200, "livery": "wave" }
             ]
         ],
         "nova-bus-lfs-cng": [
             [
-                { "year": 2013, "low": 8203, "high": 8204 }
+                { "year": 2013, "low": 8203, "high": 8204, "livery": "wave" }
             ],
             [
-                { "year": 2018, "low": 8355, "high": 8362 },
-                { "year": 2019, "low": 8363, "high": 8394 }
+                { "year": 2018, "low": 8355, "high": 8362, "livery": "wave" },
+                { "year": 2019, "low": 8363, "high": 8394, "livery": "wave" }
             ],
             [
-                { "year": 2019, "low": 8395, "high": 8434 },
-                { "year": 2019, "low": 8435, "high": 8464 }
+                { "year": 2019, "low": 8395, "high": 8434, "livery": "wave" },
+                { "year": 2019, "low": 8435, "high": 8464, "livery": "wave" }
             ],
             [
-                { "year": 2022, "low": 8465, "high": 8521 }
+                { "year": 2022, "low": 8465, "high": 8521, "livery": "wave" }
             ],
             [
-                { "year": 2024, "low": 8522, "high": 8596 }
+                { "year": 2024, "low": 8522, "high": 8596, "livery": "wave" }
             ],
             [
-                { "year": 2025, "low": 8597, "high": 8656 }
+                { "year": 2025, "low": 8597, "high": 8656, "livery": "wave" }
             ]
         ]
     },
     "edmonton-transit-service": {
         "alexander-dennis-enviro500": [
             [
-                { "year": 2013, "low": 8001, "high": 8014, "prefix": "S" }
+                { "year": 2013, "low": 8001, "high": 8014, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2016, "low": 8015, "high": 8016, "prefix": "S" },
-                { "year": 2016, "low": 8018, "high": 8020, "prefix": "S" }
+                { "year": 2016, "low": 8015, "high": 8016, "prefix": "S", "livery": "strathcona" },
+                { "year": 2016, "low": 8018, "high": 8020, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2017, "low": 8021, "high": 8023, "prefix": "S" }
+                { "year": 2017, "low": 8021, "high": 8023, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2018, "low": 8024, "high": 8025, "prefix": "S" }
+                { "year": 2018, "low": 8024, "high": 8025, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "byd-k9s": [
             [
-                { "year": 2017, "low": 1400, "high": 1402, "prefix": "A" }
+                { "year": 2017, "low": 1400, "high": 1402, "prefix": "A", "livery": "st-albert-green" }
             ],
             [
-                { "year": 2018, "low": 1403, "high": 1406, "prefix": "A" }
+                { "year": 2018, "low": 1403, "high": 1406, "prefix": "A", "livery": "st-albert-green" }
             ]
         ],
         "chevrolet-arboc-4500-sof-27": [
             [
-                { "year": 2019, "low": 6931, "high": 6933, "prefix": "P" }
+                { "year": 2019, "low": 6931, "high": 6933, "prefix": "P", "livery": "spruce-grove" }
             ],
             [
-                { "year": 2021, "id": 6934, "prefix": "P" }
+                { "year": 2021, "id": 6934, "prefix": "P", "livery": "spruce-grove" }
             ],
             [
-                { "year": 2021, "low": 6971, "high": 6972, "prefix": "P" }
+                { "year": 2021, "low": 6971, "high": 6972, "prefix": "P", "livery": "spruce-grove" }
             ]
         ],
         "ford-arboc-e-450-sof-27": [
             [
-                { "low": 5000, "high": 5002, "prefix": "F" }
+                { "low": 5000, "high": 5002, "prefix": "F", "livery": "fort-saskatchewan" }
             ]
         ],
         "grande-west-vicinity-30": [
             [
-                { "year": 2017, "low": 2000, "high": 2015 }
+                { "year": 2017, "low": 2000, "high": 2015, "livery": "ets" }
             ],
             [
-                { "year": 2018, "low": 2016, "high": 2048 }
+                { "year": 2018, "low": 2016, "high": 2048, "livery": "ets" }
             ]
         ],
         "new-flyer-d40lf": [
             [
-                { "year": 2002, "low": 4300, "high": 4352 }
+                { "year": 2002, "low": 4300, "high": 4352 , "livery": "ets"}
             ],
             [
-                { "year": 2003, "low": 4353, "high": 4402 }
+                { "year": 2003, "low": 4353, "high": 4402, "livery": "ets" }
             ],
             [
-                { "year": 2004, "low": 4403, "high": 4437 }
+                { "year": 2004, "low": 4403, "high": 4437, "livery": "ets" }
             ],
             [
-                { "year": 2004, "low": 4438, "high": 4477 }
+                { "year": 2004, "low": 4438, "high": 4477, "livery": "ets" }
             ],
             [
-                { "year": 2005, "low": 4478, "high": 4522 }
+                { "year": 2005, "low": 4478, "high": 4522, "livery": "ets" }
             ],
             [
-                { "year": 2005, "low": 862, "high": 864, "prefix": "A" }
+                { "year": 2005, "low": 862, "high": 864, "prefix": "A", "livery": "st-albert-stripes" }
             ]
         ],
         "new-flyer-d40lfr": [
             [
-                { "year": 2007, "low": 865, "high": 877, "prefix": "A" }
+                { "year": 2007, "low": 865, "high": 877, "prefix": "A", "livery": "st-albert-stripes" }
             ],
             [
-                { "year": 2007, "low": 4523, "high": 4753 }
+                { "year": 2007, "low": 4523, "high": 4753, "livery": "ets" }
             ],
             [
-                { "year": 2009, "low": 878, "high": 886, "prefix": "A" }
+                { "year": 2009, "low": 878, "high": 886, "prefix": "A", "livery": "st-albert-stripes" }
             ],
             [
-                { "year": 2009, "low": 4754, "high": 4874 }
+                { "year": 2009, "low": 4754, "high": 4874, "livery": "ets" }
             ],
             [
-                { "year": 2010, "id": 4875 }
+                { "year": 2010, "id": 4875, "livery": "ets" }
             ],
             [
-                { "year": 2012, "low": 4876, "high": 4879 }
+                { "year": 2012, "low": 4876, "high": 4879, "livery": "ets" }
             ]
         ],
         "new-flyer-d60lf": [
             [
-                { "year": 2006, "low": 812, "high": 818, "prefix": "A" }
+                { "year": 2006, "low": 812, "high": 818, "prefix": "A", "livery": "st-albert-stripes" }
             ]
         ],
         "new-flyer-d60lfr": [
             [
-                { "year": 2009, "low": 819, "high": 824, "prefix": "A" }
+                { "year": 2009, "low": 819, "high": 824, "prefix": "A", "livery": "st-albert-stripes" }
             ],
             [
-                { "year": 2011, "low": 4913, "high": 4932 }
+                { "year": 2011, "low": 4913, "high": 4932, "livery": "ets" }
             ],
             [
-                { "year": 2012, "low": 825, "high": 826, "prefix": "A" }
+                { "year": 2012, "low": 825, "high": 826, "prefix": "A", "livery": "st-albert-stripes" }
             ]
         ],
         "new-flyer-de40lfr": [
             [
-                { "year": 2006, "low": 6003, "high": 6004 }
+                { "year": 2006, "low": 6003, "high": 6004, "livery": "ets" }
             ]
         ],
         "new-flyer-xd40": [
             [
-                { "year": 2013, "low": 4880, "high": 4888 }
+                { "year": 2013, "low": 4880, "high": 4888, "livery": "ets" }
             ],
             [
-                { "year": 2014, "low": 887, "high": 889, "prefix": "A" }
+                { "year": 2014, "low": 887, "high": 889, "prefix": "A", "livery": "st-albert-green" }
             ],
             [
-                { "year": 2015, "low": 890, "high": 894, "prefix": "A" }
+                { "year": 2015, "low": 890, "high": 894, "prefix": "A", "livery": "st-albert-green" }
             ],
             [
-                { "year": 2016, "low": 6900, "high": 6905 }
+                { "year": 2016, "low": 6900, "high": 6905, "livery": "ets" }
             ],
             [
-                { "year": 2017, "low": 6950, "high": 6952, "prefix": "B" }
+                { "year": 2017, "low": 6950, "high": 6952, "prefix": "B", "livery": "spruce-grove" }
             ],
             [
-                { "year": 2018, "low": 7000, "high": 7109 }
+                { "year": 2018, "low": 7000, "high": 7109, "livery": "ets" }
             ],
             [
-                { "year": 2019, "low": 7110, "high": 7201 }
+                { "year": 2019, "low": 7110, "high": 7201, "livery": "ets" }
             ],
             [
-                { "year": 2022, "low": 7202, "high": 7218 }
+                { "year": 2022, "low": 7202, "high": 7218, "livery": "ets" }
             ],
             [
-                { "year": 2023, "low": 7219, "high": 7236 }
+                { "year": 2023, "low": 7219, "high": 7236, "livery": "ets" }
             ],
             [
-                { "year": 2024, "low": 7237, "high": 7267 }
+                { "year": 2024, "low": 7237, "high": 7267, "livery": "ets" }
             ],
             [
-                { "year": 2026, "low": 7268, "high": 7309 }
+                { "year": 2026, "low": 7268, "high": 7309, "livery": "ets" }
             ]
         ],
         "new-flyer-xd60": [
             [
-                { "year": 2019, "low": 4933, "high": 4967 }
+                { "year": 2019, "low": 4933, "high": 4967, "livery": "ets" }
             ],
             [
-                { "year": 2020, "low": 827, "high": 831, "prefix": "A" }
+                { "year": 2020, "low": 827, "high": 831, "prefix": "A", "livery": "st-albert-green" }
             ]
         ],
         "new-flyer-xhe40": [
             [
-                { "year": 2022, "id": 5001, "prefix": "S" }
+                { "year": 2022, "id": 5001, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2022, "id": 6016 }
+                { "year": 2022, "id": 6016, "livery": "ets" }
             ]
         ],
         "nova-bus-lfs-2": [
             [
-                { "year": 2008, "low": 2001, "high": 2009, "prefix": "S" }
+                { "year": 2008, "low": 2001, "high": 2009, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "nova-bus-lfs-3": [
             [
-                { "year": 2010, "low": 2010, "high": 2023, "prefix": "S" }
+                { "year": 2010, "low": 2010, "high": 2023, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2011, "low": 2024, "high": 2028, "prefix": "S" }
+                { "year": 2011, "low": 2024, "high": 2028, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "nova-bus-lfs-4": [
             [
-                { "year": 2020, "low": 2029, "high": 2033, "prefix": "S" }
+                { "year": 2020, "low": 2029, "high": 2033, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2022, "low": 2034, "high": 2037, "prefix": "S" }
+                { "year": 2022, "low": 2034, "high": 2037, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2025, "low": 940, "high": 949, "prefix": "A" }
+                { "year": 2025, "low": 940, "high": 949, "prefix": "A", "livery": "st-albert-green" }
             ],
             [
-                { "year": 2025, "low": 2038, "high": 2042, "prefix": "S" }
+                { "year": 2025, "low": 2038, "high": 2042, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "nova-bus-lfs-artic-4": [
             [
-                { "year": 2025, "low": 832, "high": 834, "prefix": "A" }
+                { "year": 2025, "low": 832, "high": 834, "prefix": "A", "livery": "st-albert-green" }
             ]
         ],
         "nova-bus-lfs-hev-3": [
             [
-                { "year": 2010, "low": 3005, "high": 3010, "prefix": "S" }
+                { "year": 2010, "low": 3005, "high": 3010, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "nova-bus-lfs-suburban-2": [
             [
-                { "year": 2007, "low": 930, "high": 936, "prefix": "S" }
+                { "year": 2007, "low": 930, "high": 936, "prefix": "S", "livery": "strathcona" }
             ]
         ],
         "proterra-zx5max": [
             [
-                { "year": 2020, "low": 8000, "high": 8039 }
+                { "year": 2020, "low": 8000, "high": 8039, "livery": "ets" }
             ],
             [
-                { "year": 2022, "low": 8040, "high": 8059 }
+                { "year": 2022, "low": 8040, "high": 8059, "livery": "ets" }
             ]
         ]
     },
     "grande-prairie-transit": {
         "byd-k7m": [
             [
-                { "year": 2018, "low": 29, "high": 30, "prefix": "CTB-0" }
+                { "year": 2018, "low": 29, "high": 30, "prefix": "CTB-0", "livery": "grande-prairie" }
             ],
             [
-                { "year": 2019, "low": 32, "high": 34, "prefix": "CTB-0" }
+                { "year": 2019, "low": 32, "high": 34, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ],
         "ford-champion-e-450-challenger": [
             [
-                { "year": 2021, "low": 35, "high": 38, "prefix": "CTB-0" }
+                { "year": 2021, "low": 35, "high": 38, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ],
         "grande-west-vicinity-30": [
             [
-                { "year": 2017, "low": 25, "high": 28, "prefix": "CTB-0" }
+                { "year": 2017, "low": 25, "high": 28, "prefix": "CTB-0", "livery": "grande-prairie" }
             ],
             [
-                { "year": 2018, "id": 31, "prefix": "CTB-0" }
+                { "year": 2018, "id": 31, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ],
         "new-flyer-d40lfr": [
             [
-                { "year": 2009, "low": 13, "high": 16, "prefix": "CTB-0" }
+                { "year": 2009, "low": 13, "high": 16, "prefix": "CTB-0", "livery": "grande-prairie" }
             ],
             [
-                { "year": 2010, "low": 17, "high": 20, "prefix": "CTB-0" }
+                { "year": 2010, "low": 17, "high": 20, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ],
         "new-flyer-xd35": [
             [
-                { "year": 2022, "low": 39, "high": 40, "prefix": "CTB-0" }
+                { "year": 2022, "low": 39, "high": 40, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ],
         "nova-bus-lfs-4": [
             [
-                { "year": 2015, "low": 21, "high": 24, "prefix": "CTB-0" }
+                { "year": 2015, "low": 21, "high": 24, "prefix": "CTB-0", "livery": "grande-prairie" }
             ]
         ]
     },
