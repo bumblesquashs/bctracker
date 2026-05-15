@@ -17,7 +17,6 @@ database = Database()
 database.connect()
 
 date_range = DateRange(Date(2025, 3, 30, DEFAULT_TIMEZONE), Date.today())
-# date_range = DateRange(Date(2025, 4, 1, DEFAULT_TIMEZONE), Date(2025, 4, 1, DEFAULT_TIMEZONE))
 
 def update_records(agency_id):
     ACCURATE_SECONDS = agency_id == 'medicine-hat-transit'
