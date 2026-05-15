@@ -99,7 +99,7 @@
                                 % include('components/trip')
                             </td>
                         % else:
-                            <td colspan="3">
+                            <td colspan="{{ '3' if context.enable_blocks else '2' }}">
                                 <div class="column">
                                     <span class="lighter-text">Not In Service</span>
                                     <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>

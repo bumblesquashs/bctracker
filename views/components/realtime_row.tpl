@@ -49,7 +49,7 @@
             % include('components/trip')
         </td>
     % else:
-        <td colspan="3">
+        <td colspan="{{ '3' if context.enable_blocks else '2' }}">
             <div class="column">
                 <div class="lighter-text">Not In Service</div>
                 % if stop:
