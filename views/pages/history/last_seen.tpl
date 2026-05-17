@@ -252,6 +252,9 @@
                                     </tr>
                                     <tr class="display-none"></tr>
                                     % for allocation in order_allocations:
+                                        % if allocation.last_date is None:
+                                            % print(allocation.last_record is None)
+                                        % end
                                         % vehicle = allocation.vehicle
                                         % record = allocation.last_record
                                         <tr>
@@ -282,15 +285,17 @@
                                                 % if record:
                                                     <td>
                                                         <div class="column stretch">
-                                                            <div class="row space-between">
-                                                                % if record.is_available:
-                                                                    % block = record.block
-                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                % else:
-                                                                    <span>{{ record.block_id }}</span>
-                                                                % end
-                                                                % include('components/record_warnings')
-                                                            </div>
+                                                            % if record.block_id:
+                                                                <div class="row space-between">
+                                                                    % if record.is_available:
+                                                                        % block = record.block
+                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                    % else:
+                                                                        <span>{{ record.block_id }}</span>
+                                                                    % end
+                                                                    % include('components/record_warnings')
+                                                                </div>
+                                                            % end
                                                             <div class="non-desktop">
                                                                 % include('components/route_list', routes=record.routes)
                                                             </div>

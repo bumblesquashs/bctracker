@@ -29,14 +29,16 @@ class Record:
     def from_db(cls, row: Row):
         '''Returns a record initialized from the given database row'''
         id = row['id']
+        if id is None:
+            raise ValueError()
         allocation_id = row['allocation_id']
         context = row.context()
         vehicle = context.find_vehicle(row['vehicle_id'])
         date = Date.parse(row['date'], context.timezone)
         block_id = row['block_id']
-        if 'route_numbers' in row:
+        try:
             route_numbers = [n.strip() for n in row['route_numbers'].split(',')]
-        else:
+        except:
             route_numbers = []
         start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
         end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
@@ -66,7 +68,7 @@ class Record:
     @property
     def is_available(self):
         '''Checks if this record has an associated block'''
-        return self.block is not None
+        return self.block_id is None or self.block is not None
     
     @property
     def routes(self):
