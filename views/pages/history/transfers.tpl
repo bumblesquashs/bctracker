@@ -40,11 +40,9 @@
                         </div>
                         <script>
                             function setFilter(filter) {
-                                if (filter === null) {
-                                    window.location = "{{ context.url('history', 'transfers') }}";
-                                } else {
-                                    window.location = "{{ context.url('history', 'transfers') }}?filter=" + filter;
-                                }
+                                window.location = getURL(currentAgencyID, currentSystemID, "history/transfers", false, {
+                                    "filter": filter
+                                });
                             }
                         </script>
                     </div>

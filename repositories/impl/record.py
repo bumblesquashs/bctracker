@@ -56,7 +56,7 @@ class RecordRepository:
             }
         )
     
-    def find_all(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
+    def find_all(self, context: Context, vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
         '''Returns all records that match the given context, vehicle, block, and trip'''
         joins = {
             'allocation': {
@@ -155,7 +155,7 @@ class RecordRepository:
         )
         return {row['block_id']: context.find_vehicle(row['vehicle_id']) for row in rows}
     
-    def count(self, context: Context = Context(), vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None) -> int:
+    def count(self, context: Context, vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None) -> int:
         '''Returns the number of records for the given system, vehicle, block, and trip'''
         joins = {
             'allocation': {
