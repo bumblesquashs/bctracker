@@ -95,7 +95,6 @@
                                         % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % trip = position.trip
-                                    % block = trip.block
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
@@ -113,8 +112,11 @@
                                         </div>
                                     </td>
                                     % if context.enable_blocks:
+                                        % block = trip.block
                                         <td class="non-mobile">
-                                            <a href="{{ block.url() }}">{{ block.id }}</a>
+                                            % if block:
+                                                <a href="{{ block.url() }}">{{ block.id }}</a>
+                                            % end
                                         </td>
                                     % end
                                     <td class="non-mobile">

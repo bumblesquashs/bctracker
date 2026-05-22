@@ -85,15 +85,15 @@ class GTFSService:
         trips = repositories.trip.find_all(context)
         context.system.trips = {t.id: t for t in trips}
         
-        block_trips = {}
-        for trip in trips:
-            block_trips.setdefault(trip.block_id, []).append(trip)
-        
         routes = repositories.route.find_all(context)
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
+        if context.enable_blocks:
+            block_trips = {}
+            for trip in trips:
+                block_trips.setdefault(trip.block_id, []).append(trip)
+            context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
         context.system.reset_caches()
