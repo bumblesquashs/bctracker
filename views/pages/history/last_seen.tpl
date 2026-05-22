@@ -206,8 +206,8 @@
                                                     <td>
                                                         <div class="column stretch">
                                                             <div class="row space-between">
-                                                                % if record.is_available:
-                                                                    % block = record.block
+                                                                % block = record.block
+                                                                % if block:
                                                                     <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                 % else:
                                                                     <span>{{ record.block_id }}</span>
@@ -287,8 +287,8 @@
                                                         <div class="column stretch">
                                                             % if record.block_id:
                                                                 <div class="row space-between">
-                                                                    % if record.is_available:
-                                                                        % block = record.block
+                                                                    % block = record.block
+                                                                    % if block:
                                                                         <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                     % else:
                                                                         <span>{{ record.block_id }}</span>
