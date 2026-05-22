@@ -51,6 +51,11 @@ class GTFSService:
         
         try:
             calendar_services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
+            calendar_service_ids = {s.id for s in calendar_services}
+            missing_service_ids = {s for s in service_exceptions.keys() if s not in calendar_service_ids}
+            for missing_id in missing_service_ids:
+                exceptions = service_exceptions[missing_id]
+                calendar_services.append(Service.combine(context, missing_id, exceptions))
         except:
             calendar_services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
@@ -80,15 +85,15 @@ class GTFSService:
         trips = repositories.trip.find_all(context)
         context.system.trips = {t.id: t for t in trips}
         
-        block_trips = {}
-        for trip in trips:
-            block_trips.setdefault(trip.block_id, []).append(trip)
-        
         routes = repositories.route.find_all(context)
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
+        if context.enable_blocks:
+            block_trips = {}
+            for trip in trips:
+                block_trips.setdefault(trip.block_id, []).append(trip)
+            context.system.blocks = {id: Block(context.agency, context.system, id, trips) for id, trips in block_trips.items()}
         
         context.system.gtfs_loaded = True
         context.system.reset_caches()

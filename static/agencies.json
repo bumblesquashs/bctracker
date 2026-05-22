@@ -43,7 +43,8 @@
         "default_system": "medicine-hat",
         "vehicle_name_length": 3,
         "prefix_headsigns": true,
-        "distance_scale": 1000
+        "distance_scale": 1000,
+        "enable_blocks": false
     },
     "red-deer-transit": {
         "name": "Red Deer Transit",
@@ -64,6 +65,7 @@
         "prefer_stop_id": true,
         "show_stop_number": false,
         "distance_scale": 1000,
+        "enable_blocks": false,
         "invalid_realtime_percentage": 0.5
     },
     "woosh": {

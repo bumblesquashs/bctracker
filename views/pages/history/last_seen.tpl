@@ -214,15 +214,17 @@
                                                     % if record:
                                                         <td>
                                                             <div class="column stretch">
-                                                                <div class="row space-between">
-                                                                    % if record.is_available:
+                                                                % if record.block_id:
+                                                                    <div class="row space-between">
                                                                         % block = record.block
-                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                    % else:
-                                                                        <span>{{ record.block_id }}</span>
-                                                                    % end
-                                                                    % include('components/record_warnings')
-                                                                </div>
+                                                                        % if block:
+                                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                        % else:
+                                                                            <span>{{ record.block_id }}</span>
+                                                                        % end
+                                                                        % include('components/record_warnings')
+                                                                    </div>
+                                                                % end
                                                                 <div class="non-desktop">
                                                                     % include('components/route_list', routes=record.routes)
                                                                 </div>
@@ -291,15 +293,17 @@
                                                     % if record:
                                                         <td>
                                                             <div class="column stretch">
-                                                                <div class="row space-between">
-                                                                    % if record.is_available:
+                                                                % if record.block_id:
+                                                                    <div class="row space-between">
                                                                         % block = record.block
-                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                    % else:
-                                                                        <span>{{ record.block_id }}</span>
-                                                                    % end
-                                                                    % include('components/record_warnings')
-                                                                </div>
+                                                                        % if block:
+                                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                        % else:
+                                                                            <span>{{ record.block_id }}</span>
+                                                                        % end
+                                                                        % include('components/record_warnings')
+                                                                    </div>
+                                                                % end
                                                                 <div class="non-desktop">
                                                                     % include('components/route_list', routes=record.routes)
                                                                 </div>
