@@ -247,7 +247,7 @@
                     routeLine.style.backgroundColor = "#" + position.colour;
                     
                     let headsign = "";
-                    if (position.headsign.includes("/")) {
+                    if (position.enable_stacked_headsigns && position.headsign.includes("/")) {
                         const headsignParts = position.headsign.split("/", 2);
                         headsign = "<div class='column'>" + headsignParts[0] + "<div class='lighter-text'>" + headsignParts[1] + "</div></div>";
                     } else {
