@@ -25,6 +25,10 @@ class Vehicle:
     visible: bool = True
     demo: bool = False,
     livery: str | None = None
+    length: float | None = None
+    length_units: str | None = None
+    fuel: str | None = None
+    capacity: dict[str, str] = field(default_factory=dict)
     accessible: bool = False
     air_conditioned: bool = False
     usb_charging: bool = False

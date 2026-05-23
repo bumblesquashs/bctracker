@@ -1573,19 +1573,19 @@ class Server(Bottle):
         vehicle_records = {}
         for favourite in favourites:
             if favourite.type == 'route':
-                route_positions[favourite.value.id] = repositories.position.find_all(favourite.value.context, route_id=favourite.value.id)
+                route_positions[favourite] = repositories.position.find_all(favourite.value.context, route_id=favourite.value.id)
             elif favourite.type == 'stop':
                 departures = favourite.value.find_departures(date=context.today)
-                stop_departures[favourite.value.id] = departures
+                stop_departures[favourite] = departures
                 trip_ids = [d.trip_id for d in departures]
                 positions = repositories.position.find_all(favourite.value.context, trip_id=trip_ids)
                 assignments = repositories.assignment.find_all(favourite.value.context, stop_id=favourite.value.id)
-                stop_positions[favourite.value.id] = {p.trip.id: p for p in positions}
-                stop_assignments[favourite.value.id] = {a.block_id: a for a in assignments}
+                stop_positions[favourite] = {p.trip.id: p for p in positions}
+                stop_assignments[favourite] = {a.block_id: a for a in assignments}
             elif favourite.type == 'vehicle':
-                vehicle_positions[favourite.value.id] = repositories.position.find(favourite.value.agency.id, favourite.value.id)
-                vehicle_allocations[favourite.value.id] = repositories.allocation.find_active(favourite.value.context.without_system(), favourite.value.id)
-                vehicle_records[favourite.value.id] = repositories.record.find_all(favourite.value.context.without_system(), vehicle_id=favourite.value.id, limit=5)
+                vehicle_positions[favourite] = repositories.position.find(favourite.value.agency.id, favourite.value.id)
+                vehicle_allocations[favourite] = repositories.allocation.find_active(favourite.value.context.without_system(), favourite.value.id)
+                vehicle_records[favourite] = repositories.record.find_all(favourite.value.context.without_system(), vehicle_id=favourite.value.id, limit=5)
         order_ids = {f.value.order_id for f in favourites if f.type == 'vehicle' and f.value.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(

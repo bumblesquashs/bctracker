@@ -232,6 +232,13 @@
                 }
             }
             
+            function setLiveryTheme(theme) {
+                if (theme !== "") {
+                    setCookie("theme", theme);
+                    location.reload();
+                }
+            }
+            
             function getTimestampOffset() {
                 const currentLocal = new Date().getTime();
                 const currentRemote = parseFloat("{{ timestamp.value }}") * 1000;
@@ -279,6 +286,7 @@
         % include('components/svg_script', name='model/type/bus-conventional')
         % include('components/svg_script', name='model/type/bus-decker')
         % include('components/svg_script', name='model/type/bus-midibus')
+        % include('components/svg_script', name='model/type/bus-trolley')
         % include('components/svg_script', name='model/type/bus-shuttle')
         % include('components/svg_script', name='model/type/ferry')
         % include('components/svg_script', name='ghost')

@@ -193,7 +193,7 @@
                             </thead>
                             <tbody>
                                 % for position in unknown_positions:
-                                    % include('components/realtime_row', position=position)
+                                    % include('components/realtime_row', position=position, enable_blocks=agency.enable_blocks)
                                 % end
                             </tbody>
                         </table>

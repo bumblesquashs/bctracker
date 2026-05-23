@@ -256,11 +256,10 @@ class Context:
                 query_args['system'] = self.system_id
         elif self.agency_id:
             if self.agency and self.agency.default_system:
-                system = repositories.system.find(self.agency.default_system)
                 if settings.current.system_domain:
-                    url = settings.current.system_domain.format(system.id, path)
+                    url = settings.current.system_domain.format(self.agency.default_system, path)
                 else:
-                    query_args['system'] = system.id
+                    query_args['system'] = self.agency.default_system
             else:
                 if settings.current.agency_domain:
                     url = settings.current.agency_domain.format(self.agency_id, path)
