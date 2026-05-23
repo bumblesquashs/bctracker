@@ -51,7 +51,10 @@ class PositionRepository:
         except AttributeError:
             bearing = None
         try:
-            speed = int(data.position.speed * 3.6)
+            if data.position.HasField('speed'):
+                speed = int(data.position.speed * 3.6)
+            else:
+                speed = None
         except AttributeError:
             speed = None
         trip = context.system.get_trip(trip_id)

@@ -19,6 +19,7 @@ class Settings:
     
     # Key settings
     analytics_key: str | None = None
+    translink_api_key: str | None = None
     
     # Functionality settings
     enable_analytics: bool = True
@@ -41,6 +42,7 @@ class Settings:
         self.cookie_domain = config.get('cookie_domain')
         
         self.analytics_key = config.get('analytics_key')
+        self.translink_api_key = config.get('translink_api_key')
         
         self.enable_analytics = config.get('enable_analytics', 'true') == 'true'
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'

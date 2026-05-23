@@ -39,19 +39,21 @@
                                 <div>{{ headsign }}</div>
                             % end
                         </div>
-                        % variants = [r for r in route.context.system.get_routes() if route.is_variant(r)]
-                        % if variants:
-                            <div class="column gap-5 section">
-                                <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
-                                <div class="column">
-                                    % for variant in variants:
-                                        <div class="row">
-                                            % include('components/route', route=variant)
-                                            <a href="{{ variant.url() }}">{{! variant.display_name }}</a>
-                                        </div>
-                                    % end
+                        % if context.enable_route_variants:
+                            % variants = [r for r in route.context.system.get_routes() if route.is_variant(r)]
+                            % if variants:
+                                <div class="column gap-5 section">
+                                    <div class="lighter-text">Route {{ 'Variant' if len(variants) == 1 else 'Variants' }}</div>
+                                    <div class="column">
+                                        % for variant in variants:
+                                            <div class="row">
+                                                % include('components/route', route=variant)
+                                                <a href="{{ variant.url() }}">{{! variant.display_name }}</a>
+                                            </div>
+                                        % end
+                                    </div>
                                 </div>
-                            </div>
+                            % end
                         % end
                     </div>
                 </div>
@@ -196,7 +198,7 @@
                                                         % if not start_time.is_unknown and not last_start_time:
                                                             % last_start_time = start_time
                                                         % end
-                                                        <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
+                                                        <tr class="{{'divider' if last_start_time and start_time.hour > last_start_time.hour else ''}}">
                                                             <td>{{ trip.start_time.format_web(time_format) }}</td>
                                                             <td class="desktop-only">
                                                                 % include('components/headsign')

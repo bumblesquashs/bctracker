@@ -854,8 +854,16 @@
                 { "year": 2012, "low": 1201, "high": 1217, "livery": "sweep-r-west-van-light" }
             ],
             [
+                { "year": 2012, "low": 81201, "high": 81217, "livery": "sweep-r-west-van-light" }
+            ],
+            [
                 { "year": 2016, "low": 1601, "high": 1605, "livery": "sweep-r-west-van-charcoal" },
                 { "year": 2016, "low": 1606, "high": 1614, "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2016, "low": 16601, "high": 16605, "livery": "sweep-r-west-van-charcoal" },
+                { "year": 2016, "low": 16131, "high": 16136, "livery": "sweep-r-charcoal" },
+                { "year": 2016, "low": 16138, "high": 16140, "livery": "sweep-r-charcoal" }
             ],
             [
                 { "year": 2016, "low": 16101, "high": 16130, "livery": "sweep-r-charcoal" },
@@ -918,6 +926,9 @@
                 { "year": 2007, "low": 701, "high": 706, "livery": "sweep-r-west-van-light", "air_conditioned": false }
             ],
             [
+                { "year": 2007, "low": 80701, "high": 80706, "livery": "sweep-r-west-van-light", "air_conditioned": false }
+            ],
+            [
                 { "year": 2007, "low": 9605, "high": 9699, "livery": "sweep-r-light", "air_conditioned": false },
                 { "year": 2007, "low": 9701, "high": 9725, "livery": "sweep-r-light", "air_conditioned": false }
             ],
@@ -929,6 +940,9 @@
         "nova-bus-lfs-3": [
             [
                 { "year": 2009, "low": 901, "high": 909, "livery": "sweep-r-west-van-light", "air_conditioned": false }
+            ],
+            [
+                { "year": 2009, "low": 80901, "high": 80909, "livery": "sweep-r-west-van-light", "air_conditioned": false }
             ],
             [
                 { "year": 2009, "low": 9543, "high": 9581, "livery": "sweep-r-light", "air_conditioned": false },

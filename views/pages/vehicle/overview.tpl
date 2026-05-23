@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                         </div>
-                        % if show_speed:
+                        % if show_speed and position.speed is not None:
                             <div class="row section">
                                 <div class="name">Speed</div>
                                 <div class="value">{{ position.speed }} km/h</div>

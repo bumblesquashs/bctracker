@@ -16,6 +16,7 @@ from models.stop import Stop, StopCache
 from models.trip import Trip, TripCache
 
 import repositories
+import settings
 
 from constants import *
 
@@ -90,6 +91,8 @@ class System:
             url = self.agency.realtime_url
             if self.remote_id:
                 url = url.replace('$REMOTE_ID', str(self.remote_id))
+            if settings.current.translink_api_key:
+                url = url.replace('$TRANSLINK_API_KEY', str(settings.current.translink_api_key))
             return url
         return None
     

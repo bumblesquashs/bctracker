@@ -182,6 +182,12 @@
                             <div>Speed</div>
                         </div>
                     % end
+                    % if vehicle_marker_style == 'livery':
+                        <div class="option" onclick="setVehicleMarkerStyle('livery')">
+                            <div class="radio-button {{ 'selected' if vehicle_marker_style == 'livery' else '' }}"></div>
+                            <div>Livery</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>

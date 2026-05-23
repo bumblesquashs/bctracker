@@ -29,6 +29,15 @@
             "fuel": "Diesel/Electric Hybrid"
         }
     },
+    "artic_trolley": {
+        "new-flyer-e60lfr": {
+            "manufacturer": "New Flyer",
+            "name": "E60LFR",
+            "length": 60,
+            "length_units": "feet",
+            "fuel": "Trolley Electric"
+        }
+    },
     "conventional": {
         "byd-k9": {
             "manufacturer": "BYD",
@@ -470,13 +479,6 @@
             "manufacturer": "New Flyer",
             "name": "E40LFR",
             "length": 40,
-            "length_units": "feet",
-            "fuel": "Trolley Electric"
-        },
-        "new-flyer-e60lfr": {
-            "manufacturer": "New Flyer",
-            "name": "E60LFR",
-            "length": 60,
             "length_units": "feet",
             "fuel": "Trolley Electric"
         }

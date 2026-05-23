@@ -6,6 +6,7 @@ class ModelType(Enum):
     '''A type of vehicle model'''
     
     artic = "Articulated"
+    artic_trolley = "Articulated Trolley"
     conventional = "Conventional"
     decker = "Double Decker"
     midibus = "Midibus"
@@ -41,6 +42,8 @@ class ModelType(Enum):
     def image_name(self):
         if self == ModelType.ferry:
             return self.name
+        if self == ModelType.artic_trolley:
+            return f'bus-artic-trolley'
         return f'bus-{self.name}'
 
 @dataclass(slots=True)

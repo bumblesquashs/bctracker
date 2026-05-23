@@ -423,7 +423,7 @@ class Server(Bottle):
             file='realtime/speed',
             title='Realtime',
             path=['realtime', 'speed'],
-            positions=positions,
+            positions=[p for p in positions if p.speed is not None],
             show_nis=show_nis
         )
     

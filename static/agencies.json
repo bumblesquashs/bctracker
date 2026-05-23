@@ -92,7 +92,17 @@
     "translink": {
         "name": "Translink",
         "website": "https://translink.ca",
+        "gtfs_url": "https://gtfs-static.translink.ca/gtfs/google_transit.zip",
+        "realtime_url": "https://gtfsapi.translink.ca/v3/gtfsposition?apikey=$TRANSLINK_API_KEY",
         "default_system": "vancouver",
-        "enabled": false
+        "enable_route_variants": false,
+        "enable_stacked_headsigns": true,
+        "default_route_colour": "0082C8",
+        "custom_route_numbers": {
+            "30053": "EL",
+            "30052": "ML",
+            "13686": "CL",
+            "6771": "SB"
+        }
     }
 }

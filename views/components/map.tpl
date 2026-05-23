@@ -236,19 +236,27 @@
             content.appendChild(model);
             
             if (!position.offline) {
-                const headsign = document.createElement("div");
+                const headsignElement = document.createElement("div");
                 if (position.headsign === "Not In Service") {
-                    headsign.innerHTML = position.headsign;
+                    headsignElement.innerHTML = position.headsign;
                 } else {
-                    headsign.className = "headsign";
+                    headsignElement.className = "headsign";
                 
                     const routeLine = document.createElement("div");
                     routeLine.className = "route-line";
                     routeLine.style.backgroundColor = "#" + position.colour;
                     
-                    headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                    let headsign = "";
+                    if (position.headsign.includes("/")) {
+                        const headsignParts = position.headsign.split("/", 2);
+                        headsign = "<div class='column'>" + headsignParts[0] + "<div class='lighter-text'>" + headsignParts[1] + "</div></div>";
+                    } else {
+                        headsign = position.headsign;
+                    }
+                    
+                    headsignElement.innerHTML = routeLine.outerHTML + headsign;
                 }
-                content.appendChild(headsign);
+                content.appendChild(headsignElement);
             }
             
             const footer = document.createElement("div");

@@ -134,6 +134,18 @@ class Context:
         return DEFAULT_ENABLE_BLOCKS
     
     @property
+    def enable_route_variants(self):
+        if self.agency:
+            return self.agency.enable_route_variants
+        return DEFAULT_ENABLE_ROUTE_VARIANTS
+    
+    @property
+    def enable_stacked_headsigns(self):
+        if self.agency:
+            return self.agency.enable_stacked_headsigns
+        return DEFAULT_ENABLE_STACKED_HEADSIGNS
+    
+    @property
     def nis_colour(self):
         if self.agency:
             return self.agency.nis_colour
