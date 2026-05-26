@@ -564,7 +564,7 @@
             [
                 { "low": 0, "high": 30, "visible": false },
                 { "id": 1111, "visible": false },
-                { "id": 7405, "visible": false },
+                { "low": 7404, "high": 7405, "visible": false },
                 { "low": 9980, "high": 9999, "visible": false }
             ]
         ]
