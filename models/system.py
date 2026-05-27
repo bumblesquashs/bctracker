@@ -166,7 +166,7 @@ class System:
         return sorted(self.sheets)
     
     def copy_sheets(self, services):
-        copies = [s.copy(services) for s in self.get_sheets()]
+        copies = [s.copy([s for s in services if s]) for s in self.get_sheets()]
         return [s for s in copies if s]
     
     def get_stop(self, stop_id=None, number=None):

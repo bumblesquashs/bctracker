@@ -49,7 +49,7 @@ class Block:
         return self._related_blocks
     
     def __post_init__(self):
-        services = {t.service for t in self.trips}
+        services = {t.service for t in self.trips if t.service}
         self.schedule = Schedule.combine(services)
         self.sheets = self.system.copy_sheets(services)
     
