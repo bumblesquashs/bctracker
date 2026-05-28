@@ -308,6 +308,15 @@
                 "Vehicles": 358
             }
         },
+        "summit-class": {
+            "name": "Summit Class",
+            "length_units": "metres",
+            "fuel": "Diesel/Electric Hybrid",
+            "capacity": {
+                "Passengers/Crew": 2100,
+                "Vehicles": 360
+            }
+        },
         "t-class": {
             "name": "T Class",
             "length_units": "metres",

@@ -183,6 +183,14 @@
                 { "year": 1994, "id": "spirit-of-vancouver-island", "name": "Spirit of Vancouver Island", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true }
             ]
         ],
+        "summit-class": [
+            [
+                { "id": "summit-arbutus", "name": "Summit Arbutus", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true  },
+                { "id": "summit-cedar", "name": "Summit Cedar", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true  },
+                { "id": "summit-maple", "name": "Summit Maple", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true  },
+                { "id": "summit-spruce", "name": "Summit Spruce", "dining": true, "gift_shop": true, "kids_area": true, "pet_area": true, "work_area": true  }
+            ]
+        ],
         "t-class": [
             [
                 {
