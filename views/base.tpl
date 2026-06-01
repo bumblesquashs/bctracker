@@ -168,13 +168,13 @@
                 }
                 
                 if (systemID) {
-                    if (internal || "{{ settings.system_domain }}" === "") {
+                    if ((internal && currentSystemID === null) || "{{ settings.system_domain }}" === "") {
                         query.push("system=" + systemID);
                     } else {
                         url = "{{ settings.system_domain }}".format(systemID, path);
                     }
                 } else if (agencyID) {
-                    if (internal || "{{ settings.agency_domain }}" === "") {
+                    if ((internal && currentAgencyID === null) || "{{ settings.agency_domain }}" === "") {
                         query.push("agency=" + agencyID);
                     } else {
                         url = "{{ settings.agency_domain }}".format(agencyID, path);
