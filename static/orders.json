@@ -748,6 +748,9 @@
             ],
             [
                 { "year": 2025, "low": 25601, "high": 25627, "livery": "blue-top" }
+            ],
+            [
+                { "year": 2026, "low": 26601, "high": 26624, "livery": "blue-sweep" }
             ]
         ],
         "ford-girardin-e450-g5": [
@@ -970,7 +973,7 @@
                 { "year": 2025, "low": 25101, "high": 25184, "livery": "blue-top" }
             ],
             [
-                { "year": 2026, "low": 26101, "high": 26130, "livery": "blue-top" }
+                { "year": 2026, "low": 26101, "high": 26130, "livery": "blue-sweep" }
             ]
         ],
         "nova-bus-lfs-hev-3": [

@@ -47,6 +47,9 @@
         },
         "blue-top": {
             "name": "Blue Top"
+        },
+        "blue-sweep": {
+            "name": "Blue Sweep"
         }
     }
 }
