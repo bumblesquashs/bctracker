@@ -305,7 +305,10 @@ class Server(Bottle):
             if duration >= 10:
                 services.log.warning(f'Slow response to {request.path} ({round(duration, 2)}s)')
             return result
-        self.route(path, method, callback=endpoint)
+        paths = [path]
+        if path != '/':
+            paths.append(path + '/')
+        self.route(paths, method, callback=endpoint)
     
     # =============================================================
     # Static Files
