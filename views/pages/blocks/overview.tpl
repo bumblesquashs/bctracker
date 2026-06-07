@@ -142,8 +142,8 @@
                     </div>
                 </div>
             </div>
-
-            % include('components/top_button')
+            
+            % include('components/section_navigation')
         % else:
             <div class="placeholder">
                 <h3>{{ context }} block information is unavailable</h3>

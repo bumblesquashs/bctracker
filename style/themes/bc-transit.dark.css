@@ -47,6 +47,10 @@
     --map-control-background-hover: rgba(30, 30, 30, 0.7);
     --map-control-icon: #FFFFFF;
     
+    --section-navigation-background: rgba(30, 30, 30, 0.7);
+    --section-navigation-background-hover: rgba(0, 0, 0, 0.7);
+    --section-navigation-icon: #FFFFFF;
+    
     --amenity-background: #565656;
     --amenity-color: #FFFFFF;
 }
@@ -222,6 +226,10 @@ table tr.table-button:hover {
 
 #search-results .result .description {
     color: #ABABAB;
+}
+
+#section-navigation {
+    --tooltip-background: #000000;
 }
 
 #status-bar {

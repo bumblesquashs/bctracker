@@ -39,6 +39,14 @@ table th {
     overflow: hidden;
 }
 
+#content.search-visible #section-navigation {
+    display: none;
+}
+
+#content.search-visible #main {
+    padding-right: 0px;
+}
+
 #favourite-systems-dropdown {
     position: absolute;
     top: 100%;
@@ -168,6 +176,17 @@ table th {
 
 #search-results .result .description {
     font-size: 11pt;
+}
+
+#section-navigation {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    flex-direction: column;
+}
+
+#section-navigation .section-navigation-button:hover {
+    background-color: var(--section-navigation-background-hover);
 }
 
 #status-bar {

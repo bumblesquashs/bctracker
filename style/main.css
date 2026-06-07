@@ -159,6 +159,7 @@ table tr.table-button {
 
 #content {
     flex: 1;
+    position: relative;
 }
 
 #favourite-systems-dropdown {
@@ -232,7 +233,6 @@ table tr.table-button {
 
 #main {
     flex: 1;
-    position: relative;
 }
 
 #map.full-screen {
@@ -498,6 +498,34 @@ table tr.table-button {
     flex-direction: column;
 }
 
+#section-navigation {
+    position: fixed;
+    z-index: 20;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    background-color: var(--section-navigation-background);
+    user-select: none;
+}
+
+#section-navigation .section-navigation-button {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px;
+    --image-size: 18px;
+    --image-color: var(--section-navigation-icon);
+}
+
+#section-navigation .section-navigation-button.disabled {
+    opacity: 0.3;
+}
+
+#section-navigation .section-navigation-button.disabled:hover {
+    cursor: default;
+    background-color: unset;
+}
+
 #settings.collapsed {
     display: none !important;
 }
@@ -539,13 +567,6 @@ table tr.table-button {
 #system-menu .system-button.current {
     font-weight: bold;
     cursor: default;
-}
-
-#top-button {
-    position: fixed;
-    right: 40px;
-    bottom: 20px;
-    display: none;
 }
 
 #title {

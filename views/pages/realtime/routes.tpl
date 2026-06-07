@@ -193,7 +193,7 @@
         % end
     </div>
     
-    % include('components/top_button')
+    % include('components/section_navigation')
 % else:
     <div class="placeholder">
         % if not context.system:

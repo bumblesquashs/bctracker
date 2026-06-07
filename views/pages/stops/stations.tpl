@@ -31,7 +31,7 @@
                         </tbody>
                     </table>
                     
-                    % include('components/top_button')
+                    % include('components/section_navigation')
                 % else:
                     <div class="placeholder">
                         <h3>{{ context }} station information is unavailable</h3>

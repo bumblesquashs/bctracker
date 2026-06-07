@@ -121,7 +121,7 @@
         </div>
     </div>
     
-    % include('components/top_button')
+    % include('components/section_navigation')
 % else:
     <div class="placeholder">
         <h3>{{ context }} realtime information is not supported</h3>

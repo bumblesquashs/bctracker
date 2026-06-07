@@ -329,8 +329,8 @@
                     </div>
                 </div>
             % end
-                        
-            % include('components/top_button')
+            
+            % include('components/section_navigation')
         % else:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">

@@ -196,4 +196,4 @@
     </div>
 </div>
 
-% include('components/top_button')
+% include('components/section_navigation')

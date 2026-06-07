@@ -154,6 +154,17 @@ table th {
     font-size: 11pt;
 }
 
+#section-navigation {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+#section-navigation .section-navigation-button {
+    flex: 1;
+    --image-size: 24px;
+}
+
 #status-bar {
     display: flex;
     flex-direction: row;

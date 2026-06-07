@@ -210,7 +210,7 @@
                         </table>
                         % include('components/paging', use_path=True, path_args=paging_args)
                         
-                        % include('components/top_button')
+                        % include('components/section_navigation')
                     % else:
                         <div class="placeholder">
                             % if page == 0:
