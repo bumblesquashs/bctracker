@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from database import Database
 
-from protobuf.data.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
+from google.transit.gtfs_realtime_pb2 import _VEHICLEPOSITION_OCCUPANCYSTATUS
 
 from models.adherence import Adherence
 from models.context import Context

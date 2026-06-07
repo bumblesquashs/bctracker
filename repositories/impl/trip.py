@@ -14,6 +14,8 @@ class TripRepository:
     
     def create(self, context: Context, row: dict):
         '''Inserts a new trip into the database'''
+        if not row:
+            return
         self.database.insert(
             table='trip',
             values={
