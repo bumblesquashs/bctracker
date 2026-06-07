@@ -1,16 +1,20 @@
 {
     "bc-transit": {
         "red-blue-stripes": {
-            "name": "Red/Blue Stripes"
+            "name": "Red/Blue Stripes",
+            "theme": "bc-transit-classic"
         },
         "green-blue-stripes": {
-            "name": "Green/Blue Stripes"
+            "name": "Green/Blue Stripes",
+            "theme": "bc-transit"
         },
         "green-blue-stripes-green-back": {
-            "name": "Green/Blue Stripes with Green Back"
+            "name": "Green/Blue Stripes with Green Back",
+            "theme": "bc-transit"
         },
         "green-front": {
-            "name": "Green Front"
+            "name": "Green Front",
+            "theme": "bc-transit-green"
         }
     },
     "translink": {

@@ -11,6 +11,7 @@ Available at https://bctracker.ca
 - Denman Island Bus
 - Gertie
 - Hornby Bus
+- Tofino Free Shuttle
 
 ## Systems
 
@@ -48,6 +49,7 @@ Available at https://bctracker.ca
 - South Okanagan
 - Squamish
 - Sunshine Coast
+- Tofino
 - Victoria
 - West Coast
 - West Kootenay
@@ -105,26 +107,18 @@ admin_key: '<key>'
 
 ### Domain configuration
 
-By default, the current system (if any) is included as the first part of the URL path.
-In order to ensure all links and references work correctly, config for domains **must** be included before running.
+The current system or agency is determined using the relevant query strings (`system` and `agency`).
+For basic setup, no additional configuration is required - everything will simply work out of the box.
 
-Here's an example of the domain config required in `server.conf`:
+The program can work with subdomains for each system/agency, as deployed on our server.
+This means that instead of urls like `https://bctracker.ca/routes?system=victoria` you instead have `https://victoria.bctracker.ca/routes`
 
-```
-all_systems_domain: 'http://localhost:8080/{0}'
-system_domain: 'http://localhost:8080/{0}/{1}'
-system_domain_path: 'http://localhost:8080/{0}/{1}'
-```
-
-The program can work with subdomains for each system, as deployed on our server.
-This means that instead of urls like `https://bctracker.ca/victoria/routes` you instead have `https://victoria.bctracker.ca/routes`
-
-To enable this you need these lines instead, along with the proper DNS and proxying rules.
+To enable this you need these config lines, along with the proper DNS and proxying rules.
 
 ```
-all_systems_domain: 'http://example.com/{0}'
-system_domain: 'http://{0}.example.com/{1}'
-system_domain_path: 'http://example.com/{0}/{1}
+root_domain: 'https://example.com/{0}'
+system_domain: 'https://{0}.example.com/{1}'
+agency_domain: 'https://{0}.example.com/{1}'
 cookie_domain: 'example.com'
 ```
 

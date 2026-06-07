@@ -3,10 +3,12 @@
         "name": "BC Ferries",
         "website": "https://bcferries.com",
         "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
+        "default_system": "bc-ferries",
         "prefix_headsigns": true,
         "accurate_seconds": false,
         "prefer_stop_id": true,
         "show_stop_number": false,
+        "show_full_orders": true,
         "enable_blocks": false,
         "nis_colour": "003769",
         "default_route_colour": "003769",
@@ -53,6 +55,7 @@
         "name": "Denman Island Bus",
         "website": "https://www.denmanislandbus.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/DENMAN_feed/feed-Denman.zip",
+        "default_system": "denman-island",
         "prefix_headsigns": true,
         "prefer_stop_id": true,
         "show_stop_number": false
@@ -61,6 +64,7 @@
         "name": "GERTIE",
         "website": "https://gertie.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/GABRIOLA_feed/feed-GERTIE.zip",
+        "default_system": "gabriola-island",
         "prefix_headsigns": true,
         "prefer_route_id": true,
         "prefer_stop_id": true,
@@ -70,6 +74,7 @@
         "name": "Hornby Bus",
         "website": "https://hornbybus.com",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
+        "default_system": "hornby-island",
         "prefix_headsigns": true,
         "prefer_route_id": true,
         "prefer_stop_id": true,
@@ -79,6 +84,7 @@
         "name": "Tofino Free Shuttle",
         "website": "https://tourismtofino.com/plan-your-trip/getting-around",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/TOFINO_feed/feed-tofino.zip",
+        "default_system": "tofino",
         "accurate_seconds": false,
         "prefer_stop_id": true,
         "show_stop_number": false
@@ -86,6 +92,7 @@
     "translink": {
         "name": "Translink",
         "website": "https://translink.ca",
+        "default_system": "vancouver",
         "enabled": false
     }
 }

@@ -129,8 +129,9 @@ class Position:
         '''Returns a representation of this position in JSON-compatible format'''
         data = {
             'vehicle_id': self.vehicle.id,
-            'vehicle_name': str(self.vehicle),
+            'vehicle_name': str(self.vehicle).replace("'", '&apos;'),
             'vehicle_url_id': str(self.vehicle.url_id),
+            'system_id': self.system.id,
             'system': str(self.system),
             'agency_id': self.context.agency_id,
             'lon': self.lon,

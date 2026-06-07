@@ -1,5 +1,5 @@
 <div class="order-details">
-    <div class="row space-between">
+    <div class="row {{ 'space-between' if livery else 'justify-center' }}">
         % if livery:
             <div style="width: 40px"></div>
         % end
@@ -20,31 +20,39 @@
         % end
     </div>
     % if len(order.vehicles) > 1:
-        <div class="content">
-            % first_vehicle = order.vehicles[0]
-            % if vehicle > first_vehicle:
-                % include('components/vehicle', vehicle=first_vehicle)
+        % if order.agency.show_full_orders:
+            <div class="column center">
+                % for order_vehicle in order.vehicles:
+                    % include('components/vehicle', vehicle=order_vehicle, enable_link=order_vehicle != vehicle)
+                % end
+            </div>
+        % else:
+            <div class="content">
+                % first_vehicle = order.vehicles[0]
+                % if vehicle > first_vehicle:
+                    % include('components/vehicle', vehicle=first_vehicle)
+                    
+                    % previous_vehicle = order.previous_vehicle(vehicle)
+                    % if previous_vehicle > first_vehicle:
+                        % include('components/svg', name='paging/left-triple')
+                        % include('components/vehicle', vehicle=previous_vehicle)
+                    % end
+                    % include('components/svg', name='paging/left')
+                % end
                 
-                % previous_vehicle = order.previous_vehicle(vehicle)
-                % if previous_vehicle > first_vehicle:
-                    % include('components/svg', name='paging/left-triple')
-                    % include('components/vehicle', vehicle=previous_vehicle)
+                % include('components/vehicle', enable_link=False)
+                
+                % last_vehicle = order.vehicles[-1]
+                % if vehicle < last_vehicle:
+                    % include('components/svg', name='paging/right')
+                    % next_vehicle = order.next_vehicle(vehicle)
+                    % if next_vehicle < last_vehicle:
+                        % include('components/vehicle', vehicle=next_vehicle)
+                        % include('components/svg', name='paging/right-triple')
+                    % end
+                    % include('components/vehicle', vehicle=last_vehicle)
                 % end
-                % include('components/svg', name='paging/left')
-            % end
-            
-            % include('components/vehicle', enable_link=False)
-            
-            % last_vehicle = order.vehicles[-1]
-            % if vehicle < last_vehicle:
-                % include('components/svg', name='paging/right')
-                % next_vehicle = order.next_vehicle(vehicle)
-                % if next_vehicle < last_vehicle:
-                    % include('components/vehicle', vehicle=next_vehicle)
-                    % include('components/svg', name='paging/right-triple')
-                % end
-                % include('components/vehicle', vehicle=last_vehicle)
-            % end
-        </div>
+            </div>
+        % end
     % end
 </div>

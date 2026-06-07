@@ -25,10 +25,21 @@ class Vehicle:
     visible: bool = True
     demo: bool = False,
     livery: str | None = None
+    length: float | None = None
+    length_units: str | None = None
+    fuel: str | None = None
+    capacity: dict[str, str] = field(default_factory=dict)
     accessible: bool = True
     air_conditioned: bool = True
     usb_charging: bool = False
     cctv: bool = True
+    wifi: bool = False
+    dining: bool = False
+    gift_shop: bool = False
+    cabins: bool = False
+    kids_area: bool = False
+    pet_area: bool = False
+    work_area: bool = False
     
     key: tuple = field(init=False)
     
@@ -79,10 +90,12 @@ class Vehicle:
         return self.agency == other.agency and self.id == other.id and self.order_id == other.order_id
     
     def __lt__(self, other):
+        if self.key == other.key:
+            return self.agency < other.agency
         return self.key < other.key
     
     def url(self, *args, **kwargs):
-        return self.context.url('bus', self, *args, **kwargs)
+        return self.context.url('fleet', self, *args, **kwargs)
     
     def find_decoration(self):
         '''Returns the decoration for this vehicle, if one exists'''

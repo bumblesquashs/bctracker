@@ -30,8 +30,8 @@
     % end
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ vehicle.url('map') }}" class="tab-button">Map</a>
-        <a href="{{ vehicle.url('history') }}" class="tab-button">History</a>
+        <a href="{{ context.url('fleet', vehicle, 'map') }}" class="tab-button">Map</a>
+        <a href="{{ context.url('fleet', vehicle, 'history') }}" class="tab-button">History</a>
     </div>
 </div>
 
@@ -233,16 +233,31 @@
                                 <div class="name">Vehicle Type</div>
                                 <div class="value">{{ model.type }}</div>
                             </div>
-                            % if model.length:
+                            % length = vehicle.length or model.length
+                            % if length:
+                                % units = vehicle.length_units or model.length_units
                                 <div class="row section">
                                     <div class="name">Length</div>
-                                    <div class="value">{{ model.length }} feet</div>
+                                    <div class="value">{{ length }} {{ units }}</div>
                                 </div>
                             % end
-                            % if model.fuel:
+                            % fuel = vehicle.fuel or model.fuel
+                            % if fuel:
                                 <div class="row section">
                                     <div class="name">Fuel Type</div>
-                                    <div class="value">{{ model.fuel }}</div>
+                                    <div class="value">{{ fuel }}</div>
+                                </div>
+                            % end
+                            % capacity = vehicle.capacity or model.capacity
+                            % if capacity:
+                                <div class="column gap-5 section">
+                                    <div class="smaller-font lighter-text">Capacity</div>
+                                    % for (capacity_type, capacity_count) in capacity.items():
+                                        <div class="row">
+                                            <div class="flex-1">{{ capacity_type }}</div>
+                                            <div>{{ capacity_count }}</div>
+                                        </div>
+                                    % end
                                 </div>
                             % end
                         % end
@@ -250,7 +265,7 @@
                             <div class="row section">
                                 <div class="name">Amenities</div>
                                 <div class="value">
-                                    <div class="row gap-5">
+                                    <div class="row gap-5 wrap justify-right">
                                         % if vehicle.accessible:
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/accessible')
@@ -273,6 +288,48 @@
                                             <div class="tooltip-anchor amenity">
                                                 % include('components/svg', name='amenities/cctv')
                                                 <div class="tooltip right">CCTV cameras</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.wifi:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/wifi')
+                                                <div class="tooltip right">WIFI</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.dining:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/dining')
+                                                <div class="tooltip right">Dining</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.gift_shop:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/gift-shop')
+                                                <div class="tooltip right">Gift shop</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.cabins:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/cabins')
+                                                <div class="tooltip right">Cabins</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.kids_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/kids-area')
+                                                <div class="tooltip right">Kids area</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.pet_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/pet-area')
+                                                <div class="tooltip right">Pet area</div>
+                                            </div>
+                                        % end
+                                        % if vehicle.work_area:
+                                            <div class="tooltip-anchor amenity">
+                                                % include('components/svg', name='amenities/work-area')
+                                                <div class="tooltip right">Work area</div>
                                             </div>
                                         % end
                                     </div>

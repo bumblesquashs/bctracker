@@ -136,39 +136,14 @@
         
         <script>
             const svgs = {};
-            let currentSystemID;        
+            const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
+            const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
+            const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
             
             function getSVG(name) {
                 return svgs[name];
             }
             
-            const showStopNumbers = "{{ context.show_stop_number }}" == "True";
-        </script>
-        
-        % if context.system:
-            <script>
-                currentSystemID = "{{ context.system_id }}";
-            </script>
-        % else:
-            <script>
-                currentSystemID = null;
-            </script>
-        % end
-        
-        % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='ferry')
-        % include('components/svg_script', name='model/type/bus-artic')
-        % include('components/svg_script', name='model/type/bus-conventional')
-        % include('components/svg_script', name='model/type/bus-decker')
-        % include('components/svg_script', name='model/type/bus-midibus')
-        % include('components/svg_script', name='model/type/bus-shuttle')
-        % include('components/svg_script', name='model/type/ferry')
-        % include('components/svg_script', name='ghost')
-        % include('components/svg_script', name='stop')
-        % include('components/svg_script', name='route')
-        % include('components/svg_script', name='block')
-        
-        <script>
             function toggleNavigationMenu() {
                 document.getElementById("navigation-menu").classList.toggle("display-none");
                 document.getElementById("search").classList.add("display-none");
@@ -182,16 +157,30 @@
                 return a
             }
             
-            function getUrl(systemID, path, forceSubdomain=false, params=null) {
+            function getURL(agencyID, systemID, path, internal=false, params=null) {
                 let url;
-                if (systemID === null || systemID === undefined) {
-                    url = "{{ settings.all_systems_domain }}".format(path);
-                } else if (currentSystemID !== null || forceSubdomain) {
-                    url = "{{ settings.system_domain }}".format(systemID, path);
-                } else {
-                    url = "{{ settings.system_domain_path }}".format(systemID, path);
-                }
                 const query = [];
+                
+                if ("{{ settings.root_domain is None }}" === "True") {
+                    url = "/" + path;
+                } else {
+                    url = "{{ settings.root_domain }}".format(path)
+                }
+                
+                if (systemID) {
+                    if ((internal && currentSystemID === null) || "{{ settings.system_domain is None }}" === "True") {
+                        query.push("system=" + systemID);
+                    } else {
+                        url = "{{ settings.system_domain }}".format(systemID, path);
+                    }
+                } else if (agencyID) {
+                    if ((internal && currentAgencyID === null) || "{{ settings.agency_domain is None }}" === "True") {
+                        query.push("agency=" + agencyID);
+                    } else {
+                        url = "{{ settings.agency_domain }}".format(agencyID, path);
+                    }
+                }
+                
                 if (params) {
                     for (const key in params) {
                         if (params.hasOwnProperty(key) && params[key] !== undefined && params[key] !== null) {
@@ -202,12 +191,12 @@
                 if (query.length === 0) {
                     return url;
                 }
-                return url + "?" + query.join("&")
+                return url + "?" + query.join("&");
             }
             
             function setCookie(key, value) {
                 const max_age = 60*60*24*365*10;
-                if ("{{ settings.cookie_domain }}" == "None") {
+                if ("{{ settings.cookie_domain }}" == "") {
                     document.cookie = key + "=" + value + "; max-age=" + max_age + "; path=/";
                 } else {
                     document.cookie = key + "=" + value + "; max-age=" + max_age + "; domain={{ settings.cookie_domain }}; path=/";
@@ -244,13 +233,10 @@
                 }
             }
             
-            function setLiveryTheme(liveryID) {
-                if (liveryID === "green-blue-stripes" || liveryID == "green-blue-stripes-green-back") {
-                    window.location.href = "?theme=bc-transit";
-                } else if (liveryID === "red-blue-stripes") {
-                    window.location.href = "?theme=bc-transit-classic";
-                } else if (liveryID === "green-front") {
-                    window.location.href = "?theme=bc-transit-green";
+            function setLiveryTheme(theme) {
+                if (theme !== "") {
+                    setCookie("theme", theme);
+                    location.reload();
                 }
             }
             
@@ -293,6 +279,20 @@
                 return parts.join(" ") + " ago";
             }
         </script>
+        
+        % include('components/svg_script', name='bus')
+        % include('components/svg_script', name='ferry')
+        % include('components/svg_script', name='model/type/bus-artic')
+        % include('components/svg_script', name='model/type/bus-conventional')
+        % include('components/svg_script', name='model/type/bus-decker')
+        % include('components/svg_script', name='model/type/bus-midibus')
+        % include('components/svg_script', name='model/type/bus-trolley')
+        % include('components/svg_script', name='model/type/bus-shuttle')
+        % include('components/svg_script', name='model/type/ferry')
+        % include('components/svg_script', name='ghost')
+        % include('components/svg_script', name='stop')
+        % include('components/svg_script', name='route')
+        % include('components/svg_script', name='block')
     </head>
     
     <body class="{{ 'full-map' if full_map else '' }}">
@@ -458,6 +458,8 @@
                         % if context.system_id in favourite_system_ids:
                             % include('components/svg', name='action/favourite')
                         % end
+                    % elif context.agency:
+                        {{ context }}
                     % else:
                         All Transit Systems
                     % end
@@ -466,10 +468,10 @@
                     % end
                     % if favourite_system_ids:
                         <div id="favourite-systems-dropdown">
-                            % if context.system:
-                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
-                            % else:
+                            % if context.system is None and context.agency is None:
                                 <span class="system-button current all-systems" onclick="event.stopPropagation()">All Transit Systems</span>
+                            % else:
+                                <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems" onclick="event.stopPropagation()">All Transit Systems</a>
                             % end
                             % favourite_systems = sorted([s for s in systems if s.id in favourite_system_ids], key=lambda s: s.name)
                             % for system in favourite_systems:
@@ -506,10 +508,25 @@
         </div>
         <div id="content">
             <div id="system-menu" class="collapse-non-desktop {{ 'collapse-desktop' if hide_systems else '' }}">
-                % if context.system:
-                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
-                % else:
+                % if context.system is None and context.agency is None:
                     <span class="system-button current all-systems">All Transit Systems</span>
+                % else:
+                    <a href="{{ Context().url(*path, **path_args) }}" class="system-button all-systems">All Transit Systems</a>
+                % end
+                % for agency in agencies:
+                    % if agency.default_system is None:
+                        % if context.system is None and context.agency == agency:
+                            <span class="system-button current">
+                                % include('components/agency_logo')
+                                <div class="flex-1">{{ agency }}</div>
+                            </span>
+                        % else:
+                            <a href="{{ agency.context.url(*path, **path_args) }}" class="system-button">
+                                % include('components/agency_logo')
+                                <div class="flex-1">{{ agency }}</div>
+                            </a>
+                        % end
+                    % end
                 % end
                 % if favourite_system_ids:
                     <div class="header">Favourites</div>

@@ -76,6 +76,16 @@ class RealtimeService:
                 date = context.today
                 time = context.now
                 
+                if position.block:
+                    if position.block.get_end_time().hour >= 28 and time.hour < 6:
+                        # Assumption: blocks ending after 4am do not start until after 6am
+                        date = date.previous()
+                        time.hour += 24
+                    elif position.block.get_start_time().hour < 4 and time.hour >= 26:
+                        # Assumption: blocks starting before 4am do not end after 2am
+                        date = date.next()
+                        time.hour -= 24
+                
                 allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
                 if allocation:
                     if allocation.context == context:

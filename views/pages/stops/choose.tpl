@@ -25,13 +25,21 @@
                 <td>
                     <div class="column">
                         % include('components/stop')
-                        <div class="mobile-only smaller-font">{{ stop.context }}</div>
+                        <div class="mobile-only smaller-font row">
+                            % include('components/agency_logo', agency=stop.agency)
+                            {{ stop.context }}
+                        </div>
                         <div class="mobile-only">
                             % include('components/route_list', routes=stop.routes)
                         </div>
                     </div>
                 </td>
-                <td class="non-mobile">{{ stop.context }}</td>
+                <td class="non-mobile">
+                    <div class="row">
+                        % include('components/agency_logo', agency=stop.agency)
+                        {{ stop.context }}
+                    </div>
+                </td>
                 <td class="non-mobile">
                     % include('components/route_list', routes=stop.routes)
                 </td>
