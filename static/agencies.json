@@ -4,14 +4,7 @@
         "website": "https://bcferries.com",
         "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
         "default_system": "bc-ferries",
-        "prefix_headsigns": true,
         "accurate_seconds": false,
-        "prefer_stop_id": true,
-        "show_stop_number": false,
-        "show_full_orders": true,
-        "enable_blocks": false,
-        "nis_colour": "003769",
-        "default_route_colour": "003769",
         "custom_route_numbers": {
             "12443": "1",
             "12444": "2",
@@ -37,7 +30,14 @@
             "12442": "26",
             "12393": "30"
         },
+        "default_route_colour": "003769",
+        "enable_blocks": false,
         "filter_vehicles_image_name": "ferry",
+        "nis_colour": "003769",
+        "prefer_stop_id": true,
+        "prefix_headsigns": true,
+        "show_full_orders": true,
+        "show_stop_number": false,
         "vehicle_type": "Vessel",
         "vehicle_type_plural": "Vessels"
     },
@@ -46,18 +46,18 @@
         "website": "https://bctransit.com",
         "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
         "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
-        "prefix_headsigns": true,
         "accurate_seconds": false,
-        "vehicle_name_length": 4,
-        "distance_scale": 1000
+        "distance_scale": 1000,
+        "prefix_headsigns": true,
+        "vehicle_name_length": 4
     },
     "denman-island-bus": {
         "name": "Denman Island Bus",
         "website": "https://www.denmanislandbus.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/DENMAN_feed/feed-Denman.zip",
         "default_system": "denman-island",
-        "prefix_headsigns": true,
         "prefer_stop_id": true,
+        "prefix_headsigns": true,
         "show_stop_number": false
     },
     "gertie": {
@@ -65,9 +65,9 @@
         "website": "https://gertie.ca",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/GABRIOLA_feed/feed-GERTIE.zip",
         "default_system": "gabriola-island",
-        "prefix_headsigns": true,
         "prefer_route_id": true,
         "prefer_stop_id": true,
+        "prefix_headsigns": true,
         "show_stop_number": false
     },
     "hornby-bus": {
@@ -75,9 +75,9 @@
         "website": "https://hornbybus.com",
         "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/HORNBY_feed/feed-hornby.zip",
         "default_system": "hornby-island",
-        "prefix_headsigns": true,
         "prefer_route_id": true,
         "prefer_stop_id": true,
+        "prefix_headsigns": true,
         "show_stop_number": false
     },
     "tofino-shuttle": {
@@ -95,14 +95,15 @@
         "gtfs_url": "https://gtfs-static.translink.ca/gtfs/google_transit.zip",
         "realtime_url": "https://gtfsapi.translink.ca/v3/gtfsposition?apikey=$TRANSLINK_API_KEY",
         "default_system": "vancouver",
-        "enable_route_variants": false,
-        "enable_stacked_headsigns": true,
-        "default_route_colour": "0082C8",
         "custom_route_numbers": {
             "30053": "EL",
             "30052": "ML",
             "13686": "CL",
             "6771": "SB"
-        }
+        },
+        "default_route_colour": "0082C8",
+        "enable_occupancy": false,
+        "enable_route_variants": false,
+        "enable_stacked_headsigns": true
     }
 }

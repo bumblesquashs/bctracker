@@ -86,40 +86,16 @@ class Context:
         return DEFAULT_TIMEZONE
     
     @property
-    def prefix_headsigns(self):
-        if self.agency:
-            return self.agency.prefix_headsigns
-        return DEFAULT_PREFIX_HEADSIGNS
-    
-    @property
     def accurate_seconds(self):
         if self.agency:
             return self.agency.accurate_seconds
         return DEFAULT_ACCURATE_SECONDS
     
     @property
-    def prefer_route_id(self):
+    def default_route_colour(self):
         if self.agency:
-            return self.agency.prefer_route_id
-        return DEFAULT_PREFER_ROUTE_ID
-    
-    @property
-    def prefer_stop_id(self):
-        if self.agency:
-            return self.agency.prefer_stop_id
-        return DEFAULT_PREFER_STOP_ID
-    
-    @property
-    def show_stop_number(self):
-        if self.agency:
-            return self.agency.show_stop_number
-        return DEFAULT_SHOW_STOP_NUMBER
-    
-    @property
-    def vehicle_name_length(self):
-        if self.agency:
-            return self.agency.vehicle_name_length
-        return DEFAULT_VEHICLE_NAME_LENGTH
+            return self.agency.default_route_colour
+        return DEFAULT_ROUTE_COLOUR
     
     @property
     def distance_scale(self):
@@ -134,6 +110,12 @@ class Context:
         return DEFAULT_ENABLE_BLOCKS
     
     @property
+    def enable_occupancy(self):
+        if self.agency:
+            return self.agency.enable_occupancy
+        return DEFAULT_ENABLE_OCCUPANCY
+    
+    @property
     def enable_route_variants(self):
         if self.agency:
             return self.agency.enable_route_variants
@@ -146,22 +128,64 @@ class Context:
         return DEFAULT_ENABLE_STACKED_HEADSIGNS
     
     @property
+    def filter_vehicles_image_name(self):
+        if self.agency:
+            return self.agency.filter_vehicles_image_name
+        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    
+    @property
+    def gtfs_cutoff(self):
+        if self.system:
+            return self.system.gtfs_cutoff
+        return DEFAULT_GTFS_CUTOFF
+    
+    @property
+    def ignore_route_colour(self):
+        if self.system:
+            return self.system.ignore_route_colour
+        return DEFAULT_IGNORE_ROUTE_COLOUR
+    
+    @property
+    def max_invalid_positions(self):
+        if self.system:
+            return self.system.max_invalid_positions
+        return DEFAULT_MAX_INVALID_POSITIONS
+    
+    @property
     def nis_colour(self):
         if self.agency:
             return self.agency.nis_colour
         return DEFAULT_NIS_COLOUR
     
     @property
-    def default_route_colour(self):
+    def prefer_route_id(self):
         if self.agency:
-            return self.agency.default_route_colour
-        return DEFAULT_ROUTE_COLOUR
+            return self.agency.prefer_route_id
+        return DEFAULT_PREFER_ROUTE_ID
     
     @property
-    def filter_vehicles_image_name(self):
+    def prefer_stop_id(self):
         if self.agency:
-            return self.agency.filter_vehicles_image_name
-        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+            return self.agency.prefer_stop_id
+        return DEFAULT_PREFER_STOP_ID
+    
+    @property
+    def prefix_headsigns(self):
+        if self.agency:
+            return self.agency.prefix_headsigns
+        return DEFAULT_PREFIX_HEADSIGNS
+    
+    @property
+    def show_stop_number(self):
+        if self.agency:
+            return self.agency.show_stop_number
+        return DEFAULT_SHOW_STOP_NUMBER
+    
+    @property
+    def vehicle_name_length(self):
+        if self.agency:
+            return self.agency.vehicle_name_length
+        return DEFAULT_VEHICLE_NAME_LENGTH
     
     @property
     def vehicle_type(self):
@@ -174,24 +198,6 @@ class Context:
         if self.agency:
             return self.agency.vehicle_type_plural
         return DEFAULT_VEHICLE_TYPE_PLURAL
-    
-    @property
-    def ignore_route_colour(self):
-        if self.system:
-            return self.system.ignore_route_colour
-        return DEFAULT_IGNORE_ROUTE_COLOUR
-    
-    @property
-    def gtfs_cutoff(self):
-        if self.system:
-            return self.system.gtfs_cutoff
-        return DEFAULT_GTFS_CUTOFF
-    
-    @property
-    def max_invalid_positions(self):
-        if self.system:
-            return self.system.max_invalid_positions
-        return DEFAULT_MAX_INVALID_POSITIONS
     
     @property
     def today(self) -> Date:

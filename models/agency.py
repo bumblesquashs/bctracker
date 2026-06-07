@@ -17,21 +17,23 @@ class Agency:
     realtime_url: str | None = None
     default_system: str | None = None
     enabled: bool = True
-    prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
+    
     accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS
-    prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
-    prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
-    show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
-    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
-    vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
+    custom_route_numbers: dict[str, str] = field(default_factory=dict)
+    default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
+    enable_occupancy: bool = DEFAULT_ENABLE_OCCUPANCY
     enable_route_variants: bool = DEFAULT_ENABLE_ROUTE_VARIANTS
     enable_stacked_headsigns: bool = DEFAULT_ENABLE_STACKED_HEADSIGNS
-    nis_colour: str = DEFAULT_NIS_COLOUR
-    default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
-    custom_route_numbers: dict[str, str] = field(default_factory=dict)
     filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
+    nis_colour: str = DEFAULT_NIS_COLOUR
+    prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
+    prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
+    prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
+    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
+    show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
+    vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     vehicle_type: str = DEFAULT_VEHICLE_TYPE
     vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
     

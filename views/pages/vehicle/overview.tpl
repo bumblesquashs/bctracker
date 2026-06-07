@@ -138,15 +138,17 @@
                                 <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
-                        <div class="row section">
-                            <div class="name">Occupancy</div>
-                            <div class="value">
-                                <div class="row gap-5 center">
-                                    <div>{{ position.occupancy }}</div>
-                                    % include('components/occupancy', occupancy=position.occupancy, size='large')
+                        % if context.enable_occupancy:
+                            <div class="row section">
+                                <div class="name">Occupancy</div>
+                                <div class="value">
+                                    <div class="row gap-5 center">
+                                        <div>{{ position.occupancy }}</div>
+                                        % include('components/occupancy', occupancy=position.occupancy, size='large')
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        % end
                         % if show_speed and position.speed is not None:
                             <div class="row section">
                                 <div class="name">Speed</div>

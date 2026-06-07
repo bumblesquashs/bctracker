@@ -139,6 +139,7 @@ class Position:
             'colour': self.colour,
             'text_colour': self.text_colour,
             'offline': self.offline,
+            'enable_occupancy': self.context.enable_occupancy,
             'enable_stacked_headsigns': self.context.enable_stacked_headsigns
         }
         year_model = self.vehicle.year_model

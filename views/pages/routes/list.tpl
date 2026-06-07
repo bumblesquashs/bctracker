@@ -11,7 +11,7 @@
 
 % if context.system:
     % if routes:
-        % route_types = sorted({r.type for r in routes}, key=lambda t: t.name)
+        % route_types = sorted({r.type for r in routes})
         <div class="container">
             % for route_type in route_types:
                 % type_routes = [r for r in routes if r.type == route_type]

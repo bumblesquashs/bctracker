@@ -82,7 +82,9 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % if position.context.enable_occupancy:
+                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % end
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>

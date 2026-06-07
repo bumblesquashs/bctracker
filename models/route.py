@@ -75,7 +75,7 @@ class RouteType(Enum):
         return self.value == other.value
     
     def __lt__(self, other):
-        return self.value < other.value
+        return self.name < other.name
 
 @dataclass(slots=True)
 class Route:
