@@ -331,7 +331,14 @@
                 }
                 content.appendChild(headsign);
             }
-        
+            
+            if (position.stop_name) {
+                const stopElement = document.createElement("div");
+                stopElement.className = "row gap-2 lighter-text";
+                stopElement.innerHTML = getSVG("stop") + "<span>" + position.stop_name + "</span>";
+                content.appendChild(stopElement);
+            }
+            
             const footer = document.createElement("div");
             footer.className = "lighter-text";
             content.appendChild(footer);
