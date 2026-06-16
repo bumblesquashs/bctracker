@@ -1091,6 +1091,7 @@ table tr.table-button {
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    --image-size: 12px;
 }
 
 .marker .details .content .adherence-indicator {
