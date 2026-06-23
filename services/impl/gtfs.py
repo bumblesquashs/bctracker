@@ -14,8 +14,10 @@ from models.block import Block
 from models.context import Context
 from models.date import Date
 from models.daterange import DateRange
+from models.download import DownloadTrigger
 from models.service import Service, ServiceException
 from models.sheet import Sheet
+from models.time import Time
 
 import repositories
 import services
@@ -26,12 +28,14 @@ class GTFSService:
     
     database: Database
     
-    def load(self, context: Context, force_download=False, update_db=False):
+    def load(self, context: Context, trigger: DownloadTrigger, force_download=False, update_db=False):
         '''Loads the GTFS for the given context into memory'''
         if not context.system.gtfs_enabled:
             return
         
         context.system.gtfs_downloaded = path.exists(f'data/gtfs/{context.system_id}')
+        if not context.system.gtfs_downloaded:
+            trigger = DownloadTrigger.MISSING
         if not context.system.gtfs_downloaded or force_download:
             self.download(context)
             update_db = True
@@ -66,7 +70,7 @@ class GTFSService:
             filter_service_ids = set()
         
         if update_db:
-            self.update_database(context, filter_service_ids)
+            self.update_database(context, trigger, filter_service_ids)
         
         services.log.info(f'Loading GTFS data for {context}')
         
@@ -118,7 +122,7 @@ class GTFSService:
             zip.extractall(data_path)
         context.system.gtfs_downloaded = True
     
-    def update_database(self, context: Context, filter_service_ids: set[str]):
+    def update_database(self, context: Context, trigger: DownloadTrigger, filter_service_ids: set[str]):
         '''Updates cached GTFS data for the given system'''
         services.log.info(f'Updating database with GTFS data for {context}')
         
@@ -128,16 +132,21 @@ class GTFSService:
         repositories.route.delete_all(context)
         repositories.point.delete_all(context)
         
-        apply_csv(context, 'routes', repositories.route.create)
-        apply_csv(context, 'stops', repositories.stop.create)
+        date = Date.today()
+        time = Time.now()
+        
+        download_id = repositories.download.create(context, date, time, trigger)
+        
+        apply_csv(download_id, context, 'routes', repositories.route.create)
+        apply_csv(download_id, context, 'stops', repositories.stop.create)
         if filter_service_ids:
-            filtered_rows = apply_csv(context, 'trips', repositories.trip.create, filter=lambda r: r['service_id'] in filter_service_ids)
+            filtered_rows = apply_csv(download_id, context, 'trips', repositories.trip.create, filter=lambda r: r['service_id'] in filter_service_ids)
             filtered_trip_ids = {r['trip_id'] for r in filtered_rows}
-            apply_csv(context, 'stop_times', repositories.departure.create, filter=lambda r: r['trip_id'] in filtered_trip_ids)
+            apply_csv(download_id, context, 'stop_times', repositories.departure.create, filter=lambda r: r['trip_id'] in filtered_trip_ids)
         else:
-            apply_csv(context, 'trips', repositories.trip.create)
-            apply_csv(context, 'stop_times', repositories.departure.create)
-        apply_csv(context, 'shapes', repositories.point.create)
+            apply_csv(download_id, context, 'trips', repositories.trip.create)
+            apply_csv(download_id, context, 'stop_times', repositories.departure.create)
+        apply_csv(download_id, context, 'shapes', repositories.point.create)
         
         self.database.commit()
     
@@ -159,7 +168,7 @@ def read_csv(context: Context, name, initializer):
         columns = next(reader)
         return [initializer(dict(zip(columns, row))) for row in reader]
 
-def apply_csv(context: Context, name, function, filter=None):
+def apply_csv(download_id: int, context: Context, name, function, filter=None):
     '''Opens a CSV file and applies a function to each row'''
     with open(f'./data/gtfs/{context.system_id}/{name}.txt', 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
@@ -168,7 +177,7 @@ def apply_csv(context: Context, name, function, filter=None):
         for row in reader:
             data = dict(zip(columns, row))
             if not filter or filter(data):
-                function(context, data)
+                function(download_id, context, data)
                 if filter:
                     filtered_rows.append(data)
         return filtered_rows
