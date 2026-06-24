@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from .impl.assignment import AssignmentRepository
     from .impl.decoration import DecorationRepository
     from .impl.departure import DepartureRepository
+    from .impl.download import DownloadRepository
     from .impl.livery import LiveryRepository
     from .impl.model import ModelRepository
     from .impl.order import OrderRepository
@@ -27,6 +28,7 @@ allocation: AllocationRepository
 assignment: AssignmentRepository
 decoration: DecorationRepository
 departure: DepartureRepository
+download: DownloadRepository
 livery: LiveryRepository
 model: ModelRepository
 order: OrderRepository

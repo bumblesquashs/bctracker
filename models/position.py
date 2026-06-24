@@ -170,6 +170,9 @@ class Position:
         else:
             data['headsign'] = 'Not In Service'
             data['route_number'] = 'NIS'
+        stop = self.stop
+        if stop:
+            data['stop_name'] = str(stop).replace("'", '&apos;')
         occupancy = self.occupancy
         if occupancy:
             data['occupancy_name'] = occupancy.value,

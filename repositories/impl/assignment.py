@@ -97,17 +97,19 @@ class AssignmentRepository:
             'assignment.date': context.today.format_db()
         }
         if trip_id or route_id or stop_id:
+            joins['download'] = {
+                'download.agency_id': 'allocation.agency_id',
+                'download.system_id': 'allocation.system_id'
+            }
             joins['trip'] = {
-                'trip.agency_id': 'allocation.agency_id',
-                'trip.system_id': 'allocation.system_id',
+                'trip.download_id': 'download.download_id',
                 'trip.block_id': 'assignment.block_id'
             }
             filters['trip.trip_id'] = trip_id
             filters['trip.route_id'] = route_id
             if stop_id:
                 joins['departure'] = {
-                    'departure.agency_id': 'trip.agency_id',
-                    'departure.system_id': 'trip.system_id',
+                    'departure.download_id': 'trip.download_id',
                     'departure.trip_id': 'trip.trip_id'
                 }
                 filters['departure.stop_id'] = stop_id

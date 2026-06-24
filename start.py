@@ -32,6 +32,7 @@ if __name__ == '__main__':
     repositories.allocation = AllocationRepository(database)
     repositories.assignment = AssignmentRepository(database)
     repositories.departure = DepartureRepository(database)
+    repositories.download = DownloadRepository(database)
     repositories.point = PointRepository(database)
     repositories.position = PositionRepository(database)
     repositories.record = RecordRepository(database)

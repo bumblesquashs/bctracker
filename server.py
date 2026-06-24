@@ -9,6 +9,7 @@ from database import Database
 
 from models.context import Context
 from models.date import Date
+from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
@@ -19,7 +20,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 69
+VERSION = 70
 
 random = Random()
 
@@ -146,9 +147,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context, args.reload, args.updatedb)
+                    services.gtfs.load(context, DownloadTrigger.LAUNCH_FLAG, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -1809,9 +1810,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context)
+                    services.gtfs.load(context, DownloadTrigger.ADMIN)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -1851,7 +1852,7 @@ class Server(Bottle):
             return 'Invalid system'
         context = system.context
         try:
-            services.gtfs.load(context, True)
+            services.gtfs.load(context, DownloadTrigger.ADMIN, True)
             services.realtime.update(context)
             services.realtime.update_records()
             if not system.gtfs_downloaded or not services.realtime.validate(context):

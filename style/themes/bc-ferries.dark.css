@@ -358,6 +358,7 @@ table tr.table-button:hover {
 
 .lighter-text {
     color: #ABABAB;
+    --image-color: #ABABAB;
 }
 
 .marker .details {
