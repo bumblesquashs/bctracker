@@ -4,6 +4,7 @@ from .allocation import AllocationRepository
 from .assignment import AssignmentRepository
 from .decoration import DecorationRepository
 from .departure import DepartureRepository
+from .download import DownloadRepository
 from .livery import LiveryRepository
 from .model import ModelRepository
 from .order import OrderRepository

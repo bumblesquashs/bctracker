@@ -12,15 +12,14 @@ class TripRepository:
     
     database: Database
     
-    def create(self, context: Context, row: dict):
+    def create(self, download_id: int, context: Context, row: dict):
         '''Inserts a new trip into the database'''
         if not row:
             return
         self.database.insert(
             table='trip',
             values={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
+                'download_id': download_id,
                 'trip_id': row['trip_id'],
                 'route_id': row['route_id'],
                 'service_id': row['service_id'],
@@ -35,21 +34,26 @@ class TripRepository:
         '''Returns the trip with the given context and trip ID'''
         trips = self.database.select(
             table='trip',
-            columns=[
-                'agency_id',
-                'system_id',
-                'trip_id',
-                'route_id',
-                'service_id',
-                'block_id',
-                'direction_id',
-                'shape_id',
-                'headsign'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'trip_id': 'trip_id',
+                'route_id': 'route_id',
+                'service_id': 'service_id',
+                'block_id': 'block_id',
+                'direction_id': 'direction_id',
+                'shape_id': 'shape_id',
+                'headsign': 'headsign'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'trip.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'trip_id': trip_id
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'trip.trip_id': trip_id
             },
             limit=1,
             initializer=Trip.from_db
@@ -63,23 +67,28 @@ class TripRepository:
         '''Returns all trips that match the given context, route, and block'''
         return self.database.select(
             table='trip',
-            columns=[
-                'agency_id',
-                'system_id',
-                'trip_id',
-                'route_id',
-                'service_id',
-                'block_id',
-                'direction_id',
-                'shape_id',
-                'headsign'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'trip_id': 'trip_id',
+                'route_id': 'route_id',
+                'service_id': 'service_id',
+                'block_id': 'block_id',
+                'direction_id': 'direction_id',
+                'shape_id': 'shape_id',
+                'headsign': 'headsign'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'trip.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'trip_id': trip_id,
-                'route_id': route_id,
-                'block_id': block_id
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'trip.trip_id': trip_id,
+                'trip.route_id': route_id,
+                'trip.block_id': block_id
             },
             limit=limit,
             initializer=Trip.from_db
@@ -88,16 +97,21 @@ class TripRepository:
     def find_block_matches(self, context: Context, query: str) -> list[Match]:
         rows = self.database.select(
             table='trip',
-            columns=[
-                'agency_id',
-                'system_id',
-                'block_id'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'trip.block_id': 'block_id'
+            },
             distinct=True,
+            joins={
+                'download': {
+                    'download.download_id': 'trip.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'block_id': {
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'trip.block_id': {
                     'LIKE': f'%{query}%'
                 }
             }
@@ -113,10 +127,30 @@ class TripRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all trips for the given context from the database'''
+        download_ids = self.database.select(
+            table='trip',
+            columns={
+                'trip.download_id': 'download_id'
+            },
+            distinct=True,
+            joins={
+                'download': {
+                    'download.download_id': 'trip.download_id'
+                }
+            },
+            filters={
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id
+            },
+            initializer=lambda r: r['download_id']
+        )
+        if not download_ids:
+            return
+        if len(download_ids) == 1:
+            download_ids = download_ids[0]
         self.database.delete(
             table='trip',
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id
+                'download_id': download_ids
             }
         )
