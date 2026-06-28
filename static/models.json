@@ -72,7 +72,7 @@
             "name": "XD40",
             "length": 40,
             "length_units": "feet",
-            "fuel": "CNG"
+            "fuel": "Diesel"
         },
         "new-flyer-xhe40": {
             "manufacturer": "New Flyer",
@@ -128,7 +128,7 @@
             "name": "LFS HEV (2nd Gen)",
             "length": 40,
             "length_units": "feet",
-            "fuel": "Hybrid"
+            "fuel": "Diesel/Electric Hybrid"
         },
         "nova-bus-lfs-hev-3": {
             "manufacturer": "Nova Bus",
