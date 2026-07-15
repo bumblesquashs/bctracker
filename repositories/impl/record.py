@@ -197,12 +197,9 @@ class RecordRepository:
                 FROM trip_record
                 JOIN record ON record.record_id = trip_record.record_id
                 JOIN allocation ON allocation.allocation_id = record.allocation_id
+                LEFT JOIN trip ON trip.trip_id = trip_record.trip_id
+                LEFT JOIN download ON download.download_id = trip.download_id AND download.agency_id = allocation.agency_id AND download.system_id = allocation.system_id
                 WHERE record.date < ?
-                AND NOT EXISTS (
-                    SELECT 1
-                    FROM trip
-                    WHERE trip.trip_id = trip_record.trip_id
-                        AND trip.system_id = allocation.system_id
-                )
+                    AND download.download_id IS NULL;
             )
         ''', [date.format_db()])
