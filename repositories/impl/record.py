@@ -200,6 +200,6 @@ class RecordRepository:
                 LEFT JOIN trip ON trip.trip_id = trip_record.trip_id
                 LEFT JOIN download ON download.download_id = trip.download_id AND download.agency_id = allocation.agency_id AND download.system_id = allocation.system_id
                 WHERE record.date < ?
-                    AND download.download_id IS NULL;
+                    AND download.download_id IS NULL
             )
         ''', [date.format_db()])

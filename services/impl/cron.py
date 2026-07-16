@@ -62,9 +62,15 @@ class CronService:
                 except Exception as e:
                     services.log.error(f'Error loading GTFS data for {context}: {e}')
         if self.running:
-            repositories.record.delete_stale_trip_records()
-            self.database.archive()
-            services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            try:
+                repositories.record.delete_stale_trip_records()
+            except Exception as e:
+                services.log.error(f'Error deleting stale trip records: {e}')
+            try:
+                self.database.archive()
+                services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            except Exception as e:
+                services.log.error(f'Error running daily backup for {date.previous()}: {e}')
     
     def handle_realtime(self):
         '''Reloads realtime data for every system, and backs up data at midnight'''
