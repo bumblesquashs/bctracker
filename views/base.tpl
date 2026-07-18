@@ -1,6 +1,7 @@
 
 % from models.context import Context
 
+<!DOCTYPE html>
 <html>
     <head>
         % if settings.enable_analytics:
