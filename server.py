@@ -298,7 +298,7 @@ class Server(Bottle):
                 value = request.get_cookie('hvakamsyanab', '')
                 if value not in {'v1', 'v2'}:
                     response.status = 404
-                    return template('pages/validate')
+                    return template('pages/validate', cookie_domain=settings.current.cookie_domain)
             if settings.current.await_realtime:
                 while services.cron.updating_realtime:
                     sleep(1)

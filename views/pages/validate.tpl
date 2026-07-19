@@ -20,7 +20,11 @@
                     return;
                 }
                 const max_age = 60*60*24*365;
-                document.cookie = "hvakamsyanab=" + src + "; max-age=" + max_age + "; domain=bctracker.ca; path=/";
+                if ("{{ cookie_domain }}" === "") {
+                    document.cookie = "hvakamsyanab=" + src + "; max-age=" + max_age + "; path=/";
+                } else {
+                    document.cookie = "hvakamsyanab=" + src + "; max-age=" + max_age + "; domain={{ cookie_domain }}; path=/";
+                }
                 location.reload();
             }
             function fB() {
