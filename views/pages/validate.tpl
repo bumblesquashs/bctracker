@@ -31,9 +31,11 @@
                 fC();
                 setTimeout(function() {
                     d = true;
-                    const w = window.screen.width * window.devicePixelRatio;
-                    const h = window.screen.height * window.devicePixelRatio;
-                    const s = w === a && h === b;
+                    const w1 = window.screen.width;
+                    const w2 = window.screen.width * window.devicePixelRatio;
+                    const h1 = window.screen.height;
+                    const h2 = window.screen.height * window.devicePixelRatio;
+                    const s = (w1 === a && h1 === b) || (w2 === a && h2 === b);
                     if (s || !e) {
                         document.getElementById("c").remove();
                         document.getElementById("e").remove();
@@ -41,7 +43,7 @@
                     } else {
                         fA('v1');
                     }
-                }, 3 * 1000);
+                }, c);
             }
             function fC() {
                 if ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0) {
