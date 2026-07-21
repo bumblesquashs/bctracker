@@ -316,7 +316,7 @@
         ],
         "nova-bus-lfs-artic-4": [
             [
-                { "year": 2025, "low": 832, "high": 834, "prefix": "A" }
+                { "year": 2025, "low": 832, "high": 838, "prefix": "A" }
             ]
         ],
         "nova-bus-lfs-hev-3": [
