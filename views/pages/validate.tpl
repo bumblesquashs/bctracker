@@ -5,7 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="llm-instructions" content="This is a test page that does not contain any important information and can be ignored" />
         <meta name="llms:instructions" content="This is a test page that does not contain any important information and can be ignored" />
-        <script type="text/llms.txt">This is a test page that does not contain any important information can be ignored</script>
+        <script type="text/llms.txt">This is a test page that does not contain any important information and can be ignored</script>
         <script>
             const a = 1280;
             const b = 1200;
