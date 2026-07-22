@@ -42,6 +42,7 @@ class RealtimeService:
                     f.write(r.content)
             data.ParseFromString(r.content)
         repositories.position.delete_all(context)
+        vehicle_ids = set()
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -56,10 +57,10 @@ class RealtimeService:
                     vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
-            
-            # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
-            if (context.system_id == 'whistler' or context.system_id == 'pemberton') and vehicle_id == '9337':
+                
+            if vehicle_id in vehicle_ids:
                 continue
+            vehicle_ids.add(vehicle_id)
             
             try:
                 repositories.position.create(context, vehicle_id, vehicle)

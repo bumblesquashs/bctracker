@@ -7,7 +7,7 @@
         "default_system": "calgary",
         "prefix_headsigns": true,
         "accurate_seconds": false,
-        "invalid_realtime_percentage": 0.5
+        "invalid_realtime_percentage": 1.1
     },
     "edmonton-transit-service": {
         "name": "Edmonton Transit Service",

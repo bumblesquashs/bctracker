@@ -9,7 +9,7 @@
         <script>
             const a = 1280;
             const b = 1200;
-            const c = 5 * 1000;
+            const c = 4 * 1000;
             let d = false;
             let e = false;
             function fA(src) {
