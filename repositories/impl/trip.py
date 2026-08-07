@@ -16,6 +16,10 @@ class TripRepository:
         '''Inserts a new trip into the database'''
         if not row:
             return
+        try:
+            direction_id = int(row['direction_id'])
+        except:
+            direction_id = None
         self.database.insert(
             table='trip',
             values={
@@ -23,8 +27,8 @@ class TripRepository:
                 'trip_id': row['trip_id'],
                 'route_id': row['route_id'],
                 'service_id': row['service_id'],
-                'block_id': row['block_id'],
-                'direction_id': int(row['direction_id']),
+                'block_id': row.get('block_id'),
+                'direction_id': direction_id,
                 'shape_id': row['shape_id'],
                 'headsign': row['trip_headsign']
             }
