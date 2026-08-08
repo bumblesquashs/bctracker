@@ -11,7 +11,7 @@ class DepartureRepository:
     
     database: Database
     
-    def create(self, context: Context, row: dict):
+    def create(self, download_id: int, context: Context, row: dict):
         '''Inserts a new departure into the database'''
         try:
             pickup_type = PickupType(row['pickup_type'])
@@ -36,8 +36,7 @@ class DepartureRepository:
         self.database.insert(
             table='departure',
             values={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
+                'download_id': download_id,
                 'trip_id': row['trip_id'],
                 'sequence': int(row['stop_sequence']),
                 'stop_id': row['stop_id'],
@@ -69,18 +68,21 @@ class DepartureRepository:
             ]
         else:
             order_by = None
-        joins = {}
+        joins = {
+            'download': {
+                'download.download_id': 'departure.download_id'
+            }
+        }
         if route_id or block_id:
             joins['trip'] = {
-                'trip.agency_id': 'departure.agency_id',
-                'trip.system_id': 'departure.system_id',
+                'trip.download_id': 'departure.download_id',
                 'trip.trip_id': 'departure.trip_id'
             }
         return self.database.select(
             table='departure',
             columns={
-                'departure.agency_id': 'agency_id',
-                'departure.system_id': 'system_id',
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
                 'departure.sequence': 'sequence',
                 'departure.stop_id': 'stop_id',
@@ -93,8 +95,8 @@ class DepartureRepository:
             },
             joins=joins,
             filters={
-                'departure.agency_id': context.agency_id,
-                'departure.system_id': context.system_id,
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
                 'departure.trip_id': trip_id,
                 'departure.sequence': sequence,
                 'departure.stop_id': stop_id,
@@ -110,28 +112,33 @@ class DepartureRepository:
         '''Returns all departures on a trip from the given sequence number onwards'''
         return self.database.select(
             table='departure',
-            columns=[
-                'agency_id',
-                'system_id',
-                'trip_id',
-                'sequence',
-                'stop_id',
-                'time',
-                'pickup_type',
-                'dropoff_type',
-                'timepoint',
-                'distance',
-                'headsign'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'departure.trip_id': 'trip_id',
+                'departure.sequence': 'sequence',
+                'departure.stop_id': 'stop_id',
+                'departure.time': 'time',
+                'departure.pickup_type': 'pickup_type',
+                'departure.dropoff_type': 'dropoff_type',
+                'departure.timepoint': 'timepoint',
+                'departure.distance': 'distance',
+                'departure.headsign': 'headsign'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'departure.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'trip_id': trip_id,
-                'sequence': {
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'departure.trip_id': trip_id,
+                'departure.sequence': {
                     '>=': sequence
                 }
             },
-            order_by='sequence',
+            order_by='departure.sequence',
             limit=limit,
             initializer=Departure.from_db
         )
@@ -142,22 +149,24 @@ class DepartureRepository:
             table='departure',
             columns='trip.*',
             joins={
+                'download': {
+                    'download.download_id': 'departure.download_id'
+                },
                 'trip': {
-                    'trip.agency_id': 'departure.agency_id',
-                    'trip.system_id': 'departure.system_id',
+                    'trip.download_id': 'departure.download_id',
                     'trip.trip_id': 'departure.trip_id'
                 }
             },
             filters={
-                'departure.agency_id': context.agency_id,
-                'departure.system_id': context.system_id,
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
                 'departure.stop_id': stop_id
             })
         return self.database.select(
             table='stop_trip',
             columns={
-                'departure.agency_id': 'agency_id',
-                'departure.system_id': 'system_id',
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
                 'departure.trip_id': 'trip_id',
                 'departure.sequence': 'sequence',
                 'departure.stop_id': 'stop_id',
@@ -172,9 +181,11 @@ class DepartureRepository:
                 'stop_trip': cte
             },
             joins={
+                'download': {
+                    'download.download_id': 'stop_trip.download_id'
+                },
                 'departure': {
-                    'departure.agency_id': 'stop_trip.agency_id',
-                    'departure.system_id': 'stop_trip.system_id',
+                    'departure.download_id': 'stop_trip.download_id',
                     'departure.trip_id': 'stop_trip.trip_id'
                 }
             },
@@ -190,28 +201,33 @@ class DepartureRepository:
     def find_with_previous(self, context: Context, trip_id: str, sequence: int) -> tuple[Departure | None, Departure | None]:
         departures = self.database.select(
             table='departure',
-            columns=[
-                'agency_id',
-                'system_id',
-                'trip_id',
-                'sequence',
-                'stop_id',
-                'time',
-                'pickup_type',
-                'dropoff_type',
-                'timepoint',
-                'distance',
-                'headsign'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'departure.trip_id': 'trip_id',
+                'departure.sequence': 'sequence',
+                'departure.stop_id': 'stop_id',
+                'departure.time': 'time',
+                'departure.pickup_type': 'pickup_type',
+                'departure.dropoff_type': 'dropoff_type',
+                'departure.timepoint': 'timepoint',
+                'departure.distance': 'distance',
+                'departure.headsign': 'headsign'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'departure.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'trip_id': trip_id,
-                'sequence': {
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'departure.trip_id': trip_id,
+                'departure.sequence': {
                     '<=': sequence
                 }
             },
-            order_by='sequence DESC',
+            order_by='departure.sequence DESC',
             limit=2,
             initializer=Departure.from_db
         )
@@ -223,10 +239,30 @@ class DepartureRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all departures for the given context from the database'''
+        download_ids = self.database.select(
+            table='departure',
+            columns={
+                'departure.download_id': 'download_id'
+            },
+            distinct=True,
+            joins={
+                'download': {
+                    'download.download_id': 'departure.download_id'
+                }
+            },
+            filters={
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id
+            },
+            initializer=lambda r: r['download_id']
+        )
+        if not download_ids:
+            return
+        if len(download_ids) == 1:
+            download_ids = download_ids[0]
         self.database.delete(
             table='departure',
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id
+                'download_id': download_ids
             }
         )

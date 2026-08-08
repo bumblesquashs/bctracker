@@ -96,9 +96,18 @@ SQL_SCRIPTS = [
         )
     ''',
     '''
-        CREATE TABLE IF NOT EXISTS route (
+        CREATE TABLE IF NOT EXISTS download (
+            download_id INTEGER PRIMARY KEY ASC,
             agency_id TEXT NOT NULL,
             system_id TEXT NOT NULL,
+            date TEXT NOT NULL,
+            time TEXT NOT NULL,
+            trigger TEXT NOT NULL
+        )
+    ''',
+    '''
+        CREATE TABLE IF NOT EXISTS route (
+            download_id TEXT NOT NULL,
             route_id TEXT NOT NULL,
             number TEXT NOT NULL,
             name TEXT NOT NULL,
@@ -106,13 +115,12 @@ SQL_SCRIPTS = [
             text_colour TEXT,
             type TEXT,
             sort_order INTEGER,
-            PRIMARY KEY (agency_id, system_id, route_id)
+            PRIMARY KEY (download_id, route_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS stop (
-            agency_id TEXT NOT NULL,
-            system_id TEXT NOT NULL,
+            download_id TEXT NOT NULL,
             stop_id TEXT NOT NULL,
             number TEXT NOT NULL,
             name TEXT NOT NULL,
@@ -120,13 +128,12 @@ SQL_SCRIPTS = [
             lon REAL NOT NULL,
             parent_id TEXT,
             type TEXT,
-            PRIMARY KEY (agency_id, system_id, stop_id)
+            PRIMARY KEY (download_id, stop_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS trip (
-            agency_id TEXT NOT NULL,
-            system_id TEXT NOT NULL,
+            download_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
             route_id TEXT NOT NULL,
             service_id TEXT NOT NULL,
@@ -134,14 +141,13 @@ SQL_SCRIPTS = [
             direction_id INTEGER,
             shape_id TEXT,
             headsign TEXT NOT NULL,
-            PRIMARY KEY (agency_id, system_id, trip_id),
-            FOREIGN KEY (agency_id, system_id, route_id) REFERENCES route (agency_id, system_id, route_id)
+            PRIMARY KEY (download_id, trip_id),
+            FOREIGN KEY (download_id, route_id) REFERENCES route (download_id, route_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS departure (
-            agency_id TEXT NOT NULL,
-            system_id TEXT NOT NULL,
+            download_id TEXT NOT NULL,
             trip_id TEXT NOT NULL,
             sequence INTEGER NOT NULL,
             stop_id TEXT NOT NULL,
@@ -151,20 +157,19 @@ SQL_SCRIPTS = [
             timepoint INTEGER NOT NULL,
             distance REAL,
             headsign TEXT,
-            PRIMARY KEY (agency_id, system_id, trip_id, sequence),
-            FOREIGN KEY (agency_id, system_id, trip_id) REFERENCES trip (agency_id, system_id, trip_id),
-            FOREIGN KEY (agency_id, system_id, stop_id) REFERENCES stop (agency_id, system_id, stop_id)
+            PRIMARY KEY (download_id, trip_id, sequence),
+            FOREIGN KEY (download_id, trip_id) REFERENCES trip (download_id, trip_id),
+            FOREIGN KEY (download_id, stop_id) REFERENCES stop (download_id, stop_id)
         )
     ''',
     '''
         CREATE TABLE IF NOT EXISTS point (
-            agency_id TEXT NOT NULL,
-            system_id TEXT NOT NULL,
+            download_id TEXT NOT NULL,
             shape_id TEXT NOT NULL,
             sequence INTEGER NOT NULL,
             lat REAL NOT NULL,
             lon REAL NOT NULL,
-            PRIMARY KEY (agency_id, system_id, shape_id, sequence)
+            PRIMARY KEY (download_id, shape_id, sequence)
         )
     ''',
     'CREATE INDEX IF NOT EXISTS allocation_agency_vehicle ON allocation (agency_id, vehicle_id)',

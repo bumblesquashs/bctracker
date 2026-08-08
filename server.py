@@ -9,6 +9,7 @@ from database import Database
 
 from models.context import Context
 from models.date import Date
+from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
@@ -19,7 +20,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 69
+VERSION = 70
 
 random = Random()
 
@@ -37,13 +38,13 @@ class Server(Bottle):
         self.database = database
         
         # Static files
-        self.add('/style/<name:path>', self.style, add_context=False)
-        self.add('/img/<name:path>', self.img, add_context=False)
-        self.add('/js/<name:path>', self.js, add_context=False)
-        self.add('/robots.txt', self.robots_text, add_context=False)
+        self.add('/style/<name:path>', self.style, add_context=False, validate=False)
+        self.add('/img/<name:path>', self.img, add_context=False, validate=False)
+        self.add('/js/<name:path>', self.js, add_context=False, validate=False)
+        self.add('/robots.txt', self.robots_text, add_context=False, validate=False)
         
         # Pages
-        self.add('/', self.home)
+        self.add('/', self.home, validate=False)
         self.add('/news', self.news)
         self.add('/map', self.map)
         self.add('/realtime', self.realtime_all)
@@ -92,21 +93,21 @@ class Server(Bottle):
         self.add('/admin/logs', self.admin_logs, require_admin=True)
         
         # API endpoints
-        self.add('/api/health-check', self.api_health_check, add_context=False)
-        self.add('/api/positions', self.api_positions)
-        self.add('/api/shape/<shape_id>', self.api_shape)
-        self.add('/api/stops', self.api_stops)
-        self.add('/api/routes', self.api_routes)
-        self.add('/api/search', self.api_search, method='POST')
-        self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reload-systems', self.api_admin_reload_systems, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reload-themes', self.api_admin_reload_themes, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/restart-cron', self.api_admin_restart_cron, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/backup-database', self.api_admin_backup_database, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reset-cache/<reset_system_id>', self.api_admin_reset_cache, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reload-gtfs/<reload_system_id>', self.api_admin_reload_gtfs, method='POST', add_context=False, require_admin=True)
-        self.add('/api/admin/reload-realtime/<reload_system_id>', self.api_admin_reload_realtime, method='POST', add_context=False, require_admin=True)
+        self.add('/api/health-check', self.api_health_check, add_context=False, validate=False)
+        self.add('/api/positions', self.api_positions, validate=False)
+        self.add('/api/shape/<shape_id>', self.api_shape, validate=False)
+        self.add('/api/stops', self.api_stops, validate=False)
+        self.add('/api/routes', self.api_routes, validate=False)
+        self.add('/api/search', self.api_search, method='POST', validate=False)
+        self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reload-systems', self.api_admin_reload_systems, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reload-themes', self.api_admin_reload_themes, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/restart-cron', self.api_admin_restart_cron, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/backup-database', self.api_admin_backup_database, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reset-cache/<reset_system_id>', self.api_admin_reset_cache, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reload-gtfs/<reload_system_id>', self.api_admin_reload_gtfs, method='POST', add_context=False, require_admin=True, validate=False)
+        self.add('/api/admin/reload-realtime/<reload_system_id>', self.api_admin_reload_realtime, method='POST', add_context=False, require_admin=True, validate=False)
         
         # Errors
         self.error(403)(self.error_403)
@@ -146,9 +147,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context, args.reload, args.updatedb)
+                    services.gtfs.load(context, DownloadTrigger.LAUNCH_FLAG, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -288,11 +289,16 @@ class Server(Bottle):
         favourites_string = request.get_cookie('favourites', '')
         return FavouriteSet.parse(favourites_string)
     
-    def add(self, path, callback, method='GET', add_context=True, require_admin=False):
+    def add(self, path, callback, method='GET', add_context=True, require_admin=False, validate=True):
         '''Adds an endpoint to the server'''
         def endpoint(*args, **kwargs):
             if require_admin and not self.validate_admin():
                 raise HTTPError(403)
+            if settings.current.enable_validation and validate:
+                value = request.get_cookie('hvakamsyanab', '')
+                if value not in {'v1', 'v2'}:
+                    response.status = 404
+                    return template('pages/validate', cookie_domain=settings.current.cookie_domain)
             if settings.current.await_realtime:
                 while services.cron.updating_realtime:
                     sleep(1)
@@ -1809,9 +1815,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context)
+                    services.gtfs.load(context, DownloadTrigger.ADMIN)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -1851,7 +1857,7 @@ class Server(Bottle):
             return 'Invalid system'
         context = system.context
         try:
-            services.gtfs.load(context, True)
+            services.gtfs.load(context, DownloadTrigger.ADMIN, True)
             services.realtime.update(context)
             services.realtime.update_records()
             if not system.gtfs_downloaded or not services.realtime.validate(context):

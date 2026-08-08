@@ -12,7 +12,7 @@ class RouteRepository:
     
     database: Database
     
-    def create(self, context: Context, row: dict):
+    def create(self, download_id: int, context: Context, row: dict):
         '''Inserts a new route into the database'''
         try:
             colour = row['route_color']
@@ -46,8 +46,7 @@ class RouteRepository:
         self.database.insert(
             table='route',
             values={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
+                'download_id': download_id,
                 'route_id': route_id,
                 'number': number,
                 'name': row['route_long_name'],
@@ -62,22 +61,27 @@ class RouteRepository:
         '''Returns the route with the given context and route ID'''
         routes = self.database.select(
             table='route',
-            columns=[
-                'agency_id',
-                'system_id',
-                'route_id',
-                'number',
-                'name',
-                'colour',
-                'text_colour',
-                'type',
-                'sort_order'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'route.route_id': 'route_id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour',
+                'route.type': 'type',
+                'route.sort_order': 'sort_order'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'route.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'route_id': route_id,
-                'number': number
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'route.route_id': route_id,
+                'route.number': number
             },
             limit=1,
             initializer=Route.from_db
@@ -91,21 +95,26 @@ class RouteRepository:
         '''Returns all routes that match the given context'''
         return self.database.select(
             table='route',
-            columns=[
-                'agency_id',
-                'system_id',
-                'route_id',
-                'number',
-                'name',
-                'colour',
-                'text_colour',
-                'type',
-                'sort_order'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'route.route_id': 'route_id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour',
+                'route.type': 'type',
+                'route.sort_order': 'sort_order'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'route.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
-                'number': route_number
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'route.number': route_number
             },
             limit=limit,
             initializer=Route.from_db
@@ -114,25 +123,30 @@ class RouteRepository:
     def find_matches(self, context: Context, query: str) -> list[Match]:
         routes = self.database.select(
             table='route',
-            columns=[
-                'agency_id',
-                'system_id',
-                'route_id',
-                'number',
-                'name',
-                'colour',
-                'text_colour',
-                'type',
-                'sort_order'
-            ],
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'route.route_id': 'route_id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour',
+                'route.type': 'type',
+                'route.sort_order': 'sort_order'
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'route.download_id'
+                }
+            },
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id,
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
                 'OR': {
-                    'number': {
+                    'route.number': {
                         'LIKE': f'%{query}%'
                     },
-                    'name': {
+                    'route.name': {
                         'LIKE': f'%{query}%'
                     }
                 }
@@ -143,10 +157,30 @@ class RouteRepository:
     
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''
+        download_ids = self.database.select(
+            table='route',
+            columns={
+                'route.download_id': 'download_id'
+            },
+            distinct=True,
+            joins={
+                'download': {
+                    'download.download_id': 'route.download_id'
+                }
+            },
+            filters={
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id
+            },
+            initializer=lambda r: r['download_id']
+        )
+        if not download_ids:
+            return
+        if len(download_ids) == 1:
+            download_ids = download_ids[0]
         self.database.delete(
             table='route',
             filters={
-                'agency_id': context.agency_id,
-                'system_id': context.system_id
+                'download_id': download_ids
             }
         )

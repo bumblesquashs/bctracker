@@ -21,6 +21,7 @@ class Settings:
     analytics_key: str | None = None
     
     # Functionality settings
+    enable_validation: bool = False
     enable_analytics: bool = True
     enable_gtfs_backups: bool = True
     enable_realtime_backups: bool = True
@@ -42,6 +43,7 @@ class Settings:
         
         self.analytics_key = config.get('analytics_key')
         
+        self.enable_validation = config.get('enable_validation', 'false') == 'true'
         self.enable_analytics = config.get('enable_analytics', 'true') == 'true'
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'

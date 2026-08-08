@@ -333,6 +333,7 @@ table tr.table-button:hover {
 
 .lighter-text {
     color: #888888;
+    --image-color: #888888;
 }
 
 .marker .details {
