@@ -20,7 +20,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 70
+VERSION = 71
 
 random = Random()
 

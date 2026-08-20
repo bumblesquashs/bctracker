@@ -72,6 +72,10 @@
                 <div class="options-container">
                     <div class="option" onclick="setVehicleMarkerStyle('default')">
                         <div id="vehicle-marker-style-default" class="radio-button {{ 'selected' if not vehicle_marker_style or vehicle_marker_style == 'default' else '' }}"></div>
+                        <div>Default</div>
+                    </div>
+                    <div class="option" onclick="setVehicleMarkerStyle('vehicle-type')">
+                        <div id="vehicle-marker-style-vehicle-type" class="radio-button {{ 'selected' if vehicle_marker_style == 'vehicle-type' else '' }}"></div>
                         <div>Vehicle Type</div>
                     </div>
                     <div class="option" onclick="setVehicleMarkerStyle('mini')">
@@ -230,13 +234,16 @@
             element.appendChild(icon);
             
             if (vehicleMarkerStyle === "route") {
-                icon.classList.add("vehicle_route");
+                icon.classList.add("route-number");
+                icon.innerHTML += position.route_number;
+                icon.style.backgroundColor = "#" + position.colour;
+            } else if (vehicleMarkerStyle === "vehicle-type") {
                 if (position.lat === 0 && position.lon === 0) {
-                    icon.innerHTML += getSVG("fish");
+                    icon.innerHTML = getSVG("fish");
                 } else if (adherence && adherence.value <= -66) {
-                    icon.innerHTML += getSVG("snail");
+                    icon.innerHTML = getSVG("snail");
                 } else {
-                    icon.innerHTML += position.route_number;
+                    icon.innerHTML = getSVG(position.vehicle_icon);
                 }
                 icon.style.backgroundColor = "#" + position.colour;
             } else if (vehicleMarkerStyle === "mini") {
@@ -246,22 +253,14 @@
             } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
-                    if (position.lat === 0 && position.lon === 0) {
-                        icon.innerHTML += getSVG("fish");
-                    } else if (position.route_number === "NIS") {
+                    if (position.route_number === "NIS") {
                         icon.innerHTML += "NIS";
                     } else {
                         icon.innerHTML += "N/A"
                     }
                 } else {
-                    if (position.lat === 0 && position.lon === 0) {
-                        icon.innerHTML += getSVG("fish");
-                    } else if (adherence.value <= -66) {
-                        icon.innerHTML += getSVG("snail");
-                    } else {
-                        icon.innerHTML += adherence.value;
-                    }
                     icon.classList.add(adherence.status_class);
+                    icon.innerHTML += adherence.value;
                     const adherenceValue = parseInt(adherence.value);
                     if (adherenceValue >= 100 || adherenceValue <= -100) {
                         icon.classList.add("smaller-font");
@@ -270,13 +269,7 @@
             } else if (vehicleMarkerStyle === "occupancy" && position.occupancy_icon) {
                 icon.classList.add("occupancy");
                 icon.classList.add(position.occupancy_status_class);
-                if (position.lat === 0 && position.lon === 0) {
-                    icon.innerHTML += getSVG("fish");
-                } else if (adherence && adherence.value <= -66) {
-                    icon.innerHTML += getSVG("snail");
-                } else {
-                    icon.innerHTML += getSVG(position.occupancy_icon);
-                }
+                icon.innerHTML += getSVG(position.occupancy_icon);
             } else if (vehicleMarkerStyle === "livery" && position.livery) {
                 icon.classList.add("livery");
                 icon.innerHTML = '<img src="/img/liveries/' + position.livery  +'.png" />';
@@ -285,13 +278,21 @@
                 icon.innerHTML = position.speed + '<div class="units">km/h</div>';
                 icon.style.backgroundColor = "#" + position.colour;
             } else {
+                icon.classList.add("vehicle-route");
+                const column = document.createElement("div");
+                column.className = "column center gap-0";
                 if (position.lat === 0 && position.lon === 0) {
-                    icon.innerHTML += getSVG("fish");
+                    column.innerHTML = getSVG("fish");
                 } else if (adherence && adherence.value <= -66) {
-                    icon.innerHTML += getSVG("snail");
+                    column.innerHTML = getSVG("snail");
                 } else {
-                    icon.innerHTML += getSVG(position.vehicle_icon);
+                    column.innerHTML = getSVG(position.vehicle_icon);
                 }
+                const routeElement = document.createElement("div");
+                routeElement.className = "number";
+                routeElement.innerHTML = position.route_number;
+                column.appendChild(routeElement);
+                icon.appendChild(column);
                 icon.style.backgroundColor = "#" + position.colour;
             }
             
@@ -492,9 +493,15 @@
     }
     
     function setVehicleMarkerStyle(style) {
-        document.getElementById("vehicle-marker-style-" + vehicleMarkerStyle).classList.remove("selected");
+        const oldElement = document.getElementById("vehicle-marker-style-" + vehicleMarkerStyle);
+        if (oldElement !== null) {
+            oldElement.classList.remove("selected");
+        }
         vehicleMarkerStyle = style;
-        document.getElementById("vehicle-marker-style-" + style).classList.add("selected");
+        const newElement = document.getElementById("vehicle-marker-style-" + style);
+        if (newElement !== null) {
+            newElement.classList.add("selected");
+        }
         setCookie("vehicle_marker_style", style);
         updateMap(false);
     }
