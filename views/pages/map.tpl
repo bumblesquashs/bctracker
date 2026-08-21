@@ -530,7 +530,7 @@
                 continue;
             }
             const request = new XMLHttpRequest();
-            request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id, true), true);
+            request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id), true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
@@ -588,7 +588,7 @@
                 shapes[shapeID].setVisible(true);
             } else {
                 const request = new XMLHttpRequest();
-                request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id, true), true);
+                request.open("GET", getURL(null, position.system_id, "api/shape/" + position.shape_id), true);
                 request.responseType = "json";
                 request.onload = function() {
                     if (request.status === 200) {
@@ -684,7 +684,7 @@
         if (key in cachedStops) {
             updateStopMarkers(key);
         } else {
-            const url = getURL(currentAgencyID, currentSystemID, "api/stops", true, {
+            const url = getURL(currentAgencyID, currentSystemID, "api/stops", {
                 "lat": lat,
                 "lon": lon,
                 "size": size

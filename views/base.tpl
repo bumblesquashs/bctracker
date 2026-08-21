@@ -157,7 +157,7 @@
                 return a
             }
             
-            function getURL(agencyID, systemID, path, internal=false, params=null) {
+            function getURL(agencyID, systemID, path, params=null) {
                 let url;
                 const query = [];
                 
@@ -168,13 +168,13 @@
                 }
                 
                 if (systemID) {
-                    if ((internal && currentSystemID === null) || "{{ settings.system_domain is None }}" === "True") {
+                    if ("{{ settings.system_domain is None }}" === "True") {
                         query.push("system=" + systemID);
                     } else {
                         url = "{{ settings.system_domain }}".format(systemID, path);
                     }
                 } else if (agencyID) {
-                    if ((internal && currentAgencyID === null) || "{{ settings.agency_domain is None }}" === "True") {
+                    if ("{{ settings.agency_domain is None }}" === "True") {
                         query.push("agency=" + agencyID);
                     } else {
                         url = "{{ settings.agency_domain }}".format(agencyID, path);

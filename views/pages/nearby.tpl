@@ -171,7 +171,7 @@
     
     <script>
         function onSuccess(position) {
-            window.location = getURL(currentAgencyID, currentSystemID, "nearby", false, {
+            window.location = getURL(currentAgencyID, currentSystemID, "nearby", {
                 lat: position.coords.latitude,
                 lon: position.coords.longitude
             });

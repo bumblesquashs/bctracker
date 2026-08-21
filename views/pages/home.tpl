@@ -70,7 +70,7 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = getURL(currentAgencyID, currentSystemID, "stops", false, {
+                                window.location = getURL(currentAgencyID, currentSystemID, "stops", {
                                     "search": value
                                 });
                             } else {
