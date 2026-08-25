@@ -115,8 +115,8 @@
                 </p>
                 <p>
                     <b>Perrin</b> graduated with a bachelors degree in information technology from Kwantlen Polytechnic University in 2019.
-                    Currently he works as a mobile app developer for a construction safety startup.
-                    He began helping to develop BCTracker in summer 2020.
+                    Currently they work as a mobile app developer for a construction safety startup.
+                    They began helping to develop BCTracker in summer 2020.
                 </p>
             </div>
         </div>
