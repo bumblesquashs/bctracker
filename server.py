@@ -346,13 +346,14 @@ class Server(Bottle):
             file='home',
             title='Home',
             enable_refresh=False,
-            recent_news_views=news_views[:constants.RECENT_NEWS_POSTS]
+            recent_news_views=news_views[:constants.RECENT_NEWS_POSTS],
+            show_more_news=len(news_views) > constants.RECENT_NEWS_POSTS
         )
     
     def news(self, context: Context):
         news_views = glob('./views/news/*.tpl')
         news_views.sort(reverse=True)
-        if news_views and len(news_views) > constants.RECENT_NEWS_POSTS:
+        if len(news_views) > constants.RECENT_NEWS_POSTS:
             news_views = news_views[constants.RECENT_NEWS_POSTS:]
         return self.page(
             context=context,

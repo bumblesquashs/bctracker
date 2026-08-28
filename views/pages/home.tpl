@@ -185,9 +185,11 @@
                         % for news_view in recent_news_views:
                             % include(news_view)
                         % end
-                        <div>
-                            <a href="{{ context.url('news') }}">See older news</a>
-                        </div>
+                        % if show_more_news:
+                            <div>
+                                <a href="{{ context.url('news') }}">See older news</a>
+                            </div>
+                        % end
                     </div>
                 % else:
                     <div class="placeholder">
