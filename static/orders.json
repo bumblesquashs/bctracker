@@ -308,10 +308,13 @@
                 { "year": 2022, "low": 2034, "high": 2037, "prefix": "S" }
             ],
             [
-                { "year": 2025, "low": 940, "high": 949, "prefix": "A" }
+                { "year": 2025, "low": 940, "high": 944, "prefix": "A" }
             ],
             [
                 { "year": 2025, "low": 2038, "high": 2042, "prefix": "S" }
+            ],
+            [
+                { "year": 2026, "low": 945, "high": 951, "prefix": "A" }
             ]
         ],
         "nova-bus-lfs-artic-4": [
@@ -483,9 +486,13 @@
                 { "year": 2012, "low": 1007, "high": 1008 }
             ]
         ],
-        "ford-glaval-e-450-universal": [
+        "ford-champion-e-450-challenger": [
             [
                 { "year": 2024, "low": 1052, "high": 1054 }
+            ],
+            [
+                { "year": 2026, "id": 1056 },
+                { "year": 2026, "id": 1058 }
             ]
         ],
         "grande-west-vicinity-30": [
