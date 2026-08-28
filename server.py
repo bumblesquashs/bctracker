@@ -339,7 +339,7 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
-        news_views = glob('./views/news/*.html')
+        news_views = glob('./views/news/*.tpl')
         news_views.sort(reverse=True)
         return self.page(
             context=context,
@@ -350,7 +350,7 @@ class Server(Bottle):
         )
     
     def news(self, context: Context):
-        news_views = glob('./views/news/*.html')
+        news_views = glob('./views/news/*.tpl')
         news_views.sort(reverse=True)
         if news_views and len(news_views) > constants.RECENT_NEWS_POSTS:
             news_views = news_views[constants.RECENT_NEWS_POSTS:]
