@@ -1,6 +1,7 @@
 
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
+from glob import glob
 from random import Random
 from time import time, sleep
 import cherrypy as cp
@@ -15,6 +16,7 @@ from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
 from models.stop import StopType
 
+import constants
 import repositories
 import services
 import settings
@@ -337,20 +339,28 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
+        news_views = glob('./views/news/*.html')
+        news_views.sort(reverse=True)
         return self.page(
             context=context,
             file='home',
             title='Home',
-            enable_refresh=False
+            enable_refresh=False,
+            recent_news_views=news_views[:constants.RECENT_NEWS_POSTS]
         )
     
     def news(self, context: Context):
+        news_views = glob('./views/news/*.html')
+        news_views.sort(reverse=True)
+        if news_views and len(news_views) > constants.RECENT_NEWS_POSTS:
+            news_views = news_views[constants.RECENT_NEWS_POSTS:]
         return self.page(
             context=context,
             file='news',
             title='News Archive',
             path=['news'],
-            enable_refresh=False
+            enable_refresh=False,
+            news_views=news_views
         )
     
     def map(self, context: Context):

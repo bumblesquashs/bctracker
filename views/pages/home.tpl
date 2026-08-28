@@ -180,60 +180,21 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <div class="container">
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Spring Update</h3>
-                            April 13th, 2026
-                        </div>
-                        <div class="content">
-                            <p>
-                                Long time no post!
-                                We've made a few improvements to favourites on the site.
-                            </p>
-                            <ul>
-                                <li>You can now add favourite systems, which are shown at the top of the systems list</li>
-                                <li>
-                                    Favourite buses, routes, and stops now have a <a href="{{ context.url('favourites') }}">dedicated page</a>
-                                    <ul>
-                                        <li>On desktop this can be accessed via the star icon in the navigation bar, on mobile it can be found in the navigation menu</li>
-                                    </ul>
-                                </li>
-                                <li>With more room to show favourites, you can now easily see bus history, active buses on routes, and upcoming departures from stops</li>
-                            </ul>
-                            <p>
-                                We've also made some improvements to searching across all transit systems.
-                                Routes, stops, and blocks can be searched at any time.
-                                With the quick search, if there's more than one result, you'll be prompted to choose the one you're looking for.
-                            </p>
-                            <p>As always, thank you for choosing BCTracker!</p>
+                % if recent_news_views:
+                    <div class="container">
+                        % for news_view in recent_news_views:
+                            % include(news_view)
+                        % end
+                        <div>
+                            <a href="{{ context.url('news') }}">See older news</a>
                         </div>
                     </div>
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>BCTracker AI Chat</h3>
-                            April 1st, 2026
-                        </div>
-                        <div class="content">
-                            <p class="smaller-font lighter-text">Sure, here is a news post for the new AI chat feature written in the style of the BCTracker developers:</p>
-                            <p>
-                                It's never too late to jump on the bandwagon.
-                                BCTracker is finally introducing an AI chat to help you get information faster!
-                            </p>
-                            <p>
-                                For your convenience, the chat is designed to take up a large portion of your screen and there's no way to remove it, so you can't just ignore this amazing new feature.
-                                All responses are guaranteed to be 100% correct anyways — you probably won't even need the rest of the website anymore.
-                            </p>
-                            <p>For more information, please see the AI chat section on the <a href="{{ context.url('about') }}#ai">About</a> page.</p>
-                            <p>We hope you enjoy, and have a safe summer!</p>
-                            <p class="smaller-font lighter-text">Let me know if you'd like any modifications or something different.</p>
-                            <i>... Happy April Fools Day!</i>
-                        </div>
+                % else:
+                    <div class="placeholder">
+                        <h3>No news yet</h3>
+                        <p>Please check back later!</p>
                     </div>
-                    <div>
-                        <a href="{{ context.url('news') }}">See older news</a>
-                    </div>
-                </div>
+                % end
             </div>
         </div>
     </div>
