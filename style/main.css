@@ -325,6 +325,7 @@ table tr.table-button {
     margin: 0px;
     padding: 5px 0px;
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     align-items: center;
     font-family: var(--sans-serif-font);
     background-color: var(--navigation-menu-background);
@@ -390,6 +391,10 @@ table tr.table-button {
     padding-bottom: 5px;
     border-bottom-width: 2px;
     border-bottom-style: solid;
+}
+
+#page-header:has(.tab-button-bar) {
+    padding-bottom: 0px;
 }
 
 #page-header h2 {
@@ -1629,9 +1634,10 @@ table tr.table-button {
 .tab-button-bar {
     display: flex;
     flex-direction: row;
-    gap: 1px;
-    margin-bottom: -6px;
-    border-width: 1px;
+    gap: 0px;
+    border-width: 0px;
+    border-top-width: 1px;
+    border-left-width: 1px;
     border-style: solid;
 }
 
@@ -1644,6 +1650,8 @@ table tr.table-button {
     font-family: var(--sans-serif-font);
     text-align: center;
     text-decoration: none !important;
+    border-width: 0px;
+    border-style: solid;
 }
 
 .tab-button:hover {

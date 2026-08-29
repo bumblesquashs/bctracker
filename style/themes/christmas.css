@@ -434,13 +434,12 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background: #69BB65;
     border-color: #69BB65;
 }
 
 .tab-button {
-    background-color: #FFFFFF;
     color: #D70000;
+    border-color: #69BB65;
 }
 
 .tab-button:hover {

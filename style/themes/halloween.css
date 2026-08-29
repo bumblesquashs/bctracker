@@ -440,13 +440,12 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background: #565656;
     border-color: #565656;
 }
 
 .tab-button {
-    background-color: #2F2F2F;
     color: #E56100;
+    border-color: #565656;
 }
 
 .tab-button:hover {
