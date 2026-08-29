@@ -1,9 +1,9 @@
 {
     "calgary-transit": {
-        "three-stripes": {
+        "calgary-stripes": {
             "name": "Three Stripes"
         },
-        "wave": {
+        "calgary-wave": {
             "name": "Wave"
         }
     },
@@ -25,6 +25,27 @@
         },
         "strathcona": {
             "name": "Strathcona County"
+        }
+    },
+    "grande-prairie-transit": {
+        "grande-prairie-stripes": {
+            "name": "Stripes"
+        },
+        "grande-prairie-wave": {
+            "name": "Waves"
+        }
+    },
+    "medicine-hat-transit": {
+        "medicine-hat-stripes": {
+            "name": "Stripes"
+        },
+        "medicine-hat-wave": {
+            "name": "Wave"
+        }
+    },
+    "woosh": {
+        "woosh": {
+            "name": "Woosh"
         }
     }
 }

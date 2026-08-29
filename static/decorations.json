@@ -1,3 +1,168 @@
 {
-    
+    "roam": {
+        "1001": {
+            "text": "🐻",
+            "description": "Summer Grizzly"
+        },
+        "1002": {
+            "text": "🐺",
+            "description": "Winter Wolf"
+        },
+        "1003": {
+            "text": "🦌",
+            "description": "Elk"
+        },
+        "1004": {
+            "text": "🐐",
+            "description": "Spring Goat"
+        },
+        "1005": {
+            "text": "🫎",
+            "description": "Fall Moose"
+        },
+        "1006": {
+            "text": "🐑",
+            "description": "Summer Sheep"
+        },
+        "1007": {
+            "text": "🦌",
+            "description": "Deer"
+        },
+        "1008": {
+            "text": "🦊",
+            "description": "Fox"
+        },
+        "1011": {
+            "text": "🐆",
+            "description": "Summer Cougar"
+        },
+        "1012": {
+            "text": "🐆",
+            "description": "Winter Lynx"
+        },
+        "1013": {
+            "text": "🦌",
+            "description": "Winter Elk"
+        },
+        "1014": {
+            "text": "🐻",
+            "description": "Spring Black Bear"
+        },
+        "1015": {
+            "text": "🐟",
+            "description": "Trout"
+        },
+        "1017": {
+            "text": "🐺",
+            "description": "Fall Coyote"
+        },
+        "1018": {
+            "text": "🦫",
+            "description": "Summer Beaver"
+        },
+        "1019": {
+            "text": "🦌",
+            "description": "Winter Mule Deer"
+        },
+        "1021": {
+            "text": "🦊",
+            "description": "Summer Fox"
+        },
+        "1022": {
+            "text": "🐾",
+            "description": "Marmot"
+        },
+        "1023": {
+            "text": "🐻",
+            "description": "Spring Grizzly"
+        },
+        "1024": {
+            "text": "🐆",
+            "description": "Summer Lynx"
+        },
+        "1026": {
+            "text": "🦌",
+            "description": "Elk"
+        },
+        "1027": {
+            "text": "🫎",
+            "description": "Moose"
+        },
+        "1028": {
+            "text": "🦬",
+            "description": "Bison"
+        },
+        "1029": {
+            "text": "🐺",
+            "description": "Wolf"
+        },
+        "1030": {
+            "text": "🐇",
+            "description": "Hare"
+        },
+        "1031": {
+            "text": "🐾",
+            "description": "Marten"
+        },
+        "1032": {
+            "text": "🦊",
+            "description": "Fox"
+        },
+        "1033": {
+            "text": "🐺",
+            "description": "Summer Wolf"
+        },
+        "1034": {
+            "text": "🫎",
+            "description": "Summer Moose"
+        },
+        "1035": {
+            "text": "🐆",
+            "description": "Spring Cougar"
+        },
+        "1036": {
+            "text": "🦌",
+            "description": "White Deer"
+        },
+        "1037": {
+            "text": "🦬",
+            "description": "Bison"
+        },
+        "1038": {
+            "text": "🐺",
+            "description": "Wolf"
+        },
+        "1039": {
+            "text": "🐐",
+            "description": "Goat"
+        },
+        "1043": {
+            "text": "🐻",
+            "description": "Black Bear"
+        },
+        "1044": {
+            "text": "🐆",
+            "description": "Lynx"
+        },
+        "1045": {
+            "text": "🐾",
+            "description": "Wolverine"
+        },
+        "1046": {
+            "text": "🐾",
+            "description": "Pika"
+        },
+        "1047": {
+            "text": "🦉",
+            "description": "Owl"
+        },
+        "1049": {
+            "text": "🐾",
+            "description": "Marten"
+        },
+        "1051": {
+            "text": "🐾",
+            "description": "Loon"
+        }
+    }
 }
