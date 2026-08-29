@@ -158,6 +158,10 @@
                 <div class="options-container">
                     <div class="option" onclick="setVehicleMarkerStyle('default')">
                         <div class="radio-button {{ 'selected' if not vehicle_marker_style or vehicle_marker_style == 'default' else '' }}"></div>
+                        <div>Default</div>
+                    </div>
+                    <div class="option" onclick="setVehicleMarkerStyle('vehicle-type')">
+                        <div class="radio-button {{ 'selected' if vehicle_marker_style == 'vehicle-type' else '' }}"></div>
                         <div>Vehicle Type</div>
                     </div>
                     <div class="option" onclick="setVehicleMarkerStyle('mini')">

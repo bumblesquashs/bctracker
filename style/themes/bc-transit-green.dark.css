@@ -380,15 +380,6 @@ table tr.table-button:hover {
 .marker .icon {
     background-color: #00A200;
     border-color: #2F2F2F;
-    --image-color: #FFFFFF;
-}
-
-.marker .icon.route .number {
-    color: #FFFFFF;
-}
-
-.marker .icon.vehicle_route {
-    color: #FFFFFF;
 }
 
 .news-post {

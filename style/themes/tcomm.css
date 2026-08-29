@@ -509,20 +509,6 @@ table tr.table-button:hover {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #5393c5;
-    --image-color: #FFFFFF;
-}
-
-.marker .icon.route .number {
-    color: #FFFFFF;
-    text-shadow: none;
-}
-
-.marker .icon.vehicle_route {
-    color: #FFFFFF;
-    text-shadow: none;
-}
-
-.marker .icon.adherence {
     text-shadow: none;
 }
 

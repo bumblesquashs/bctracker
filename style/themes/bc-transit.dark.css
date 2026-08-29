@@ -374,7 +374,11 @@ table tr.table-button:hover {
     color: #FFFFFF;
 }
 
-.marker .icon.vehicle_route {
+.marker .icon.route-number {
+    color: #FFFFFF;
+}
+
+.marker .icon.vehicle-route {
     color: #FFFFFF;
 }
 

@@ -1215,13 +1215,31 @@ table tr.table-button {
     text-decoration: none;
 }
 
-.marker .icon.vehicle_route {
+.marker .icon.route-number {
     font-weight: bold;
     text-align: center;
     line-height: 24px;
     font-size: 11pt;
     vertical-align: middle;
     text-decoration: none;
+}
+
+.marker .icon.vehicle-route {
+    font-weight: bold;
+    text-align: center;
+    line-height: 8px;
+    font-size: 7pt;
+    vertical-align: middle;
+    text-decoration: none;
+    --image-size: 18px;
+}
+
+.marker .icon.vehicle-route .column {
+    margin-top: -1px;
+}
+
+.marker .icon.vehicle-route .number {
+    margin-top: -1px;
 }
 
 .marker .icon.occupancy {
