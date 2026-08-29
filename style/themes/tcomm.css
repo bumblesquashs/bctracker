@@ -622,11 +622,7 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background-color: #333333;
-    background-image: linear-gradient(#444444, #2D2D2D);
     border-width: 0px;
-    margin-bottom: -5px;
-    gap: 0px;
 }
 
 .tab-button {
@@ -634,6 +630,7 @@ table tr.table-button:hover {
     background-image: linear-gradient(#444444, #2D2D2D);
     text-shadow: 0 -1px 1px #000000;
     color: #FFFFFF;
+    border-width: 0px;
 }
 
 .tab-button:hover {

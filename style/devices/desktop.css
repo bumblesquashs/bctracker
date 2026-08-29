@@ -285,6 +285,10 @@ table th {
     align-self: flex-start;
 }
 
+.tab-button {
+    border-right-width: 1px;
+}
+
 .table-border-wrapper {
     align-self: flex-start;
 }

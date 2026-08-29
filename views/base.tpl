@@ -437,13 +437,13 @@
             % if show_random:
                 <a class="menu-button" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
-                    <span>Random Page</span>
+                    <span>Random</span>
                 </a>
             % end
             % if is_admin:
                 <a class="menu-button" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
-                    <span>Administration</span>
+                    <span>Admin</span>
                 </a>
             % end
         </div>

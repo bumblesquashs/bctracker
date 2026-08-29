@@ -421,13 +421,13 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background: #666666;
     border-color: #000000;
 }
 
 .tab-button {
     background-color: #FFFFFF;
     color: #165ABE;
+    background: #000000;
 }
 
 .tab-button:hover {

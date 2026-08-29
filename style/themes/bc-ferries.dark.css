@@ -451,13 +451,13 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background: #003769;
     border-color: #003769;
 }
 
 .tab-button {
     background-color: #000E1A;
     color: #5CC3FF;
+    border-color: #003769;
 }
 
 .tab-button:hover {
