@@ -320,15 +320,18 @@
                 { "year": 2022, "low": 2034, "high": 2037, "prefix": "S", "livery": "strathcona" }
             ],
             [
-                { "year": 2025, "low": 940, "high": 949, "prefix": "A", "livery": "st-albert-green" }
+                { "year": 2025, "low": 940, "high": 944, "prefix": "A", "livery": "st-albert-green" }
             ],
             [
                 { "year": 2025, "low": 2038, "high": 2042, "prefix": "S", "livery": "strathcona" }
+            ],
+            [
+                { "year": 2026, "low": 945, "high": 951, "prefix": "A", "livery": "st-albert-green" }
             ]
         ],
         "nova-bus-lfs-artic-4": [
             [
-                { "year": 2025, "low": 832, "high": 834, "prefix": "A", "livery": "st-albert-green" }
+                { "year": 2025, "low": 832, "high": 838, "prefix": "A", "livery": "st-albert-green" }
             ]
         ],
         "nova-bus-lfs-hev-3": [
@@ -481,6 +484,9 @@
         "new-flyer-xn40": [
             [
                 { "year": 2014, "low": 754, "high": 759 }
+            ],
+            [
+                { "year": 2026, "low": 762, "high": 767 }
             ]
         ],
         "ram-trucks-new-england-wheels-promaster-frontrunner": [
@@ -495,9 +501,13 @@
                 { "year": 2012, "low": 1007, "high": 1008 }
             ]
         ],
-        "ford-glaval-e-450-universal": [
+        "ford-champion-e-450-challenger": [
             [
                 { "year": 2024, "low": 1052, "high": 1054 }
+            ],
+            [
+                { "year": 2026, "id": 1056 },
+                { "year": 2026, "id": 1058 }
             ]
         ],
         "grande-west-vicinity-30": [
@@ -576,7 +586,7 @@
             [
                 { "low": 0, "high": 30, "visible": false },
                 { "id": 1111, "visible": false },
-                { "id": 7405, "visible": false },
+                { "low": 7404, "high": 7405, "visible": false },
                 { "low": 9980, "high": 9999, "visible": false }
             ]
         ]

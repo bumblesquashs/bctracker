@@ -80,12 +80,15 @@
                     </div>
                 </div>
                 <div class="container flex-3">
-                    % for fleet_agency in agencies:
-                        % agency_orders = [o for o in orders if o.agency == fleet_agency]
+                    % for agency in agencies:
+                        % agency_orders = [o for o in orders if o.agency == agency]
                         % if agency_orders:
                             <div class="section">
                                 <div class="header" onclick="toggleSection(this)">
-                                    <h2>{{ fleet_agency }}</h2>
+                                    <h2 class="row">
+                                        % include('components/agency_logo')
+                                        {{ agency }}
+                                    </h2>
                                     % include('components/toggle')
                                 </div>
                                 <div class="content">

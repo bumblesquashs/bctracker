@@ -158,43 +158,43 @@
 <script>
     function reloadDecorations() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-decorations"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-decorations", true), true);
         request.send();
     }
     
     function reloadOrders() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-orders"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-orders", true), true);
         request.send();
     }
     
     function reloadSystems() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-systems"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-systems", true), true);
         request.send();
     }
     
     function reloadThemes() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-themes"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-themes", true), true);
         request.send();
     }
     
     function restartCron() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/restart-cron"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/restart-cron", true), true);
         request.send();
     }
     
     function backupDatabase() {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/backup-database"), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/backup-database", true), true);
         request.send();
     }
     
     function resetCache(resetSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reset-cache/" + resetSystemID), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reset-cache/" + resetSystemID, true), true);
         request.onload = function() {
             location.reload();
         }
@@ -203,13 +203,13 @@
     
     function reloadGTFS(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-gtfs/" + reloadSystemID), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-gtfs/" + reloadSystemID, true), true);
         request.send();
     }
     
     function reloadRealtime(reloadSystemID) {
         const request = new XMLHttpRequest();
-        request.open("POST", getUrl(currentSystemID, "api/admin/reload-realtime/" + reloadSystemID), true);
+        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-realtime/" + reloadSystemID, true), true);
         request.send();
     }
 </script>

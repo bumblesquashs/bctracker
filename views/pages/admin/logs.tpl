@@ -52,11 +52,9 @@
                 </div>
                 <script>
                     function setLevel(level) {
-                        if (level === null) {
-                            window.location = "{{ context.url('admin', 'logs') }}";
-                        } else {
-                            window.location = "{{ context.url('admin', 'logs') }}?level=" + level;
-                        }
+                        window.location = getURL(currentAgencyID, currentSystemID, "admin/logs", false, {
+                            "level": level
+                        });
                     }
                 </script>
             </div>

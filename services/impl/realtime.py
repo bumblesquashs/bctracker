@@ -42,6 +42,7 @@ class RealtimeService:
                     f.write(r.content)
             data.ParseFromString(r.content)
         repositories.position.delete_all(context)
+        vehicle_ids = set()
         for index, entity in enumerate(data.entity):
             vehicle = entity.vehicle
             try:
@@ -56,10 +57,10 @@ class RealtimeService:
                     vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
-            
-            # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
-            if (context.system_id == 'whistler' or context.system_id == 'pemberton') and vehicle_id == '9337':
+                
+            if vehicle_id in vehicle_ids:
                 continue
+            vehicle_ids.add(vehicle_id)
             
             try:
                 repositories.position.create(context, vehicle_id, vehicle)
@@ -78,6 +79,16 @@ class RealtimeService:
                     continue
                 date = context.today
                 time = context.now
+                
+                if position.block:
+                    if position.block.get_end_time().hour >= 28 and time.hour < 6:
+                        # Assumption: blocks ending after 4am do not start until after 6am
+                        date = date.previous()
+                        time.hour += 24
+                    elif position.block.get_start_time().hour < 4 and time.hour >= 26:
+                        # Assumption: blocks starting before 4am do not end after 2am
+                        date = date.next()
+                        time.hour -= 24
                 
                 allocation = repositories.allocation.find_active(context.without_system(), vehicle.id)
                 if allocation:
@@ -98,21 +109,39 @@ class RealtimeService:
                     first_record = None
                     last_record = None
                 
-                if position.trip and position.block_id and position.block:
-                    assignment = repositories.assignment.find(position.block_id, allocation_id, date)
-                    if not assignment or assignment.allocation_id != allocation_id:
-                        repositories.assignment.delete_all(block_id=position.block_id)
-                        repositories.assignment.delete_all(allocation_id=allocation_id)
-                        repositories.assignment.create(position.block_id, allocation_id, date)
-                    
-                    if last_record and last_record.date == date and last_record.block_id == position.block_id:
+                if context.enable_blocks:
+                    if position.trip and position.block_id and position.block:
+                        assignment = repositories.assignment.find(position.block_id, allocation_id, date)
+                        if not assignment or assignment.allocation_id != allocation_id:
+                            repositories.assignment.delete_all(block_id=position.block_id)
+                            repositories.assignment.delete_all(allocation_id=allocation_id)
+                            repositories.assignment.create(position.block_id, allocation_id, date)
+                        
+                        if last_record and last_record.date == date and last_record.block_id == position.block_id:
+                            record_id = last_record.id
+                            repositories.record.update(last_record.id, time)
+                            trip_ids = repositories.record.find_trip_ids(last_record.id)
+                            if position.trip_id not in trip_ids:
+                                repositories.record.create_trip(last_record.id, position.trip_id)
+                        else:
+                            record_id = repositories.record.create(allocation_id, date, position.block, time, position.trip_id)
+                        
+                        if not first_record:
+                            repositories.allocation.set_first_record(allocation_id, record_id)
+                        if not last_record or last_record.id != record_id:
+                            repositories.allocation.set_last_record(allocation_id, record_id)
+                elif position.trip:
+                    trip = position.trip
+                    if last_record and last_record.date == date:
                         record_id = last_record.id
-                        repositories.record.update(last_record.id, time)
                         trip_ids = repositories.record.find_trip_ids(last_record.id)
-                        if position.trip_id not in trip_ids:
+                        if position.trip_id in trip_ids:
+                            repositories.record.update(last_record.id, time)
+                        else:
+                            repositories.record.merge(last_record, trip, time)
                             repositories.record.create_trip(last_record.id, position.trip_id)
                     else:
-                        record_id = repositories.record.create(allocation_id, date, position.block, time, position.trip_id)
+                        record_id = repositories.record.create_from_trip(allocation_id, date, trip, time)
                     
                     if not first_record:
                         repositories.allocation.set_first_record(allocation_id, record_id)

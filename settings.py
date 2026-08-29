@@ -12,15 +12,16 @@ class Settings:
     admin_logs_count: int = DEFAULT_ADMIN_LOGS_COUNT
     
     # Domain settings
-    all_systems_domain: str | None = None
+    root_domain: str | None = None
     system_domain: str | None = None
-    system_domain_path: str | None = None
+    agency_domain: str | None = None
     cookie_domain: str | None = None
     
     # Key settings
     analytics_key: str | None = None
     
     # Functionality settings
+    enable_validation: bool = False
     enable_analytics: bool = True
     enable_gtfs_backups: bool = True
     enable_realtime_backups: bool = True
@@ -35,13 +36,14 @@ class Settings:
         except:
             pass
         
-        self.all_systems_domain = config['all_systems_domain']
-        self.system_domain = config['system_domain']
-        self.system_domain_path = config['system_domain_path']
+        self.root_domain = config.get('root_domain')
+        self.system_domain = config.get('system_domain')
+        self.agency_domain = config.get('agency_domain')
         self.cookie_domain = config.get('cookie_domain')
         
         self.analytics_key = config.get('analytics_key')
         
+        self.enable_validation = config.get('enable_validation', 'false') == 'true'
         self.enable_analytics = config.get('enable_analytics', 'true') == 'true'
         self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
         self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'

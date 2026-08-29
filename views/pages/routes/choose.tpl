@@ -12,7 +12,7 @@
 
 % route_types = {r.type for r in routes}
 <div class="container">
-    % for route_type in route_types:
+    % for route_type in sorted(route_types):
         % type_routes = [r for r in routes if r.type == route_type]
         <div class="section">
             <div class="header" onclick="toggleSection(this)">
@@ -42,7 +42,12 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ route.context }}</td>
+                                <td>
+                                    <div class="row">
+                                        % include('components/agency_logo', agency=route.agency)
+                                        {{ route.context }}
+                                    </div>
+                                </td>
                                 <td class="non-mobile">
                                     % include('components/weekdays', context=route.context, schedule=route.schedule, compact=True, schedule_path=f'routes/{route.url_id}/schedule')
                                 </td>

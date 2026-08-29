@@ -51,10 +51,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ route.context.vehicle_type }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                % if context.enable_blocks:
+                                % if route.context.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th class="non-mobile">Trip</th>
@@ -95,7 +95,6 @@
                                         % include('components/year_model', year_model=vehicle.year_model)
                                     </td>
                                     % trip = position.trip
-                                    % block = trip.block
                                     % stop = position.stop
                                     <td>
                                         <div class="column">
@@ -112,9 +111,12 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if context.enable_blocks:
+                                    % if route.context.enable_blocks:
+                                        % block = trip.block
                                         <td class="non-mobile">
-                                            <a href="{{ block.url() }}">{{ block.id }}</a>
+                                            % if block:
+                                                <a href="{{ block.url() }}">{{ block.id }}</a>
+                                            % end
                                         </td>
                                     % end
                                     <td class="non-mobile">

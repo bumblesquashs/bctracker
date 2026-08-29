@@ -22,7 +22,6 @@
         <td class="desktop-only">{{ position.context }}</td>
     % end
     % if trip:
-        % block = trip.block
         <td>
             <div class="column">
                 % include('components/headsign', departure=position.departure)
@@ -38,16 +37,19 @@
                 % end
             </div>
         </td>
-        % if context.enable_blocks:
+        % if enable_blocks:
+            % block = trip.block
             <td class="non-mobile">
-                <a href="{{ block.url() }}">{{ block.id }}</a>
+                % if block:
+                    <a href="{{ block.url() }}">{{ block.id }}</a>
+                % end
             </td>
         % end
         <td class="non-mobile">
             % include('components/trip')
         </td>
     % else:
-        <td colspan="3">
+        <td colspan="{{ '3' if enable_blocks else '2' }}">
             <div class="column">
                 <div class="lighter-text">Not In Service</div>
                 % if stop:

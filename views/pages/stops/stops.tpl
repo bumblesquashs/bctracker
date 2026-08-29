@@ -45,7 +45,7 @@
         
         function updateFilters() {
             const search = document.getElementById('stop_id_search').value;
-            window.location = getUrl(currentSystemID, "stops", true, {
+            window.location = getURL(currentAgencyID, currentSystemID, "stops", false, {
                 "search": search.length === 0 ? null : search,
                 "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                 "sort": sort === "name" ? null : sort,
@@ -249,8 +249,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    % available_systems = [s for s in systems if s.agency == context.agency] if context.agency else systems
                     % for region in regions:
-                        % region_systems = [s for s in systems if s.region == region]
+                        % region_systems = [s for s in available_systems if s.region == region]
                         % if region_systems:
                             <tr class="header">
                                 <td colspan="3">

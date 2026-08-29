@@ -7,11 +7,13 @@
     <h1>Favourites</h1>
 </div>
 
-<p>
-    Add up to 20 favourites using the
-    % include('components/svg', name='action/non-favourite')
-    button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
-</p>
+% if show_help_text:
+    <p>
+        Add up to 20 favourites using the
+        % include('components/svg', name='action/non-favourite')
+        button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
+    </p>
+% end
 
 % if favourites:
     % vehicle_favourites = [f for f in favourites if f.type == 'vehicle']
@@ -29,14 +31,11 @@
                     <div class="page-grid">
                         % for favourite in vehicle_favourites:
                             % value = favourite.value
-                            % model = value.model
                             <div class="info-box gap-10 collapsed">
                                 <div class="row space-between">
                                     <div class="column">
                                         <h3 class="row">
-                                            % if model and model.type:
-                                                % include('components/svg', name=f'model/type/{model.type.image_name}')
-                                            % end
+                                            % include('components/agency_logo', agency=value.agency)
                                             % include('components/vehicle', vehicle=value)
                                         </h3>
                                         % year_model = value.year_model
@@ -50,7 +49,7 @@
                                         % include('components/svg', name='action/dropdown')
                                     </div>
                                 </div>
-                                % position = vehicle_positions[value.id]
+                                % position = vehicle_positions[favourite]
                                 <div class="column stretch">
                                     % if position and position.trip:
                                         % trip = position.trip
@@ -65,7 +64,7 @@
                                         </div>
                                     % else:
                                         <h3>Not In Service</h3>
-                                        % allocation = vehicle_allocations[value.id]
+                                        % allocation = vehicle_allocations[favourite]
                                         % if allocation:
                                             % if allocation.last_seen.is_today:
                                                 <div class="lighter-text">Last seen today</div>
@@ -77,7 +76,7 @@
                                         % end
                                     % end
                                 </div>
-                                % records = vehicle_records[value.id]
+                                % records = vehicle_records[favourite]
                                 % if records:
                                     <table class="open-only">
                                         <thead>
@@ -158,7 +157,7 @@
                                         % include('components/svg', name='action/dropdown')
                                     </div>
                                 </div>
-                                % positions = route_positions[value.id]
+                                % positions = route_positions[favourite]
                                 % if positions:
                                     <table class="open-only">
                                         <thead>
@@ -236,9 +235,9 @@
                                         % include('components/svg', name='action/dropdown')
                                     </div>
                                 </div>
-                                % departures = stop_departures[value.id]
-                                % positions = stop_positions[value.id]
-                                % assignments = stop_assignments[value.id]
+                                % departures = stop_departures[favourite]
+                                % positions = stop_positions[favourite]
+                                % assignments = stop_assignments[favourite]
                                 % if departures:
                                     % upcoming_count = 3 + floor(len(value.routes) / 3)
                                     % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]

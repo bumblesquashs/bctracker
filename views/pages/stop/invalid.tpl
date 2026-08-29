@@ -25,7 +25,7 @@
                     </ul>
                 </li>
             % end
-            <li>It may be from a system that isn't currently available on BC Tracker</li>
+            <li>It may be from a system that isn't currently available on BCTracker</li>
         </ol>
         <p>If you believe this error is incorrect and the stop actually should exist, please email <a href="mailto:james@bctracker.ca">james@bctracker.ca</a> to let us know!</p>
         

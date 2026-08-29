@@ -8,6 +8,7 @@ class Livery:
     agency_id: str
     id: int
     name: str
+    theme: str | None = None
     
     def __str__(self):
         return self.name
