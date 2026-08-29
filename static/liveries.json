@@ -1,20 +1,51 @@
 {
-    "bc-transit": {
-        "red-blue-stripes": {
-            "name": "Red/Blue Stripes",
-            "theme": "bc-transit-classic"
+    "calgary-transit": {
+        "calgary-stripes": {
+            "name": "Three Stripes"
         },
-        "green-blue-stripes": {
-            "name": "Green/Blue Stripes",
-            "theme": "bc-transit"
+        "calgary-wave": {
+            "name": "Wave"
+        }
+    },
+    "edmonton-transit-service": {
+        "ets": {
+            "name": "ETS"
         },
-        "green-blue-stripes-green-back": {
-            "name": "Green/Blue Stripes with Green Back",
-            "theme": "bc-transit"
+        "spruce-grove": {
+            "name": "Spruce Grove"
         },
-        "green-front": {
-            "name": "Green Front",
-            "theme": "bc-transit-green"
+        "st-albert-stripes": {
+            "name": "St Albert Stripes"
+        },
+        "st-albert-green": {
+            "name": "St Albert Green"
+        },
+        "fort-saskatchewan": {
+            "name": "Fort Saskatchewan"
+        },
+        "strathcona": {
+            "name": "Strathcona County"
+        }
+    },
+    "grande-prairie-transit": {
+        "grande-prairie-stripes": {
+            "name": "Stripes"
+        },
+        "grande-prairie-wave": {
+            "name": "Waves"
+        }
+    },
+    "medicine-hat-transit": {
+        "medicine-hat-stripes": {
+            "name": "Stripes"
+        },
+        "medicine-hat-wave": {
+            "name": "Wave"
+        }
+    },
+    "woosh": {
+        "woosh": {
+            "name": "Woosh"
         }
     }
 }
