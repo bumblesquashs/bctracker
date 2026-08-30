@@ -67,6 +67,15 @@ class RouteType(Enum):
                 return 'Trolley Bus'
             case RouteType.MONORAIL:
                 return 'Monorail'
+    
+    def __hash__(self):
+        return hash(self.value)
+    
+    def __eq__(self, other):
+        return self.value == other.value
+    
+    def __lt__(self, other):
+        return self.value < other.value
 
 @dataclass(slots=True)
 class Route:

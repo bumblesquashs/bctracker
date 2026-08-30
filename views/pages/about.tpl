@@ -101,7 +101,7 @@
                 </p>
                 <p>
                     <b>Perrin</b> graduated with a bachelors degree in information technology from Kwantlen Polytechnic University in 2019.
-                    Currently he works as a mobile app developer for a construction safety startup.
+                    Currently they work as a mobile app developer for a construction safety startup.
                 </p>
             </div>
         </div>

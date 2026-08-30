@@ -6,7 +6,7 @@ pip install requests
 pip install Bottle
 pip install cherrypy
 pip install wsgi-request-logger
-pip install protobuf==3.20
+pip install gtfs-realtime-bindings
 pip install google
 pip install python-crontab
 pip install pytz

@@ -27,7 +27,7 @@ class Trip:
     route_id: str
     service_id: str
     block_id: str | None
-    direction_id: int
+    direction_id: int | None
     shape_id: str
     headsign: str
     

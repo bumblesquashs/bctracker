@@ -78,12 +78,12 @@ table th {
     display: none;
 }
 
-#navigation-menu {
-    grid-template-columns: 1fr 1fr;
-}
-
 #page {
     padding: 20px;
+}
+
+#page-header:has(.tab-button-bar) {
+    border-bottom-width: 0px;
 }
 
 #quick-navigation {
@@ -298,6 +298,11 @@ table th {
 .tab-button-bar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.tab-button {
+    border-right-width: 1px;
+    border-bottom-width: 1px;
 }
 
 .table-border-wrapper {

@@ -70,7 +70,7 @@
                         let value = document.getElementById('stop_search').value;
                         if (value.length > 0) {
                             if (isNaN(value)) {
-                                window.location = getURL(currentAgencyID, currentSystemID, "stops", false, {
+                                window.location = getURL(currentAgencyID, currentSystemID, "stops", {
                                     "search": value
                                 });
                             } else {
@@ -180,32 +180,23 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <div class="container">
-                    <div class="news-post">
-                        <div class="header">
-                            <h3>Welcome to ABTracker!</h3>
-                            April 1st, 2025
-                        </div>
-                        <div class="content">
-                            <p>
-                                ABTracker is a new spinoff from <a href="https://bctracker.ca">BCTracker</a> for folks living in Alberta!
-                                We hope you find it useful for tracking down your buses.
-                                Then again Alberta is so flat that you can probably just see your bus from wherever you happen to be standing.
-                            </p>
-                            <p>
-                                Originally this website was meant to be a one-day April Fools joke, but there was so much interest in it that we're going to try keeping it around for longer!
-                                It turns out we were the fools all along for not anticipating this...
-                            </p>
-                            <p>
-                                For now the website is going to be in <b>beta</b>, which means that some stuff could still break or get changed at any time.
-                                Please see the <a href="{{ context.url('about') }}#beta-testing">about page</a> for more info.
-                            </p>
-                            <p>
-                                Enjoy!
-                            </p>
-                        </div>
+                % if recent_news_views:
+                    <div class="container">
+                        % for news_view in recent_news_views:
+                            % include(news_view)
+                        % end
+                        % if show_more_news:
+                            <div>
+                                <a href="{{ context.url('news') }}">See older news</a>
+                            </div>
+                        % end
                     </div>
-                </div>
+                % else:
+                    <div class="placeholder">
+                        <h3>No news yet</h3>
+                        <p>Please check back later!</p>
+                    </div>
+                % end
             </div>
         </div>
     </div>

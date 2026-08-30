@@ -135,8 +135,8 @@
         
         <script>
             const svgs = {};
-            const currentAgencyID = "{{ context.agency_id }}" === "" ? null : "{{ context.agency_id }}";
-            const currentSystemID = "{{ context.system_id }}" === "" ? null : "{{ context.system_id }}";   
+            const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
+            const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
             const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
             
             function getSVG(name) {
@@ -156,24 +156,24 @@
                 return a
             }
             
-            function getURL(agencyID, systemID, path, internal=false, params=null) {
+            function getURL(agencyID, systemID, path, params=null) {
                 let url;
                 const query = [];
                 
-                if ("{{ settings.root_domain }}" === "") {
+                if ("{{ settings.root_domain is None }}" === "True") {
                     url = "/" + path;
                 } else {
                     url = "{{ settings.root_domain }}".format(path)
                 }
                 
                 if (systemID) {
-                    if ((internal && currentSystemID === null) || "{{ settings.system_domain }}" === "") {
+                    if ("{{ settings.system_domain is None }}" === "True") {
                         query.push("system=" + systemID);
                     } else {
                         url = "{{ settings.system_domain }}".format(systemID, path);
                     }
                 } else if (agencyID) {
-                    if ((internal && currentAgencyID === null) || "{{ settings.agency_domain }}" === "") {
+                    if ("{{ settings.agency_domain is None }}" === "True") {
                         query.push("agency=" + agencyID);
                     } else {
                         url = "{{ settings.agency_domain }}".format(agencyID, path);
@@ -438,13 +438,13 @@
             % if show_random:
                 <a class="menu-button" href="{{ context.url('random') }}">
                     % include('components/svg', name='random')
-                    <span>Random Page</span>
+                    <span>Random</span>
                 </a>
             % end
             % if is_admin:
                 <a class="menu-button" href="{{ context.url('admin') }}">
                     % include('components/svg', name='admin')
-                    <span>Administration</span>
+                    <span>Admin</span>
                 </a>
             % end
         </div>

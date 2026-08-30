@@ -7,6 +7,7 @@ from crontab import CronTab
 from database import Database
 
 from models.date import Date
+from models.download import DownloadTrigger
 from models.time import Time
 from models.weekday import Weekday
 
@@ -53,13 +54,23 @@ class CronService:
             if self.running:
                 try:
                     if context.today.weekday == Weekday.MON or not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        if context.today.weekday == Weekday.MON:
+                            trigger = DownloadTrigger.WEEKLY
+                        else:
+                            trigger = DownloadTrigger.NEAR_END_DATE
+                        services.gtfs.load(context, trigger, system.enable_force_gtfs)
                 except Exception as e:
                     services.log.error(f'Error loading GTFS data for {context}: {e}')
         if self.running:
-            repositories.record.delete_stale_trip_records()
-            self.database.archive()
-            services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            try:
+                repositories.record.delete_stale_trip_records()
+            except Exception as e:
+                services.log.error(f'Error deleting stale trip records: {e}')
+            try:
+                self.database.archive()
+                services.backup.run(date.previous(), include_db=date.weekday == Weekday.MON)
+            except Exception as e:
+                services.log.error(f'Error running daily backup for {date.previous()}: {e}')
     
     def handle_realtime(self):
         '''Reloads realtime data for every system, and backs up data at midnight'''
@@ -75,7 +86,7 @@ class CronService:
                 try:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.INVALID_POSITIONS, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')

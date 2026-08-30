@@ -5,7 +5,7 @@ from datetime import datetime
 
 import requests
 
-import protobuf.data.gtfs_realtime_pb2 as protobuf
+import google.transit.gtfs_realtime_pb2 as protobuf
 
 from database import Database
 
@@ -57,7 +57,7 @@ class RealtimeService:
                     vehicle_id = '0'
             except:
                 vehicle_id = str(-(index + 1))
-                
+            
             if vehicle_id in vehicle_ids:
                 continue
             vehicle_ids.add(vehicle_id)

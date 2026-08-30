@@ -6,6 +6,16 @@
     <a href="{{ context.url() }}">Return home</a>
 </div>
 
-<h2>No news here yet!</h2>
-
-% include('components/top_button')
+% if news_views:
+    <div class="container">
+        % for news_view in news_views:
+            % include(news_view)
+        % end
+    </div>
+    % include('components/top_button')
+% else:
+    <div class="placeholder">
+        <h3>No news yet</h3>
+        <p>Please check back later!</p>
+    </div>
+% end

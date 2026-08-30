@@ -15,6 +15,7 @@ database.execute("DROP TABLE departure")
 database.execute("DROP TABLE trip")
 database.execute("DROP TABLE stop")
 database.execute("DROP TABLE route")
+database.execute("VACUUM")
 
 database.commit()
 database.disconnect()

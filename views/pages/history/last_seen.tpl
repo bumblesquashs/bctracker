@@ -60,7 +60,7 @@
                 % end
                 <script>
                     function setDays(days) {
-                        window.location = getURL(currentAgencyID, currentSystemID, "history", false, {
+                        window.location = getURL(currentAgencyID, currentSystemID, "history", {
                             "days": days
                         });
                     }
@@ -295,8 +295,8 @@
                                                             <div class="column stretch">
                                                                 % if record.block_id:
                                                                     <div class="row space-between">
-                                                                        % block = record.block
-                                                                        % if block:
+                                                                        % if record.is_available:
+                                                                            % block = record.block
                                                                             <a href="{{ block.url() }}">{{ block.id }}</a>
                                                                         % else:
                                                                             <span>{{ record.block_id }}</span>

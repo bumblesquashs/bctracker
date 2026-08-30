@@ -1,6 +1,7 @@
 
 from bottle import Bottle, HTTPError, static_file, template, request, response, debug, redirect
 from datetime import timedelta
+from glob import glob
 from random import Random
 from time import time, sleep
 import cherrypy as cp
@@ -9,17 +10,19 @@ from database import Database
 
 from models.context import Context
 from models.date import Date
+from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
 from models.stop import StopType
 
+import constants
 import repositories
 import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 4
+VERSION = 5
 
 random = Random()
 
@@ -146,9 +149,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context, args.reload, args.updatedb)
+                    services.gtfs.load(context, DownloadTrigger.LAUNCH_FLAG, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -310,7 +313,10 @@ class Server(Bottle):
             if duration >= 10:
                 services.log.warning(f'Slow response to {request.path} ({round(duration, 2)}s)')
             return result
-        self.route(path, method, callback=endpoint)
+        paths = [path]
+        if path != '/':
+            paths.append(path + '/')
+        self.route(paths, method, callback=endpoint)
     
     # =============================================================
     # Static Files
@@ -333,20 +339,29 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
+        news_views = glob('./views/news/*.tpl')
+        news_views.sort(reverse=True)
         return self.page(
             context=context,
             file='home',
             title='Home',
-            enable_refresh=False
+            enable_refresh=False,
+            recent_news_views=news_views[:constants.RECENT_NEWS_POSTS],
+            show_more_news=len(news_views) > constants.RECENT_NEWS_POSTS
         )
     
     def news(self, context: Context):
+        news_views = glob('./views/news/*.tpl')
+        news_views.sort(reverse=True)
+        if len(news_views) > constants.RECENT_NEWS_POSTS:
+            news_views = news_views[constants.RECENT_NEWS_POSTS:]
         return self.page(
             context=context,
             file='news',
             title='News Archive',
             path=['news'],
-            enable_refresh=False
+            enable_refresh=False,
+            news_views=news_views
         )
     
     def map(self, context: Context):
@@ -1805,9 +1820,9 @@ class Server(Bottle):
             context = system.context
             if self.running:
                 try:
-                    services.gtfs.load(context)
+                    services.gtfs.load(context, DownloadTrigger.ADMIN)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -1847,7 +1862,7 @@ class Server(Bottle):
             return 'Invalid system'
         context = system.context
         try:
-            services.gtfs.load(context, True)
+            services.gtfs.load(context, DownloadTrigger.ADMIN, True)
             services.realtime.update(context)
             services.realtime.update_records()
             if not system.gtfs_downloaded or not services.realtime.validate(context):
