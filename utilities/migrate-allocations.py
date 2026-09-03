@@ -40,7 +40,7 @@ from models.daterange import DateRange
 old_db = Database('bctracker-old')
 new_db = Database('bctracker-new')
 
-old_db.connect(run_scripts=False)
+old_db.connect(script_file=None)
 new_db.connect()
 
 unexpected_updates = []
