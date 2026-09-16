@@ -435,6 +435,7 @@ table tr.table-button:hover {
 .tab-button {
     background-color: #FFFFFF;
     color: #7E3704;
+    border-color: #666666;
 }
 
 .tab-button:hover {
