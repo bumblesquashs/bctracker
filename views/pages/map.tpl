@@ -235,15 +235,19 @@
             
             if (vehicleMarkerStyle === "route") {
                 icon.classList.add("route-number");
-                icon.innerHTML += position.route_number;
+                if (position.enable_realtime_trips) {
+                    icon.innerHTML += position.route_number;
+                } else {
+                    icon.innerHTML += "N/A"
+                }
                 icon.style.backgroundColor = "#" + position.colour;
             } else if (vehicleMarkerStyle === "vehicle-type") {
                 if (position.lat === 0 && position.lon === 0) {
-                    icon.innerHTML = getSVG("fish");
+                    icon.innerHTML += getSVG("fish");
                 } else if (adherence && adherence.value <= -66) {
-                    icon.innerHTML = getSVG("snail");
+                    icon.innerHTML += getSVG("snail");
                 } else {
-                    icon.innerHTML = getSVG(position.vehicle_icon);
+                    icon.innerHTML += getSVG(position.vehicle_icon);
                 }
                 icon.style.backgroundColor = "#" + position.colour;
             } else if (vehicleMarkerStyle === "mini") {
@@ -253,7 +257,7 @@
             } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
-                    if (position.route_number === "NIS") {
+                    if (position.enable_realtime_trips && position.route_number === "NIS") {
                         icon.innerHTML += "NIS";
                     } else {
                         icon.innerHTML += "N/A"
