@@ -134,6 +134,12 @@ class Context:
         return DEFAULT_ENABLE_BLOCKS
     
     @property
+    def enable_realtime_trips(self):
+        if self.agency:
+            return self.agency.enable_realtime_trips
+        return DEFAULT_ENABLE_REALTIME_TRIPS
+    
+    @property
     def nis_colour(self):
         if self.agency:
             return self.agency.nis_colour
