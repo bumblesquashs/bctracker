@@ -215,7 +215,9 @@
                 { "year": 2007, "low": 4523, "high": 4753, "livery": "ets" }
             ],
             [
-                { "year": 2009, "low": 878, "high": 886, "prefix": "A", "livery": "st-albert-stripes" }
+                { "year": 2009, "low": 878, "high": 880, "prefix": "A", "livery": "st-albert-stripes" },
+                { "year": 2009, "id": 881, "prefix": "A", "livery": "st-albert-green" },
+                { "year": 2009, "low": 882, "high": 886, "prefix": "A", "livery": "st-albert-stripes" }
             ],
             [
                 { "year": 2009, "low": 4754, "high": 4874, "livery": "ets" }
@@ -494,6 +496,9 @@
         "ram-trucks-new-england-wheels-promaster-frontrunner": [
             [
                 { "year": 2019, "low": 720, "high": 726, "livery": "medicine-hat-stripes" }
+            ],
+            [
+                { "year": 2020, "low": 729, "high": 730, "livery": "medicine-hat-stripes" }
             ]
         ]
     },
