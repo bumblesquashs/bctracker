@@ -161,7 +161,7 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if context.realtime_enabled and show_help_text:
+                                        % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
                                             <p>
                                                 <span>{{ context.vehicle_type_plural }} with a</span>
                                                 <span class="scheduled">
@@ -182,7 +182,7 @@
                                                         % end
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
-                                                        % if context.realtime_enabled:
+                                                        % if context.realtime_enabled and context.enable_realtime_trips:
                                                             <th>{{ context.vehicle_type }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
@@ -218,7 +218,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/stop', stop=first_stop)
                                                             </td>
-                                                            % if context.realtime_enabled:
+                                                            % if context.realtime_enabled and context.enable_realtime_trips:
                                                                 % if trip.id in recorded_today:
                                                                     % vehicle = recorded_today[trip.id]
                                                                     <td>

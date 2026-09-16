@@ -8,7 +8,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ context.url('blocks', block, 'map') }}" class="tab-button">Map</a>
-        % if context.realtime_enabled:
+        % if context.realtime_enabled and context.enable_realtime_trips:
             <a href="{{ context.url('blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>

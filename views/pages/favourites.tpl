@@ -63,7 +63,9 @@
                                             % include('components/trip')
                                         </div>
                                     % else:
-                                        <h3>Not In Service</h3>
+                                        % if value.agency.enable_realtime_trips:
+                                            <h3>Not In Service</h3>
+                                        % end
                                         % allocation = vehicle_allocations[favourite]
                                         % if allocation:
                                             % if allocation.last_seen.is_today:
@@ -197,7 +199,7 @@
                                     </table>
                                 % else:
                                     <div class="placeholder open-only">
-                                        % if value.context.realtime_enabled:
+                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
                                             <p>No active {{ value.context.vehicle_type_plural.lower() }} right now</p>
                                         % else:
                                             <p>Realtime information is not available for this route</p>
@@ -248,7 +250,7 @@
                                                     <th>Time</th>
                                                     <th class="non-mobile">Headsign</th>
                                                     <th>Trip</th>
-                                                    % if value.context.realtime_enabled:
+                                                    % if value.context.realtime_enabled and value.context.enable_realtime_trips:
                                                         <th>{{ value.context.vehicle_type }}</th>
                                                     % end
                                                 </tr>
@@ -279,7 +281,7 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        % if value.context.realtime_enabled:
+                                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
                                                             <td>
                                                                 <div class="row">
                                                                     % if trip.id in positions:

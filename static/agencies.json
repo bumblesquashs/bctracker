@@ -10,6 +10,7 @@
         "show_stop_number": false,
         "show_full_orders": true,
         "enable_blocks": false,
+        "enable_realtime_trips": false,
         "nis_colour": "003769",
         "default_route_colour": "003769",
         "custom_route_numbers": {

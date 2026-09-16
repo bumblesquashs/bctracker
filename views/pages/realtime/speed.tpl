@@ -32,12 +32,14 @@
                         <th class="desktop-only">System</th>
                     % end
                     <th class="desktop-only">Speed</th>
-                    <th>Headsign</th>
-                    % if context.enable_blocks:
-                        <th class="non-mobile">Block</th>
+                    % if context.enable_realtime_trips:
+                        <th>Headsign</th>
+                        % if context.enable_blocks:
+                            <th class="non-mobile">Block</th>
+                        % end
+                        <th class="non-mobile">Trip</th>
+                        <th class="desktop-only">Next Stop</th>
                     % end
-                    <th class="non-mobile">Trip</th>
-                    <th class="desktop-only">Next Stop</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,51 +72,57 @@
                             <td class="desktop-only">{{ position.context }}</td>
                         % end
                         <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
-                        % if trip:
-                            <td>
-                                <div class="column">
-                                    % include('components/headsign', departure=position.departure)
-                                    <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
-                                    <div class="mobile-only smaller-font">
-                                        Trip:
+                        % if context.enable_realtime_trips:
+                            % if position.context.enable_realtime_trips:
+                                % if trip:
+                                    <td>
+                                        <div class="column">
+                                            % include('components/headsign', departure=position.departure)
+                                            <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                            <div class="mobile-only smaller-font">
+                                                Trip:
+                                                % include('components/trip')
+                                            </div>
+                                            % if stop:
+                                                <div class="non-desktop smaller-font">
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
+                                                </div>
+                                            % end
+                                        </div>
+                                    </td>
+                                    % if context.enable_blocks:
+                                        % block = trip.block
+                                        <td class="non-mobile">
+                                            % if block:
+                                                <a href="{{ block.url() }}">{{ block.id }}</a>
+                                            % end
+                                        </td>
+                                    % end
+                                    <td class="non-mobile">
                                         % include('components/trip')
-                                    </div>
-                                    % if stop:
-                                        <div class="non-desktop smaller-font">
-                                            <span class="align-middle">Next Stop:</span>
-                                            % include('components/stop')
+                                    </td>
+                                % else:
+                                    <td colspan="{{ '3' if context.enable_blocks else '2' }}">
+                                        <div class="column">
+                                            <span class="lighter-text">Not In Service</span>
+                                            <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
+                                            % if stop:
+                                                <div class="non-desktop smaller-font">
+                                                    <span class="align-middle">Next Stop:</span>
+                                                    % include('components/stop')
+                                                </div>
+                                            % end
                                         </div>
-                                    % end
-                                </div>
-                            </td>
-                            % if context.enable_blocks:
-                                % block = trip.block
-                                <td class="non-mobile">
-                                    % if block:
-                                        <a href="{{ block.url() }}">{{ block.id }}</a>
-                                    % end
+                                    </td>
+                                % end
+                                <td class="desktop-only">
+                                    % include('components/stop')
                                 </td>
+                            % else:
+                                <td colspan="{{ '4' if context.enable_blocks else '3' }}"></td>
                             % end
-                            <td class="non-mobile">
-                                % include('components/trip')
-                            </td>
-                        % else:
-                            <td colspan="{{ '3' if context.enable_blocks else '2' }}">
-                                <div class="column">
-                                    <span class="lighter-text">Not In Service</span>
-                                    <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
-                                    % if stop:
-                                        <div class="non-desktop smaller-font">
-                                            <span class="align-middle">Next Stop:</span>
-                                            % include('components/stop')
-                                        </div>
-                                    % end
-                                </div>
-                            </td>
                         % end
-                        <td class="desktop-only">
-                            % include('components/stop')
-                        </td>
                     </tr>
                 % end
             </tbody>
