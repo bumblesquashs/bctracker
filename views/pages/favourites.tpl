@@ -63,7 +63,9 @@
                                             % include('components/trip')
                                         </div>
                                     % else:
-                                        <h3>Not In Service</h3>
+                                        % if value.agency.enable_realtime_trips:
+                                            <h3>Not In Service</h3>
+                                        % end
                                         % allocation = vehicle_allocations[favourite]
                                         % if allocation:
                                             % if allocation.last_seen.is_today:
