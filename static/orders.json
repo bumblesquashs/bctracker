@@ -83,11 +83,19 @@
         "island-class": [
             [
                 { "year": 2019, "id": "island-aurora", "name": "Island Aurora", "pet_area": true },
-                { "year": 2019, "id": "island-discovery", "name": "Island Discovery", "pet_area": true },
+                { "year": 2019, "id": "island-discovery", "name": "Island Discovery", "pet_area": true }
+            ],
+            [
                 { "year": 2020, "id": "island-kuluta", "name": "Island K'ulut'a", "pet_area": true },
                 { "year": 2020, "id": "island-nagalis", "name": "Island Nagalis", "pet_area": true },
-                { "year": 2021, "id": "island-gwawis", "name": "Island Gwawis", "pet_area": true },
+                { "year": 2021, "id": "island-gwawis", "name": "Island G̲wawis", "pet_area": true },
                 { "year": 2021, "id": "island-kwigwis", "name": "Island Kwigwis", "pet_area": true }
+            ],
+            [
+                { "year": 2024, "id": "island-xwsaluxul", "name": "Island xwsaĺux̌ul", "pet_area": true },
+                { "year": 2024, "id": "island-sarlequun", "name": "Island sarlequun", "pet_area": true },
+                { "year": 2024, "id": "island-gwayam", "name": "Island Gwa̲’ya̲m", "pet_area": true },
+                { "year": 2024, "id": "island-kasa", "name": "Island K’asa", "pet_area": true }
             ]
         ],
         "k-class": [
