@@ -207,6 +207,25 @@
                 }
             ]
         ],
+        "v-class": [
+            [
+                {
+                    "year": 1964,
+                    "id": "queen-of-new-west",
+                    "name": "Queen of New Westminster",
+                    "length": 129.9,
+                    "capacity": {
+                        "Passengers/Crew": 1332,
+                        "Vehicles": 254
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "kids_area": true,
+                    "pet_area": true,
+                    "work_area": true
+                }
+            ]
+        ],
         "none": [
             [
                 {
@@ -274,25 +293,6 @@
                         "Vehicles": 35
                     },
                     "dining": true
-                }
-            ],
-            [
-                {
-                    "year": 1964,
-                    "id": "queen-of-new-west",
-                    "name": "Queen of New Westminster",
-                    "length": 129.9,
-                    "length_units": "metres",
-                    "fuel": "Diesel",
-                    "capacity": {
-                        "Passengers/Crew": 1332,
-                        "Vehicles": 254
-                    },
-                    "dining": true,
-                    "gift_shop": true,
-                    "kids_area": true,
-                    "pet_area": true,
-                    "work_area": true
                 }
             ]
         ]

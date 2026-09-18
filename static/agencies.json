@@ -3,6 +3,7 @@
         "name": "BC Ferries",
         "website": "https://bcferries.com",
         "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
+        "realtime_url": "$AIS_PATH/bc-ferries.json",
         "default_system": "bc-ferries",
         "prefix_headsigns": true,
         "accurate_seconds": false,
