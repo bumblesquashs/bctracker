@@ -16,7 +16,7 @@ class PositionRepository:
     
     database: Database
     
-    def create(self, context: Context, vehicle_id: str, data):
+    def create_protobuf(self, context: Context, vehicle_id: str, data):
         '''Inserts a new position into the database'''
         try:
             trip_id = data.trip.trip_id
@@ -102,6 +102,26 @@ class PositionRepository:
         if timestamp:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
+    
+    def create_json(self, context: Context, vehicle_id: str, data: dict):
+        lat = data.get('latitude')
+        lon = data.get('longitude')
+        bearing = data.get('heading')
+        speed = data.get('speed')
+        timestamp = data.get('timestamp')
+        self.database.insert(
+            table='position',
+            values={
+                'agency_id': context.agency_id,
+                'vehicle_id': vehicle_id,
+                'system_id': context.system_id,
+                'lat': lat,
+                'lon': lon,
+                'bearing': bearing,
+                'speed': speed,
+                'timestamp': timestamp
+            }
+        )
     
     def find(self, agency_id: str, vehicle_id: str) -> Position | None:
         '''Returns the position of the given vehicle'''

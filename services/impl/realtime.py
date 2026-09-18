@@ -3,6 +3,7 @@ from os import path, rename, remove
 from dataclasses import dataclass
 from datetime import datetime
 
+import json
 import requests
 
 import google.transit.gtfs_realtime_pb2 as protobuf
@@ -35,33 +36,48 @@ class RealtimeService:
                 rename(data_path, archives_path)
             else:
                 remove(data_path)
-        data = protobuf.FeedMessage()
-        with requests.get(context.system.realtime_url, timeout=10) as r:
-            if settings.current.enable_realtime_backups:
-                with open(data_path, 'wb') as f:
-                    f.write(r.content)
-            data.ParseFromString(r.content)
-        repositories.position.delete_all(context)
-        for index, entity in enumerate(data.entity):
-            vehicle = entity.vehicle
-            try:
-                vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = context.vehicle_name_length
-                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
-                if vehicle_id == '':
-                    vehicle_id = '0'
-            except:
-                vehicle_id = str(-(index + 1))
-            
-            # Workaround for issue where buses incorrectly report as 9337, causing a bunch of "transfers" with the real 9337
-            if vehicle_id == '9337' and context.system_id != 'south-okanagan':
-                continue
-            
-            try:
-                repositories.position.create(context, vehicle_id, vehicle)
-            except Exception as e:
-                services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        realtime_url = context.system.realtime_url
+        if realtime_url.startswith('$AIS_PATH'):
+            if not settings.current.ais_path:
+                # System wants AIS data but it isn't set up; ignore realtime completely
+                return
+            realtime_url = realtime_url.replace('$AIS_PATH', settings.current.ais_path)
+            with open(realtime_url, 'r') as file:
+                ais_data = json.load(file)
+            repositories.position.delete_all(context)
+            for (vehicle_id, data) in ais_data.items():
+                try:
+                    repositories.position.create_json(context, vehicle_id, data)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        else:
+            data = protobuf.FeedMessage()
+            with requests.get(context.system.realtime_url, timeout=10) as r:
+                if settings.current.enable_realtime_backups:
+                    with open(data_path, 'wb') as f:
+                        f.write(r.content)
+                data.ParseFromString(r.content)
+            repositories.position.delete_all(context)
+            for index, entity in enumerate(data.entity):
+                vehicle = entity.vehicle
+                try:
+                    vehicle_id = vehicle.vehicle.id
+                    vehicle_name_length = context.vehicle_name_length
+                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
+                        vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
+                    if vehicle_id == '':
+                        vehicle_id = '0'
+                except:
+                    vehicle_id = str(-(index + 1))
+                
+                # Workaround for issue where buses incorrectly report as 9337, causing a bunch of "transfers" with the real 9337
+                if vehicle_id == '9337' and context.system_id != 'south-okanagan':
+                    continue
+                
+                try:
+                    repositories.position.create_protobuf(context, vehicle_id, vehicle)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = context.timestamp
     
