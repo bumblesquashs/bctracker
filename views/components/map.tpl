@@ -303,7 +303,7 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            if (!position.offline && position.occupancy_icon) {
+            if (!position.offline && position.show_occupancy && position.occupancy_icon) {
                 const occupancyIcon = document.createElement("div");
                 occupancyIcon.className = "occupancy-icon";
                 occupancyIcon.classList.add(position.occupancy_status_class);

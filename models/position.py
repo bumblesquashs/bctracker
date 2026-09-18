@@ -139,7 +139,8 @@ class Position:
             'colour': self.colour,
             'text_colour': self.text_colour,
             'offline': self.offline,
-            'enable_realtime_trips': self.context.enable_realtime_trips
+            'enable_realtime_trips': self.context.enable_realtime_trips,
+            'show_occupancy': self.context.show_occupancy
         }
         year_model = self.vehicle.year_model
         if year_model:

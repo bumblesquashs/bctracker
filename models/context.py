@@ -116,6 +116,12 @@ class Context:
         return DEFAULT_SHOW_STOP_NUMBER
     
     @property
+    def show_occupancy(self):
+        if self.agency:
+            return self.agency.show_occupancy
+        return DEFAULT_SHOW_OCCUPANCY
+    
+    @property
     def vehicle_name_length(self):
         if self.agency:
             return self.agency.vehicle_name_length

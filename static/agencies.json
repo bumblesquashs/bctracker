@@ -9,6 +9,7 @@
         "prefer_stop_id": true,
         "show_stop_number": false,
         "show_full_orders": true,
+        "show_occupancy": false,
         "enable_blocks": false,
         "enable_realtime_trips": false,
         "nis_colour": "003769",
