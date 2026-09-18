@@ -177,7 +177,9 @@
                                                         <div class="row">
                                                             % include('components/vehicle', vehicle=position.vehicle)
                                                             <div class="row gap-5">
-                                                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                % if position.context.show_occupancy:
+                                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                % end
                                                                 % include('components/adherence', adherence=position.adherence)
                                                             </div>
                                                         </div>
@@ -288,7 +290,9 @@
                                                                         % position = positions[trip.id]
                                                                         % include('components/vehicle', vehicle=position.vehicle)
                                                                         <div class="row gap-5">
-                                                                            % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                            % if position.context.show_occupancy:
+                                                                                % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                            % end
                                                                             % include('components/adherence', adherence=position.adherence)
                                                                         </div>
                                                                     % elif trip.block_id in assignments and trip.end_time.is_later:

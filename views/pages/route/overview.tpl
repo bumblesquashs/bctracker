@@ -95,7 +95,9 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % if position.context.show_occupancy:
+                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % end
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
@@ -228,7 +230,9 @@
                                                                                 % if trip.id in trip_positions:
                                                                                     % position = trip_positions[trip.id]
                                                                                     <div class="row gap-5">
-                                                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                                        % if position.context.show_occupancy:
+                                                                                            % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                                                        % end
                                                                                         % include('components/adherence', adherence=position.adherence)
                                                                                     </div>
                                                                                 % end
