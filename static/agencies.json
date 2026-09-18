@@ -83,6 +83,19 @@
         "prefer_stop_id": true,
         "show_stop_number": false
     },
+    "hullo": {
+        "name": "Hullo",
+        "website": "https://hullo.com",
+        "realtime_url": "$AIS_PATH/hullo.json",
+        "default_system": "hullo",
+        "nis_colour": "FF3503",
+        "show_full_orders": true,
+        "show_occupancy": false,
+        "enable_realtime_trips": false,
+        "filter_vehicles_image_name": "ferry",
+        "vehicle_type": "Vessel",
+        "vehicle_type_plural": "Vessels"
+    },
     "tofino-shuttle": {
         "name": "Tofino Free Shuttle",
         "website": "https://tourismtofino.com/plan-your-trip/getting-around",
