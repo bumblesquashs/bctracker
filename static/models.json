@@ -253,9 +253,9 @@
                 "Vehicles": 310
             }
         },
-        "damen-group-fast-ferry-4212": {
+        "damen-fast-ferry-4212": {
             "name": "Fast Ferry 4212",
-            "manufacturer": "Damen Group",
+            "manufacturer": "Damen",
             "length": 42.2,
             "length_units": "metres",
             "fuel": "Diesel",
