@@ -88,6 +88,7 @@
         "website": "https://hullo.com",
         "realtime_url": "$AIS_PATH/hullo.json",
         "default_system": "hullo",
+        "enabled": false,
         "nis_colour": "FF3503",
         "show_full_orders": true,
         "show_occupancy": false,
