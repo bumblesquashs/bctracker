@@ -42,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if show_nis:
+                                    % if context.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -58,8 +58,14 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if show_nis:
-                                            <td class="align-right">{{ sum(1 for p in agency_positions if p.trip) }}</td>
+                                        % if context.enable_realtime_trips and show_nis:
+                                            <td class="align-right">
+                                                % if agency.enable_realtime_trips:
+                                                    {{ sum(1 for p in agency_positions if p.trip) }}
+                                                % else:
+                                                    N/A
+                                                % end
+                                            </td>
                                         % end
                                         <td class="align-right">{{ len(agency_positions) }}</td>
                                     </tr>

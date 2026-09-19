@@ -55,7 +55,14 @@
                                 <tr class="header">
                                     <td>{{ type }}</td>
                                     % if context.enable_realtime_trips and show_nis:
-                                        <td class="align-right">{{ sum(1 for p in type_positions if p.trip) }}</td>
+                                        % type_enable_realtime_trips = any([p.context.enable_realtime_trips for p in type_positions])
+                                        <td class="align-right">
+                                            % if type_enable_realtime_trips:
+                                                {{ sum(1 for p in type_positions if p.trip) }}
+                                            % else:
+                                                N/A
+                                            % end
+                                        </td>
                                     % end
                                     <td class="align-right">{{ len(type_positions) }}</td>
                                 </tr>
@@ -66,7 +73,14 @@
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
                                         % if context.enable_realtime_trips and show_nis:
-                                            <td class="align-right">{{ sum(1 for p in model_positions if p.trip) }}</td>
+                                            % model_enable_realtime_trips = any([p.context.enable_realtime_trips for p in model_positions])
+                                            <td class="align-right">
+                                                % if model_enable_realtime_trips:
+                                                    {{ sum(1 for p in model_positions if p.trip) }}
+                                                % else:
+                                                    N/A
+                                                % end
+                                            </td>
                                         % end
                                         <td class="align-right">{{ len(model_positions) }}</td>
                                     </tr>
