@@ -33,14 +33,16 @@
                     % if not context.system:
                         <th class="desktop-only">System</th>
                     % end
-                    <th class="desktop-only">Speed</th>
                     % if context.enable_realtime_trips:
+                        <th class="desktop-only">Speed</th>
                         <th>Headsign</th>
                         % if context.enable_blocks:
                             <th class="non-mobile">Block</th>
                         % end
                         <th class="non-mobile">Trip</th>
                         <th class="desktop-only">Next Stop</th>
+                    % else:
+                        <th>Speed</th>
                     % end
                 </tr>
             </thead>
@@ -75,8 +77,8 @@
                         % if not context.system:
                             <td class="desktop-only">{{ position.context }}</td>
                         % end
-                        <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                         % if context.enable_realtime_trips:
+                            <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
                             % if position.context.enable_realtime_trips:
                                 % if trip:
                                     <td>
@@ -124,8 +126,10 @@
                                     % include('components/stop')
                                 </td>
                             % else:
-                                <td colspan="{{ '4' if context.enable_blocks else '3' }}"></td>
+                                <td colspan="{{ '4' if context.enable_blocks else '3' }}">{{ position.speed }} km/h</td>
                             % end
+                        % else:
+                            <td class="no-wrap">{{ position.speed }} km/h</td>
                         % end
                     </tr>
                 % end
