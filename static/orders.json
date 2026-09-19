@@ -715,8 +715,8 @@
     "hullo": {
         "damen-fast-ferry-4212": [
             [
-                { "year": 2023, "id": "spuhels", "name": "spuhéls" },
-                { "year": 2023, "id": "sthuqi", "name": "sthuqi’" }
+                { "year": 2023, "id": "spuhels", "name": "spuhéls", "wifi": true },
+                { "year": 2023, "id": "sthuqi", "name": "sthuqi’", "wifi": true }
             ]
         ]
     },
