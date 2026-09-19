@@ -104,24 +104,47 @@ class PositionRepository:
         self.database.insert('position', values)
     
     def create_json(self, context: Context, vehicle_id: str, data: dict):
+        sequence = data.get('sequence')
         lat = data.get('latitude')
         lon = data.get('longitude')
-        bearing = data.get('heading')
-        speed = data.get('speed')
         timestamp = data.get('timestamp')
-        self.database.insert(
-            table='position',
-            values={
+        trip_id = data.get('trip_id')
+        stop_id = data.get('stop_id')
+        trip = context.system.get_trip(trip_id)
+        stop = context.system.get_stop(stop_id=stop_id)
+        if trip:
+            block_id = trip.block_id
+            route_id = trip.route_id
+        else:
+            block_id = None
+            route_id = None
+        if trip and stop and sequence is not None and lat is not None and lon is not None:
+            adherence = Adherence.calculate(trip, stop, sequence, lat, lon, timestamp)
+        else:
+            adherence = None
+        try:
+            occupancy = Occupancy[data['occupancy'].upper()]
+        except:
+            occupancy = Occupancy.NO_DATA_AVAILABLE
+        values = {
                 'agency_id': context.agency_id,
                 'vehicle_id': vehicle_id,
                 'system_id': context.system_id,
+                'trip_id': trip_id,
+                'stop_id': stop_id,
+                'block_id': block_id,
+                'route_id': route_id,
                 'lat': lat,
                 'lon': lon,
-                'bearing': bearing,
-                'speed': speed,
+                'bearing': data.get('heading'),
+                'speed': data.get('speed'),
+                'occupancy': occupancy.name,
                 'timestamp': timestamp
             }
-        )
+        if adherence:
+            values['adherence'] = adherence.value
+            values['layover'] = 1 if adherence.layover else 0
+        self.database.insert('position', values)
     
     def find(self, agency_id: str, vehicle_id: str) -> Position | None:
         '''Returns the position of the given vehicle'''
