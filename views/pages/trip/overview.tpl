@@ -15,7 +15,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
-        % if context.realtime_enabled:
+        % if context.realtime_enabled and context.enable_realtime_trips:
             <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>
@@ -197,7 +197,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.enable_occupancy:
+                                                    % if position.context.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)

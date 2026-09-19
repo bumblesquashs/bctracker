@@ -83,11 +83,19 @@
         "island-class": [
             [
                 { "year": 2019, "id": "island-aurora", "name": "Island Aurora", "pet_area": true },
-                { "year": 2019, "id": "island-discovery", "name": "Island Discovery", "pet_area": true },
+                { "year": 2019, "id": "island-discovery", "name": "Island Discovery", "pet_area": true }
+            ],
+            [
                 { "year": 2020, "id": "island-kuluta", "name": "Island K'ulut'a", "pet_area": true },
                 { "year": 2020, "id": "island-nagalis", "name": "Island Nagalis", "pet_area": true },
-                { "year": 2021, "id": "island-gwawis", "name": "Island Gwawis", "pet_area": true },
+                { "year": 2021, "id": "island-gwawis", "name": "Island G̲wawis", "pet_area": true },
                 { "year": 2021, "id": "island-kwigwis", "name": "Island Kwigwis", "pet_area": true }
+            ],
+            [
+                { "year": 2024, "id": "island-xwsaluxul", "name": "Island xwsaĺux̌ul", "pet_area": true },
+                { "year": 2024, "id": "island-sarlequun", "name": "Island sarlequun", "pet_area": true },
+                { "year": 2024, "id": "island-gwayam", "name": "Island Gwa̲’ya̲m", "pet_area": true },
+                { "year": 2024, "id": "island-kasa", "name": "Island K’asa", "pet_area": true }
             ]
         ],
         "k-class": [
@@ -207,6 +215,25 @@
                 }
             ]
         ],
+        "v-class": [
+            [
+                {
+                    "year": 1964,
+                    "id": "queen-of-new-west",
+                    "name": "Queen of New Westminster",
+                    "length": 129.9,
+                    "capacity": {
+                        "Passengers/Crew": 1332,
+                        "Vehicles": 254
+                    },
+                    "dining": true,
+                    "gift_shop": true,
+                    "kids_area": true,
+                    "pet_area": true,
+                    "work_area": true
+                }
+            ]
+        ],
         "none": [
             [
                 {
@@ -274,25 +301,6 @@
                         "Vehicles": 35
                     },
                     "dining": true
-                }
-            ],
-            [
-                {
-                    "year": 1964,
-                    "id": "queen-of-new-west",
-                    "name": "Queen of New Westminster",
-                    "length": 129.9,
-                    "length_units": "metres",
-                    "fuel": "Diesel",
-                    "capacity": {
-                        "Passengers/Crew": 1332,
-                        "Vehicles": 254
-                    },
-                    "dining": true,
-                    "gift_shop": true,
-                    "kids_area": true,
-                    "pet_area": true,
-                    "work_area": true
                 }
             ]
         ]

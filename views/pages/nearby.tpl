@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="content">
                                         % if upcoming_departures:
-                                            % if context.realtime_enabled and show_help_text:
+                                            % if stop.context.realtime_enabled and stop.context.enable_realtime_trips and show_help_text:
                                                 <p>
                                                     <span>{{ context.vehicle_type_plural }} with a</span>
                                                     <span class="scheduled">
@@ -112,11 +112,11 @@
                                                     <tr>
                                                         <th>Time</th>
                                                         <th class="non-mobile">Headsign</th>
-                                                        % if context.enable_blocks:
+                                                        % if stop.context.enable_blocks:
                                                             <th class="desktop-only">Block</th>
                                                         % end
                                                         <th>Trip</th>
-                                                        % if context.realtime_enabled:
+                                                        % if stop.context.realtime_enabled and stop.context.enable_realtime_trips:
                                                             <th>{{ context.vehicle_type }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
@@ -128,7 +128,7 @@
                                                         % if not last_time:
                                                             % last_time = departure.time
                                                         % end
-                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
+                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour, enable_blocks=stop.context.enable_blocks, enable_realtime_trips=stop.context.enable_realtime_trips, realtime_enabled=stop.context.realtime_enabled)
                                                         % last_time = departure.time
                                                     % end
                                                 </tbody>
@@ -171,7 +171,7 @@
     
     <script>
         function onSuccess(position) {
-            window.location = getURL(currentAgencyID, currentSystemID, "nearby", false, {
+            window.location = getURL(currentAgencyID, currentSystemID, "nearby", {
                 lat: position.coords.latitude,
                 lon: position.coords.longitude
             });

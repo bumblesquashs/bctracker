@@ -97,7 +97,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.enable_occupancy:
+                                                    % if position.context.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)
@@ -165,7 +165,7 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if context.realtime_enabled and show_help_text:
+                                        % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
                                             <p>
                                                 <span>{{ context.vehicle_type_plural }} with a</span>
                                                 <span class="scheduled">
@@ -186,7 +186,7 @@
                                                         % end
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
-                                                        % if context.realtime_enabled:
+                                                        % if context.realtime_enabled and context.enable_realtime_trips:
                                                             <th>{{ context.vehicle_type }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
@@ -222,7 +222,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/stop', stop=first_stop)
                                                             </td>
-                                                            % if context.realtime_enabled:
+                                                            % if context.realtime_enabled and context.enable_realtime_trips:
                                                                 % if trip.id in recorded_today:
                                                                     % vehicle = recorded_today[trip.id]
                                                                     <td>
@@ -232,7 +232,7 @@
                                                                                 % if trip.id in trip_positions:
                                                                                     % position = trip_positions[trip.id]
                                                                                     <div class="row gap-5">
-                                                                                        % if position.context.enable_occupancy:
+                                                                                        % if position.context.show_occupancy:
                                                                                             % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                                         % end
                                                                                         % include('components/adherence', adherence=position.adherence)

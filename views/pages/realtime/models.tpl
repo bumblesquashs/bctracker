@@ -41,7 +41,7 @@
                         <thead>
                             <tr>
                                 <th>Model</th>
-                                % if show_nis:
+                                % if context.enable_realtime_trips and show_nis:
                                     <th class="no-wrap align-right">In Service</th>
                                 % end
                                 <th class="align-right">Total</th>
@@ -52,7 +52,7 @@
                                 % type_positions = [p for p in positions if p.vehicle.model and p.vehicle.model.type == type]
                                 <tr class="header">
                                     <td>{{ type }}</td>
-                                    % if show_nis:
+                                    % if context.enable_realtime_trips and show_nis:
                                         <td class="align-right">{{ sum(1 for p in type_positions if p.trip) }}</td>
                                     % end
                                     <td class="align-right">{{ len(type_positions) }}</td>
@@ -63,7 +63,7 @@
                                     % model_positions = [p for p in type_positions if p.vehicle.model == model]
                                     <tr>
                                         <td><a href="#{{ model.id }}">{{! model }}</a></td>
-                                        % if show_nis:
+                                        % if context.enable_realtime_trips and show_nis:
                                             <td class="align-right">{{ sum(1 for p in model_positions if p.trip) }}</td>
                                         % end
                                         <td class="align-right">{{ len(model_positions) }}</td>
@@ -72,7 +72,7 @@
                             % end
                             <tr class="header">
                                 <td>Total</td>
-                                % if show_nis:
+                                % if context.enable_realtime_trips and show_nis:
                                     <td class="align-right">{{ sum(1 for p in positions if p.trip) }}</td>
                                 % end
                                 <td class="align-right">{{ len(positions) }}</td>
@@ -126,12 +126,14 @@
                                                                         % if not context.system:
                                                                             <th class="desktop-only">System</th>
                                                                         % end
-                                                                        <th>Headsign</th>
-                                                                        % if agency.enable_blocks:
-                                                                            <th class="non-mobile">Block</th>
+                                                                        % if agency.enable_realtime_trips:
+                                                                            <th>Headsign</th>
+                                                                            % if agency.enable_blocks:
+                                                                                <th class="non-mobile">Block</th>
+                                                                            % end
+                                                                            <th class="non-mobile">Trip</th>
+                                                                            <th class="desktop-only">Next Stop</th>
                                                                         % end
-                                                                        <th class="non-mobile">Trip</th>
-                                                                        <th class="desktop-only">Next Stop</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -150,7 +152,7 @@
                                                                         </tr>
                                                                         <tr class="display-none"></tr>
                                                                         % for position in order_positions:
-                                                                            % include('components/realtime_row', position=position, enable_blocks=agency.enable_blocks)
+                                                                            % include('components/realtime_row', position=position, enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
                                                                         % end
                                                                     % end
                                                                 </tbody>
@@ -176,27 +178,48 @@
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>{{ context.vehicle_type }}</th>
-                                    % if not context.system:
-                                        <th class="desktop-only">System</th>
+                        <div class="container">
+                            % available_agencies = sorted({o.agency for o in model_orders})
+                            % for agency in available_agencies:
+                                % agency_positions = [p for p in unknown_positions if p.vehicle.agency == agency]
+                                <div class="section">
+                                    % if len(all_available_agencies) > 1:
+                                        <div class="header" onclick="toggleSection(this)">
+                                            <h4 class="row">
+                                                % include('components/agency_logo')
+                                                {{ agency }}
+                                            </h4>
+                                            % include('components/toggle')
+                                        </div>
                                     % end
-                                    <th>Headsign</th>
-                                    % if context.enable_blocks:
-                                        <th class="non-mobile">Block</th>
-                                    % end
-                                    <th class="non-mobile">Trip</th>
-                                    <th class="desktop-only">Next Stop</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % for position in unknown_positions:
-                                    % include('components/realtime_row', position=position, enable_blocks=agency.enable_blocks)
-                                % end
-                            </tbody>
-                        </table>
+                                    <div class="content">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ context.vehicle_type }}</th>
+                                                    % if not context.system:
+                                                        <th class="desktop-only">System</th>
+                                                    % end
+                                                    % if agency.enable_realtime_trips:
+                                                        <th>Headsign</th>
+                                                        % if context.enable_blocks:
+                                                            <th class="non-mobile">Block</th>
+                                                        % end
+                                                        <th class="non-mobile">Trip</th>
+                                                        <th class="desktop-only">Next Stop</th>
+                                                    % end
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                % for position in agency_positions:
+                                                    % include('components/realtime_row', position=position, enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
+                                                % end
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            % end
+                        </div>
                     </div>
                 </div>
             % end

@@ -335,6 +335,11 @@
                 "Vehicles": 26
             }
         },
+        "v-class": {
+            "name": "V Class",
+            "length_units": "metres",
+            "fuel": "Diesel"
+        },
         "none": {
             "name": "(Unclassed)"
         }

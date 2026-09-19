@@ -15,6 +15,7 @@ class Agency:
     website: str | None = None
     gtfs_url: str | None = None
     realtime_url: str | None = None
+    realtime_ais: bool = False
     default_system: str | None = None
     enabled: bool = True
     
@@ -23,7 +24,6 @@ class Agency:
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
-    enable_occupancy: bool = DEFAULT_ENABLE_OCCUPANCY
     enable_route_variants: bool = DEFAULT_ENABLE_ROUTE_VARIANTS
     enable_stacked_headsigns: bool = DEFAULT_ENABLE_STACKED_HEADSIGNS
     filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
@@ -32,6 +32,7 @@ class Agency:
     prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
     prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
     show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
+    show_occupancy: bool = DEFAULT_SHOW_OCCUPANCY
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     vehicle_type: str = DEFAULT_VEHICLE_TYPE
@@ -49,7 +50,7 @@ class Agency:
     @property
     def realtime_enabled(self):
         '''Checks if realtime is enabled for this agency'''
-        return self.enabled and self.realtime_url
+        return self.enabled and (self.realtime_url or self.realtime_ais)
     
     def __str__(self):
         return self.name

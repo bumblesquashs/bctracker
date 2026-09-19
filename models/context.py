@@ -110,10 +110,10 @@ class Context:
         return DEFAULT_ENABLE_BLOCKS
     
     @property
-    def enable_occupancy(self):
+    def enable_realtime_trips(self):
         if self.agency:
-            return self.agency.enable_occupancy
-        return DEFAULT_ENABLE_OCCUPANCY
+            return self.agency.enable_realtime_trips
+        return DEFAULT_ENABLE_REALTIME_TRIPS
     
     @property
     def enable_route_variants(self):
@@ -174,6 +174,12 @@ class Context:
         if self.agency:
             return self.agency.prefix_headsigns
         return DEFAULT_PREFIX_HEADSIGNS
+    
+    @property
+    def show_occupancy(self):
+        if self.agency:
+            return self.agency.show_occupancy
+        return DEFAULT_SHOW_OCCUPANCY
     
     @property
     def show_stop_number(self):

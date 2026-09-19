@@ -7,6 +7,7 @@ from constants import DEFAULT_ADMIN_LOGS_COUNT
 class Settings:
     
     # Basic settings
+    ais_path: str | None = None
     cron_id: str = 'bctracker-muncher'
     admin_key: str | None = None
     admin_logs_count: int = DEFAULT_ADMIN_LOGS_COUNT
@@ -30,6 +31,7 @@ class Settings:
     await_realtime: bool = False
     
     def setup(self, config):
+        self.ais_path = config.get('ais_path')
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
         self.admin_key = config.get('admin_key')
         try:

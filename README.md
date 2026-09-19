@@ -105,6 +105,14 @@ To enable this, add the following to the configuration file:
 admin_key: '<key>'
 ```
 
+Some ferry-based agencies use AIS data instead of normal GTFS realtime.
+This can be enabled using the BCTracker AIS project (sold separately).
+When it's set up, you can point this project to the data files with this config:
+
+```
+ais_path: '<path>'
+```
+
 ### Domain configuration
 
 The current system or agency is determined using the relevant query strings (`system` and `agency`).

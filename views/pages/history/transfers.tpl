@@ -40,7 +40,7 @@
                         </div>
                         <script>
                             function setFilter(filter) {
-                                window.location = getURL(currentAgencyID, currentSystemID, "history/transfers", false, {
+                                window.location = getURL(currentAgencyID, currentSystemID, "history/transfers", {
                                     "filter": filter
                                 });
                             }

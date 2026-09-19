@@ -9,6 +9,7 @@ from models.context import Context
 from models.date import Date
 from models.record import Record
 from models.time import Time
+from models.trip import Trip
 from models.vehicle import Vehicle
 
 @dataclass(slots=True)
@@ -34,6 +35,23 @@ class RecordRepository:
         self.create_trip(record_id, trip_id)
         return record_id
     
+    def create_from_trip(self, allocation_id: int, date: Date, trip: Trip, time: Time):
+        '''Inserts a new record into the database based on a single trip'''
+        record_id = self.database.insert(
+            table='record',
+            values={
+                'allocation_id': allocation_id,
+                'date': date.format_db(),
+                'route_numbers': trip.route.number if trip.route else None,
+                'start_time': trip.start_time.format_db(),
+                'end_time': trip.end_time.format_db(),
+                'first_seen': time.format_db(),
+                'last_seen': time.format_db()
+            }
+        )
+        self.create_trip(record_id, trip.id)
+        return record_id
+    
     def create_trip(self, record_id: int, trip_id: str):
         '''Inserts a new trip record into the database'''
         self.database.insert(
@@ -56,6 +74,30 @@ class RecordRepository:
             }
         )
     
+    def merge(self, record: Record, trip: Trip, time: Time):
+        '''Updates a non-block record based on a trip'''
+        route_numbers = record.route_numbers
+        if trip.route and trip.route.number not in route_numbers:
+            route_numbers.append(trip.route.number)
+        start_time = record.start_time
+        if not trip.start_time.is_unknown and (start_time.is_unknown or trip.start_time < start_time):
+            start_time = trip.start_time
+        end_time = record.end_time
+        if not trip.end_time.is_unknown and (end_time.is_unknown or trip.end_time > end_time):
+            end_time = trip.end_time
+        self.database.update(
+            table='record',
+            values={
+                'route_numbers': ', '.join(route_numbers),
+                'start_time': start_time.format_db(),
+                'end_time': end_time.format_db(),
+                'last_seen': time.format_db()
+            },
+            filters={
+                'record_id': record.id
+            }
+        )
+    
     def find_all(self, context: Context, vehicle_id: str | None = None, block_id: str | None = None, trip_id: str | None = None, limit: int | None = None, page: int | None = None) -> list[Record]:
         '''Returns all records that match the given context, vehicle, block, and trip'''
         joins = {
@@ -75,7 +117,7 @@ class RecordRepository:
             }
             filters['trip_record.trip_id'] = trip_id
         return self.database.select(
-            table='record', 
+            table='record',
             columns={
                 'allocation.agency_id': 'agency_id',
                 'allocation.vehicle_id': 'vehicle_id',

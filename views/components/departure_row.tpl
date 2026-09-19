@@ -6,6 +6,9 @@
 
 % show_divider = get('show_divider', False)
 % show_time_estimate = get('show_time_estimate', False)
+% enable_blocks = get('enable_blocks', context.enable_blocks)
+% enable_realtime_trips = get('enable_realtime_trips', context.enable_realtime_trips)
+% realtime_enabled = get('realtime_enabled', context.realtime_enabled)
 
 <tr class="{{'divider' if show_divider else ''}}">
     <td>
@@ -46,7 +49,7 @@
             % end
         </div>
     </td>
-    % if context.enable_blocks:
+    % if enable_blocks:
         <td class="desktop-only">
             % if block:
                 <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -71,7 +74,7 @@
             % end
         </div>
     </td>
-    % if context.realtime_enabled:
+    % if realtime_enabled and enable_realtime_trips:
         % if trip.id in recorded_today:
             % vehicle = recorded_today[trip.id]
             <td>
@@ -81,7 +84,7 @@
                         % if trip.id in positions:
                             % position = positions[trip.id]
                             <div class="row gap-5">
-                                % if position.context.enable_occupancy:
+                                % if position.context.show_occupancy:
                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                 % end
                                 % include('components/adherence', adherence=position.adherence)

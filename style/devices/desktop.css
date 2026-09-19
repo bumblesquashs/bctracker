@@ -18,6 +18,10 @@ body.full-map #page {
     min-width: 250px;
 }
 
+body.full-map .tab-button {
+    border-bottom-width: 1px;
+}
+
 input[type="text"] {
     font-size: 14pt;
     vertical-align: middle;
@@ -283,6 +287,10 @@ table th {
 
 .tab-button-bar {
     align-self: flex-start;
+}
+
+.tab-button {
+    border-right-width: 1px;
 }
 
 .table-border-wrapper {

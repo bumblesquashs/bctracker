@@ -100,12 +100,14 @@
                                         % if not context.system:
                                             <th class="desktop-only">System</th>
                                         % end
-                                        <th>Headsign</th>
-                                        % if agency.enable_blocks:
-                                            <th class="non-mobile">Block</th>
+                                        % if agency.enable_realtime_trips:
+                                            <th>Headsign</th>
+                                            % if agency.enable_blocks:
+                                                <th class="non-mobile">Block</th>
+                                            % end
+                                            <th class="non-mobile">Trip</th>
+                                            <th class="desktop-only">Next Stop</th>
                                         % end
-                                        <th class="non-mobile">Trip</th>
-                                        <th class="desktop-only">Next Stop</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,7 +122,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in unknown_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks)
+                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
                                         % end
                                     % end
                                     % for order in agency_orders:
@@ -138,7 +140,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in order_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks)
+                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
                                         % end
                                     % end
                                 </tbody>

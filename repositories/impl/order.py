@@ -96,14 +96,14 @@ class OrderRepository:
                 model_icon = 'ghost'
                 title_prefix = None
             value = 0
-            if query in vehicle.name:
-                value += (len(query) / len(vehicle.name)) * 100
-                if vehicle.name.startswith(query):
+            name = vehicle.name
+            if query.lower() in name.lower():
+                value += (len(query) / len(name)) * 100
+                if name.lower().startswith(query.lower()):
                     value += len(query)
             if vehicle.id not in recorded_vehicle_ids:
                 value /= 10
             decoration = vehicle.find_decoration()
-            name = vehicle.name
             if decoration and decoration.enabled:
                 name += f' {decoration}'
             if title_prefix:

@@ -67,8 +67,9 @@
     --image-color: #FF9A3A;
 }
 
-.marker .icon.speed {
+.marker .icon {
     color: #FFFFFF;
+    --image-color: #FFFFFF;
 }
 
 .modified-service {

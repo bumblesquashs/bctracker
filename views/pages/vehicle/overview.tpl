@@ -68,21 +68,23 @@
                 
                 <div class="info-box">
                     % if position:
-                        <div class="section">
-                            % if trip:
-                                <div class="row">
-                                    % include('components/adherence', adherence=position.adherence, size='large')
-                                    % departure = position.departure
-                                    % if departure and departure.headsign:
-                                        <h3>{{ departure }}</h3>
-                                    % else:
-                                        <h3>{{ trip }}</h3>
-                                    % end
-                                </div>
-                            % else:
-                                <h3>Not In Service</h3>
-                            % end
-                        </div>
+                        % if trip or context.enable_realtime_trips:
+                            <div class="section">
+                                % if trip:
+                                    <div class="row">
+                                        % include('components/adherence', adherence=position.adherence, size='large')
+                                        % departure = position.departure
+                                        % if departure and departure.headsign:
+                                            <h3>{{ departure }}</h3>
+                                        % else:
+                                            <h3>{{ trip }}</h3>
+                                        % end
+                                    </div>
+                                % else:
+                                    <h3>Not In Service</h3>
+                                % end
+                            </div>
+                        % end
                         
                         % stop = position.stop
                         % if trip:
@@ -138,7 +140,7 @@
                                 <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
-                        % if context.enable_occupancy:
+                        % if position.context.show_occupancy:
                             <div class="row section">
                                 <div class="name">Occupancy</div>
                                 <div class="value">
@@ -487,16 +489,20 @@
                 % else:
                     <div class="placeholder">
                         <h3>This {{ vehicle.type_generic_name.lower() }} doesn't have any recorded history</h3>
-                        <p>There are a few reasons why that might be the case:</p>
-                        <ol>
-                            <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                            <li>It may not have been in service since BCTracker started recording {{ context.vehicle_type.lower() }} history</li>
-                            <li>It may not have functional tracking equipment installed</li>
-                            % if model and model.type == ModelType.shuttle:
-                                <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
-                            % end
-                        </ol>
-                        <p>Please check again later!</p>
+                        % if context.enable_realtime_trips:
+                            <p>There are a few reasons why that might be the case:</p>
+                            <ol>
+                                <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
+                                <li>It may not have been in service since BCTracker started recording {{ context.vehicle_type.lower() }} history</li>
+                                <li>It may not have functional tracking equipment installed</li>
+                                % if model and model.type == ModelType.shuttle:
+                                    <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
+                                % end
+                            </ol>
+                            <p>Please check again later!</p>
+                        % else:
+                            <p>Realtime trip information is unavailable for this agency</p>
+                        % end
                     </div>
                 % end
             </div>

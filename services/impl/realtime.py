@@ -3,6 +3,7 @@ from os import path, rename, remove
 from dataclasses import dataclass
 from datetime import datetime
 
+import json
 import requests
 
 import google.transit.gtfs_realtime_pb2 as protobuf
@@ -35,33 +36,45 @@ class RealtimeService:
                 rename(data_path, archives_path)
             else:
                 remove(data_path)
-        data = protobuf.FeedMessage()
-        with requests.get(context.system.realtime_url, timeout=10) as r:
-            if settings.current.enable_realtime_backups:
-                with open(data_path, 'wb') as f:
-                    f.write(r.content)
-            data.ParseFromString(r.content)
         repositories.position.delete_all(context)
-        for index, entity in enumerate(data.entity):
-            vehicle = entity.vehicle
-            try:
-                vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = context.vehicle_name_length
-                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
-                if vehicle_id == '':
-                    vehicle_id = '0'
-            except:
-                vehicle_id = str(-(index + 1))
-            
-            # Workaround for issue where 1151 is reporting as 9337, causing a bunch of "transfers" with the real 9337
-            if (context.system_id == 'whistler' or context.system_id == 'pemberton') and vehicle_id == '9337':
-                continue
-            
-            try:
-                repositories.position.create(context, vehicle_id, vehicle)
-            except Exception as e:
-                services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
+        if context.agency.realtime_ais and settings.current.ais_path:
+            with open(f'{settings.current.ais_path}/{context.agency_id}.json', 'r') as file:
+                ais_data = json.load(file)
+            for (vehicle_id, data) in ais_data.items():
+                try:
+                    repositories.position.create_json(context, vehicle_id, data)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
+        if context.system.realtime_url:
+            data = protobuf.FeedMessage()
+            with requests.get(context.system.realtime_url, timeout=10) as r:
+                if settings.current.enable_realtime_backups:
+                    with open(data_path, 'wb') as f:
+                        f.write(r.content)
+                data.ParseFromString(r.content)
+            for index, entity in enumerate(data.entity):
+                vehicle = entity.vehicle
+                try:
+                    vehicle_id = vehicle.vehicle.id
+                    vehicle_name_length = context.vehicle_name_length
+                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
+                        vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
+                    if vehicle_id == '':
+                        vehicle_id = '0'
+                except:
+                    vehicle_id = str(-(index + 1))
+                
+                # Workaround for issue where buses incorrectly report as 9337, causing a bunch of "transfers" with the real 9337
+                if vehicle_id == '9337' and context.system_id != 'south-okanagan':
+                    continue
+                
+                try:
+                    repositories.position.create_protobuf(context, vehicle_id, vehicle)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = context.timestamp
     
@@ -105,21 +118,39 @@ class RealtimeService:
                     first_record = None
                     last_record = None
                 
-                if position.trip and position.block_id and position.block:
-                    assignment = repositories.assignment.find(position.block_id, allocation_id, date)
-                    if not assignment or assignment.allocation_id != allocation_id:
-                        repositories.assignment.delete_all(block_id=position.block_id)
-                        repositories.assignment.delete_all(allocation_id=allocation_id)
-                        repositories.assignment.create(position.block_id, allocation_id, date)
-                    
-                    if last_record and last_record.date == date and last_record.block_id == position.block_id:
+                if context.enable_blocks:
+                    if position.trip and position.block_id and position.block:
+                        assignment = repositories.assignment.find(position.block_id, allocation_id, date)
+                        if not assignment or assignment.allocation_id != allocation_id:
+                            repositories.assignment.delete_all(block_id=position.block_id)
+                            repositories.assignment.delete_all(allocation_id=allocation_id)
+                            repositories.assignment.create(position.block_id, allocation_id, date)
+                        
+                        if last_record and last_record.date == date and last_record.block_id == position.block_id:
+                            record_id = last_record.id
+                            repositories.record.update(last_record.id, time)
+                            trip_ids = repositories.record.find_trip_ids(last_record.id)
+                            if position.trip_id not in trip_ids:
+                                repositories.record.create_trip(last_record.id, position.trip_id)
+                        else:
+                            record_id = repositories.record.create(allocation_id, date, position.block, time, position.trip_id)
+                        
+                        if not first_record:
+                            repositories.allocation.set_first_record(allocation_id, record_id)
+                        if not last_record or last_record.id != record_id:
+                            repositories.allocation.set_last_record(allocation_id, record_id)
+                elif position.trip:
+                    trip = position.trip
+                    if last_record and last_record.date == date:
                         record_id = last_record.id
-                        repositories.record.update(last_record.id, time)
                         trip_ids = repositories.record.find_trip_ids(last_record.id)
-                        if position.trip_id not in trip_ids:
+                        if position.trip_id in trip_ids:
+                            repositories.record.update(last_record.id, time)
+                        else:
+                            repositories.record.merge(last_record, trip, time)
                             repositories.record.create_trip(last_record.id, position.trip_id)
                     else:
-                        record_id = repositories.record.create(allocation_id, date, position.block, time, position.trip_id)
+                        record_id = repositories.record.create_from_trip(allocation_id, date, trip, time)
                     
                     if not first_record:
                         repositories.allocation.set_first_record(allocation_id, record_id)

@@ -354,15 +354,6 @@ table tr.table-button:hover {
 .marker .icon {
     border-color: #FFFFFF;
     background-color: #61C315;
-    --image-color: #FFFFFF;
-}
-
-.marker .icon.route .number {
-    color: #FFFFFF;
-}
-
-.marker .icon.vehicle_route {
-    color: #FFFFFF;
 }
 
 .news-post {
@@ -437,13 +428,13 @@ table tr.table-button:hover {
 }
 
 .tab-button-bar {
-    background: #666666;
     border-color: #666666;
 }
 
 .tab-button {
-    background-color: #FFFFFF;
     color: #026E6E;
+    background-color: #FFFFFF;
+    border-color: #666666;
 }
 
 .tab-button:hover {

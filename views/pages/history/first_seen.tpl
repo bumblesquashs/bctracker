@@ -57,11 +57,13 @@
                                 % if not context.system:
                                     <th class="non-mobile">System</th>
                                 % end
-                                % if context.enable_blocks:
-                                    <th>Block</th>
-                                    <th class="desktop-only">Routes</th>
-                                % else:
-                                    <th>Routes</th>
+                                % if context.enable_realtime_trips:
+                                    % if context.enable_blocks:
+                                        <th>Block</th>
+                                        <th class="desktop-only">Routes</th>
+                                    % else:
+                                        <th>Routes</th>
+                                    % end
                                 % end
                             </tr>
                         </thead>
@@ -109,37 +111,45 @@
                                     % if not context.system:
                                         <td class="non-mobile">{{ allocation.context }}</td>
                                     % end
-                                    % if context.enable_blocks:
-                                        % if record:
-                                            <td>
-                                                <div class="column stretch">
-                                                    <div class="row space-between">
-                                                        % if record.is_available:
-                                                            % block = record.block
-                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                        % else:
-                                                            <span>{{ record.block_id }}</span>
-                                                        % end
-                                                        % include('components/record_warnings')
-                                                    </div>
-                                                    <div class="non-desktop">
+                                    % if context.enable_realtime_trips:
+                                        % if allocation.context.enable_realtime_trips:
+                                            % if context.enable_blocks:
+                                                % if record:
+                                                    <td>
+                                                        <div class="column stretch">
+                                                            % if record.block_id:
+                                                                <div class="row space-between">
+                                                                    % if record.is_available:
+                                                                        % block = record.block
+                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                    % else:
+                                                                        <span>{{ record.block_id }}</span>
+                                                                    % end
+                                                                    % include('components/record_warnings')
+                                                                </div>
+                                                            % end
+                                                            <div class="non-desktop">
+                                                                % include('components/route_list', routes=record.routes)
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="desktop-only">
                                                         % include('components/route_list', routes=record.routes)
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="desktop-only">
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
+                                                    </td>
+                                                % else:
+                                                    <td colspan="2" class="lighter-text">No records for this system</td>
+                                                % end
+                                            % else:
+                                                % if record:
+                                                    <td>
+                                                        % include('components/route_list', routes=record.routes)
+                                                    </td>
+                                                % else:
+                                                    <td class="lighter-text">No records for this system</td>
+                                                % end
+                                            % end
                                         % else:
-                                            <td colspan="2" class="lighter-text">No records for this system</td>
-                                        % end
-                                    % else:
-                                        % if record:
-                                            <td>
-                                                % include('components/route_list', routes=record.routes)
-                                            </td>
-                                        % else:
-                                            <td class="lighter-text">No records for this system</td>
+                                            <td colspan="2"></td>
                                         % end
                                     % end
                                 </tr>

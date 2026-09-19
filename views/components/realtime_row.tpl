@@ -9,7 +9,7 @@
             <div class="row">
                 % include('components/vehicle')
                 <div class="row gap-5">
-                    % if position.context.enable_occupancy:
+                    % if position.context.show_occupancy:
                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                     % end
                     % include('components/adherence', adherence=position.adherence)
@@ -23,47 +23,49 @@
     % if not context.system:
         <td class="desktop-only">{{ position.context }}</td>
     % end
-    % if trip:
-        % block = trip.block
-        <td>
-            <div class="column">
-                % include('components/headsign', departure=position.departure)
-                <div class="mobile-only smaller-font">
-                    Trip:
-                    % include('components/trip', include_tooltip=False)
-                </div>
-                % if stop:
-                    <div class="non-desktop smaller-font">
-                        <span class="align-middle">Next Stop:</span>
-                        % include('components/stop')
+    % if enable_realtime_trips:
+        % if trip:
+            <td>
+                <div class="column">
+                    % include('components/headsign', departure=position.departure)
+                    <div class="mobile-only smaller-font">
+                        Trip:
+                        % include('components/trip', include_tooltip=False)
                     </div>
-                % end
-            </div>
-        </td>
-        % if enable_blocks:
+                    % if stop:
+                        <div class="non-desktop smaller-font">
+                            <span class="align-middle">Next Stop:</span>
+                            % include('components/stop')
+                        </div>
+                    % end
+                </div>
+            </td>
+            % if enable_blocks:
+                % block = trip.block
+                <td class="non-mobile">
+                    % if block:
+                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                    % end
+                </td>
+            % end
             <td class="non-mobile">
-                % if block:
-                    <a href="{{ block.url() }}">{{ block.id }}</a>
-                % end
+                % include('components/trip')
+            </td>
+        % else:
+            <td colspan="{{ '3' if enable_blocks else '2' }}">
+                <div class="column">
+                    <div class="lighter-text">Not In Service</div>
+                    % if stop:
+                        <div class="non-desktop smaller-font">
+                            <span class="align-middle">Next Stop:</span>
+                            % include('components/stop')
+                        </div>
+                    % end
+                </div>
             </td>
         % end
-        <td class="non-mobile">
-            % include('components/trip')
-        </td>
-    % else:
-        <td colspan="3">
-            <div class="column">
-                <div class="lighter-text">Not In Service</div>
-                % if stop:
-                    <div class="non-desktop smaller-font">
-                        <span class="align-middle">Next Stop:</span>
-                        % include('components/stop')
-                    </div>
-                % end
-            </div>
+        <td class="desktop-only">
+            % include('components/stop')
         </td>
     % end
-    <td class="desktop-only">
-        % include('components/stop')
-    </td>
 </tr>
