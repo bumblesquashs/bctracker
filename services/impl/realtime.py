@@ -36,28 +36,24 @@ class RealtimeService:
                 rename(data_path, archives_path)
             else:
                 remove(data_path)
-        realtime_url = context.system.realtime_url
-        if realtime_url.startswith('$AIS_PATH'):
-            if not settings.current.ais_path:
-                # System wants AIS data but it isn't set up; ignore realtime completely
-                return
-            realtime_url = realtime_url.replace('$AIS_PATH', settings.current.ais_path)
-            with open(realtime_url, 'r') as file:
+        repositories.position.delete_all(context)
+        
+        if context.agency.realtime_ais and settings.current.ais_path:
+            with open(f'{settings.current.ais_path}/{context.agency_id}.json', 'r') as file:
                 ais_data = json.load(file)
-            repositories.position.delete_all(context)
             for (vehicle_id, data) in ais_data.items():
                 try:
                     repositories.position.create_json(context, vehicle_id, data)
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
-        else:
+        
+        if context.system.realtime_url:
             data = protobuf.FeedMessage()
             with requests.get(context.system.realtime_url, timeout=10) as r:
                 if settings.current.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
                 data.ParseFromString(r.content)
-            repositories.position.delete_all(context)
             for index, entity in enumerate(data.entity):
                 vehicle = entity.vehicle
                 try:
@@ -78,6 +74,7 @@ class RealtimeService:
                     repositories.position.create_protobuf(context, vehicle_id, vehicle)
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = context.timestamp
     
