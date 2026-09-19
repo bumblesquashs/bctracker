@@ -16,14 +16,16 @@
     </div>
 </div>
 
-<div class="options-container">
-    <div class="option" onclick="toggleNISVehicles()">
-        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='status/check')
+% if context.enable_realtime_trips:
+    <div class="options-container">
+        <div class="option" onclick="toggleNISVehicles()">
+            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                % include('components/svg', name='status/check')
+            </div>
+            <div>Show NIS {{ context.vehicle_type_plural }}</div>
         </div>
-        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
-</div>
+% end
 
 % if positions:
     % available_agencies = sorted({p.vehicle.agency for p in positions})
