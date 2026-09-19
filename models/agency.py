@@ -15,6 +15,7 @@ class Agency:
     website: str | None = None
     gtfs_url: str | None = None
     realtime_url: str | None = None
+    realtime_ais: bool = False
     default_system: str | None = None
     enabled: bool = True
     prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
@@ -47,7 +48,7 @@ class Agency:
     @property
     def realtime_enabled(self):
         '''Checks if realtime is enabled for this agency'''
-        return self.enabled and self.realtime_url
+        return self.enabled and (self.realtime_url or self.realtime_ais)
     
     def __str__(self):
         return self.name
