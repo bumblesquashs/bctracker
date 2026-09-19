@@ -24,6 +24,7 @@ class Agency:
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
+    enable_realtime_trips: bool = DEFAULT_ENABLE_REALTIME_TRIPS
     enable_route_variants: bool = DEFAULT_ENABLE_ROUTE_VARIANTS
     enable_stacked_headsigns: bool = DEFAULT_ENABLE_STACKED_HEADSIGNS
     filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
