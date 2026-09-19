@@ -16,14 +16,16 @@
     </div>
 </div>
 
-<div class="options-container">
-    <div class="option" onclick="toggleNISVehicles()">
-        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='status/check')
+% if context.enable_realtime_trips:
+    <div class="options-container">
+        <div class="option" onclick="toggleNISVehicles()">
+            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                % include('components/svg', name='status/check')
+            </div>
+            <div>Show NIS {{ context.vehicle_type_plural }}</div>
         </div>
-        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
-</div>
+% end
 
 % if positions:
     % available_agencies = sorted({p.vehicle.agency for p in positions})
@@ -40,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if show_nis:
+                                    % if context.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -56,8 +58,14 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if show_nis:
-                                            <td class="align-right">{{ sum(1 for p in agency_positions if p.trip) }}</td>
+                                        % if context.enable_realtime_trips and show_nis:
+                                            <td class="align-right">
+                                                % if agency.enable_realtime_trips:
+                                                    {{ sum(1 for p in agency_positions if p.trip) }}
+                                                % else:
+                                                    N/A
+                                                % end
+                                            </td>
                                         % end
                                         <td class="align-right">{{ len(agency_positions) }}</td>
                                     </tr>
