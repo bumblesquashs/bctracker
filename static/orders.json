@@ -769,6 +769,14 @@
                 { "year": 2026, "low": 26601, "high": 26624, "livery": "blue-sweep" }
             ]
         ],
+        "damen-seabus": [
+            [
+                { "year": 2014, "id": "burrard-otter-ii", "name": "Burrard Otter II", "livery": "sweep-r-charcoal" }
+            ],
+            [
+                { "year": 2019, "id": "burrard-chinook", "name": "Burrard Chinook", "livery": "sweep-r-charcoal" }
+            ]
+        ],
         "ford-girardin-e450-g5": [
             [
                 { "year": 2023, "low": 23651, "high": 23665, "livery": "blue-top" }
@@ -1036,6 +1044,17 @@
             ],
             [
                 { "year": 2008, "low": 9277, "high": 9285, "livery": "sweep-suburban-grey" }
+            ]
+        ],
+        "victoria-shipyards-seabus": [
+            [
+                { "year": 2009, "id": "burrard-pacific-breeze", "name": "Burrard Pacific Breeze", "livery": "sweep-r-charcoal" }
+            ]
+        ],
+        "yarrows-shipbuilders-seabus": [
+            [
+                { "year": 1976, "id": "burrard-otter", "name": "Burrard Otter", "livery": "sweep" },
+                { "year": 1976, "id": "burrard-beaver", "name": "Burrard Beaver", "livery": "sweep-r-charcoal" }
             ]
         ]
     }

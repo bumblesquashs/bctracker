@@ -97,6 +97,7 @@
         "website": "https://translink.ca",
         "gtfs_url": "https://gtfs-static.translink.ca/gtfs/google_transit.zip",
         "realtime_url": "https://gtfsapi.translink.ca/v3/gtfsposition?apikey=$TRANSLINK_API_KEY",
+        "realtime_ais": true,
         "default_system": "vancouver",
         "custom_route_numbers": {
             "30053": "EL",

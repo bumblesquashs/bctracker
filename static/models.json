@@ -342,6 +342,36 @@
         },
         "none": {
             "name": "(Unclassed)"
+        },
+        "yarrows-shipbuilders-seabus": {
+            "manufacturer": "Yarrows Shipbuilders Limited",
+            "name": "Seabus",
+            "length": 34.29,
+            "length_units": "metres",
+            "fuel": "Diesel",
+            "capacity": {
+                "Passengers/Crew": 400
+            }
+        },
+        "victoria-shipyards-seabus": {
+            "manufacturer": "Victoria Shipyards",
+            "name": "Seabus",
+            "length": 33.54,
+            "length_units": "metres",
+            "fuel": "Diesel",
+            "capacity": {
+                "Passengers/Crew": 400
+            }
+        },
+        "damen-seabus": {
+            "manufacturer": "Damen",
+            "name": "Seabus",
+            "length": 34,
+            "length_units": "metres",
+            "fuel": "Diesel",
+            "capacity": {
+                "Passengers/Crew": 400
+            }
         }
     },
     "midibus": {
