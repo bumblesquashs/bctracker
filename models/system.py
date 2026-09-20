@@ -87,7 +87,7 @@ class System:
     @property
     def realtime_url(self):
         '''Returns the URL to load realtime for this system'''
-        if self.realtime_enabled:
+        if self.realtime_enabled and self.agency.realtime_url:
             url = self.agency.realtime_url
             if self.remote_id:
                 url = url.replace('$REMOTE_ID', str(self.remote_id))
