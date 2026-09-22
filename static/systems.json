@@ -198,6 +198,13 @@
             }
         }
     },
+    "hullo": {
+        "interregional": {
+            "hullo": {
+                "name": "Hullo"
+            }
+        }
+    },
     "tofino-shuttle": {
         "vancouver-island": {
             "tofino": {
