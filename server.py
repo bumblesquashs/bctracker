@@ -389,7 +389,7 @@ class Server(Bottle):
         positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
-            positions = [p for p in positions if p.trip]
+            positions = [p for p in positions if p.trip or not p.context.enable_realtime_trips]
         order_ids = {p.vehicle.order_id for p in positions if p.vehicle.order_id}
         orders = sorted([o for o in repositories.order.find_all(context) if o.id in order_ids])
         return self.page(
@@ -406,7 +406,7 @@ class Server(Bottle):
         positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
-            positions = [p for p in positions if p.trip]
+            positions = [p for p in positions if p.trip or not p.context.enable_realtime_trips]
         return self.page(
             context=context,
             file='realtime/routes',
@@ -420,7 +420,7 @@ class Server(Bottle):
         positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
-            positions = [p for p in positions if p.trip]
+            positions = [p for p in positions if p.trip or not p.context.enable_realtime_trips]
         orders = repositories.order.find_all(context)
         return self.page(
             context=context,
@@ -437,7 +437,7 @@ class Server(Bottle):
         positions = repositories.position.find_all(context)
         show_nis = self.query_cookie('show_nis', 'true') != 'false'
         if not show_nis:
-            positions = [p for p in positions if p.trip]
+            positions = [p for p in positions if p.trip or not p.context.enable_realtime_trips]
         return self.page(
             context=context,
             file='realtime/speed',

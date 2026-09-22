@@ -19,9 +19,10 @@
     </div>
 </div>
 
-<div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }}">
+<div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }} column">
     % if not context.realtime_enabled:
-        <i>{{ context }} realtime information is not supported</i>
+        <i>{{ context }} realtime information is not supported.</i>
+        <i>See the routes map <a href="{{ context.url('routes/map') }}">here</a></i>
     % elif context.system:
         <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
     % else:
