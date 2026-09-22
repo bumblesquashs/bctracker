@@ -302,11 +302,12 @@
                 <div>BCTracker</div>
             </a>
             
-            <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
             % if context.realtime_enabled:
+                <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
                 <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
                 <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
             % else:
+                <a class="navigation-button non-mobile" href="{{ context.url('routes/map') }}">Map</a>
                 <div class="navigation-button non-mobile disabled">Realtime</div>
                 <div class="navigation-button desktop-only disabled">History</div>
             % end
@@ -376,11 +377,11 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            <a class="menu-button mobile-only" href="{{ context.url('map') }}">
-                % include('components/svg', name='map')
-                <span>Map</span>
-            </a>
             % if context.realtime_enabled:
+                <a class="menu-button mobile-only" href="{{ context.url('map') }}">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </a>
                 <a class="menu-button mobile-only" href="{{ context.url('realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
@@ -390,6 +391,10 @@
                     <span>History</span>
                 </a>
             % else:
+                <a class="menu-button mobile-only" href="{{ context.url('routes/map') }}">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </a>
                 <div class="menu-button mobile-only disabled">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
