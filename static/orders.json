@@ -593,6 +593,9 @@
             ],
             [
                 { "year": 2026, "low": 7525, "high": 7532, "livery": "green-front", "usb_charging": true }
+            ],
+            [
+                { "year": 2027, "low": 7533, "high": 7562, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "new-flyer-xn40": [
@@ -678,6 +681,9 @@
             ],
             [
                 { "year": 2026, "low": 7035, "high": 7042, "livery": "green-front", "usb_charging": true }
+            ],
+            [
+                { "year": 2027, "low": 7043, "high": 7071, "livery": "green-front", "usb_charging": true }
             ]
         ],
         "proterra-zx5": [
