@@ -163,11 +163,11 @@ table th {
 
 #search-results {
     overflow: auto;
+    padding-bottom: 10px;
 }
 
 #search-results .result {
     padding: 5px 10px;
-    --image-size: 24px;
 }
 
 #search-results .result .description {

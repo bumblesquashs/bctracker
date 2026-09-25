@@ -121,7 +121,7 @@ class Block:
             return False
         return True
     
-    def get_match(self, query):
+    def get_match(self, query: str):
         '''Returns a match for this block with the given query'''
         query = query.lower()
         id = self.id
@@ -130,9 +130,4 @@ class Block:
             value += (len(query) / len(id)) * 100
             if id.startswith(query):
                 value += len(query)
-        routes = self.get_routes_string()
-        if routes.count(',') == 0:
-            message = f'Route {routes}'
-        else:
-            message = f'Routes {routes}'
-        return Match(self.context, f'Block {id}', message, 'block', f'blocks/{self.url_id}', value)
+        return Match.block(self, value)

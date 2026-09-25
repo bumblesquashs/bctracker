@@ -143,10 +143,11 @@ class Stop:
             'lat': self.lat,
             'lon': self.lon,
             'routes': [r.get_json() for r in self.routes],
-            'url_id': self.url_id
+            'url_id': self.url_id,
+            'show_stop_number': self.agency.show_stop_number
         }
     
-    def get_match(self, query):
+    def get_match(self, query: str):
         '''Returns a match for this stop with the given query'''
         query = query.lower()
         number = self.number.lower()
@@ -164,7 +165,7 @@ class Stop:
                 value -= 20
             else:
                 value = 1
-        return Match(self.context, f'Stop {self.number}', self.name, 'stop', f'stops/{self.url_id}', value)
+        return Match.stop(self, value)
     
     def is_near(self, lat, lon, accuracy=0.001):
         '''Checks if this stop is near the given latitude and longitude'''

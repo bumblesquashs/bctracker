@@ -186,7 +186,7 @@ class Route:
         return {
             'id': self.id,
             'number': self.number,
-            'name': self.name.replace("'", '&apos;'),
+            'name': self.display_name.replace("'", '&apos;'),
             'colour': self.colour,
             'text_colour': self.text_colour,
             'type': str(self.type),
@@ -202,7 +202,7 @@ class Route:
                 'system_name': str(self.system),
                 'agency_id': self.context.agency_id,
                 'number': self.number,
-                'name': self.name.replace("'", '&apos;'),
+                'name': self.display_name.replace("'", '&apos;'),
                 'colour': self.colour,
                 'text_colour': self.text_colour,
                 'type': str(self.type),
@@ -230,7 +230,7 @@ class Route:
                 headsigns.add(headsign)
         return sorted(headsigns)
     
-    def get_match(self, query):
+    def get_match(self, query: str):
         '''Returns a match for this route with the given query'''
         query = query.lower()
         number = self.number.lower()
@@ -244,7 +244,7 @@ class Route:
             value += (len(query) / len(name)) * 100
             if name.startswith(query):
                 value += len(query)
-        return Match(self.context, f'Route {self.number}', self.name, 'route', f'routes/{self.url_id}', value)
+        return Match.route(self, value)
     
     def is_variant(self, route):
         '''Checks if this route is a variant of another route'''
