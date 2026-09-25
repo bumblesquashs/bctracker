@@ -481,7 +481,6 @@ table tr.table-button {
 #search-results {
     display: flex;
     flex-direction: column;
-    padding-bottom: 10px;
     flex: 1;
 }
 
@@ -490,13 +489,29 @@ table tr.table-button {
     display: flex;
     flex-direction: row;
     gap: 10px;
-    align-items: center;
+    align-items: flex-start;
 }
 
 #search-results .result .details {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 3px;
+}
+
+#search-results .result .icon {
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    --image-size: 36px;
+}
+
+#search-results .result .icon .route {
+    padding: 3px 6px;
+    margin: 3px 0px;
+    overflow-wrap: break-word;
+    align-self: stretch;
 }
 
 #settings.collapsed {
@@ -1607,17 +1622,17 @@ table tr.table-button {
 }
 
 .stop {
-    display: inline-block;
+    display: inline;
 }
 
 .stop .stop-name {
-    display: inline-block;
+    display: inline;
     margin-right: 5px;
     vertical-align: middle;
 }
 
 .stop .stop-number {
-    display: inline-block;
+    display: inline;
     padding: 1px 4px;
     border-radius: 4px;
     font-size: 10pt;
