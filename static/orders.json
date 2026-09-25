@@ -8,7 +8,7 @@
                 { "year": 2023, "low": 1337, "high": 1356, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2024, "low": 1357, "high": 1516, "livery": "calgary-wave" }
+                { "year": 2025, "low": 1357, "high": 1516, "livery": "calgary-wave" }
             ]
         ],
         "chevrolet-arboc-4500-sof27d": [
@@ -136,6 +136,9 @@
             ],
             [
                 { "year": 2025, "low": 8597, "high": 8656, "livery": "calgary-wave" }
+            ],
+            [
+                { "year": 2026, "low": 8657, "high": 8749, "livery": "calgary-wave" }
             ]
         ]
     },
