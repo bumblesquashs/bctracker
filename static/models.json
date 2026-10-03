@@ -86,6 +86,13 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
+        "new-flyer-xde40": {
+            "manufacturer": "New Flyer",
+            "name": "XDE40",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Diesel/Electric Hybrid"
+        },
         "new-flyer-xe40": {
             "manufacturer": "New Flyer",
             "name": "XE40",
