@@ -84,6 +84,11 @@ class Order:
     def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
         vehicles = []
         for row in rows:
+            if 'version' in row:
+                version = row['version']
+                del row['version']
+            else:
+                version = None
             if 'id' in row:
                 id = row['id']
                 del row['id']
@@ -105,6 +110,8 @@ class Order:
                     id = str(id)
                     if not name:
                         name = id
+                if version:
+                    id = f'{id}-{version}'
                 vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
             else:
                 low = row['low']
@@ -122,5 +129,7 @@ class Order:
                     else:
                         id = str(id)
                         name = id
+                    if version:
+                        id = f'{id}-{version}'
                     vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
         return cls(order_id, agency, model, vehicles)
