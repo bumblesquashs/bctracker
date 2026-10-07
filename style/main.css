@@ -802,6 +802,10 @@ table tr.table-button {
     user-select: none;
 }
 
+.decoration:hover {
+    text-decoration: none;
+}
+
 .display-none {
     display: none !important;
 }
@@ -1425,7 +1429,7 @@ table tr.table-button {
     min-width: 18px;
 }
 
-.order-details .title {
+.order-details .order-title {
     text-align: center;
     font-weight: bold;
 }

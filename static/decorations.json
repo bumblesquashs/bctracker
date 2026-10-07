@@ -35,6 +35,12 @@
             "description": "Santa Bus",
             "enabled": false
         },
+        "7520": {
+            "text": "🎨",
+            "description": "Indigenous Artwork",
+            "artist": "Elder Butch",
+            "website": "https://www.bctransit.com/indigenous-bus-design/"
+        },
         "9093": {
             "text": "⚡",
             "description": "Battery Bus Demo"
