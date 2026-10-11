@@ -84,6 +84,11 @@ class Order:
     def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
         vehicles = []
         for row in rows:
+            if 'version' in row:
+                version = row['version']
+                del row['version']
+            else:
+                version = None
             if 'id' in row:
                 id = row['id']
                 del row['id']

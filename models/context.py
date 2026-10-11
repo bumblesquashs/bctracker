@@ -116,6 +116,12 @@ class Context:
         return DEFAULT_SHOW_STOP_NUMBER
     
     @property
+    def show_occupancy(self):
+        if self.agency:
+            return self.agency.show_occupancy
+        return DEFAULT_SHOW_OCCUPANCY
+    
+    @property
     def vehicle_name_length(self):
         if self.agency:
             return self.agency.vehicle_name_length
@@ -132,6 +138,12 @@ class Context:
         if self.agency:
             return self.agency.enable_blocks
         return DEFAULT_ENABLE_BLOCKS
+    
+    @property
+    def enable_realtime_trips(self):
+        if self.agency:
+            return self.agency.enable_realtime_trips
+        return DEFAULT_ENABLE_REALTIME_TRIPS
     
     @property
     def nis_colour(self):

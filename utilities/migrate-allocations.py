@@ -24,7 +24,7 @@ from models.daterange import DateRange
 old_db = Database('abtracker remote')
 new_db = Database('abtracker')
 
-old_db.connect(run_scripts=False)
+old_db.connect(script_file=None)
 new_db.connect()
 
 unexpected_updates = []

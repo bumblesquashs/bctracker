@@ -4,7 +4,7 @@
             <div style="width: 40px"></div>
         % end
         <div class="column center">
-            <div class="title">{{! order }}</div>
+            <div class="order-title">{{! order }}</div>
             <div class="content lighter-text smaller-font">
                 % if len(order.vehicles) == 1:
                     1 {{ context.vehicle_type.lower() }}

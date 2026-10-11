@@ -19,9 +19,10 @@
     </div>
 </div>
 
-<div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }}">
+<div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }} column">
     % if not context.realtime_enabled:
-        <i>{{ context }} realtime information is not supported</i>
+        <i>{{ context }} realtime information is not supported.</i>
+        <i>See the routes map <a href="{{ context.url('routes/map') }}">here</a></i>
     % elif context.system:
         <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
     % else:
@@ -235,15 +236,19 @@
             
             if (vehicleMarkerStyle === "route") {
                 icon.classList.add("route-number");
-                icon.innerHTML += position.route_number;
+                if (position.enable_realtime_trips) {
+                    icon.innerHTML += position.route_number;
+                } else {
+                    icon.innerHTML += "N/A"
+                }
                 icon.style.backgroundColor = "#" + position.colour;
             } else if (vehicleMarkerStyle === "vehicle-type") {
                 if (position.lat === 0 && position.lon === 0) {
-                    icon.innerHTML = getSVG("fish");
+                    icon.innerHTML += getSVG("fish");
                 } else if (adherence && adherence.value <= -66) {
-                    icon.innerHTML = getSVG("snail");
+                    icon.innerHTML += getSVG("snail");
                 } else {
-                    icon.innerHTML = getSVG(position.vehicle_icon);
+                    icon.innerHTML += getSVG(position.vehicle_icon);
                 }
                 icon.style.backgroundColor = "#" + position.colour;
             } else if (vehicleMarkerStyle === "mini") {
@@ -253,7 +258,7 @@
             } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
-                    if (position.route_number === "NIS") {
+                    if (position.enable_realtime_trips && position.route_number === "NIS") {
                         icon.innerHTML += "NIS";
                     } else {
                         icon.innerHTML += "N/A"
@@ -278,7 +283,9 @@
                 icon.innerHTML = position.speed + '<div class="units">km/h</div>';
                 icon.style.backgroundColor = "#" + position.colour;
             } else {
-                icon.classList.add("vehicle-route");
+                if (position.enable_realtime_trips) {
+                    icon.classList.add("vehicle-route");
+                }
                 const column = document.createElement("div");
                 column.className = "column center gap-0";
                 if (position.lat === 0 && position.lon === 0) {
@@ -288,10 +295,12 @@
                 } else {
                     column.innerHTML = getSVG(position.vehicle_icon);
                 }
-                const routeElement = document.createElement("div");
-                routeElement.className = "number";
-                routeElement.innerHTML = position.route_number;
-                column.appendChild(routeElement);
+                if (position.enable_realtime_trips) {
+                    const routeElement = document.createElement("div");
+                    routeElement.className = "number";
+                    routeElement.innerHTML = position.route_number;
+                    column.appendChild(routeElement);
+                }
                 icon.appendChild(column);
                 icon.style.backgroundColor = "#" + position.colour;
             }
@@ -317,7 +326,7 @@
             model.innerHTML = position.vehicle_year_model;
             content.appendChild(model);
             
-            if (!position.offline) {
+            if (!position.offline && position.enable_realtime_trips) {
                 const headsign = document.createElement("div");
                 if (position.headsign === "Not In Service") {
                     headsign.innerHTML = position.headsign;
@@ -380,7 +389,7 @@
                 iconsRow.appendChild(adherenceElement);
             }
             
-            if (!position.offline && position.occupancy_icon) {
+            if (!position.offline && position.show_occupancy && position.occupancy_icon) {
                 const occupancyIcon = document.createElement("div");
                 occupancyIcon.className = "occupancy-icon";
                 occupancyIcon.classList.add(position.occupancy_status_class);

@@ -17,7 +17,7 @@
     </div>
 </div>
 
-% if context.realtime_enabled:
+% if context.realtime_enabled and context.enable_realtime_trips:
     <div class="page-container">
         % if records:
             <div class="sidebar container flex-1">

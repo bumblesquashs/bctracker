@@ -47,7 +47,7 @@
                                         <div class="name">Total Blocks</div>
                                         <div class="value">{{ len(today_blocks) }}</div>
                                     </div>
-                                    % if context.realtime_enabled:
+                                    % if context.realtime_enabled and context.enable_realtime_trips:
                                         <div class="section row">
                                             <div class="name column">
                                                 <div>Assigned {{ context.vehicle_type_plural }}</div>
@@ -80,7 +80,7 @@
                                                 <th class="non-mobile">Start Time</th>
                                                 <th class="non-mobile">End Time</th>
                                                 <th class="desktop-only">Duration</th>
-                                                % if context.realtime_enabled:
+                                                % if context.realtime_enabled and context.enable_realtime_trips:
                                                     <th>{{ context.vehicle_type }}</th>
                                                     <th class="non-mobile">Model</th>
                                                 % end
@@ -103,7 +103,7 @@
                                                     <td class="non-mobile">{{ start_time }}</td>
                                                     <td class="non-mobile">{{ end_time }}</td>
                                                     <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
-                                                    % if context.realtime_enabled:
+                                                    % if context.realtime_enabled and context.enable_realtime_trips:
                                                         % if block.id in recorded_vehicles:
                                                             % vehicle = recorded_vehicles[block.id]
                                                             <td>

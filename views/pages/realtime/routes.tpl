@@ -16,14 +16,16 @@
     </div>
 </div>
 
-<div class="options-container">
-    <div class="option" onclick="toggleNISVehicles()">
-        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='status/check')
+% if context.enable_realtime_trips:
+    <div class="options-container">
+        <div class="option" onclick="toggleNISVehicles()">
+            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                % include('components/svg', name='status/check')
+            </div>
+            <div>Show NIS {{ context.vehicle_type_plural }}</div>
         </div>
-        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
-</div>
+% end
 
 % if positions:
     % routes = {p.trip.route for p in positions if p.trip and p.route}
@@ -82,7 +84,9 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % if position.context.show_occupancy:
+                                                        % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
+                                                    % end
                                                     % include('components/adherence', adherence=position.adherence)
                                                 </div>
                                             </div>
@@ -133,7 +137,64 @@
             </div>
         % end
         
-        % no_route_positions = sorted([p for p in positions if not p.trip])
+        % no_trip_available_positions = sorted([p for p in positions if not p.context.enable_realtime_trips])
+        % if no_trip_available_positions:
+            <div class="section">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>No Trip Info Available</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>{{ context.vehicle_type }}</th>
+                                <th class="desktop-only">Model</th>
+                                % if not context.system:
+                                    <th>System</th>
+                                % end
+                            </tr>
+                        </thead>
+                        <tbody>
+                            % last_vehicle = None
+                            % for position in no_trip_available_positions:
+                                % vehicle = position.vehicle
+                                % stop = position.stop
+                                % order_id = vehicle.order_id
+                                % if not last_vehicle:
+                                    % same_order = True
+                                % elif not order_id and not last_vehicle.order_id:
+                                    % same_order = True
+                                % elif not order_id or not last_vehicle.order_id:
+                                    % same_order = False
+                                % else:
+                                    % same_order = order_id == last_vehicle.order_id
+                                % end
+                                % last_vehicle = vehicle
+                                <tr class="{{'' if same_order else 'divider'}}">
+                                    <td>
+                                        <div class="column">
+                                            % include('components/vehicle')
+                                            <span class="non-desktop smaller-font">
+                                                % include('components/year_model', year_model=vehicle.year_model)
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="desktop-only">
+                                        % include('components/year_model', year_model=vehicle.year_model)
+                                    </td>
+                                    % if not context.system:
+                                        <td>{{ position.context }}</td>
+                                    % end
+                                </tr>
+                            % end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        % end
+        
+        % no_route_positions = sorted([p for p in positions if p.context.enable_realtime_trips and not p.trip])
         % if no_route_positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">

@@ -3,6 +3,7 @@ from os import path, rename, remove
 from dataclasses import dataclass
 from datetime import datetime
 
+import json
 import requests
 
 import google.transit.gtfs_realtime_pb2 as protobuf
@@ -42,30 +43,42 @@ class RealtimeService:
                     f.write(r.content)
             data.ParseFromString(r.content)
         repositories.position.delete_all(context)
-        vehicle_ids = set()
-        for index, entity in enumerate(data.entity):
-            vehicle = entity.vehicle
-            try:
-                if vehicle.vehicle.HasField('label'):
-                    vehicle_id = vehicle.vehicle.label
-                else:
-                    vehicle_id = vehicle.vehicle.id
-                vehicle_name_length = context.vehicle_name_length
-                if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
-                    vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
-                if vehicle_id == '':
-                    vehicle_id = '0'
-            except:
-                vehicle_id = str(-(index + 1))
-            
-            if vehicle_id in vehicle_ids:
-                continue
-            vehicle_ids.add(vehicle_id)
-            
-            try:
-                repositories.position.create(context, vehicle_id, vehicle)
-            except Exception as e:
-                services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
+        if context.agency.realtime_ais and settings.current.ais_path:
+            with open(f'{settings.current.ais_path}/{context.agency_id}.json', 'r') as file:
+                ais_data = json.load(file)
+            for (vehicle_id, data) in ais_data.items():
+                try:
+                    repositories.position.create_json(context, vehicle_id, data)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
+        if context.system.realtime_url:
+            vehicle_ids = set()
+            for index, entity in enumerate(data.entity):
+                vehicle = entity.vehicle
+                try:
+                    if vehicle.vehicle.HasField('label'):
+                        vehicle_id = vehicle.vehicle.label
+                    else:
+                        vehicle_id = vehicle.vehicle.id
+                    vehicle_name_length = context.vehicle_name_length
+                    if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
+                        vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
+                    if vehicle_id == '':
+                        vehicle_id = '0'
+                except:
+                    vehicle_id = str(-(index + 1))
+                
+                if vehicle_id in vehicle_ids:
+                    continue
+                vehicle_ids.add(vehicle_id)
+                
+                try:
+                    repositories.position.create_protobuf(context, vehicle_id, vehicle)
+                except Exception as e:
+                    services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
+        
         self.last_updated = Timestamp.now(accurate_seconds=False)
         context.system.last_updated = context.timestamp
     

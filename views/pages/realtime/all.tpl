@@ -16,14 +16,16 @@
     </div>
 </div>
 
-<div class="options-container">
-    <div class="option" onclick="toggleNISVehicles()">
-        <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
-            % include('components/svg', name='status/check')
+% if context.enable_realtime_trips:
+    <div class="options-container">
+        <div class="option" onclick="toggleNISVehicles()">
+            <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
+                % include('components/svg', name='status/check')
+            </div>
+            <div>Show NIS {{ context.vehicle_type_plural }}</div>
         </div>
-        <div>Show NIS {{ context.vehicle_type_plural }}</div>
     </div>
-</div>
+% end
 
 % if positions:
     % available_agencies = sorted({p.vehicle.agency for p in positions})
@@ -40,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if show_nis:
+                                    % if context.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -56,8 +58,14 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if show_nis:
-                                            <td class="align-right">{{ sum(1 for p in agency_positions if p.trip) }}</td>
+                                        % if context.enable_realtime_trips and show_nis:
+                                            <td class="align-right">
+                                                % if agency.enable_realtime_trips:
+                                                    {{ sum(1 for p in agency_positions if p.trip) }}
+                                                % else:
+                                                    N/A
+                                                % end
+                                            </td>
                                         % end
                                         <td class="align-right">{{ len(agency_positions) }}</td>
                                     </tr>
@@ -100,12 +108,14 @@
                                         % if not context.system:
                                             <th class="desktop-only">System</th>
                                         % end
-                                        <th>Headsign</th>
-                                        % if agency.enable_blocks:
-                                            <th class="non-mobile">Block</th>
+                                        % if agency.enable_realtime_trips:
+                                            <th>Headsign</th>
+                                            % if agency.enable_blocks:
+                                                <th class="non-mobile">Block</th>
+                                            % end
+                                            <th class="non-mobile">Trip</th>
+                                            <th class="desktop-only">Next Stop</th>
                                         % end
-                                        <th class="non-mobile">Trip</th>
-                                        <th class="desktop-only">Next Stop</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -120,7 +130,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in unknown_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks)
+                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
                                         % end
                                     % end
                                     % for order in agency_orders:
@@ -138,7 +148,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in order_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks)
+                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
                                         % end
                                     % end
                                 </tbody>
