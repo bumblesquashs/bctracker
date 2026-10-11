@@ -7,6 +7,7 @@
         "default_system": "calgary",
         "prefix_headsigns": true,
         "accurate_seconds": false,
+        "show_occupancy": false,
         "invalid_realtime_percentage": 1.1
     },
     "edmonton-transit-service": {
@@ -24,7 +25,8 @@
         "gtfs_url": "https://gpt.mapstrat.com/current/google_transit.zip",
         "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
         "default_system": "grande-prairie",
-        "prefix_headsigns": true
+        "prefix_headsigns": true,
+        "show_occupancy": false
     },
     "lethbridge-transit": {
         "name": "Lethbridge Transit",
@@ -33,7 +35,8 @@
         "default_system": "lethbridge",
         "prefix_headsigns": true,
         "accurate_seconds": false,
-        "distance_scale": 1000
+        "distance_scale": 1000,
+        "show_occupancy": false
     },
     "medicine-hat-transit": {
         "name": "Medicine Hat Transit",
@@ -44,14 +47,16 @@
         "vehicle_name_length": 3,
         "prefix_headsigns": true,
         "distance_scale": 1000,
-        "enable_blocks": false
+        "enable_blocks": false,
+        "show_occupancy": false
     },
     "red-deer-transit": {
         "name": "Red Deer Transit",
         "website": "https://www.reddeer.ca/city-services/transit/",
         "gtfs_url": "https://data.reddeer.ca/datasets/gtfsdatafeed/download/zip",
         "default_system": "red-deer",
-        "prefix_headsigns": true
+        "prefix_headsigns": true,
+        "show_occupancy": false
     },
     "roam": {
         "name": "Roam",
@@ -78,6 +83,7 @@
         "prefix_headsigns": true,
         "prefer_stop_id": true,
         "show_stop_number": false,
-        "distance_scale": 1000
+        "distance_scale": 1000,
+        "show_occupancy": false
     }
 }
