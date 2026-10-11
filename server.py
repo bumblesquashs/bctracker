@@ -60,6 +60,9 @@ class Server(Bottle):
         self.add('/bus/<vehicle_id>', self.bus_overview)
         self.add('/bus/<vehicle_id>/map', self.bus_map)
         self.add('/bus/<vehicle_id>/history', self.bus_history)
+        self.add('/bus/<agency_id>/<vehicle_id>', self.agency_bus_overview)
+        self.add('/bus/<agency_id>/<vehicle_id>/map', self.agency_bus_map)
+        self.add('/bus/<agency_id>/<vehicle_id>/history', self.agency_bus_history)
         self.add('/history', self.history_last_seen)
         self.add('/history/first-seen', self.history_first_seen)
         self.add('/history/transfers', self.history_transfers)
@@ -658,6 +661,21 @@ class Server(Bottle):
         redirect(context.url('fleet', vehicle_id, 'map'))
     
     def bus_history(self, context: Context, vehicle_id: str):
+        redirect(context.url('fleet', vehicle_id, 'history'))
+    
+    def agency_bus_overview(self, context: Context, agency_id: str, vehicle_id: str):
+        if not context.agency_id:
+            context = Context.find(agency_id=agency_id)
+        redirect(context.url('fleet', vehicle_id))
+    
+    def agency_bus_map(self, context: Context, agency_id: str, vehicle_id: str):
+        if not context.agency_id:
+            context = Context.find(agency_id=agency_id)
+        redirect(context.url('fleet', vehicle_id, 'map'))
+    
+    def agency_bus_history(self, context: Context, agency_id: str, vehicle_id: str):
+        if not context.agency_id:
+            context = Context.find(agency_id=agency_id)
         redirect(context.url('fleet', vehicle_id, 'history'))
     
     def history_last_seen(self, context: Context):
