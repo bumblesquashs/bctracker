@@ -1754,9 +1754,10 @@ class Server(Bottle):
         if context.system:
             context.system.update_route_caches([r.id for r in routes])
         else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
+            route_ids_by_system = {}
+            for route in routes:
+                route_ids_by_system.setdefault(route.system, []).append(route.id)
+            for (system, system_route_ids) in route_ids_by_system.items():
                 system.update_route_caches(system_route_ids)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
         shape_ids = set()

@@ -211,8 +211,7 @@ class System:
         except KeyError:
             trips = [t for t in self.get_trips() if t.route_id == route_id]
             departure_headsigns = repositories.departure.find_headsigns(self.context, route_id)
-            headsigns = {h for (_, h) in departure_headsigns}
-            cache = RouteCache.build(self, trips, headsigns)
+            cache = RouteCache.build(self, trips, set(departure_headsigns))
             self.route_caches[route_id] = cache
             return cache
     
