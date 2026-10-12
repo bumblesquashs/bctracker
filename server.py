@@ -1759,13 +1759,21 @@ class Server(Bottle):
                 route_ids_by_system.setdefault(route.system, []).append(route.id)
             for (system, system_route_ids) in route_ids_by_system.items():
                 system.update_route_caches(system_route_ids)
-        trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
-        shape_ids = set()
+        points = repositories.point.find_all(context)
+        points_by_shape_id = {}
+        for point in points:
+            points_by_shape_id.setdefault(point.shape_id, []).append(point)
         shape_trips = []
-        for trip in trips:
-            if trip.shape_id not in shape_ids:
-                shape_ids.add(trip.shape_id)
-                shape_trips.append(trip.get_json())
+        for route in routes:
+            for shape_id in route.shape_ids:
+                points = points_by_shape_id.get(shape_id)
+                if points:
+                    shape_trips.append({
+                        'shape_id': shape_id,
+                        'points': [p.get_json() for p in points],
+                        'colour': route.colour,
+                        'text_colour': route.text_colour,
+                    })
         indicators = [j for r in routes for j in r.get_indicator_json()]
         return {
             'trips': shape_trips,

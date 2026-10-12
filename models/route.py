@@ -156,6 +156,10 @@ class Route:
         return headsigns
     
     @property
+    def shape_ids(self):
+        return self.cache.shape_ids
+    
+    @property
     def indicator_points(self):
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
@@ -262,6 +266,7 @@ class RouteCache:
     schedule: Schedule | None
     sheets: list[Sheet]
     headsigns: list[str]
+    shape_ids: set[str]
     indicator_points: list[Point]
     
     @classmethod
@@ -275,6 +280,7 @@ class RouteCache:
             schedule = None
         trip_headsigns = {t.headsign for t in trips if t.headsign}
         headsigns = sorted(trip_headsigns.union(departure_headsigns))
+        shape_ids = {t.shape_id for t in trips if t.shape_id}
         try:
             shape_ids = {t.shape_id for t in trips}
             if shape_ids:
@@ -303,4 +309,4 @@ class RouteCache:
                 indicator_points = []
         except IndexError:
             indicator_points = []
-        return cls(trips, schedule, sheets, headsigns, indicator_points)
+        return cls(trips, schedule, sheets, headsigns, shape_ids, indicator_points)
