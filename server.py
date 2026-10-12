@@ -756,13 +756,6 @@ class Server(Bottle):
     
     def routes_map(self, context: Context):
         routes = repositories.route.find_all(context)
-        if context.system:
-            context.system.update_route_caches([r.id for r in routes])
-        else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
-                system.update_route_caches(system_route_ids)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -1766,13 +1759,6 @@ class Server(Bottle):
                 system_route_ids = [r.id for r in routes if r.system == system]
                 system.update_route_caches(system_route_ids)
         trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
-        if context.system:
-            context.system.update_trip_caches([t.id for t in trips])
-        else:
-            systems = {t.system for t in trips}
-            for system in systems:
-                system_trip_ids = [t.id for t in trips if t.system == system]
-                system.update_trip_caches(system_trip_ids)
         shape_ids = set()
         shape_trips = []
         for trip in trips:

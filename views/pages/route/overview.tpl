@@ -34,7 +34,7 @@
                             <div class="value">{{ route.type }} Service</div>
                         </div>
                         <div class="column section">
-                            % headsigns = route.get_headsigns()
+                            % headsigns = route.headsigns
                             % for headsign in headsigns:
                                 <div>{{ headsign }}</div>
                             % end

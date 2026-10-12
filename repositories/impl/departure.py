@@ -237,6 +237,34 @@ class DepartureRepository:
             return (departures[0], None)
         return (None, None)
     
+    def find_headsigns(self, context: Context, route_id: str | list[str]) -> list[str]:
+        return self.database.select(
+            table='departure',
+            columns={
+                'trip.route_id': 'route_id',
+                'departure.headsign': 'headsign',
+            },
+            distinct=True,
+            joins={
+                'download': {
+                    'download.download_id': 'departure.download_id',
+                },
+                'trip': {
+                    'trip.trip_id': 'departure.trip_id',
+                },
+            },
+            filters={
+                'departure.headsign': {
+                    'IS NOT': None,
+                    '!=': '',
+                },
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'trip.route_id': route_id,
+            },
+            initializer=lambda r: (r['route_id'], r['headsign']),
+        )
+    
     def delete_all(self, context: Context):
         '''Deletes all departures for the given context from the database'''
         download_ids = self.database.select(
