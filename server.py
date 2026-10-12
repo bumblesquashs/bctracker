@@ -307,7 +307,9 @@ class Server(Bottle):
             if add_context:
                 kwargs['context'] = self.query_context()
             start_time = time()
+            services.cron.server_loading = True
             result = callback(*args, **kwargs)
+            services.cron.server_loading = False
             end_time = time()
             duration = end_time - start_time
             if duration >= 10:
