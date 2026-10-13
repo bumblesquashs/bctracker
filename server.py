@@ -1762,11 +1762,11 @@ class Server(Bottle):
         points = repositories.point.find_all(context)
         points_by_shape_id = {}
         for point in points:
-            points_by_shape_id.setdefault(point.shape_id, []).append(point)
+            points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
         shape_trips = []
         for route in routes:
             for shape_id in route.shape_ids:
-                points = points_by_shape_id.get(shape_id)
+                points = points_by_shape_id.get((route.context, shape_id))
                 if points:
                     shape_trips.append({
                         'shape_id': shape_id,
