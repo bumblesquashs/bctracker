@@ -756,13 +756,6 @@ class Server(Bottle):
     
     def routes_map(self, context: Context):
         routes = repositories.route.find_all(context)
-        if context.system:
-            context.system.update_route_caches([r.id for r in routes])
-        else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
-                system.update_route_caches(system_route_ids)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         return self.page(
             context=context,
@@ -1761,24 +1754,26 @@ class Server(Bottle):
         if context.system:
             context.system.update_route_caches([r.id for r in routes])
         else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
+            route_ids_by_system = {}
+            for route in routes:
+                route_ids_by_system.setdefault(route.system, []).append(route.id)
+            for (system, system_route_ids) in route_ids_by_system.items():
                 system.update_route_caches(system_route_ids)
-        trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
-        if context.system:
-            context.system.update_trip_caches([t.id for t in trips])
-        else:
-            systems = {t.system for t in trips}
-            for system in systems:
-                system_trip_ids = [t.id for t in trips if t.system == system]
-                system.update_trip_caches(system_trip_ids)
-        shape_ids = set()
+        points = repositories.point.find_all(context)
+        points_by_shape_id = {}
+        for point in points:
+            points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
         shape_trips = []
-        for trip in trips:
-            if trip.shape_id not in shape_ids:
-                shape_ids.add(trip.shape_id)
-                shape_trips.append(trip.get_json())
+        for route in routes:
+            for shape_id in route.shape_ids:
+                points = points_by_shape_id.get((route.context, shape_id))
+                if points:
+                    shape_trips.append({
+                        'shape_id': shape_id,
+                        'points': [p.get_json() for p in points],
+                        'colour': route.colour,
+                        'text_colour': route.text_colour,
+                    })
         indicators = [j for r in routes for j in r.get_indicator_json()]
         return {
             'trips': shape_trips,
