@@ -806,6 +806,18 @@ table tr.table-button {
     text-decoration: none;
 }
 
+.departure-hour {
+    font-weight: bold;
+    text-align: right;
+    font-size: 12pt;
+}
+
+.departure-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .display-none {
     display: none !important;
 }

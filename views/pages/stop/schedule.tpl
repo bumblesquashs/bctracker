@@ -27,6 +27,21 @@
                         <div class="section">
                             % include('components/sheet_list', schedule_path=f'stops/{stop.url_id}/schedule')
                         </div>
+                        <div class="section">
+                            <div class="options-container">
+                                <div class="option" onclick="toggleCompactSchedule()">
+                                    <div class="checkbox {{ 'selected' if compact_schedule else '' }}">
+                                        % include('components/svg', name='status/check')
+                                    </div>
+                                    <div>Show Compact Schedule</div>
+                                </div>
+                                <script>
+                                    function toggleCompactSchedule() {
+                                        window.location = "{{! stop.url('schedule', compact_schedule='false' if compact_schedule else 'true') }}";
+                                    }
+                                </script>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,70 +72,74 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Time</th>
-                                                    <th class="non-mobile">Headsign</th>
-                                                    % if context.enable_blocks:
-                                                        <th class="non-mobile">Block</th>
-                                                    % end
-                                                    <th>Trip</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                % last_time = None
-                                                % for departure in departures:
-                                                    % trip = departure.trip
-                                                    % block = trip.block
-                                                    % if not last_time:
+                                        % if compact_schedule:
+                                            % include('components/departure_board')
+                                        % else:
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th class="non-mobile">Headsign</th>
+                                                        % if context.enable_blocks:
+                                                            <th class="non-mobile">Block</th>
+                                                        % end
+                                                        <th>Trip</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    % last_time = None
+                                                    % for departure in departures:
+                                                        % trip = departure.trip
+                                                        % block = trip.block
+                                                        % if not last_time:
+                                                            % last_time = departure.time
+                                                        % end
+                                                        <tr class="{{'divider' if departure.time.hour > last_time.hour else ''}}">
+                                                            <td>{{ departure.time.format_web(time_format) }}</td>
+                                                            <td class="non-mobile">
+                                                                <div class="column">
+                                                                    % include('components/headsign')
+                                                                    % if not departure.pickup_type.is_normal:
+                                                                        <span class="smaller-font italics">{{ departure.pickup_type }}</span>
+                                                                    % elif departure == trip.last_departure:
+                                                                        <span class="smaller-font italics">No pick up</span>
+                                                                    % end
+                                                                    % if not departure.dropoff_type.is_normal:
+                                                                        <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
+                                                                    % end
+                                                                </div>
+                                                            </td>
+                                                            % if context.enable_blocks:
+                                                                <td class="non-mobile">
+                                                                    % if block:
+                                                                        <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                                    % else:
+                                                                        <div class="lighter-text">Unknown</div>
+                                                                    % end
+                                                                </td>
+                                                            % end
+                                                            <td>
+                                                                <div class="column">
+                                                                    % include('components/trip')
+                                                                    <span class="mobile-only smaller-font">
+                                                                        % include('components/headsign')
+                                                                    </span>
+                                                                    % if not departure.pickup_type.is_normal:
+                                                                        <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
+                                                                    % elif departure == trip.last_departure:
+                                                                        <span class="mobile-only smaller-font italics">No pick up</span>
+                                                                    % end
+                                                                    % if not departure.dropoff_type.is_normal:
+                                                                        <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
+                                                                    % end
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                         % last_time = departure.time
                                                     % end
-                                                    <tr class="{{'divider' if departure.time.hour > last_time.hour else ''}}">
-                                                        <td>{{ departure.time.format_web(time_format) }}</td>
-                                                        <td class="non-mobile">
-                                                            <div class="column">
-                                                                % include('components/headsign')
-                                                                % if not departure.pickup_type.is_normal:
-                                                                    <span class="smaller-font italics">{{ departure.pickup_type }}</span>
-                                                                % elif departure == trip.last_departure:
-                                                                    <span class="smaller-font italics">No pick up</span>
-                                                                % end
-                                                                % if not departure.dropoff_type.is_normal:
-                                                                    <span class="smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                                % end
-                                                            </div>
-                                                        </td>
-                                                        % if context.enable_blocks:
-                                                            <td class="non-mobile">
-                                                                % if block:
-                                                                    <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                                % else:
-                                                                    <div class="lighter-text">Unknown</div>
-                                                                % end
-                                                            </td>
-                                                        % end
-                                                        <td>
-                                                            <div class="column">
-                                                                % include('components/trip')
-                                                                <span class="mobile-only smaller-font">
-                                                                    % include('components/headsign')
-                                                                </span>
-                                                                % if not departure.pickup_type.is_normal:
-                                                                    <span class="mobile-only smaller-font italics">{{ departure.pickup_type }}</span>
-                                                                % elif departure == trip.last_departure:
-                                                                    <span class="mobile-only smaller-font italics">No pick up</span>
-                                                                % end
-                                                                % if not departure.dropoff_type.is_normal:
-                                                                    <span class="mobile-only smaller-font italics">{{ departure.dropoff_type }}</span>
-                                                                % end
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    % last_time = departure.time
-                                                % end
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        % end
                                     </div>
                                 </div>
                             % end

@@ -22,7 +22,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 74
+VERSION = 75
 
 random = Random()
 
@@ -1397,7 +1397,8 @@ class Server(Bottle):
             assignments={a.block_id: a for a in assignments},
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def stop_map(self, context: Context, stop_number: str):
@@ -1486,7 +1487,8 @@ class Server(Bottle):
             enable_refresh=False,
             stop=stop,
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def stop_schedule_date(self, context: Context, stop_number: str, date_string: str):
@@ -1532,7 +1534,8 @@ class Server(Bottle):
             stop=stop,
             date=date,
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def about(self, context: Context):
