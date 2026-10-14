@@ -816,7 +816,8 @@ class Server(Bottle):
             assignments={a.block_id: a for a in assignments},
             positions=repositories.position.find_all(context, route_id=route.id),
             favourite=Favourite('route', route),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def route_map(self, context: Context, route_number: str):
@@ -908,7 +909,8 @@ class Server(Bottle):
             enable_refresh=False,
             route=route,
             favourite=Favourite('route', route),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def route_schedule_date(self, context: Context, route_number: str, date_string: str):
@@ -955,7 +957,8 @@ class Server(Bottle):
             route=route,
             date=date,
             favourite=Favourite('route', route),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def blocks_overview(self, context: Context):

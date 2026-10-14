@@ -5,13 +5,19 @@
         <div class="tooltip right">
             <div class="title">{{ trip }}</div>
             <div>{{ departure.time.format_web(time_format) }}</div>
-            % if not departure.pickup_type.is_normal:
-                <div class="italics">{{ departure.pickup_type }}</div>
-            % elif departure == trip.last_departure:
-                <div class="italics">No pick up</div>
-            % end
-            % if not departure.dropoff_type.is_normal:
-                <div class="italics">{{ departure.dropoff_type }}</div>
+            % if show_stop_info:
+                % if departure.stop:
+                    <div>{{ departure.stop }}</div>
+                % end
+            % else:
+                % if not departure.pickup_type.is_normal:
+                    <div class="italics">{{ departure.pickup_type }}</div>
+                % elif departure == trip.last_departure:
+                    <div class="italics">No pick up</div>
+                % end
+                % if not departure.dropoff_type.is_normal:
+                    <div class="italics">{{ departure.dropoff_type }}</div>
+                % end
             % end
         </div>
     </a>
