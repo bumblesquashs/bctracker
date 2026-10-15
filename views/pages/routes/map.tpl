@@ -166,6 +166,7 @@
                     document.getElementById("map").classList.remove("display-none");
                     map.updateSize();
                     if (area.isValid) {
+                        area.makePointIfTooSmall();
                         if (area.isPoint) {
                             map.getView().setCenter(ol.proj.fromLonLat(area.point));
                             map.getView().setZoom(15);
