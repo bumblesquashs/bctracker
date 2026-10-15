@@ -5,7 +5,7 @@
         <div class="tooltip right">
             <div class="title">{{ trip }}</div>
             <div>{{ departure.time.format_web(time_format) }}</div>
-            % if show_stop_info:
+            % if get('show_stop_info', False):
                 % if departure.stop:
                     <div>{{ departure.stop }}</div>
                 % end
