@@ -254,41 +254,61 @@
                 </div>
                 <div class="content">
                     % if departures:
-                        % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
-                            <p>
-                                <span>{{ context.vehicle_type_plural }} with a</span>
-                                <span class="scheduled">
-                                    % include('components/svg', name='schedule')
-                                </span>
-                                <span>are scheduled but may be swapped off.</span>
-                            </p>
-                        % end
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th class="non-mobile">Headsign</th>
-                                    % if context.enable_blocks:
-                                        <th class="desktop-only">Block</th>
-                                    % end
-                                    <th>Trip</th>
-                                    % if context.realtime_enabled and context.enable_realtime_trips:
-                                        <th>{{ context.vehicle_type }}</th>
-                                        <th class="desktop-only">Model</th>
-                                    % end
-                                </tr>
-                            </thead>
-                            <tbody>
-                                % last_time = None
-                                % for departure in departures:
-                                    % if not last_time:
+                        <div class="options-container">
+                            <div class="option" onclick="toggleCompactSchedule()">
+                                <div class="checkbox {{ 'selected' if compact_schedule else '' }}">
+                                    % include('components/svg', name='status/check')
+                                </div>
+                                <div>Show Compact Schedule</div>
+                            </div>
+                            <script>
+                                function toggleCompactSchedule() {
+                                    window.location = "{{! stop.url(compact_schedule='false' if compact_schedule else 'true') }}";
+                                }
+                            </script>
+                        </div>
+                        % if compact_schedule:
+                            % if show_help_text and any([1 for d in departures if d.trip and d.trip.last_departure == d or not d.pickup_type.is_normal]):
+                                <p>Departures with a <span class="lighter-text strike-through">line through</span> do not pick up.</p>
+                            % end
+                            % include('components/departure_board')
+                        % else:
+                            % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
+                                <p>
+                                    <span>{{ context.vehicle_type_plural }} with a</span>
+                                    <span class="scheduled">
+                                        % include('components/svg', name='schedule')
+                                    </span>
+                                    <span>are scheduled but may be swapped off.</span>
+                                </p>
+                            % end
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th class="non-mobile">Headsign</th>
+                                        % if context.enable_blocks:
+                                            <th class="desktop-only">Block</th>
+                                        % end
+                                        <th>Trip</th>
+                                        % if context.realtime_enabled and context.enable_realtime_trips:
+                                            <th>{{ context.vehicle_type }}</th>
+                                            <th class="desktop-only">Model</th>
+                                        % end
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    % last_time = None
+                                    % for departure in departures:
+                                        % if not last_time:
+                                            % last_time = departure.time
+                                        % end
+                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                         % last_time = departure.time
                                     % end
-                                    % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
-                                    % last_time = departure.time
-                                % end
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        % end
                     % else:
                         <div class="placeholder">
                             % if context.gtfs_loaded:

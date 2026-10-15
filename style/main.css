@@ -806,6 +806,27 @@ table tr.table-button {
     text-decoration: none;
 }
 
+.departure {
+    font-size: 10pt;
+    border-bottom-width: 3;
+    border-bottom-style: solid;
+    min-width: 20px;
+    text-align: center;
+}
+
+.departure-hour {
+    font-weight: bold;
+    text-align: right;
+    font-size: 12pt;
+}
+
+.departure-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
 .display-none {
     display: none !important;
 }
@@ -1644,6 +1665,10 @@ table tr.table-button {
     background-color: var(--stop-number-background);
     color: var(--stop-number-text);
     border: 1px solid var(--stop-number-border);
+}
+
+.strike-through {
+    text-decoration: line-through;
 }
 
 .tab-button-bar {
