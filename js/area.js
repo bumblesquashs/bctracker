@@ -44,7 +44,6 @@ class Area {
         }
         const latDiff = this.maxLat - this.minLat;
         const lonDiff = this.maxLon - this.minLon;
-        console.log(latDiff, lonDiff)
         if (latDiff < 0.005 && lonDiff < 0.005) {
             const midLat = (this.minLat + this.maxLat) / 2;
             const midLon = (this.minLon + this.maxLon) / 2;
