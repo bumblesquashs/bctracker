@@ -71,6 +71,9 @@
                 % departures = stop.find_departures(date=date)
                 % if departures:
                     % if compact_schedule:
+                        % if show_help_text and any([1 for d in departures if d.trip and d.trip.last_departure == d or not d.pickup_type.is_normal]):
+                            <p>Departures with a <span class="strike-through">line through</span> do not pick up.</p>
+                        % end
                         % include('components/departure_board')
                     % else:
                         <table>

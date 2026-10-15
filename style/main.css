@@ -1667,6 +1667,10 @@ table tr.table-button {
     border: 1px solid var(--stop-number-border);
 }
 
+.strike-through {
+    text-decoration: line-through;
+}
+
 .tab-button-bar {
     display: flex;
     flex-direction: row;
