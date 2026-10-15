@@ -40,21 +40,6 @@
                     <div class="section">
                         % include('components/sheet_list', sheets=route.sheets, schedule_path=f'routes/{route.url_id}/schedule')
                     </div>
-                    <div class="section">
-                        <div class="options-container">
-                            <div class="option" onclick="toggleCompactSchedule()">
-                                <div class="checkbox {{ 'selected' if compact_schedule else '' }}">
-                                    % include('components/svg', name='status/check')
-                                </div>
-                                <div>Show Compact Schedule</div>
-                            </div>
-                            <script>
-                                function toggleCompactSchedule() {
-                                    window.location = "{{! route.url('schedule', date.format_db(), compact_schedule='false' if compact_schedule else 'true') }}";
-                                }
-                            </script>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -80,58 +65,54 @@
                                     % include('components/toggle')
                                 </div>
                                 <div class="content">
-                                    % if compact_schedule:
-                                        % include('components/departure_board', departures=[t.first_departure for t in direction_trips], show_stop_info=True)
-                                    % else:
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th class="non-mobile">Start Time</th>
-                                                    <th class="mobile-only">Start</th>
-                                                    <th class="non-mobile">Headsign</th>
-                                                    % if context.enable_blocks:
-                                                        <th class="non-mobile">Block</th>
-                                                    % end
-                                                    <th>Trip</th>
-                                                    <th class="desktop-only">First Stop</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                % last_start_time = None
-                                                % for trip in direction_trips:
-                                                    % first_stop = trip.first_departure.stop
-                                                    % start_time = trip.start_time
-                                                    % if not start_time.is_unknown and not last_start_time:
-                                                        % last_start_time = start_time
-                                                    % end
-                                                    <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
-                                                        <td>{{ trip.start_time.format_web(time_format) }}</td>
-                                                        <td class="non-mobile">
-                                                            % include('components/headsign')
-                                                        </td>
-                                                        % if context.enable_blocks:
-                                                            <td class="non-mobile">
-                                                                % block = trip.block
-                                                                <a href="{{ block.url() }}">{{ block.id }}</a>
-                                                            </td>
-                                                        % end
-                                                        <td>
-                                                            <div class="column">
-                                                                % include('components/trip')
-                                                                <span class="mobile-only smaller-font">
-                                                                    % include('components/headsign')
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="desktop-only">
-                                                            % include('components/stop', stop=first_stop)
-                                                        </td>
-                                                    </tr>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="non-mobile">Start Time</th>
+                                                <th class="mobile-only">Start</th>
+                                                <th class="non-mobile">Headsign</th>
+                                                % if context.enable_blocks:
+                                                    <th class="non-mobile">Block</th>
+                                                % end
+                                                <th>Trip</th>
+                                                <th class="desktop-only">First Stop</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            % last_start_time = None
+                                            % for trip in direction_trips:
+                                                % first_stop = trip.first_departure.stop
+                                                % start_time = trip.start_time
+                                                % if not start_time.is_unknown and not last_start_time:
                                                     % last_start_time = start_time
                                                 % end
-                                            </tbody>
-                                        </table>
-                                    % end
+                                                <tr class="{{'divider' if start_time.hour > last_start_time.hour else ''}}">
+                                                    <td>{{ trip.start_time.format_web(time_format) }}</td>
+                                                    <td class="non-mobile">
+                                                        % include('components/headsign')
+                                                    </td>
+                                                    % if context.enable_blocks:
+                                                        <td class="non-mobile">
+                                                            % block = trip.block
+                                                            <a href="{{ block.url() }}">{{ block.id }}</a>
+                                                        </td>
+                                                    % end
+                                                    <td>
+                                                        <div class="column">
+                                                            % include('components/trip')
+                                                            <span class="mobile-only smaller-font">
+                                                                % include('components/headsign')
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="desktop-only">
+                                                        % include('components/stop', stop=first_stop)
+                                                    </td>
+                                                </tr>
+                                                % last_start_time = start_time
+                                            % end
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         % end
