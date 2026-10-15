@@ -331,6 +331,24 @@
             }
         }
     </script>
+    
+    % if nearest_stop and get('zoom_vehicles', True):
+        <script>
+            function addNearestStopCoordinates() {
+                const lat = parseFloat("{{ nearest_stop.lat }}");
+                const lon = parseFloat("{{ nearest_stop.lon }}");
+                if (area.isPoint) {
+                    const latDiff = area.maxLat - lat;
+                    const lonDiff = area.maxLon - lon;
+                    const oppositeLat = area.maxLat + latDiff;
+                    const oppositeLon = area.maxLon + lonDiff;
+                    area.combine(oppositeLat, oppositeLon);
+                }
+                area.combine(lat, lon);
+            }
+            addNearestStopCoordinates();
+        </script>
+    % end
 % end
 
 % map_stops = get('map_stops', [map_stop] if defined('map_stop') and map_stop else [])
@@ -462,6 +480,7 @@
     document.body.onload = function() {
         map.updateSize();
         if (area.isValid) {
+            area.makePointIfTooSmall();
             if (area.isPoint) {
                 map.getView().setCenter(ol.proj.fromLonLat(area.point));
                 map.getView().setZoom(15);

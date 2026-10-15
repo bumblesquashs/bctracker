@@ -14,6 +14,7 @@ from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
+from models.model import ModelType
 from models.stop import StopType
 
 import constants
@@ -506,6 +507,15 @@ class Server(Bottle):
         else:
             upcoming_departures = []
         model = vehicle.model
+        if position and position.lat is not None and position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(position.context)
+            if stops:
+                stops = sorted(stops, key=lambda s: s.get_distance(position.lat, position.lon))
+                nearest_stop = stops[0]
+            else:
+                nearest_stop = None
+        else:
+            nearest_stop = None
         if model and model.type.title_prefix:
             title = f'{model.type.title_prefix} {vehicle}'
         else:
@@ -522,6 +532,7 @@ class Server(Bottle):
             records=records,
             livery=livery,
             upcoming_departures=upcoming_departures,
+            nearest_stop=nearest_stop,
             allocation=allocation,
             favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
@@ -562,6 +573,15 @@ class Server(Bottle):
         else:
             last_position = None
         model = vehicle.model
+        if position and position.lat is not None and position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(position.context)
+            if stops:
+                stops = sorted(stops, key=lambda s: s.get_distance(position.lat, position.lon))
+                nearest_stop = stops[0]
+            else:
+                nearest_stop = None
+        else:
+            nearest_stop = None
         if model and model.type.title_prefix:
             title = f'{model.type.title_prefix} {vehicle}'
         else:
@@ -574,6 +594,7 @@ class Server(Bottle):
             vehicle=vehicle,
             position=position,
             last_position=last_position,
+            nearest_stop=nearest_stop,
             favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
         )

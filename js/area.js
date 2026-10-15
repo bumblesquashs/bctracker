@@ -37,4 +37,21 @@ class Area {
             this.maxLon = lon;
         }
     }
+    
+    makePointIfTooSmall() {
+        if (!this.isValid || this.isPoint) {
+            return;
+        }
+        const latDiff = this.maxLat - this.minLat;
+        const lonDiff = this.maxLon - this.minLon;
+        console.log(latDiff, lonDiff)
+        if (latDiff < 0.005 && lonDiff < 0.005) {
+            const midLat = (this.minLat + this.maxLat) / 2;
+            const midLon = (this.minLon + this.maxLon) / 2;
+            this.minLat = midLat;
+            this.maxLat = midLat;
+            this.minLon = midLon;
+            this.maxLon = midLon;
+        }
+    }
 }
