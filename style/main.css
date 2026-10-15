@@ -806,6 +806,14 @@ table tr.table-button {
     text-decoration: none;
 }
 
+.departure {
+    font-size: 10pt;
+    border-bottom-width: 3;
+    border-bottom-style: solid;
+    min-width: 20px;
+    text-align: center;
+}
+
 .departure-hour {
     font-weight: bold;
     text-align: right;
@@ -816,6 +824,7 @@ table tr.table-button {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 5px;
 }
 
 .display-none {

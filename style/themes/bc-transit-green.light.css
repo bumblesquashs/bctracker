@@ -312,6 +312,10 @@ table tr.table-button:hover {
     --image-color: #00A200;
 }
 
+.departure {
+    color: #000000;
+}
+
 .events .date {
     border-right-color: #E2E2E2;
 }
