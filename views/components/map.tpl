@@ -332,6 +332,7 @@
         }
     </script>
     
+    % nearest_stop = get('nearest_stop')
     % if nearest_stop and get('zoom_vehicles', True):
         <script>
             function addNearestStopCoordinates() {
