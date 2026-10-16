@@ -135,6 +135,20 @@
         % end
         
         <script>
+            document.addEventListener("DOMContentLoaded", function (event) { 
+                const windowScrollPosition = localStorage.getItem("windowScrollPosition");
+                const mainScrollPosition = localStorage.getItem("mainScrollPosition");
+                if (windowScrollPosition) {
+                    localStorage.removeItem("windowScrollPosition");
+                    window.scrollTo(0, windowScrollPosition);
+                }
+                if (mainScrollPosition) {
+                    localStorage.removeItem("mainScrollPosition");
+                    const main = document.getElementById("main");
+                    main.scrollTo(0, mainScrollPosition);
+                }
+            });
+            
             const svgs = {};
             const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
             const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
@@ -236,6 +250,7 @@
             function setLiveryTheme(theme) {
                 if (theme !== "") {
                     setCookie("theme", theme);
+                    storeCurrentScrollPosition();
                     location.reload();
                 }
             }
@@ -277,6 +292,16 @@
                     parts.push(seconds + "s");
                 }
                 return parts.join(" ") + " ago";
+            }
+            
+            function storeCurrentScrollPosition() {
+                if (window.scrollY > 0) {
+                    localStorage.setItem("windowScrollPosition", window.scrollY);
+                }
+                const main = document.getElementById("main");
+                if (main.scrollTop > 0) {
+                    localStorage.setItem("mainScrollPosition", main.scrollTop);
+                }
             }
         </script>
         

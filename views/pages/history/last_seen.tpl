@@ -60,12 +60,14 @@
                 % end
                 <script>
                     function setDays(days) {
+                        storeCurrentScrollPosition();
                         window.location = getURL(currentAgencyID, currentSystemID, "history", {
                             "days": days
                         });
                     }
                     
                     function toggleShowTransfers() {
+                        storeCurrentScrollPosition();
                         window.location = "{{! context.url('history', days=days, show_transfers='false' if show_transfers else 'true') }}"
                     }
                 </script>

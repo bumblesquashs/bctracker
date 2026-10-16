@@ -52,6 +52,7 @@
                 </div>
                 <script>
                     function setLevel(level) {
+                        storeCurrentScrollPosition();
                         window.location = getURL(currentAgencyID, currentSystemID, "admin/logs", {
                             "level": level
                         });

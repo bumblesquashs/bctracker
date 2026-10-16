@@ -49,6 +49,7 @@
                             </div>
                             <script>
                                 function toggleCompactSchedule() {
+                                    storeCurrentScrollPosition();
                                     window.location = "{{! stop.url('schedule', date.format_db(), compact_schedule='false' if compact_schedule else 'true', routes=routes_query) }}";
                                 }
                             </script>
@@ -119,6 +120,7 @@
                     }
                     
                     function updateFilters() {
+                        storeCurrentScrollPosition();
                         window.location = getURL(currentAgencyID, currentSystemID, "stops/{{ stop.url_id }}/schedule/{{ date.format_db() }}", {
                             "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
                         });
