@@ -194,10 +194,12 @@
 
 <script>
     function setTheme(themeID) {
+        storeCurrentScrollPosition();
         window.location = "?theme=" + themeID;
     }
     
     function setThemeVariant(variant) {
+        storeCurrentScrollPosition();
         if (variant === null) {
             window.location = "?theme_variant=";
         } else {
@@ -206,6 +208,7 @@
     }
     
     function setHighContrast(enabled) {
+        storeCurrentScrollPosition();
         if (enabled) {
             window.location = "?high_contrast=enabled";
         } else {
@@ -214,6 +217,7 @@
     }
     
     function setHelpText(enabled) {
+        storeCurrentScrollPosition();
         if (enabled) {
             window.location = "?show_help_text=yes";
         } else {
@@ -222,10 +226,12 @@
     }
     
     function setTimeFormat(format) {
+        storeCurrentScrollPosition();
         window.location = "?time_format=" + format;
     }
     
     function setVehicleMarkerStyle(style) {
+        storeCurrentScrollPosition();
         window.location = "?vehicle_marker_style=" + style;
     }
 </script>

@@ -196,6 +196,7 @@
 
 <script>
     function toggleNISVehicles() {
+        storeCurrentScrollPosition();
         window.location = "{{ context.url('realtime', show_nis='false' if show_nis else 'true') }}"
     }
 </script>

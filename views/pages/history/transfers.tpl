@@ -40,6 +40,7 @@
                         </div>
                         <script>
                             function setFilter(filter) {
+                                storeCurrentScrollPosition();
                                 window.location = getURL(currentAgencyID, currentSystemID, "history/transfers", {
                                     "filter": filter
                                 });

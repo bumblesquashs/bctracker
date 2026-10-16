@@ -44,6 +44,7 @@
         }
         
         function updateFilters() {
+            storeCurrentScrollPosition();
             const search = document.getElementById('stop_id_search').value;
             window.location = getURL(currentAgencyID, currentSystemID, "stops", {
                 "search": search.length === 0 ? null : search,
