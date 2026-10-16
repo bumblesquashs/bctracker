@@ -14,9 +14,9 @@
     </h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
-        <a href="{{ stop.url('map') }}" class="tab-button">Map</a>
+        <a href="{{ stop.url('map', routes=routes_query) }}" class="tab-button">Map</a>
         % if stop.type != StopType.STATION:
-            <a href="{{ stop.url('schedule') }}" class="tab-button">Schedule</a>
+            <a href="{{ stop.url('schedule', routes=routes_query) }}" class="tab-button">Schedule</a>
         % end
     </div>
 </div>
@@ -35,7 +35,7 @@
                 % if stop_departures:
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.url_id}/schedule')
+                            % include('components/sheet_list', sheets=stop.sheets, schedule_path=f'stops/{stop.url_id}/schedule', schedule_path_args={'routes': routes_query})
                         </div>
                         % if parent_stop:
                             <div class="row section">
@@ -45,18 +45,89 @@
                                 </div>
                             </div>
                         % end
-                        <div class="column section">
-                            % routes = stop.routes
-                            % for route in routes:
-                                <div class="row">
-                                    % include('components/route')
-                                    <a href="{{ route.url() }}">{{! route.display_name }}</a>
+                    </div>
+                % end
+            </div>
+        </div>
+        
+        % if stop.type == StopType.STATION:
+            % filter_routes = sorted({r for s in child_stops for r in s.routes})
+        % else:
+            % filter_routes = stop.routes
+        % end
+        % show_filters = len(filter_routes) > 1
+        <div class="section">
+            <div class="header" onclick="toggleSection(this)">
+                <h2>Routes</h2>
+                % include('components/toggle')
+            </div>
+            <div class="content">
+                % if show_filters and show_help_text:
+                    <p>Select routes to filter schedule.</p>
+                % end
+                <div class="info-box">
+                    % if show_filters:
+                        <div class="row section">
+                            <div class="lighter-text">
+                                % if routes_filter:
+                                    % if len(routes_filter) == 1:
+                                        1 route selected
+                                    % else:
+                                        {{ len(routes_filter) }} routes selected
+                                    % end
+                                % else:
+                                    No routes selected
+                                % end
+                            </div>
+                            <button class="button compact" onclick="resetRoutesFilter()">Reset</button>
+                        </div>
+                    % end
+                    <div class="section">
+                        <div class="options-container">
+                            % for route in filter_routes:
+                                <div class="row space-between">
+                                    <div class="row">
+                                        % include('components/route')
+                                        <a href="{{ route.url() }}">{{! route.display_name }}</a>
+                                    </div>
+                                    % if show_filters:
+                                        <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
+                                            <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
+                                                % include('components/svg', name='status/check')
+                                            </div>
+                                        </div>
+                                    % end
                                 </div>
                             % end
                         </div>
                     </div>
-                % end
+                </div>
             </div>
+            <script>
+                const routesFilter = new Set("{{ ','.join(routes_filter) }}".split(",").filter(function(route) {
+                    return route !== "";
+                }));
+                
+                function toggleRouteFilter(number) {
+                    if (routesFilter.has(number)) {
+                        routesFilter.delete(number);
+                    } else {
+                        routesFilter.add(number);
+                    }
+                    updateFilters();
+                }
+                
+                function resetRoutesFilter() {
+                    routesFilter.clear();
+                    updateFilters();
+                }
+                
+                function updateFilters() {
+                    window.location = getURL(currentAgencyID, currentSystemID, "stops/{{ stop.url_id }}", {
+                        "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
+                    });
+                }
+            </script>
         </div>
         
         % if nearby_stops:
@@ -125,70 +196,87 @@
         % if child_stops:
             % for child_stop in child_stops:
                 % departures = child_stop.find_departures(date=today)
-                % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
-                % upcoming_count = 3 + floor(len(routes) / 3)
-                % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
-                % trip_ids = [d.trip_id for d in upcoming_departures]
-                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trip_ids)
-                % assignments = {a.block_id: a for a in repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)}
-                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip_id=trip_ids)}
+                % if routes_filter:
+                    % departures = [d for d in departures if d.trip and d.trip.route and d.trip.route.url_id in routes_filter]
+                % end
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
                         <div class="column">
                             <h2>
                                 % include('components/stop', stop=child_stop, include_link=False)
                             </h2>
-                            <a href="{{ child_stop.url() }}">View stop schedule and details</a>
+                            <a href="{{ child_stop.url(routes=routes_query) }}">View stop schedule and details</a>
                         </div>
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        % if upcoming_departures:
-                            % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
-                                <p>
-                                    <span>{{ context.vehicle_type_plural }} with a</span>
-                                    <span class="scheduled">
-                                        % include('components/svg', name='schedule')
-                                    </span>
-                                    <span>are scheduled but may be swapped off.</span>
-                                </p>
-                            % end
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th class="non-mobile">Headsign</th>
-                                        % if context.enable_blocks:
-                                            <th class="desktop-only">Block</th>
-                                        % end
-                                        <th>Trip</th>
-                                        % if context.realtime_enabled and context.enable_realtime_trips:
-                                            <th>{{ context.vehicle_type }}</th>
-                                            <th class="desktop-only">Model</th>
-                                        % end
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    % last_time = None
-                                    % for departure in upcoming_departures:
-                                        % if not last_time:
+                        % if departures:
+                            % routes = {d.trip.route for d in departures if d.trip and d.trip.route}
+                            % upcoming_count = 3 + floor(len(routes) / 3)
+                            % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
+                            % if upcoming_departures:
+                                % trip_ids = [d.trip_id for d in upcoming_departures]
+                                % recorded_today = repositories.record.find_recorded_today(child_stop.context, trip_ids)
+                                % assignments = {a.block_id: a for a in repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)}
+                                % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip_id=trip_ids)}
+                                % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
+                                    <p>
+                                        <span>{{ context.vehicle_type_plural }} with a</span>
+                                        <span class="scheduled">
+                                            % include('components/svg', name='schedule')
+                                        </span>
+                                        <span>are scheduled but may be swapped off.</span>
+                                    </p>
+                                % end
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th class="non-mobile">Headsign</th>
+                                            % if context.enable_blocks:
+                                                <th class="desktop-only">Block</th>
+                                            % end
+                                            <th>Trip</th>
+                                            % if context.realtime_enabled and context.enable_realtime_trips:
+                                                <th>{{ context.vehicle_type }}</th>
+                                                <th class="desktop-only">Model</th>
+                                            % end
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        % last_time = None
+                                        % for departure in upcoming_departures:
+                                            % if not last_time:
+                                                % last_time = departure.time
+                                            % end
+                                            % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
                                             % last_time = departure.time
                                         % end
-                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour)
-                                        % last_time = departure.time
-                                    % end
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            % else:
+                                <p>
+                                    There are no departures for the rest of today.
+                                    <a href="{{ child_stop.url('schedule', today.next(), routes=routes_query) }}">Check tomorrow's schedule.</a>
+                                </p>
+                            % end
                         % else:
-                            <p>
-                                There are no departures for the rest of today.
-                                <a href="{{ child_stop.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
-                            </p>
+                            % if routes_filter:
+                                <p>There are no departures today for the selected routes.</p>
+                            % else:
+                                <p>
+                                    There are no departures today.
+                                    <a href="{{ child_stop.url('schedule', today.next(), routes=routes_query) }}">Check tomorrow's schedule.</a>
+                                </p>
+                            % end
                         % end
                     </div>
                 </div>
             % end
          % else:
+            % if routes_filter:
+                % departures = [d for d in departures if d.trip and d.trip.route and d.trip.route.url_id in routes_filter]
+            % end
             % if departures:
                 <div class="section">
                     <div class="header" onclick="toggleSection(this)">
@@ -196,7 +284,7 @@
                         % include('components/toggle')
                     </div>
                     <div class="content">
-                        % upcoming_count = 3 + floor(len(routes) / 3)
+                        % upcoming_count = 3 + floor(len(stop.routes) / 3)
                         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                         % if upcoming_departures:
                             % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
@@ -239,7 +327,7 @@
                             <div class="placeholder">
                                 <p>
                                     There are no departures for the rest of today.
-                                    <a href="{{ stop.url('schedule', today.next()) }}">Check tomorrow's schedule.</a>
+                                    <a href="{{ stop.url('schedule', today.next(), routes=routes_query) }}">Check tomorrow's schedule.</a>
                                 </p>
                             </div>
                         % end
@@ -263,7 +351,7 @@
                             </div>
                             <script>
                                 function toggleCompactSchedule() {
-                                    window.location = "{{! stop.url(compact_schedule='false' if compact_schedule else 'true') }}";
+                                    window.location = "{{! stop.url(compact_schedule='false' if compact_schedule else 'true', routes=routes_query) }}";
                                 }
                             </script>
                         </div>
@@ -312,8 +400,13 @@
                     % else:
                         <div class="placeholder">
                             % if context.gtfs_loaded:
-                                <h3>There are no departures from this stop today</h3>
-                                <p>You can check the <a href="{{ stop.url('schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                                % if routes_filter:
+                                    <h3>There are no departures from this stop for the selected routes</h3>
+                                    <p>Try selecting other routes to see today's service.</p>
+                                % else:
+                                    <h3>There are no departures from this stop today</h3>
+                                    <p>You can check the <a href="{{ stop.url('schedule') }}">full schedule</a> for more information about when this stop has service.</p>
+                                % end
                             % else:
                                 <h3>Departures for this stop are unavailable</h3>
                                 <p>System data is currently loading and will be available soon.</p>
