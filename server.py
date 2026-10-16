@@ -1400,6 +1400,11 @@ class Server(Bottle):
             parent_stop = repositories.stop.find(context, stop_id=stop.parent_id)
         else:
             parent_stop = None
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         departures = stop.find_departures(date=context.today)
         trip_ids = [d.trip_id for d in departures]
         positions = repositories.position.find_all(context, trip_id=trip_ids)
@@ -1413,6 +1418,8 @@ class Server(Bottle):
             nearby_stops=nearby_stops,
             child_stops=child_stops,
             parent_stop=parent_stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             departures=departures,
             recorded_today=repositories.record.find_recorded_today(context, trip_ids),
             assignments={a.block_id: a for a in assignments},
@@ -1456,12 +1463,19 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=sorted(alt_stops)
             )
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/map',
             title=str(stop),
             full_map=True,
             stop=stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             adjacent_departures=repositories.departure.find_adjacent(context, stop.id),
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1501,12 +1515,19 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=sorted(alt_stops)
             )
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/schedule',
             title=str(stop),
             enable_refresh=False,
             stop=stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites(),
             compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
@@ -1547,6 +1568,11 @@ class Server(Bottle):
                 alt_stops=sorted(alt_stops)
             )
         date = Date.parse(date_string, context.timezone)
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/date',
@@ -1554,6 +1580,8 @@ class Server(Bottle):
             enable_refresh=False,
             stop=stop,
             date=date,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites(),
             compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'

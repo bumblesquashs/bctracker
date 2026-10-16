@@ -9,10 +9,10 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ stop.url() }}" class="tab-button">Overview</a>
+        <a href="{{ stop.url(routes=routes_query) }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
         % if stop.type != StopType.STATION:
-            <a href="{{ stop.url('schedule') }}" class="tab-button">Schedule</a>
+            <a href="{{ stop.url('schedule', routes=routes_query) }}" class="tab-button">Schedule</a>
         % end
     </div>
 </div>

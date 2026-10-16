@@ -7,8 +7,8 @@
         % include('components/favourite')
     </h1>
     <div class="tab-button-bar">
-        <a href="{{ stop.url() }}" class="tab-button">Overview</a>
-        <a href="{{ stop.url('map') }}" class="tab-button">Map</a>
+        <a href="{{ stop.url(routes=routes_query) }}" class="tab-button">Overview</a>
+        <a href="{{ stop.url('map', routes=routes_query) }}" class="tab-button">Map</a>
         <span class="tab-button current">Schedule</span>
     </div>
 </div>
@@ -25,7 +25,7 @@
                 <div class="content">
                     <div class="info-box">
                         <div class="section">
-                            % include('components/sheet_list', schedule_path=f'stops/{stop.url_id}/schedule')
+                            % include('components/sheet_list', schedule_path=f'stops/{stop.url_id}/schedule', schedule_path_args={'routes': routes_query})
                         </div>
                         <div class="section">
                             <div class="options-container">
@@ -37,7 +37,7 @@
                                 </div>
                                 <script>
                                     function toggleCompactSchedule() {
-                                        window.location = "{{! stop.url('schedule', compact_schedule='false' if compact_schedule else 'true') }}";
+                                        window.location = "{{! stop.url('schedule', compact_schedule='false' if compact_schedule else 'true', routes=routes_query) }}";
                                     }
                                 </script>
                             </div>
@@ -45,6 +45,75 @@
                     </div>
                 </div>
             </div>
+            % if len(stop.routes) > 1:
+                <div class="section {{ '' if routes_filter else 'closed' }}">
+                    <div class="header" onclick="toggleSection(this)">
+                        <h2>Routes</h2>
+                        % include('components/toggle')
+                    </div>
+                    <div class="content">
+                        % if show_help_text:
+                            <p>Select routes to filter schedule.</p>
+                        % end
+                        <div class="info-box">
+                            <div class="row section">
+                                <div class="lighter-text">
+                                    % if routes_filter:
+                                        % if len(routes_filter) == 1:
+                                            1 route selected
+                                        % else:
+                                            {{ len(routes_filter) }} routes selected
+                                        % end
+                                    % else:
+                                        No routes selected
+                                    % end
+                                </div>
+                                <button class="button compact" onclick="resetRoutesFilter()">Reset</button>
+                            </div>
+                            <div class="section">
+                                <div class="options-container">
+                                    % for route in stop.routes:
+                                        <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
+                                            <div class="row">
+                                                % include('components/route')
+                                                {{! route.display_name }}
+                                            </div>
+                                            <div class="checkbox {{ 'selected' if route.url_id in routes_filter else '' }}">
+                                                % include('components/svg', name='status/check')
+                                            </div>
+                                        </div>
+                                    % end
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        const routesFilter = new Set("{{ ','.join(routes_filter) }}".split(",").filter(function(route) {
+                            return route !== "";
+                        }));
+                        
+                        function toggleRouteFilter(number) {
+                            if (routesFilter.has(number)) {
+                                routesFilter.delete(number);
+                            } else {
+                                routesFilter.add(number);
+                            }
+                            updateFilters();
+                        }
+                        
+                        function resetRoutesFilter() {
+                            routesFilter.clear();
+                            updateFilters();
+                        }
+                        
+                        function updateFilters() {
+                            window.location = getURL(currentAgencyID, currentSystemID, "stops/{{ stop.url_id }}/schedule", {
+                                "routes": routesFilter.size === 0 ? null : Array.from(routesFilter).sort().join(","),
+                            });
+                        }
+                    </script>
+                </div>
+            % end
         </div>
         <div class="container flex-3">
             % for (i, sheet) in enumerate(sheets):
@@ -61,6 +130,9 @@
                         <div class="container inline">
                             % for service_group in sheet.normal_service_groups:
                                 % departures = stop.find_departures(service_group)
+                                % if routes_filter:
+                                    % departures = [d for d in departures if d.trip and d.trip.route and d.trip.route.url_id in routes_filter]
+                                % end
                                 <div class="section">
                                     <div class="header" onclick="toggleSection(this)">
                                         <div>
