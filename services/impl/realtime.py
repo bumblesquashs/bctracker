@@ -59,9 +59,9 @@ class RealtimeService:
                 vehicle = entity.vehicle
                 try:
                     if vehicle.vehicle.HasField('label'):
-                        vehicle_id = vehicle.vehicle.label
+                        vehicle_id = vehicle.vehicle.label.lstrip('0')
                     else:
-                        vehicle_id = vehicle.vehicle.id
+                        vehicle_id = vehicle.vehicle.id.lstrip('0')
                     vehicle_name_length = context.vehicle_name_length
                     if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                         vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
