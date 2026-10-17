@@ -26,7 +26,7 @@ body.full-map #page {
     margin: 10px 20px;
     overflow: auto;
     max-height: calc(100% - 120px);
-    gap: 5px;
+    gap: 10px;
 }
 
 body.full-map #page-header {
@@ -1065,6 +1065,20 @@ table tr.table-button {
     width: 16px;
     height: 16px;
     border-radius: 3px;
+}
+
+.loading-circle {
+    border: 4px solid var(--loading-border);
+    border-top: 4px solid var(--loading-foreground);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: s 1s linear infinite;
+}
+
+@keyframes s {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .log-line {

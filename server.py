@@ -23,7 +23,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 75
+VERSION = 76
 
 random = Random()
 
@@ -100,7 +100,7 @@ class Server(Bottle):
         self.add('/api/positions', self.api_positions, validate=False)
         self.add('/api/shape/<shape_id>', self.api_shape, validate=False)
         self.add('/api/stops', self.api_stops, validate=False)
-        self.add('/api/routes', self.api_routes, validate=False)
+        self.add('/api/route-indicators', self.api_route_indicators, validate=False)
         self.add('/api/search', self.api_search, method='POST', validate=False)
         self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True, validate=False)
@@ -780,6 +780,21 @@ class Server(Bottle):
     def routes_map(self, context: Context):
         routes = repositories.route.find_all(context)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
+        points = repositories.point.find_all(context)
+        points_by_shape_id = {}
+        for point in points:
+            points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
+        shapes = []
+        for route in routes:
+            for shape_id in route.shape_ids:
+                shape_points = points_by_shape_id.get((route.context, shape_id))
+                if shape_points:
+                    shapes.append({
+                        'shape_id': shape_id,
+                        'points': [p.get_json() for p in shape_points],
+                        'colour': route.colour,
+                        'text_colour': route.text_colour,
+                    })
         return self.page(
             context=context,
             file='routes/map',
@@ -788,6 +803,7 @@ class Server(Bottle):
             enable_refresh=False,
             full_map=len(routes) > 0,
             routes=routes,
+            shapes=shapes,
             show_route_numbers=show_route_numbers
         )
     
@@ -1803,7 +1819,7 @@ class Server(Bottle):
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
-    def api_routes(self, context: Context):
+    def api_route_indicators(self, context: Context):
         routes = repositories.route.find_all(context)
         if context.system:
             context.system.update_route_caches([r.id for r in routes])
@@ -1813,24 +1829,8 @@ class Server(Bottle):
                 route_ids_by_system.setdefault(route.system, []).append(route.id)
             for (system, system_route_ids) in route_ids_by_system.items():
                 system.update_route_caches(system_route_ids)
-        points = repositories.point.find_all(context)
-        points_by_shape_id = {}
-        for point in points:
-            points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
-        shape_trips = []
-        for route in routes:
-            for shape_id in route.shape_ids:
-                points = points_by_shape_id.get((route.context, shape_id))
-                if points:
-                    shape_trips.append({
-                        'shape_id': shape_id,
-                        'points': [p.get_json() for p in points],
-                        'colour': route.colour,
-                        'text_colour': route.text_colour,
-                    })
         indicators = [j for r in routes for j in r.get_indicator_json()]
         return {
-            'trips': shape_trips,
             'indicators': sorted(indicators, key=lambda j: j['lat'])
         }
     
