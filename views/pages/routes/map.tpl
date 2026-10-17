@@ -1,4 +1,6 @@
 
+% import json
+
 % rebase('base')
 
 <div id="page-header">
@@ -25,31 +27,36 @@
             <span>Show Route Numbers</span>
         </div>
     </div>
+    % if show_route_numbers:
+        <div id="loading-indicator" class="row">
+            <div class="loading-circle"></div>
+            Loading route numbers
+        </div>
+    % end
     <script>
-        document.getElementById("map").classList.add("display-none");
-        
         const area = new Area();
+        const shapes = JSON.parse('{{! json.dumps(shapes) }}');
         
         let showRouteNumbers = "{{ show_route_numbers }}" !== "False";
         
-        function setTrips(trips) {
-            for (const trip of trips) {
+        function updateShapes() {
+            for (const shape of shapes) {
                 map.addLayer(new ol.layer.Vector({
                     className: "ol-layer route-layer",
                     source: new ol.source.Vector({
                         features: [
                             new ol.Feature({
-                                geometry: new ol.geom.LineString(trip.points.map(function (point) {
+                                geometry: new ol.geom.LineString(shape.points.map(function (point) {
                                     return ol.proj.fromLonLat([point.lon, point.lat])
                                 })),
-                                name: String(trip.shape_id)
+                                name: String(shape.shape_id)
                             })
                         ],
                         wrapX: false
                     }),
                     style: new ol.style.Style({
                         stroke: new ol.style.Stroke({
-                            color: "#" + trip.colour,
+                            color: "#" + shape.colour,
                             width: 4,
                             lineCap: "butt"
                         })
@@ -57,7 +64,7 @@
                     zIndex: 1
                 }));
                 
-                for (const point of trip.points) {
+                for (const point of shape.points) {
                     area.combine(point.lat, point.lon);
                 }
             }
@@ -154,28 +161,30 @@
         }
         
         document.body.onload = function() {
-            startLoading();
+            updateShapes();
+            map.updateSize();
+            if (area.isValid) {
+                area.makePointIfTooSmall();
+                if (area.isPoint) {
+                    map.getView().setCenter(ol.proj.fromLonLat(area.point));
+                    map.getView().setZoom(15);
+                } else {
+                    map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
+                        padding: [100, 100, 100, 100]
+                    });
+                }
+            }
+            
             const request = new XMLHttpRequest();
-            request.open("GET", "{{ context.url('api', 'routes') }}", true);
+            request.open("GET", "{{ context.url('api', 'route-indicators') }}", true);
             request.responseType = "json";
             request.onload = function() {
                 if (request.status === 200) {
-                    setTrips(request.response.trips);
                     setRouteNumbers(request.response.indicators);
-                    
-                    document.getElementById("map").classList.remove("display-none");
-                    map.updateSize();
-                    if (area.isValid) {
-                        if (area.isPoint) {
-                            map.getView().setCenter(ol.proj.fromLonLat(area.point));
-                            map.getView().setZoom(15);
-                        } else {
-                            map.getView().fit(ol.proj.transformExtent(area.box, ol.proj.get("EPSG:4326"), ol.proj.get("EPSG:3857")), {
-                                padding: [100, 100, 100, 100]
-                            });
-                        }
-                    }
-                    stopLoading();
+                }
+                const loadingIndicator = document.getElementById("loading-indicator");
+                if (loadingIndicator) {
+                    loadingIndicator.remove();
                 }
             };
             request.send();

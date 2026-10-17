@@ -148,6 +148,18 @@ class Route:
         return self.cache.sheets
     
     @property
+    def headsigns(self):
+        '''Returns all headsigns from this route'''
+        headsigns = self.cache.headsigns
+        if self.context.prefix_headsigns:
+            return [f'{self.number} {h}' for h in headsigns]
+        return headsigns
+    
+    @property
+    def shape_ids(self):
+        return self.cache.shape_ids
+    
+    @property
     def indicator_points(self):
         '''Returns the indicator points for this route'''
         return self.cache.indicator_points
@@ -195,6 +207,7 @@ class Route:
     
     def get_indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
+        headsigns = self.headsigns
         json = []
         for point in self.indicator_points:
             json.append({
@@ -209,7 +222,7 @@ class Route:
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,
-                'headsigns': self.get_headsigns()
+                'headsigns': headsigns,
             })
         return json
     
@@ -220,15 +233,6 @@ class Route:
         if date:
             return sorted([t for t in self.trips if date in t.service])
         return sorted(self.trips)
-    
-    def get_headsigns(self, service_group=None, date=None):
-        '''Returns all headsigns from this route'''
-        headsigns = set()
-        for trip in self.get_trips(service_group, date):
-            headsigns.add(str(trip))
-            for headsign in trip.custom_headsigns:
-                headsigns.add(headsign)
-        return sorted(headsigns)
     
     def get_match(self, query: str):
         '''Returns a match for this route with the given query'''
@@ -261,10 +265,12 @@ class RouteCache:
     trips: list[Trip]
     schedule: Schedule | None
     sheets: list[Sheet]
+    headsigns: list[str]
+    shape_ids: set[str]
     indicator_points: list[Point]
     
     @classmethod
-    def build(cls, system, trips):
+    def build(cls, system: System, trips: list[Trip], departure_headsigns: set[str]):
         services = {t.service for t in trips}
         sheets = system.copy_sheets(services)
         if sheets:
@@ -272,6 +278,9 @@ class RouteCache:
             schedule = Schedule.combine(services, date_range)
         else:
             schedule = None
+        trip_headsigns = {t.headsign for t in trips if t.headsign}
+        headsigns = sorted(trip_headsigns.union(departure_headsigns))
+        shape_ids = {t.shape_id for t in trips if t.shape_id}
         try:
             shape_ids = {t.shape_id for t in trips}
             if shape_ids:
@@ -300,4 +309,4 @@ class RouteCache:
                 indicator_points = []
         except IndexError:
             indicator_points = []
-        return cls(trips, schedule, sheets, indicator_points)
+        return cls(trips, schedule, sheets, headsigns, shape_ids, indicator_points)

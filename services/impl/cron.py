@@ -3,6 +3,7 @@ import os
 import signal
 from dataclasses import dataclass, field
 from crontab import CronTab
+from time import sleep
 
 from database import Database
 
@@ -21,6 +22,7 @@ class CronService:
     database: Database
     running: bool = field(default=True, init=False)
     updating_realtime: bool = field(default=False, init=False)
+    server_loading: bool = field(default=False, init=False)
     
     def __post_init__(self):
         signal.signal(signal.SIGUSR1, lambda sig, frame: self.handle_gtfs())
@@ -77,6 +79,9 @@ class CronService:
         if self.updating_realtime:
             return
         self.updating_realtime = True
+        if settings.current.await_realtime:
+            while self.server_loading:
+                sleep(1)
         date = Date.today()
         time = Time.now(accurate_seconds=False)
         services.log.info(f'Running realtime cron job for {date} at {time}')

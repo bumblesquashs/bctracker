@@ -196,8 +196,13 @@ class System:
         trips_by_route = {}
         for trip in trips:
             trips_by_route.setdefault(trip.route_id, []).append(trip)
+        departure_headsigns = repositories.departure.find_headsigns(self.context, missing_route_ids)
+        departure_headsigns_by_route = {}
+        for (route_id, headsign) in departure_headsigns:
+            departure_headsigns_by_route.setdefault(route_id, set()).add(headsign)
         for (route_id, route_trips) in trips_by_route.items():
-            self.route_caches[route_id] = RouteCache.build(self, route_trips)
+            headsigns = departure_headsigns_by_route.get(route_id, set())
+            self.route_caches[route_id] = RouteCache.build(self, route_trips, headsigns)
     
     def get_route_cache(self, route_id: str):
         '''Returns the cache for the given route'''
@@ -205,7 +210,8 @@ class System:
             return self.route_caches[route_id]
         except KeyError:
             trips = [t for t in self.get_trips() if t.route_id == route_id]
-            cache = RouteCache.build(self, trips)
+            departure_headsigns = repositories.departure.find_headsigns(self.context, route_id)
+            cache = RouteCache.build(self, trips, set(departure_headsigns))
             self.route_caches[route_id] = cache
             return cache
     

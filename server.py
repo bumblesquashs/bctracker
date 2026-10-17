@@ -14,6 +14,7 @@ from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
+from models.model import ModelType
 from models.stop import StopType
 
 import constants
@@ -22,7 +23,7 @@ import services
 import settings
 
 # Increase the version to force CSS reload
-VERSION = 5
+VERSION = 6
 
 random = Random()
 
@@ -102,7 +103,7 @@ class Server(Bottle):
         self.add('/api/positions', self.api_positions, validate=False)
         self.add('/api/shape/<shape_id>', self.api_shape, validate=False)
         self.add('/api/stops', self.api_stops, validate=False)
-        self.add('/api/routes', self.api_routes, validate=False)
+        self.add('/api/route-indicators', self.api_route_indicators, validate=False)
         self.add('/api/search', self.api_search, method='POST', validate=False)
         self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True, validate=False)
@@ -310,7 +311,9 @@ class Server(Bottle):
             if add_context:
                 kwargs['context'] = self.query_context()
             start_time = time()
+            services.cron.server_loading = True
             result = callback(*args, **kwargs)
+            services.cron.server_loading = False
             end_time = time()
             duration = end_time - start_time
             if duration >= 10:
@@ -507,6 +510,16 @@ class Server(Bottle):
         else:
             upcoming_departures = []
         model = vehicle.model
+        nearest_stop_position = position or last_position
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(nearest_stop_position.context)
+            if stops:
+                stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
+                nearest_stop = stops[0]
+            else:
+                nearest_stop = None
+        else:
+            nearest_stop = None
         if model and model.type.title_prefix:
             title = f'{model.type.title_prefix} {vehicle}'
         else:
@@ -523,6 +536,7 @@ class Server(Bottle):
             records=records,
             livery=livery,
             upcoming_departures=upcoming_departures,
+            nearest_stop=nearest_stop,
             allocation=allocation,
             favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
@@ -563,6 +577,16 @@ class Server(Bottle):
         else:
             last_position = None
         model = vehicle.model
+        nearest_stop_position = position or last_position
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(nearest_stop_position.context)
+            if stops:
+                stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
+                nearest_stop = stops[0]
+            else:
+                nearest_stop = None
+        else:
+            nearest_stop = None
         if model and model.type.title_prefix:
             title = f'{model.type.title_prefix} {vehicle}'
         else:
@@ -575,6 +599,7 @@ class Server(Bottle):
             vehicle=vehicle,
             position=position,
             last_position=last_position,
+            nearest_stop=nearest_stop,
             favourite=Favourite('vehicle', vehicle),
             favourites=self.get_favourites()
         )
@@ -766,14 +791,22 @@ class Server(Bottle):
     
     def routes_map(self, context: Context):
         routes = repositories.route.find_all(context)
-        if context.system:
-            context.system.update_route_caches([r.id for r in routes])
-        else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
-                system.update_route_caches(system_route_ids)
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
+        points = repositories.point.find_all(context)
+        points_by_shape_id = {}
+        for point in points:
+            points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
+        shapes = []
+        for route in routes:
+            for shape_id in route.shape_ids:
+                shape_points = points_by_shape_id.get((route.context, shape_id))
+                if shape_points:
+                    shapes.append({
+                        'shape_id': shape_id,
+                        'points': [p.get_json() for p in shape_points],
+                        'colour': route.colour,
+                        'text_colour': route.text_colour,
+                    })
         return self.page(
             context=context,
             file='routes/map',
@@ -782,6 +815,7 @@ class Server(Bottle):
             enable_refresh=False,
             full_map=len(routes) > 0,
             routes=routes,
+            shapes=shapes,
             show_route_numbers=show_route_numbers
         )
     
@@ -1396,6 +1430,11 @@ class Server(Bottle):
             parent_stop = repositories.stop.find(context, stop_id=stop.parent_id)
         else:
             parent_stop = None
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         departures = stop.find_departures(date=context.today)
         trip_ids = [d.trip_id for d in departures]
         positions = repositories.position.find_all(context, trip_id=trip_ids)
@@ -1409,12 +1448,15 @@ class Server(Bottle):
             nearby_stops=nearby_stops,
             child_stops=child_stops,
             parent_stop=parent_stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             departures=departures,
             recorded_today=repositories.record.find_recorded_today(context, trip_ids),
             assignments={a.block_id: a for a in assignments},
             positions={p.trip.id: p for p in positions},
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def stop_map(self, context: Context, stop_number: str):
@@ -1451,12 +1493,19 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=sorted(alt_stops)
             )
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/map',
             title=str(stop),
             full_map=True,
             stop=stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             adjacent_departures=repositories.departure.find_adjacent(context, stop.id),
             favourite=Favourite('stop', stop),
             favourites=self.get_favourites()
@@ -1496,14 +1545,22 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=sorted(alt_stops)
             )
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/schedule',
             title=str(stop),
             enable_refresh=False,
             stop=stop,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def stop_schedule_date(self, context: Context, stop_number: str, date_string: str):
@@ -1541,6 +1598,11 @@ class Server(Bottle):
                 alt_stops=sorted(alt_stops)
             )
         date = Date.parse(date_string, context.timezone)
+        routes_query = request.query.get('routes')
+        if routes_query:
+            routes_filter = {r for r in routes_query.split(',') if r}
+        else:
+            routes_filter = set()
         return self.page(
             context=context,
             file='stop/date',
@@ -1548,8 +1610,11 @@ class Server(Bottle):
             enable_refresh=False,
             stop=stop,
             date=date,
+            routes_query=routes_query,
+            routes_filter=routes_filter,
             favourite=Favourite('stop', stop),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            compact_schedule=self.query_cookie('compact_schedule', 'false') != 'false'
         )
     
     def about(self, context: Context):
@@ -1766,32 +1831,18 @@ class Server(Bottle):
             'stops': [s.get_json() for s in sorted(stops, key=lambda s: s.lat)]
         }
     
-    def api_routes(self, context: Context):
+    def api_route_indicators(self, context: Context):
         routes = repositories.route.find_all(context)
         if context.system:
             context.system.update_route_caches([r.id for r in routes])
         else:
-            systems = {r.system for r in routes}
-            for system in systems:
-                system_route_ids = [r.id for r in routes if r.system == system]
+            route_ids_by_system = {}
+            for route in routes:
+                route_ids_by_system.setdefault(route.system, []).append(route.id)
+            for (system, system_route_ids) in route_ids_by_system.items():
                 system.update_route_caches(system_route_ids)
-        trips = sorted([t for r in routes for t in r.trips], key=lambda t: t.route, reverse=True)
-        if context.system:
-            context.system.update_trip_caches([t.id for t in trips])
-        else:
-            systems = {t.system for t in trips}
-            for system in systems:
-                system_trip_ids = [t.id for t in trips if t.system == system]
-                system.update_trip_caches(system_trip_ids)
-        shape_ids = set()
-        shape_trips = []
-        for trip in trips:
-            if trip.shape_id not in shape_ids:
-                shape_ids.add(trip.shape_id)
-                shape_trips.append(trip.get_json())
         indicators = [j for r in routes for j in r.get_indicator_json()]
         return {
-            'trips': shape_trips,
             'indicators': sorted(indicators, key=lambda j: j['lat'])
         }
     
