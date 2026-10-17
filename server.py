@@ -507,10 +507,11 @@ class Server(Bottle):
         else:
             upcoming_departures = []
         model = vehicle.model
-        if position and position.lat is not None and position.lon is not None and model and model.type == ModelType.ferry:
-            stops = repositories.stop.find_all(position.context)
+        nearest_stop_position = position or last_position
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
-                stops = sorted(stops, key=lambda s: s.get_distance(position.lat, position.lon))
+                stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
                 nearest_stop = stops[0]
             else:
                 nearest_stop = None
@@ -573,10 +574,11 @@ class Server(Bottle):
         else:
             last_position = None
         model = vehicle.model
-        if position and position.lat is not None and position.lon is not None and model and model.type == ModelType.ferry:
-            stops = repositories.stop.find_all(position.context)
+        nearest_stop_position = position or last_position
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+            stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
-                stops = sorted(stops, key=lambda s: s.get_distance(position.lat, position.lon))
+                stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
                 nearest_stop = stops[0]
             else:
                 nearest_stop = None
