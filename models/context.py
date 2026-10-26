@@ -200,6 +200,12 @@ class Context:
         return DEFAULT_MAX_INVALID_POSITIONS
     
     @property
+    def custom_route_colours(self):
+        if self.system:
+            return self.system.custom_route_colours
+        return {}
+    
+    @property
     def today(self) -> Date:
         return Date.today(self.timezone)
     
