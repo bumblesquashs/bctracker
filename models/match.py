@@ -50,7 +50,7 @@ class Match:
                     'year_model': self.entity.year_model,
                     'title_prefix': self.entity.model.type.title_prefix if self.entity.model else None,
                     'icon': f'model/type/{self.entity.model.type.image_name}' if self.entity.model else 'ghost',
-                    'decoration': decoration.text if decoration else None,
+                    'decoration': decoration.text if decoration and decoration.enabled else None,
                 }
         return {
             'agency_id': self.context.agency_id,
