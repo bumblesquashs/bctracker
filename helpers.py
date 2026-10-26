@@ -61,8 +61,10 @@ def format_hour(hour, time_format='30hr'):
         return f'{hour}xm'
     return f'{hour:02d}'
 
-def generate_colour(context: Context, number):
+def generate_colour(context: Context, number: str):
     '''Generate a random colour based on context and route number'''
+    if number in context.custom_route_colours:
+        return context.custom_route_colours[number]
     if context.default_route_colour:
         return context.default_route_colour
     seed(context.system_id)

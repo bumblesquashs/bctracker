@@ -35,6 +35,7 @@ class System:
     enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
     gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF
     max_invalid_positions: int = DEFAULT_MAX_INVALID_POSITIONS
+    custom_route_colours: dict[str, str] = field(default_factory=dict)
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
