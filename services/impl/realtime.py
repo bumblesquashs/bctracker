@@ -49,7 +49,8 @@ class RealtimeService:
         
         if context.system.realtime_url:
             data = protobuf.FeedMessage()
-            with requests.get(context.system.realtime_url, timeout=10) as r:
+            headers = {'User-Agent': 'BCTracker'}
+            with requests.get(context.system.realtime_url, headers=headers, timeout=10) as r:
                 if settings.current.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
