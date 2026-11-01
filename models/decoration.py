@@ -9,6 +9,8 @@ class Decoration:
     vehicle_id: int
     text: str
     description: str | None = None
+    artist: str | None = None
+    website: str | None = None
     enabled: bool = True
     
     def __str__(self):

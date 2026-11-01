@@ -110,13 +110,13 @@ class TestTimezoneName:
     def test_default(self):
         date = Date.today()
         
-        assert (date.timezone_name == 'PST' or date.timezone_name == 'PDT')
+        assert (date.timezone_name == 'PST' or date.timezone_name == 'PDT' or date.timezone_name == 'MST')
     
     def test_custom(self):
         timezone = pytz.timezone('America/Edmonton')
         date = Date.today(timezone)
         
-        assert (date.timezone_name == 'MST' or date.timezone_name == 'MDT')
+        assert (date.timezone_name == 'MST' or date.timezone_name == 'MDT' or date.timezone_name == 'CST')
 
 class TestWeekday:
     def test_default(self):

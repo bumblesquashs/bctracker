@@ -24,7 +24,7 @@ class PointRepository:
             }
         )
     
-    def find_all(self, context: Context, shape_id: str) -> list[Point]:
+    def find_all(self, context: Context, shape_id: str | None = None) -> list[Point]:
         '''Returns all points that match the given context and shape'''
         return self.database.select(
             table='point',

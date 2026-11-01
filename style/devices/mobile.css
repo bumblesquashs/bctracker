@@ -145,13 +145,19 @@ table th {
 
 #search-results .result {
     font-weight: normal;
-    font-size: 14pt;
-    padding: 5px 20px;
-    --image-size: 28px;
+    font-size: 15pt;
+    gap: 15px;
+    padding: 10px 20px;
+    --image-size: 40px;
 }
 
 #search-results .result .description {
+    font-size: 13pt;
+}
+
+#search-results .result .route {
     font-size: 11pt;
+    padding: 2px 6px;
 }
 
 #status-bar {

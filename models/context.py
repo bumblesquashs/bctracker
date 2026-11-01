@@ -92,6 +92,12 @@ class Context:
         return DEFAULT_ACCURATE_SECONDS
     
     @property
+    def custom_route_colours(self):
+        if self.system:
+            return self.system.custom_route_colours
+        return {}
+    
+    @property
     def default_route_colour(self):
         if self.agency:
             return self.agency.default_route_colour
@@ -254,7 +260,11 @@ class Context:
     def url(self, *args, **kwargs):
         '''Returns a URL formatted based on the given path'''
         components = []
+        tag_component = None
         for arg in args:
+            if isinstance(arg, str) and arg.startswith('#'):
+                tag_component = arg
+                continue
             try:
                 components.append(str(arg.url_id))
             except AttributeError:
@@ -287,6 +297,8 @@ class Context:
         if query_args:
             query = '&'.join([f'{k}={v}' for k, v in query_args.items()])
             url += f'?{query}'
+        if tag_component:
+            url += tag_component
         return url
     
     def without_system(self):

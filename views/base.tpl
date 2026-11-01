@@ -111,7 +111,7 @@
         % end
         
         % if include_maps:
-            <script src="/js/area.js"></script>
+            <script src="/js/area.js?version={{ version }}"></script>
             <script src="https://cdn.jsdelivr.net/npm/ol@v10.8.0/dist/ol.js"></script>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.8.0/ol.css">
         % end
@@ -135,6 +135,20 @@
         % end
         
         <script>
+            document.addEventListener("DOMContentLoaded", function (event) { 
+                const windowScrollPosition = localStorage.getItem("windowScrollPosition");
+                const mainScrollPosition = localStorage.getItem("mainScrollPosition");
+                if (windowScrollPosition) {
+                    localStorage.removeItem("windowScrollPosition");
+                    window.scrollTo(0, windowScrollPosition);
+                }
+                if (mainScrollPosition) {
+                    localStorage.removeItem("mainScrollPosition");
+                    const main = document.getElementById("main");
+                    main.scrollTo(0, mainScrollPosition);
+                }
+            });
+            
             const svgs = {};
             const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
             const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
@@ -236,6 +250,7 @@
             function setLiveryTheme(theme) {
                 if (theme !== "") {
                     setCookie("theme", theme);
+                    storeCurrentScrollPosition();
                     location.reload();
                 }
             }
@@ -278,6 +293,16 @@
                 }
                 return parts.join(" ") + " ago";
             }
+            
+            function storeCurrentScrollPosition() {
+                if (window.scrollY > 0) {
+                    localStorage.setItem("windowScrollPosition", window.scrollY);
+                }
+                const main = document.getElementById("main");
+                if (main.scrollTop > 0) {
+                    localStorage.setItem("mainScrollPosition", main.scrollTop);
+                }
+            }
         </script>
         
         % include('components/svg_script', name='bus')
@@ -303,11 +328,12 @@
                 <div>BCTracker</div>
             </a>
             
-            <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
             % if context.realtime_enabled:
+                <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
                 <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
                 <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
             % else:
+                <a class="navigation-button non-mobile" href="{{ context.url('routes/map') }}">Map</a>
                 <div class="navigation-button non-mobile disabled">Realtime</div>
                 <div class="navigation-button desktop-only disabled">History</div>
             % end
@@ -377,11 +403,11 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            <a class="menu-button mobile-only" href="{{ context.url('map') }}">
-                % include('components/svg', name='map')
-                <span>Map</span>
-            </a>
             % if context.realtime_enabled:
+                <a class="menu-button mobile-only" href="{{ context.url('map') }}">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </a>
                 <a class="menu-button mobile-only" href="{{ context.url('realtime') }}">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
@@ -391,6 +417,10 @@
                     <span>History</span>
                 </a>
             % else:
+                <a class="menu-button mobile-only" href="{{ context.url('routes/map') }}">
+                    % include('components/svg', name='map')
+                    <span>Map</span>
+                </a>
                 <div class="menu-button mobile-only disabled">
                     % include('components/svg', name='realtime')
                     <span>Realtime</span>
@@ -774,29 +804,137 @@
         element.href = result.url;
         
         const icon = document.createElement("div");
-        icon.innerHTML = getSVG(result.icon);
-        element.appendChild(icon);
+        icon.classList.add("icon");
         
         const details = document.createElement("div");
         details.classList.add("details");
         
-        const name = document.createElement("div");
-        name.classList.add("name");
-        name.innerHTML = result.name;
-        details.appendChild(name);
+        switch (result.type) {
+            case "block":
+                icon.innerHTML = getSVG("block");
+                
+                const blockID = document.createElement("div");
+                blockID.classList.add("name");
+                blockID.innerHTML = "Block " + result.data.id;
+                details.appendChild(blockID);
+                
+                const blockRouteList = document.createElement("div");
+                blockRouteList.classList.add("route-list");
+                for (const route of result.data.routes) {
+                    const routeElement = document.createElement("div");
+                    routeElement.classList.add("route");
+                    routeElement.innerHTML = route.number;
+                    routeElement.style.backgroundColor = "#" + route.colour;
+                    blockRouteList.appendChild(routeElement);
+                }
+                details.appendChild(blockRouteList);
+                break;
+            case "route":
+                const routeNumber = document.createElement("div");
+                routeNumber.classList.add("route");
+                routeNumber.innerHTML = result.data.number;
+                routeNumber.style.backgroundColor = result.data.colour;
+                icon.appendChild(routeNumber);
+                
+                const routeName = document.createElement("div");
+                routeName.classList.add("name");
+                routeName.innerHTML = result.data.name;
+                details.appendChild(routeName);
+                
+                const routeType = document.createElement("div");
+                routeType.classList.add("description");
+                routeType.innerHTML = result.data.type + " route";
+                details.appendChild(routeType);
+                break;
+            case "stop":
+                icon.innerHTML = getSVG("stop");
+                
+                const stopElement = document.createElement("div");
+                stopElement.classList.add("stop");
+                
+                const stopName = document.createElement("div");
+                stopName.classList.add("name", "stop-name");
+                stopName.innerHTML = result.data.name;
+                stopElement.appendChild(stopName);
+                
+                if (result.data.show_stop_number) {
+                    const stopNumber = document.createElement("div");
+                    stopNumber.classList.add("stop-number");
+                    stopNumber.innerHTML = result.data.number;
+                    stopElement.appendChild(stopNumber);
+                }
+                
+                details.appendChild(stopElement);
+                
+                const stopRouteList = document.createElement("div");
+                stopRouteList.classList.add("route-list");
+                for (const route of result.data.routes) {
+                    const routeElement = document.createElement("div");
+                    routeElement.classList.add("route");
+                    routeElement.innerHTML = route.number;
+                    routeElement.style.backgroundColor = "#" + route.colour;
+                    stopRouteList.appendChild(routeElement);
+                }
+                details.appendChild(stopRouteList);
+                break;
+            case "vehicle":
+                icon.innerHTML = getSVG(result.data.icon);
+                
+                const vehicleElement = document.createElement("div");
+                vehicleElement.classList.add("vehicle");
+                
+                const vehicleName = document.createElement("div");
+                vehicleName.classList.add("name");
+                if (result.data.title_prefix) {
+                    vehicleName.innerHTML = result.data.title_prefix + " " + result.data.name;
+                } else {
+                    vehicleName.innerHTML = result.data.name;
+                }
+                vehicleElement.appendChild(vehicleName);
+                
+                if (result.data.decoration) {
+                    const vehicleDecoration = document.createElement("decoration");
+                    vehicleDecoration.classList.add("decoration");
+                    vehicleDecoration.innerHTML = result.data.decoration;
+                    vehicleElement.appendChild(vehicleDecoration);
+                }
+                
+                details.appendChild(vehicleElement);
+                
+                const yearModel = document.createElement("div");
+                yearModel.classList.add("description");
+                if (result.data.year_model) {
+                    yearModel.innerHTML = result.data.year_model;
+                } else {
+                    yearModel.innerHTML = "Unknown Year/Model";
+                }
+                details.appendChild(yearModel);
+                break;
+            default:
+                break;
+        }
         
         if (currentSystemID === null) {
+            const systemRow = document.createElement("div");
+            systemRow.classList.add("row", "gap-5");
+            
+            const agencyIcon = document.createElement("img");
+            agencyIcon.classList.add("agency-logo");
+            agencyIcon.src = "/img/agencies/" + result.agency_id + ".png";
+            agencyIcon.onerror = function() {
+                agencyIcon.style.visibility = "hidden";
+            }
+            systemRow.appendChild(agencyIcon);
+            
             const systemName = document.createElement("div");
             systemName.classList.add("description");
             systemName.innerHTML = result.system_name;
-            details.appendChild(systemName);
+            systemRow.appendChild(systemName);
+            
+            details.appendChild(systemRow);
         }
         
-        const description = document.createElement("div");
-        description.classList.add("description");
-        description.innerHTML = result.description;
-        details.appendChild(description);
-        
+        element.appendChild(icon);
         element.appendChild(details);
         
         return element;

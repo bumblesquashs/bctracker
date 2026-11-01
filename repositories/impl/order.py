@@ -80,6 +80,7 @@ class OrderRepository:
     
     def find_matches(self, context: Context, query: str, recorded_vehicle_ids: set[str]) -> list[Match]:
         '''Returns matching vehicles for a given query'''
+        query = query.lower()
         matches = []
         try:
             vehicles = self.vehicles[context.agency_id].values()
@@ -88,25 +89,13 @@ class OrderRepository:
         for vehicle in vehicles:
             if not vehicle.agency.enabled or not vehicle.visible:
                 continue
-            year_model = vehicle.year_model or 'Unknown year/model'
-            if vehicle.model and vehicle.model.type:
-                model_icon = f'model/type/{vehicle.model.type.image_name}'
-                title_prefix = vehicle.model.type.title_prefix
-            else:
-                model_icon = 'ghost'
-                title_prefix = None
             value = 0
-            name = vehicle.name
-            if query.lower() in name.lower():
+            name = vehicle.name.lower()
+            if query in name:
                 value += (len(query) / len(name)) * 100
-                if name.lower().startswith(query.lower()):
+                if name.startswith(query):
                     value += len(query)
             if vehicle.id not in recorded_vehicle_ids:
                 value /= 10
-            decoration = vehicle.find_decoration()
-            if decoration and decoration.enabled:
-                name += f' {decoration}'
-            if title_prefix:
-                name = f'{title_prefix} {name}'
-            matches.append(Match(vehicle.context, name, year_model, model_icon, f'fleet/{vehicle.url_id}', value))
+            matches.append(Match.vehicle(vehicle, value))
         return matches

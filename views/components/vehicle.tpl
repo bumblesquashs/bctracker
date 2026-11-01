@@ -10,11 +10,35 @@
     % end
     % decoration = vehicle.find_decoration()
     % if decoration and decoration.enabled:
-        <div class="decoration tooltip-anchor">
-            {{ decoration }}
-            % if decoration.description:
-                <div class="tooltip right">{{ decoration.description }}</div>
-            % end
-        </div>
+        % if decoration.website:
+            <a class="decoration tooltip-anchor" href="{{ decoration.website }}", target="_blank">
+                {{ decoration }}
+                % if decoration.description:
+                    <div class="tooltip right">
+                        % if decoration.artist:
+                            <div class="title">{{ decoration.description }}</div>
+                            Designed by {{ decoration.artist }}
+                        % else:
+                            {{ decoration.description }}
+                        % end
+                        <i class="smaller-font">Click for more information</i>
+                    </div>
+                % end
+            </a>
+        % else:
+            <div class="decoration tooltip-anchor">
+                {{ decoration }}
+                % if decoration.description:
+                    <div class="tooltip right">
+                        % if decoration.artist:
+                            <div class="title">{{ decoration.description }}</div>
+                            Designed by {{ decoration.artist }}
+                        % else:
+                            {{ decoration.description }}
+                        % end
+                    </div>
+                % end
+            </div>
+        % end
     % end
 </div>

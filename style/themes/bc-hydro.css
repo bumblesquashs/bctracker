@@ -32,6 +32,7 @@
     
     --loading-background: #FFFBEF;
     --loading-foreground: #61C315;
+    --loading-border: #CBCBCB;
     
     --checkbox-color: #61C315;
     --radio-button-color: #61C315;
@@ -293,6 +294,10 @@ table tr.table-button:hover {
 
 .container > .section > .header > .toggle {
     --image-color: #61C315;
+}
+
+.departure {
+    color: #000000;
 }
 
 .events .date {

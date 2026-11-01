@@ -25,6 +25,7 @@
                     </div>
                     <script>
                         function toggleShowTransfers() {
+                            storeCurrentScrollPosition();
                             window.location = "{{! context.url('history', 'first-seen', show_transfers='false' if show_transfers else 'true') }}"
                         }
                     </script>

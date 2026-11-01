@@ -46,8 +46,25 @@ def days_between(start_date, end_date):
     '''Returns the number of days between two given dates'''
     return (end_date.datetime - start_date.datetime).days
 
-def generate_colour(context: Context, number):
+def format_hour(hour, time_format='30hr'):
+    if time_format == '12hr':
+        if hour == 0 or hour == 24:
+            return '12xm'
+        if hour < 4:
+            return f'{hour}xm'
+        if hour < 12:
+            return f'{hour}am'
+        if hour == 12:
+            return '12pm'
+        if hour < 24:
+            return f'{hour - 12}pm'
+        return f'{hour}xm'
+    return f'{hour:02d}'
+
+def generate_colour(context: Context, number: str):
     '''Generate a random colour based on context and route number'''
+    if number in context.custom_route_colours:
+        return context.custom_route_colours[number]
     if context.default_route_colour:
         return context.default_route_colour
     seed(context.system_id)
