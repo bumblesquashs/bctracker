@@ -16,7 +16,7 @@ class PositionRepository:
     
     database: Database
     
-    def create_protobuf(self, context: Context, vehicle_id: str, data):
+    def create_gtfs(self, context: Context, vehicle_id: str, data):
         '''Inserts a new position into the database'''
         try:
             trip_id = data.trip.trip_id
@@ -97,7 +97,8 @@ class PositionRepository:
             'lon': lon,
             'bearing': bearing,
             'speed': speed,
-            'occupancy': occupancy.name
+            'occupancy': occupancy.name,
+            'source': 'gtfs',
         }
         if adherence:
             values['adherence'] = adherence.value
@@ -106,7 +107,7 @@ class PositionRepository:
             values['timestamp'] = timestamp.value
         self.database.insert('position', values)
     
-    def create_json(self, context: Context, vehicle_id: str, data: dict):
+    def create_ais(self, context: Context, vehicle_id: str, data: dict):
         sequence = data.get('sequence')
         lat = data.get('latitude')
         lon = data.get('longitude')
@@ -130,20 +131,21 @@ class PositionRepository:
         except:
             occupancy = Occupancy.NO_DATA_AVAILABLE
         values = {
-                'agency_id': context.agency_id,
-                'vehicle_id': vehicle_id,
-                'system_id': context.system_id,
-                'trip_id': trip_id,
-                'stop_id': stop_id,
-                'block_id': block_id,
-                'route_id': route_id,
-                'lat': lat,
-                'lon': lon,
-                'bearing': data.get('heading'),
-                'speed': data.get('speed'),
-                'occupancy': occupancy.name,
-                'timestamp': timestamp
-            }
+            'agency_id': context.agency_id,
+            'vehicle_id': vehicle_id,
+            'system_id': context.system_id,
+            'trip_id': trip_id,
+            'stop_id': stop_id,
+            'block_id': block_id,
+            'route_id': route_id,
+            'lat': lat,
+            'lon': lon,
+            'bearing': data.get('heading'),
+            'speed': data.get('speed'),
+            'occupancy': occupancy.name,
+            'timestamp': timestamp,
+            'source': 'ais',
+        }
         if adherence:
             values['adherence'] = adherence.value
             values['layover'] = 1 if adherence.layover else 0
@@ -169,7 +171,8 @@ class PositionRepository:
                 'adherence',
                 'layover',
                 'occupancy',
-                'timestamp'
+                'timestamp',
+                'source',
             ],
             filters={
                 'agency_id': agency_id,
@@ -225,7 +228,8 @@ class PositionRepository:
                 'adherence',
                 'layover',
                 'occupancy',
-                'timestamp'
+                'timestamp',
+                'source',
             ],
             filters=filters,
             initializer=Position.from_db

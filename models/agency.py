@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from models.context import Context
 
@@ -20,7 +20,7 @@ class Agency:
     enabled: bool = True
     
     accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS
-    custom_route_numbers: dict[str, str] = field(default_factory=dict)
+    ais_colour: str | None = DEFAULT_AIS_COLOUR
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
     distance_scale: int = DEFAULT_DISTANCE_SCALE
     enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
@@ -28,7 +28,6 @@ class Agency:
     enable_route_variants: bool = DEFAULT_ENABLE_ROUTE_VARIANTS
     enable_stacked_headsigns: bool = DEFAULT_ENABLE_STACKED_HEADSIGNS
     filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
-    nis_colour: str = DEFAULT_NIS_COLOUR
     prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
     prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
     prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS

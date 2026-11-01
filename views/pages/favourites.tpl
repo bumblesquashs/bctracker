@@ -51,21 +51,23 @@
                                 </div>
                                 % position = vehicle_positions[favourite]
                                 <div class="column stretch">
-                                    % if position and position.trip:
+                                    % if position:
                                         % trip = position.trip
-                                        <div class="row space-between">
-                                            <h3>
-                                                % include('components/headsign', departure=position.departure)
-                                            </h3>
-                                            % include('components/adherence', adherence=position.adherence, size='large')
-                                        </div>
-                                        <div>
-                                            % include('components/trip')
-                                        </div>
-                                    % else:
-                                        % if value.agency.enable_realtime_trips:
+                                        % if trip:
+                                            <div class="row space-between">
+                                                <h3>
+                                                    % include('components/headsign', departure=position.departure)
+                                                </h3>
+                                                % include('components/adherence', adherence=position.adherence, size='large')
+                                            </div>
+                                            <div>
+                                                % include('components/trip')
+                                            </div>
+                                        % elif position.source != 'ais':
                                             <h3>Not In Service</h3>
                                         % end
+                                    % else:
+                                        <h3>Not In Service</h3>
                                         % allocation = vehicle_allocations[favourite]
                                         % if allocation:
                                             % if allocation.last_seen.is_today:

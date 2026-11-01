@@ -90,6 +90,12 @@ class Context:
         if self.agency:
             return self.agency.accurate_seconds
         return DEFAULT_ACCURATE_SECONDS
+
+    @property
+    def ais_colour(self):
+        if self.agency:
+            return self.agency.ais_colour
+        return DEFAULT_AIS_COLOUR
     
     @property
     def custom_route_colours(self):
@@ -156,12 +162,6 @@ class Context:
         if self.system:
             return self.system.max_invalid_positions
         return DEFAULT_MAX_INVALID_POSITIONS
-    
-    @property
-    def nis_colour(self):
-        if self.agency:
-            return self.agency.nis_colour
-        return DEFAULT_NIS_COLOUR
     
     @property
     def prefer_route_id(self):
