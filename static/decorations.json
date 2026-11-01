@@ -155,7 +155,9 @@
         },
         "burrard-chinook": {
             "text": "🐟",
-            "description": "st’aqʷəy’ | Chinook | kwu7s"
+            "description": "st’aqʷəy’ | Chinook | kwu7s",
+            "artist": "Kelly Cannel, Siobhan Joseph, and Angela George",
+            "website": "https://buzzer.translink.ca/2021/07/translinks-burrard-chinook-seabus-sails-into-service/"
         }
     }
 }
