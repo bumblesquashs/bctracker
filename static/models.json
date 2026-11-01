@@ -510,6 +510,20 @@
             "length": 60,
             "length_units": "feet",
             "fuel": "Trolley Electric"
+        },
+        "solaris-trollino-12": {
+            "manufacturer": "Solaris",
+            "name": "Trollino 12",
+            "length": 12,
+            "length_units": "metres",
+            "fuel": "Trolley Electric"
+        },
+        "solaris-trollino-18": {
+            "manufacturer": "Solaris",
+            "name": "Trollino 18",
+            "length": 18,
+            "length_units": "metres",
+            "fuel": "Trolley Electric"
         }
     }
 }
