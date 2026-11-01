@@ -29,7 +29,8 @@ class AllocationRepository:
                 'last_stop_id': position.stop_id,
                 'last_stop_number': stop.number if stop else None,
                 'last_stop_name': stop.name if stop else None,
-                'last_seen_timestamp': position.timestamp.value if position.timestamp else None
+                'last_seen_timestamp': position.timestamp.value if position.timestamp else None,
+                'last_seen_source': position.source,
             }
         )
     
@@ -79,7 +80,8 @@ class AllocationRepository:
                 'allocation.last_stop_id': 'last_stop_id',
                 'allocation.last_stop_number': 'last_stop_number',
                 'allocation.last_stop_name': 'last_stop_name',
-                'allocation.last_seen_timestamp': 'last_seen_timestamp'
+                'allocation.last_seen_timestamp': 'last_seen_timestamp',
+                'allocation.last_seen_source': 'last_seen_source',
             },
             filters=filters,
             join_type='LEFT',
@@ -137,6 +139,7 @@ class AllocationRepository:
                 'allocation.last_stop_number': 'last_stop_number',
                 'allocation.last_stop_name': 'last_stop_name',
                 'allocation.last_seen_timestamp': 'last_seen_timestamp',
+                'allocation.last_seen_source': 'last_seen_source',
                 'MAX(allocation.last_seen)': 'max_last_seen'
             },
             filters=filters,
@@ -198,6 +201,7 @@ class AllocationRepository:
                 'allocation.last_stop_number': 'last_stop_number',
                 'allocation.last_stop_name': 'last_stop_name',
                 'allocation.last_seen_timestamp': 'last_seen_timestamp',
+                'allocation.last_seen_source': 'last_seen_source',
                 'MIN(allocation.first_seen)': 'min_first_seen'
             },
             filters=filters,
@@ -257,7 +261,8 @@ class AllocationRepository:
                 'last_stop_id': position.stop_id,
                 'last_stop_number': stop.number if stop else None,
                 'last_stop_name': stop.name if stop else None,
-                'last_seen_timestamp': position.timestamp.value if position.timestamp else None
+                'last_seen_timestamp': position.timestamp.value if position.timestamp else None,
+                'last_seen_source': position.source,
             },
             filters={
                 'allocation_id': allocation_id

@@ -40,7 +40,7 @@ class RouteRepository:
         number = row['route_short_name']
         if not number:
             try:
-                number = context.agency.custom_route_numbers[route_id]
+                number = context.system.custom_route_numbers[route_id]
             except KeyError:
                 number = route_id
         self.database.insert(

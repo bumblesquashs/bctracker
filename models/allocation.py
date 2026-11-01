@@ -27,6 +27,7 @@ class Allocation:
     last_stop_number: str | None
     last_stop_name: str | None
     last_seen_timestamp: Timestamp | None
+    last_seen_source: str | None
     
     @property
     def first_date(self):
@@ -55,7 +56,7 @@ class Allocation:
     @property
     def last_position(self):
         if self.last_lat and self.last_lon:
-            return Position(self.context.system, self.vehicle, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, offline=True)
+            return Position(self.context.system, self.vehicle, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, source=self.last_seen_source, offline=True)
         return None
     
     def __hash__(self):
@@ -97,4 +98,5 @@ class Allocation:
         last_stop_number = row['last_stop_number']
         last_stop_name = row['last_stop_name']
         last_seen_timestamp = Timestamp.parse(row['last_seen_timestamp'], context.timezone)
-        return cls(id, context, vehicle, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp)
+        last_seen_source = row['last_seen_source']
+        return cls(id, context, vehicle, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp, last_seen_source)
