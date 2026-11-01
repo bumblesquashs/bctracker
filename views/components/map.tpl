@@ -150,7 +150,7 @@
             
             if (vehicleMarkerStyle === "route") {
                 icon.classList.add("route-number");
-                if (position.enable_realtime_trips) {
+                if (position.source !== "ais") {
                     icon.innerHTML += position.route_number;
                 } else {
                     icon.innerHTML += "N/A"
@@ -172,7 +172,7 @@
             } else if (vehicleMarkerStyle === "adherence") {
                 icon.classList.add("adherence");
                 if (adherence === undefined || adherence === null) {
-                    if (position.enable_realtime_trips && position.route_number === "NIS") {
+                    if (position.source !== "ais" && position.route_number === "NIS") {
                         icon.innerHTML += "NIS";
                     } else {
                         icon.innerHTML += "N/A"
@@ -197,7 +197,7 @@
                 icon.innerHTML = position.speed + '<div class="units">km/h</div>';
                 icon.style.backgroundColor = "#" + position.colour;
             } else {
-                if (position.enable_realtime_trips) {
+                if (position.source !== "ais") {
                     icon.classList.add("vehicle-route");
                 }
                 const column = document.createElement("div");
@@ -209,7 +209,7 @@
                 } else {
                     column.innerHTML = getSVG(position.vehicle_icon);
                 }
-                if (position.enable_realtime_trips) {
+                if (position.source !== "ais") {
                     const routeElement = document.createElement("div");
                     routeElement.className = "number";
                     routeElement.innerHTML = position.route_number;
@@ -240,7 +240,7 @@
             model.innerHTML = position.vehicle_year_model;
             content.appendChild(model);
             
-            if (!position.offline && position.enable_realtime_trips) {
+            if (!position.offline && position.source !== "ais") {
                 const headsign = document.createElement("div");
                 if (position.headsign === "Not In Service") {
                     headsign.innerHTML = position.headsign;
