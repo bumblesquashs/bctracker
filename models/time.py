@@ -12,7 +12,7 @@ class Time:
     hour: int | None
     minute: int | None
     second: int | None
-    timezone: ZoneInfo
+    timezone: ZoneInfo = DEFAULT_TIMEZONE
     
     @classmethod
     def parse(cls, time_string, timezone=DEFAULT_TIMEZONE, accurate_seconds=False):
