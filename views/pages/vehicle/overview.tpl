@@ -68,7 +68,7 @@
                 
                 <div class="info-box">
                     % if position:
-                        % if trip or context.enable_realtime_trips:
+                        % if position.source != 'ais':
                             <div class="section">
                                 % if trip:
                                     <div class="row">

@@ -1,14 +1,16 @@
 
 import calendar
+from zoneinfo import ZoneInfo
+
 import pytest
-import pytz
+
 
 from datetime import datetime, timedelta
 
 from models.date import Date
 from models.weekday import Weekday
 
-timezone = pytz.timezone('America/Vancouver')
+timezone = ZoneInfo('America/Vancouver')
 
 class TestParse:
     def test_defaults(self):
@@ -20,7 +22,7 @@ class TestParse:
         assert date.timezone == timezone
     
     def test_custom_timezone(self):
-        timezone = pytz.timezone('America/Edmonton')
+        timezone = ZoneInfo('America/Edmonton')
         date = Date.parse('2000-01-01', timezone=timezone)
         
         assert date.year == 2000
@@ -53,7 +55,7 @@ class TestToday:
         assert date.timezone == timezone
     
     def test_custom_timezone(self):
-        timezone = pytz.timezone('America/Edmonton')
+        timezone = ZoneInfo('America/Edmonton')
         now = datetime.now(timezone)
         if now.hour < 4:
             now = now - timedelta(days=1)
@@ -110,13 +112,13 @@ class TestTimezoneName:
     def test_default(self):
         date = Date.today()
         
-        assert (date.timezone_name == 'PST' or date.timezone_name == 'PDT')
+        assert (date.timezone_name == 'PST' or date.timezone_name == 'PDT' or date.timezone_name == 'MST')
     
     def test_custom(self):
-        timezone = pytz.timezone('America/Edmonton')
+        timezone = ZoneInfo('America/Edmonton')
         date = Date.today(timezone)
         
-        assert (date.timezone_name == 'MST' or date.timezone_name == 'MDT')
+        assert (date.timezone_name == 'MST' or date.timezone_name == 'MDT' or date.timezone_name == 'CST')
 
 class TestWeekday:
     def test_default(self):
@@ -166,7 +168,7 @@ class TestEqual:
     
     def test_not_equal_timezone(self):
         date1 = Date(2000, 1, 1, timezone)
-        timezone2 = pytz.timezone('America/Edmonton')
+        timezone2 = ZoneInfo('America/Edmonton')
         date2 = Date(2000, 1, 1, timezone2)
         
         assert date1 != date2

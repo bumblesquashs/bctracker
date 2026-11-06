@@ -146,10 +146,10 @@ class Context:
         return DEFAULT_ENABLE_REALTIME_TRIPS
     
     @property
-    def nis_colour(self):
+    def ais_colour(self):
         if self.agency:
-            return self.agency.nis_colour
-        return DEFAULT_NIS_COLOUR
+            return self.agency.ais_colour
+        return DEFAULT_AIS_COLOUR
     
     @property
     def default_route_colour(self):

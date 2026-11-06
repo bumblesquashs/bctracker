@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS allocation (
     last_stop_id TEXT,
     last_stop_number TEXT,
     last_stop_name TEXT,
-    last_seen_timestamp REAL
+    last_seen_timestamp REAL,
+    last_seen_source TEXT
 );
 
 CREATE TABLE IF NOT EXISTS record (
@@ -70,6 +71,7 @@ CREATE TABLE IF NOT EXISTS position (
     layover INTEGER,
     occupancy TEXT,
     timestamp REAL,
+    source TEXT,
     PRIMARY KEY (agency_id, vehicle_id)
 );
 

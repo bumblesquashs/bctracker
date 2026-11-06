@@ -49,7 +49,7 @@ class RealtimeService:
                 ais_data = json.load(file)
             for (vehicle_id, data) in ais_data.items():
                 try:
-                    repositories.position.create_json(context, vehicle_id, data)
+                    repositories.position.create_ais(context, vehicle_id, data)
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         
@@ -75,7 +75,7 @@ class RealtimeService:
                 vehicle_ids.add(vehicle_id)
                 
                 try:
-                    repositories.position.create_protobuf(context, vehicle_id, vehicle)
+                    repositories.position.create_gtfs(context, vehicle_id, vehicle)
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         

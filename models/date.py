@@ -1,9 +1,9 @@
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import calendar
-import pytz
 
 from models.weekday import Weekday
 
@@ -16,7 +16,7 @@ class Date:
     year: int
     month: int
     day: int
-    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo = DEFAULT_TIMEZONE
     
     @classmethod
     def parse(cls, date_string, timezone=DEFAULT_TIMEZONE, format='%Y-%m-%d'):
@@ -86,7 +86,7 @@ class Date:
         return hash((self.year, self.month, self.day))
     
     def __eq__(self, other):
-        return self.year == other.year and self.month == other.month and self.day == other.day and self.timezone == other.timezone
+        return self.year == other.year and self.month == other.month and self.day == other.day and self.timezone.key == other.timezone.key
     
     def __lt__(self, other):
         if self.year != other.year:

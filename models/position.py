@@ -34,6 +34,7 @@ class Position:
     adherence: Adherence | None = None
     occupancy: Occupancy | None = None
     timestamp: Timestamp | None = None
+    source: str | None = None
     offline: bool = False
     
     @classmethod
@@ -58,7 +59,8 @@ class Position:
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
         timestamp = Timestamp.parse(row['timestamp'], context.timezone)
-        return cls(context.system, vehicle, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp)
+        source = row['source']
+        return cls(context.system, vehicle, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, source)
     
     @property
     def context(self):
@@ -104,7 +106,9 @@ class Position:
         route = self.route
         if route:
             return route.colour
-        return self.context.nis_colour
+        if not self.offline and self.source == 'ais' and self.context.ais_colour:
+            return self.context.ais_colour
+        return '989898'
     
     @property
     def text_colour(self):
@@ -112,7 +116,9 @@ class Position:
         route = self.route
         if route:
             return route.text_colour
-        return helpers.generate_text_colour(self.context.nis_colour)
+        if not self.offline and self.source == 'ais' and self.context.ais_colour:
+            return helpers.generate_text_colour(self.context.ais_colour)
+        return helpers.generate_text_colour('989898')
     
     @property
     def departure(self):
@@ -139,7 +145,7 @@ class Position:
             'colour': self.colour,
             'text_colour': self.text_colour,
             'offline': self.offline,
-            'enable_realtime_trips': self.context.enable_realtime_trips,
+            'source': self.source,
             'show_occupancy': self.context.show_occupancy
         }
         year_model = self.vehicle.year_model

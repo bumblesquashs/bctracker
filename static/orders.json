@@ -649,6 +649,16 @@
             [
                 { "year": 2010, "id": 900, "prefix": "19-", "livery": "woosh" }
             ]
+        ],
+        "solaris-trollino-12": [
+            [
+                { "year": 2027, "low": 27001, "high": 27183, "livery": "blue-charcoal-sweep" }
+            ]
+        ],
+        "solaris-trollino-18": [
+            [
+                { "year": 2028, "low": 28201, "high": 28292, "livery": "blue-charcoal-sweep" }
+            ]
         ]
     }
 }

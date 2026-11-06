@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-import pytz
+from zoneinfo import ZoneInfo
 
 from constants import DEFAULT_TIMEZONE
 
@@ -12,7 +12,7 @@ class Time:
     hour: int | None
     minute: int | None
     second: int | None
-    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo = DEFAULT_TIMEZONE
     
     @classmethod
     def parse(cls, time_string, timezone=DEFAULT_TIMEZONE, accurate_seconds=False):
@@ -84,7 +84,15 @@ class Time:
     
     @property
     def timezone_name(self):
-        '''Returns the name of this time's timezone'''
+        '''Returns the name of this time's timezone (EDT, MST, PT)'''
+        if self.timezone.key == 'America/Vancouver':
+            # Special case - return PCT here because the IANA data confusingly uses MST
+            return 'PCT'
+        if self.timezone.key == 'America/Edmonton':
+            # Likewise for the albertan systems
+            return 'ABT'
+        
+
         return datetime.now(self.timezone).tzname()
     
     def __str__(self):
