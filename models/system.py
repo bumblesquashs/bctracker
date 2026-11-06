@@ -1,6 +1,6 @@
 
 from dataclasses import dataclass, field
-import pytz
+from zoneinfo import ZoneInfo
 
 from models.agency import Agency
 from models.backoff import Backoff
@@ -30,7 +30,7 @@ class System:
     
     remote_id: int | None = None
     enabled: bool = True
-    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo = DEFAULT_TIMEZONE
     ignore_route_colour: str | None = DEFAULT_IGNORE_ROUTE_COLOUR
     enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
     gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF

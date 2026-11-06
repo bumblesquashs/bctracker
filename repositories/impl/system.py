@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass, field
 import json
-import pytz
+from zoneinfo import ZoneInfo
 
 from models.system import System
 
@@ -26,7 +26,7 @@ class SystemRepository:
                         if not agency.enabled:
                             values['enabled'] = False
                         if 'timezone' in values:
-                            values['timezone'] = pytz.timezone(values['timezone'])
+                            values['timezone'] = ZoneInfo(values['timezone'])
                         self.systems[id] = System(id, agency, region, **values)
     
     def find(self, system_id: str) -> System | None:

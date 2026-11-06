@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-import pytz
+from zoneinfo import ZoneInfo
 
 from models.date import Date
 from models.time import Time
@@ -12,7 +12,7 @@ from constants import DEFAULT_TIMEZONE
 class Timestamp:
     
     value: float
-    timezone: pytz.BaseTzInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo = DEFAULT_TIMEZONE
     accurate_seconds: bool = True
     
     @classmethod
