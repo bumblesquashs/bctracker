@@ -86,8 +86,12 @@ class Time:
     def timezone_name(self):
         '''Returns the name of this time's timezone (EDT, MST, PT)'''
         if self.timezone.key == 'America/Vancouver':
-            # Special case - return PT here because the IANA data confusingly uses MST
-            return 'PT'
+            # Special case - return PCT here because the IANA data confusingly uses MST
+            return 'PCT'
+        if self.timezone.key == 'America/Edmonton':
+            # Likewise for the albertan systems
+            return 'ABT'
+        
 
         return datetime.now(self.timezone).tzname()
     
