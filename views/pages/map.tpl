@@ -570,7 +570,7 @@
                             style: new ol.style.Style({
                                 stroke: new ol.style.Stroke({
                                     color: "#" + position.colour,
-                                    width: 4,
+                                    width: request.response.line_width,
                                     lineCap: "butt"
                                 })
                             }),
@@ -628,7 +628,7 @@
                                 style: new ol.style.Style({
                                     stroke: new ol.style.Stroke({
                                         color: "#" + position.colour,
-                                        width: 4,
+                                        width: request.response.line_width,
                                         lineCap: "butt"
                                     })
                                 }),
