@@ -197,12 +197,15 @@ class Trip:
             'shape_id': self.shape_id,
             'points': [p.get_json() for p in self.find_points()]
         }
-        if self.route:
-            json['colour'] = self.route.colour
-            json['text_colour'] = self.route.text_colour
+        route = self.route
+        if route:
+            json['colour'] = route.colour
+            json['text_colour'] = route.text_colour
+            json['line_width'] = route.type.line_width
         else:
             json['colour'] = '666666'
             json['text_colour'] = '000000'
+            json['line_width'] = 3
         return json
     
     def find_points(self):

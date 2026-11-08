@@ -785,7 +785,7 @@ class Server(Bottle):
         for point in points:
             points_by_shape_id.setdefault((point.context, point.shape_id), []).append(point)
         shapes = []
-        for route in routes:
+        for route in sorted(routes):
             for shape_id in route.shape_ids:
                 shape_points = points_by_shape_id.get((route.context, shape_id))
                 if shape_points:
@@ -794,6 +794,7 @@ class Server(Bottle):
                         'points': [p.get_json() for p in shape_points],
                         'colour': route.colour,
                         'text_colour': route.text_colour,
+                        'line_width': route.type.line_width,
                     })
         return self.page(
             context=context,
@@ -1799,8 +1800,14 @@ class Server(Bottle):
         }
     
     def api_shape(self, context: Context, shape_id: str):
+        route = repositories.route.find_by_shape(context, shape_id)
+        points = repositories.point.find_all(context, shape_id)
         return {
-            'points': [p.get_json() for p in repositories.point.find_all(context, shape_id)]
+            'shape_id': shape_id,
+            'points': [p.get_json() for p in points],
+            'colour': route.colour,
+            'text_colour': route.text_colour,
+            'line_width': route.type.line_width,
         }
     
     def api_stops(self, context: Context):
