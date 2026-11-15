@@ -337,6 +337,8 @@ table tr:hover {
 
 .button.survey-button {
     background-color: #DD7D03;
+    border-color: #653800;
+    color: #FFFFFF;
 }
 
 .button.survey-button:hover {
