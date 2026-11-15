@@ -1,21 +1,36 @@
+/* COLOR REFERENCE
+ * White:      #FFFFFF
+ * Light Pink: #FFAFC7
+ * Light Blue: #73D7EE
+ * Brown:      #613915
+ * Black:      #000000
+ * Red:        #E50000
+ * Orange:     #FF8D00
+ * Yellow:     #FFEE00
+ * Green:      #028121
+ * Blue:       #004CFF
+ * Purple:     #760088
+ * 
+ * Variations created using https://meyerweb.com/eric/tools/color-blend/
+ */
 
 :root {
-    --navigation-bar-background: rgba(0, 0, 0, 0.2);
-    --navigation-bar-hover: rgba(0, 0, 0, 0.6);
-    --navigation-bar-foreground: #FFFFFF;
+    --navigation-bar-background: #FFFFFF;
+    --navigation-bar-hover: #00000020;
+    --navigation-bar-foreground: #000000;
     
-    --navigation-menu-background: rgba(0, 0, 0, 0.2);
-    --navigation-menu-foreground: #FFFFFF;
+    --navigation-menu-background: #FFFFFF;
+    --navigation-menu-foreground: #000000;
     
-    --status-bar-background: rgba(0, 0, 0, 0.2);
-    --status-bar-hover: rgba(0, 0, 0, 0.6);
-    --status-bar-foreground: #FFFFFF;
+    --status-bar-background: #FFFFFF;
+    --status-bar-hover: #00000020;
+    --status-bar-foreground: #000000;
     
-    --table-border: rgba(0, 0, 0, 0.5);
+    --table-border: transparent;
     
     --tooltip-background: #000000;
     
-    --loading-background: rgba(0, 0, 0, 0);
+    --loading-background: #FFFFFF;
     --loading-foreground: #000000;
     --loading-border: #FFFFFF;
     
@@ -23,46 +38,79 @@
     --radio-button-color: #000000;
     --toggle-button-color: #000000;
     
-    --stop-number-background: rgba(255, 255, 255, 0.7);
+    --stop-number-background: #FFFFFF;
     --stop-number-text: #000000;
-    --stop-number-border: rgba(0, 0, 0, 0.5);
+    --stop-number-border: #000000;
     
-    --map-control-background: rgba(255, 255, 255, 0.7);
-    --map-control-background-hover: rgba(255, 255, 255, 0.7);
+    --map-control-background: #FFFFFFBF;
+    --map-control-background-hover: #FFFFFFBF;
     --map-control-icon: #000000;
     
-    --amenity-background: rgba(255, 255, 255, 0.7);
+    --amenity-background: #EFEFEF;
     --amenity-color: #000000;
     
-    --warning-box-background: rgba(255, 233, 211, 0.7);
-    --warning-box-foreground: #FF9A3A;
-    --warning-box-border: #FF9A3A;
+    --rainbow-background-light: linear-gradient(to right,
+        #FFEBF1 0%,
+        #FFFFFF 10%,
+        #DCF5FB 20%,
+        #D8CEC5 30%,
+        #DFDFDF 40%,
+        #F9BFBF 50%,
+        #FFE3BF 60%,
+        #FFFBBF 70%,
+        #C0E0C8 80%,
+        #BFD2FF 90%,
+        #DDBFE1 100%
+    );
+    
+    --rainbow-background-dark: linear-gradient(to right,
+        #FFD7E3 0%,
+        #FFFFFF 10%,
+        #B9EBF7 20%,
+        #B09C8A 30%,
+        #808080 40%,
+        #F28080 50%,
+        #FFC680 60%,
+        #FFF780 70%,
+        #81C090 80%,
+        #80A6FF 90%,
+        #BB80C4 100%
+    );
+    
+    --rainbow-border: linear-gradient(to right,
+        #FFC3D5 0%,
+        #FFFFFF 10%,
+        #96E1F2 20%,
+        #896B50 30%,
+        #404040 40%,
+        #EC4040 50%,
+        #FFAA40 60%,
+        #FFF240 70%,
+        #41A159 80%,
+        #4079FF 90%,
+        #9840A6 100%
+    ) 1;
 }
 
 a {
-    color: #0040FF;
+    color: #000000;
+    text-decoration: underline;
+}
+
+a.route {
+    text-decoration: none;
+}
+
+a.route:hover {
+    text-decoration: underline;
 }
 
 body {
-    background: linear-gradient(135deg,
-        #FFFFFF 0%,
-        #FFAFC7 10%,
-        #73D7EE 20%,
-        #613915 30%,
-        #000000 40%,
-        #E50000 50%,
-        #FF8D00 60%,
-        #FFEE00 70%,
-        #028121 80%,
-        #004CFF 90%,
-        #760088 100%
-    );
-    background-attachment: fixed;
     color: #000000;
 }
 
 body.full-map #page {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: #FFFFFFBF;
 }
 
 body.full-map #page .option {
@@ -70,86 +118,97 @@ body.full-map #page .option {
 }
 
 input[type="text"] {
-    border-color: rgba(0, 0, 0, 0.5);
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: #FFFFFF;
+    border-width: 2px;
+    border-color: #000000;
     color: #000000;
 }
 
-input[type="text"]:focus {
-    border-color: rgba(0, 0, 0, 0.8);
+table {
+    background-image: linear-gradient(to right,
+        #FFC3D5 0%,
+        #FFFFFF 10%,
+        #96E1F2 20%,
+        #896B50 30%,
+        #404040 40%,
+        #EC4040 50%,
+        #FFAA40 60%,
+        #FFF240 70%,
+        #41A159 80%,
+        #4079FF 90%,
+        #9840A6 100%
+    );
+    border-collapse: unset;
+    border-width: 0px;
+    border-spacing: 2px;
 }
 
-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+table thead tr {
+    background: var(--rainbow-background-dark);
 }
 
 table tbody tr.header {
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
-table th {
-    background-color: rgba(255, 255, 255, 0.7);
+    background: var(--rainbow-background-light);
 }
 
 table tr {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: #FFFFFF;
 }
 
-table tr.table-button {
-    background-color: rgba(255, 255, 255, 0.6);
+table tr:hover {
+    background-color: #EFEFEF;
+}
+
+#content {
+    background: var(--rainbow-background-light);
+    background-attachment: fixed;
+}
+
+#content:has(#loading) {
+    background: #FFFFFF;
+}
+
+#favourite-systems-dropdown {
+    background-color: #FFFFFF;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+    border-style: solid;
+}
+
+#favourite-systems-dropdown .system-button {
     color: #000000;
     --image-color: #000000;
 }
 
-table tr.table-button:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-#favourite-systems-dropdown {
-    background-color: rgba(0, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-#favourite-systems-dropdown .system-button {
-    color: #FFFFFF;
-    --image-color: rgba(255, 255, 255, 0.7);
-}
-
 #favourite-systems-dropdown .system-button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 #favourite-systems-dropdown .system-button.current {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 #favourite-systems-dropdown .system-button.all-systems {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
 }
 
 #loading-stop {
     --image-color: #FFFFFF;
 }
 
-#main {
-    background-color: rgba(255, 255, 255, 0.4);
+#navigation-bar {
+    background: var(--rainbow-background-dark);
+    background-attachment: fixed;
 }
 
 #map.preview {
-    border-color: rgba(0, 0, 0, 0.5);
+    border-image: var(--rainbow-border);
+    border-width: 2px;
 }
 
 #map-controls .control.active {
     --map-control-icon: #365CCB;
-}
-
-#navigation-bar {
-    --tooltip-background: #000000;
-}
-
-#navigation-menu {
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 #page {
@@ -157,123 +216,123 @@ table tr.table-button:hover {
 }
 
 #page-header {
-    border-bottom-color: rgba(0, 0, 0, 0.5);
+    border-image: var(--rainbow-border);
 }
 
 #quick-navigation .item {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-color: rgba(0, 0, 0, 0.5);
+    background-color: #FFFFFF;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
 }
 
 #search {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #FFFFFF;
+    border-width: 2px;
+    border-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #search-header {
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.3);
-    --tooltip-background: #000000;
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
 }
 
 #search-input {
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
-#search-input:focus {
-    border-color: rgba(0, 0, 0, 0.8);
+    border-color: #000000;
 }
 
 #search-paging {
-    color: #FFFFFF;
-    border-color: rgba(0, 0, 0, 0.5);
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-top-width: 2px;
 }
 
 #search-placeholder {
-    color: #E6E6E6;
+    color: #404040;
 }
 
 #search-results {
-    --image-color: #FFFFFF;
+    --image-color: #000000;
 }
 
 #search-results .result {
-    color: #FFFFFF;
+    color: #000000;
 }
 
 #search-results .result:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 #search-results .result.keyboard-selected {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 #search-results .result .description {
-    color: #E6E6E6;
+    color: #404040;
 }
 
 #status-bar {
-    --tooltip-background: #000000;
+    background: var(--rainbow-background-dark);
+    background-attachment: fixed;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #system-menu {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #FFFFFF;
+    border-width: 2px;
+    border-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #system-menu .header {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: #FFFFFF;
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
 }
 
 #system-menu .system-button {
-    color: #FFFFFF;
-    --image-color: rgba(255, 255, 255, 0.7);
+    --image-color: #000000;
 }
 
 #system-menu .system-button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 #system-menu .system-button.current {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #EFEFEF;
 }
 
 .banner {
-    background-color: #FFA027;
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
-}
-
-.banner a {
-    color: #FFFFFF;
-}
-
-.button {
-    background-color: rgba(255, 255, 255, 0.6);
+    background: #00000020;
     color: #000000;
     --image-color: #000000;
 }
 
-.button:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+.button {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
+    --image-color: #000000;
 }
 
-.button.disabled {
-    background-color: rgba(255, 255, 255, 0.4);
+.button:hover {
+    background-color: #EFEFEF;
 }
 
 .button.disabled:hover {
-    background-color: rgba(255, 255, 255, 0.4) !important;
+    background-color: #FFFFFF !important;
 }
 
 .button.inactive {
-    background-color: rgba(255, 255, 255, 0.4);
-}
-
-.button.inactive:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    color: #BFBFBF;
+    border-color: #BFBFBF;
+    --image-color: #BFBFBF;
 }
 
 .button.survey-button {
@@ -285,12 +344,13 @@ table tr.table-button:hover {
 }
 
 .code-block {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-color: rgba(0, 0, 0, 0.5);
+    background-color: #FFFFFF;
+    border-width: 2px;
+    border-image: var(--rainbow-border);
 }
 
 .container > .section > .header {
-    border-bottom-color: rgba(0, 0, 0, 0.5);
+    border-bottom-color: #DFDFDF;
 }
 
 .container > .section > .header > .toggle {
@@ -302,7 +362,7 @@ table tr.table-button:hover {
 }
 
 .events .date {
-    border-right-color: rgba(0, 0, 0, 0.2);
+    border-right-color: #DFDFDF;
 }
 
 .favourite {
@@ -310,11 +370,11 @@ table tr.table-button:hover {
 }
 
 .favourite:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: #00000020;
 }
 
 .favourite.disabled {
-    --image-color: rgba(0, 0, 0, 0.6);
+    --image-color: #BFBFBF;
 }
 
 .favourite.disabled:hover {
@@ -322,133 +382,170 @@ table tr.table-button:hover {
 }
 
 .info-box {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-color: rgba(0, 0, 0, 0.5);
-    --table-border: rgba(0, 0, 0, 0.2);
+    background: #FFFFFF;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
 }
 
 .info-box h3 {
-    --stop-number-background: rgba(255, 255, 255, 0.7);
+    --stop-number-background: #FFFFFF;
+}
+
+.info-box table tr {
+    background-color: #FFFFFF;
+}
+
+.info-box table tr th:first-child {
+    padding-left: 1em;
+}
+
+.info-box table tr th:last-child {
+    padding-right: 1em;
+}
+
+.info-box table tr td:first-child {
+    padding-left: 1em;
+}
+
+.info-box table tr td:last-child {
+    padding-right: 1em;
 }
 
 .info-box .section {
-    border-color: rgba(0, 0, 0, 0.2);
+    border-color: #DFDFDF;
 }
 
 .info-box .option {
-    --hover-background: rgba(255, 255, 255, 0.6);
+    --hover-background: #EFEFEF;
 }
 
 .info-box .toggle-button {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: #EFEFEF;
     --image-color: #000000;
 }
 
 .info-box .toggle-button:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #DFDFDF;
 }
 
 .lighter-text {
-    color: #2F2F2F;
-    --image-color: #2F2F2F;
+    color: #404040;
+    --image-color: #404040;
 }
 
 .marker .details {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #FFFFFFBF;
 }
 
 .marker .icon {
     border-color: #FFFFFF;
-    background-color: #000000;
+    background-color: #808080;
+    --image-color: #FFFFFF;
 }
 
-.news-post {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-color: rgba(0, 0, 0, 0.5);
-}
-
-.news-post .header {
-    background-color: rgba(255, 255, 255, 0.6);
-    border-bottom-color: rgba(0, 0, 0, 0.5);
-}
-
-.option {
-    --hover-background: rgba(255, 255, 255, 0.6);
-}
-
-.option .checkbox {
-    background-color: rgba(255, 255, 255, 0.6);
-}
-
-.option .radio-button {
-    background-color: rgba(255, 255, 255, 0.6);
-}
-
-.order-details .content {
-    --image-color: rgba(0, 0, 0, 0.5);
-}
-
-.paging {
-    --image-color: rgba(0, 0, 0, 0.5);
-}
-
-.paging .page {
-    background-color: rgba(255, 255, 255, 0.6);
-    color: #000000;
-}
-
-.paging .page:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-.paging .page.current {
-    background-color: #000000;
+.marker .icon.route .number {
     color: #FFFFFF;
 }
 
+.marker .icon.vehicle_route {
+    color: #FFFFFF;
+}
+
+.news-post {
+    background-color: #FFFFFF;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+}
+
+.news-post .header {
+    background: var(--rainbow-background-dark);
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
+}
+
+.option {
+    --hover-background: #00000020;
+}
+
+.option .checkbox {
+    background-color: #FFFFFF;
+}
+
+.option .radio-button {
+    background-color: #FFFFFF;
+}
+
+.order-details .content {
+    --image-color: #404040;
+}
+
+.paging {
+    --image-color: #404040;
+}
+
+.paging .page {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.paging .page:hover {
+    background-color: #EFEFEF;
+}
+
+.paging .page.current {
+    background-color: #DFDFDF;
+}
+
 .paging .page.current:hover {
-    background-color: #000000;
+    background-color: #DFDFDF;
 }
 
 .route {
     color: #FFFFFF;
     border-color: #FFFFFF;
-    background-color: #989898;
+    background-color: #9B9B9B;
 }
 
 .scheduled {
-    --image-color: #2F2F2F;
+    --image-color: #404040;
 }
 
 .sheet {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: #EFEFEF;
 }
 
 .sheet-list .footer {
-    color: #2F2F2F;
+    color: #404040;
 }
 
 .sheet-list .legend {
-    color: #2F2F2F;
+    color: #404040;
 }
 
 .tab-button-bar {
-    border-color: rgba(0, 0, 0, 0.5);
+    background-color: #FFFFFF;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+    gap: 0px;
 }
 
 .tab-button {
-    color: #0040FF;
-    border-color: rgba(0, 0, 0, 0.5);
+    border-width: 0px;
+    text-decoration: underline !important;
 }
 
 .tab-button:hover {
-    background-color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
+    background-color: #EFEFEF;
 }
 
 .tab-button.current {
-    background-color: rgba(255, 255, 255,0.9);
-    color: #000000;
+    background-color: #EFEFEF;
+    text-decoration: none !important;
+}
+
+.table-border-wrapper {
+    border-width: 0px;
 }
 
 .timeline .now {
@@ -460,5 +557,5 @@ table tr.table-button:hover {
 }
 
 .timespan .time {
-    background-color: #ABABAB;
+    background-color: #BFBFBF;
 }

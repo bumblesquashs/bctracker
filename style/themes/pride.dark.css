@@ -1,157 +1,220 @@
+/* COLOR REFERENCE
+ * White:      #FFFFFF
+ * Light Pink: #FFAFC7
+ * Light Blue: #73D7EE
+ * Brown:      #613915
+ * Black:      #000000
+ * Red:        #E50000
+ * Orange:     #FF8D00
+ * Yellow:     #FFEE00
+ * Green:      #028121
+ * Blue:       #004CFF
+ * Purple:     #760088
+ * 
+ * Variations created using https://meyerweb.com/eric/tools/color-blend/
+ */
 
 :root {
     color-scheme: dark;
     
-    --navigation-bar-background: rgba(0, 0, 0, 0.6);
-    --navigation-bar-hover: rgba(0, 0, 0, 0.2);
+    --navigation-bar-background: #000000;
+    --navigation-bar-hover: #FFFFFF20;
     --navigation-bar-foreground: #FFFFFF;
     
-    --navigation-menu-background: rgba(0, 0, 0, 0.6);
+    --navigation-menu-background: #000000;
     --navigation-menu-foreground: #FFFFFF;
     
-    --status-bar-background: rgba(0, 0, 0, 0.6);
-    --status-bar-hover: rgba(0, 0, 0, 0.2);
+    --status-bar-background: #000000;
+    --status-bar-hover: #FFFFFF20;
     --status-bar-foreground: #FFFFFF;
     
-    --table-border: rgba(255, 255, 255, 0.3);
+    --table-border: transparent;
     
     --tooltip-background: #000000;
     
-    --loading-background: rgba(0, 0, 0, 0);
-    --loading-foreground: #000000;
-    --loading-border: #FFFFFF;
+    --loading-background: #000000;
+    --loading-foreground: #FFFFFF;
+    --loading-border: #000000;
     
     --checkbox-color: #FFFFFF;
     --radio-button-color: #FFFFFF;
     --toggle-button-color: #FFFFFF;
     
-    --stop-number-background: rgba(0, 0, 0, 0.6);
+    --stop-number-background: #000000;
     --stop-number-text: #FFFFFF;
-    --stop-number-border: rgba(255, 255, 255, 0.3);
+    --stop-number-border: #FFFFFF;
     
-    --map-control-background: rgba(30, 30, 30, 0.7);
-    --map-control-background-hover: rgba(30, 30, 30, 0.7);
+    --map-control-background: #000000BF;
+    --map-control-background-hover: #000000BF;
     --map-control-icon: #FFFFFF;
     
-    --amenity-background: rgba(0, 0, 0, 0.6);
+    --amenity-background: #202020;
     --amenity-color: #FFFFFF;
     
-    --warning-box-background: rgba(73, 31, 0, 0.6);
-    --warning-box-foreground: #FF6A00;
-    --warning-box-border: #FF6A00;
+    --rainbow-background-light: linear-gradient(to right,
+        #402C32 0%,
+        #404040 10%,
+        #1D363C 20%,
+        #180E05 30%,
+        #000000 40%,
+        #390000 50%,
+        #402300 60%,
+        #403C00 70%,
+        #012008 80%,
+        #001340 90%,
+        #1E0022 100%
+    );
+    
+    --rainbow-background-dark: linear-gradient(to right,
+        #805864 0%,
+        #808080 10%,
+        #3A6C77 20%,
+        #311D0B 30%,
+        #000000 40%,
+        #730000 50%,
+        #804700 60%,
+        #807700 70%,
+        #014111 80%,
+        #002680 90%,
+        #3B0044 100%
+    );
+    
+    --rainbow-border: linear-gradient(to right,
+        #BF8395 0%,
+        #BFBFBF 10%,
+        #56A1B3 20%,
+        #492B10 30%,
+        #000000 40%,
+        #AC0000 50%,
+        #BF6A00 60%,
+        #BFB300 70%,
+        #026119 80%,
+        #0039BF 90%,
+        #590066 100%
+    ) 1;
 }
 
 a {
-    color: #5CC3FF;
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+a.route {
+    text-decoration: none;
+}
+
+a.route:hover {
+    text-decoration: underline;
 }
 
 body {
-    background: linear-gradient(135deg,
-        #FFFFFF 0%,
-        #FFAFC7 10%,
-        #73D7EE 20%,
-        #613915 30%,
-        #000000 40%,
-        #E50000 50%,
-        #FF8D00 60%,
-        #FFEE00 70%,
-        #028121 80%,
-        #004CFF 90%,
-        #760088 100%
-    );
-    background-attachment: fixed;
     color: #FFFFFF;
 }
 
 body.full-map #page {
-    background-color: rgba(30, 30, 30, 0.7);
+    background-color: #000000BF;
 }
 
 body.full-map #page .option {
-    --hover-background: #2F2F2F;
+    --hover-background: #000000;
+}
+
+iframe {
+    color-scheme: light;
 }
 
 input[type="text"] {
-    border-color: rgba(255, 255, 255, 0.3);
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #000000;
+    border-width: 2px;
+    border-color: #FFFFFF;
     color: #FFFFFF;
 }
 
-input[type="text"]:focus {
-    border-color: rgba(255, 255, 255, 0.8);
+table {
+    background-image: linear-gradient(to right,
+        #BF8395 0%,
+        #BFBFBF 10%,
+        #56A1B3 20%,
+        #492B10 30%,
+        #000000 40%,
+        #AC0000 50%,
+        #BF6A00 60%,
+        #BFB300 70%,
+        #026119 80%,
+        #0039BF 90%,
+        #590066 100%
+    );
+    border-collapse: unset;
+    border-width: 0px;
+    border-spacing: 2px;
 }
 
-table tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.7);
+table thead tr {
+    background: var(--rainbow-background-dark);
 }
 
 table tbody tr.header {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-table th {
-    background-color: rgba(0, 0, 0, 0.7);
+    background: var(--rainbow-background-light);
 }
 
 table tr {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #000000;
 }
 
-table tr.table-button {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #FFFFFF;
-    --image-color: #FFFFFF;
+table tr:hover {
+    background-color: #202020;
 }
 
-table tr.table-button:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+#content {
+    background: var(--rainbow-background-light);
+    background-attachment: fixed;
+}
+
+#content:has(#loading) {
+    background: #000000;
 }
 
 #favourite-systems-dropdown {
-    background-color: rgba(0, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+    border-style: solid;
 }
 
 #favourite-systems-dropdown .system-button {
     color: #FFFFFF;
-    --image-color: rgba(255, 255, 255, 0.7);
-}
-
-#favourite-systems-dropdown .system-button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-#favourite-systems-dropdown .system-button.current {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-#favourite-systems-dropdown .system-button.all-systems {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
-}
-
-#loading-stop {
     --image-color: #FFFFFF;
 }
 
-#main {
-    background-color: rgba(0, 0, 0, 0.4);
+#favourite-systems-dropdown .system-button:hover {
+    background-color: #202020;
 }
 
-#map.preview {
-    border-color: rgba(255, 255, 255, 0.3);
+#favourite-systems-dropdown .system-button.current {
+    background-color: #202020;
 }
 
-#map-controls .control.active {
-    --map-control-icon: #5CC3FF;
+#favourite-systems-dropdown .system-button.all-systems {
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
+}
+
+#loading-stop {
+    --image-color: #000000;
 }
 
 #navigation-bar {
-    --tooltip-background: #000000;
+    background: var(--rainbow-background-dark);
+    background-attachment: fixed;
 }
 
-#navigation-menu {
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+#map.preview {
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+}
+
+#map-controls .control.active {
+    --map-control-icon: #365CCB;
 }
 
 #page {
@@ -159,40 +222,40 @@ table tr.table-button:hover {
 }
 
 #page-header {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-image: var(--rainbow-border);
 }
 
 #quick-navigation .item {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
 }
 
 #search {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-width: 2px;
+    border-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #search-header {
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.3);
-    --tooltip-background: #000000;
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
 }
 
 #search-input {
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-#search-input:focus {
-    border-color: rgba(255, 255, 255, 0.8);
+    border-color: #FFFFFF;
 }
 
 #search-paging {
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-top-width: 2px;
 }
 
 #search-placeholder {
-    color: #ABABAB;
+    color: #BFBFBF;
 }
 
 #search-results {
@@ -204,94 +267,96 @@ table tr.table-button:hover {
 }
 
 #search-results .result:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #202020;
 }
 
 #search-results .result.keyboard-selected {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #202020;
 }
 
 #search-results .result .description {
-    color: #ABABAB;
+    color: #BFBFBF;
 }
 
 #status-bar {
-    --tooltip-background: #000000;
+    background: var(--rainbow-background-dark);
+    background-attachment: fixed;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #system-menu {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-width: 2px;
+    border-style: solid;
+    border-image: var(--rainbow-border);
 }
 
 #system-menu .header {
-    background-color: rgba(0, 0, 0, 0.6);
+    background: var(--rainbow-background-light);
+    border-image: var(--rainbow-border);
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
 }
 
 #system-menu .system-button {
-    color: #FFFFFF;
-    --image-color: rgba(255, 255, 255, 0.7);
+    --image-color: #FFFFFF;
 }
 
 #system-menu .system-button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #202020;
 }
 
 #system-menu .system-button.current {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #202020;
 }
 
 .banner {
-    background-color: #8A4D00;
+    background-color: #FFFFFF20;
     color: #FFFFFF;
     --image-color: #FFFFFF;
 }
 
-.banner a {
-    color: #FFFFFF;
-}
-
 .button {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #000000;
     color: #FFFFFF;
+    border: 2px solid #FFFFFF;
     --image-color: #FFFFFF;
 }
 
 .button:hover {
-    background-color: rgba(0, 0, 0, 0.9);
-}
-
-.button.disabled {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: #202020;
 }
 
 .button.disabled:hover {
-    background-color: rgba(0, 0, 0, 0.4) !important;
+    background-color: #000000 !important;
 }
 
 .button.inactive {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.button.inactive:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+    color: #404040;
+    border-color: #404040;
+    --image-color: #404040;
 }
 
 .button.survey-button {
-    background-color: #AA6816;
+    background-color: #DD7D03;
 }
 
 .button.survey-button:hover {
-    background-color: #653800;
+    background-color: #AD6000;
 }
 
 .code-block {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-width: 2px;
+    border-image: var(--rainbow-border);
 }
 
 .container > .section > .header {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-bottom-color: #404040;
 }
 
 .container > .section > .header > .toggle {
@@ -303,7 +368,7 @@ table tr.table-button:hover {
 }
 
 .events .date {
-    border-right-color: rgba(255, 255, 255, 0.2);
+    border-right-color: #404040;
 }
 
 .favourite {
@@ -311,11 +376,11 @@ table tr.table-button:hover {
 }
 
 .favourite:hover {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #FFFFFF20;
 }
 
 .favourite.disabled {
-    --image-color: rgba(255, 255, 255, 0.6);
+    --image-color: #404040;
 }
 
 .favourite.disabled:hover {
@@ -323,134 +388,170 @@ table tr.table-button:hover {
 }
 
 .info-box {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
-    --table-border: rgba(255, 255, 255, 0.2);
+    background: #000000;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
 }
 
 .info-box h3 {
-    --stop-number-background: rgba(0, 0, 0, 0.6);
+    --stop-number-background: #000000;
+}
+
+.info-box table tr {
+    background-color: #000000;
+}
+
+.info-box table tr th:first-child {
+    padding-left: 1em;
+}
+
+.info-box table tr th:last-child {
+    padding-right: 1em;
+}
+
+.info-box table tr td:first-child {
+    padding-left: 1em;
+}
+
+.info-box table tr td:last-child {
+    padding-right: 1em;
 }
 
 .info-box .section {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: #404040;
 }
 
 .info-box .option {
-    --hover-background: rgba(0, 0, 0, 0.6);
+    --hover-background: #FFFFFF20;
 }
 
 .info-box .toggle-button {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: #202020;
     --image-color: #FFFFFF;
 }
 
 .info-box .toggle-button:hover {
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: #404040;
 }
 
 .lighter-text {
-    color: #ABABAB;
-    --image-color: #ABABAB;
+    color: #BFBFBF;
+    --image-color: #BFBFBF;
 }
 
 .marker .details {
-    background-color: rgba(30, 30, 30, 0.7);
-    color: #FFFFFF;
+    background-color: #000000BF;
 }
 
 .marker .icon {
-    border-color: #000000;
-    background-color: #000000;
+    border-color: #FFFFFF;
+    background-color: #808080;
+    --image-color: #FFFFFF;
 }
 
-.news-post {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.news-post .header {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-bottom-color: rgba(255, 255, 255, 0.3);
-}
-
-.option {
-    --hover-background: rgba(0, 0, 0, 0.6);
-}
-
-.option .checkbox {
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.option .radio-button {
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
-.order-details .content {
-    --image-color: rgba(255, 255, 255, 0.3);
-}
-
-.paging {
-    --image-color: rgba(255, 255, 255, 0.6);
-}
-
-.paging .page {
-    background-color: rgba(255, 255, 255, 0.6);
-    color: #000000;
-}
-
-.paging .page:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-.paging .page.current {
-    background-color: #000000;
+.marker .icon.route .number {
     color: #FFFFFF;
 }
 
-.paging .page.current:hover {
+.marker .icon.vehicle_route {
+    color: #FFFFFF;
+}
+
+.news-post {
     background-color: #000000;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+}
+
+.news-post .header {
+    background: var(--rainbow-background-dark);
+    border-image: var(--rainbow-border);
+    border-bottom-width: 2px;
+}
+
+.option {
+    --hover-background: #FFFFFF20;
+}
+
+.option .checkbox {
+    background-color: #000000;
+}
+
+.option .radio-button {
+    background-color: #000000;
+}
+
+.order-details .content {
+    --image-color: #BFBFBF;
+}
+
+.paging {
+    --image-color: #BFBFBF;
+}
+
+.paging .page {
+    background-color: #000000;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+}
+
+.paging .page:hover {
+    background-color: #202020;
+}
+
+.paging .page.current {
+    background-color: #404040;
+}
+
+.paging .page.current:hover {
+    background-color: #404040;
 }
 
 .route {
     color: #FFFFFF;
     border-color: #FFFFFF;
-    background-color: #989898;
+    background-color: #9F9F9F;
 }
 
 .scheduled {
-    --image-color: #ABABAB;
+    --image-color: #BFBFBF;
 }
 
 .sheet {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #202020;
 }
 
 .sheet-list .footer {
-    color: #ABABAB;
+    color: #BFBFBF;
 }
 
 .sheet-list .legend {
-    color: #ABABAB;
+    color: #BFBFBF;
 }
 
 .tab-button-bar {
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #000000;
+    border-image: var(--rainbow-border);
+    border-width: 2px;
+    gap: 0px;
 }
 
 .tab-button {
-    color: #5CC3FF;
-    border-color: rgba(255, 255, 255, 0.3);
+    border-width: 0px;
+    text-decoration: underline !important;
 }
 
 .tab-button:hover {
-    background-color: rgba(0, 0, 0, 0.6);
-    cursor: pointer;
+    background-color: #202020;
 }
 
 .tab-button.current {
-    background-color: rgba(0, 0, 0,0.9);
-    color: #FFFFFF;
+    background-color: #202020;
+    text-decoration: none !important;
+}
+
+.table-border-wrapper {
+    border-width: 0px;
 }
 
 .timeline .now {
@@ -458,9 +559,9 @@ table tr.table-button:hover {
 }
 
 .timeline .section:hover {
-    border-color: #000000;
+    border-color: #FFFFFF;
 }
 
 .timespan .time {
-    background-color: #989898;
+    background-color: #404040;
 }

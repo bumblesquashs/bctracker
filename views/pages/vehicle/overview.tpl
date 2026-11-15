@@ -440,8 +440,8 @@
                                     % if not last_date or record.date.year != last_date.year or record.date.month != last_date.month:
                                         <tr class="header">
                                             <td colspan="8">{{ record.date.format_month() }}</td>
-                                            <tr class="display-none"></tr>
                                         </tr>
+                                        <tr class="display-none"></tr>
                                     % end
                                     % last_date = record.date
                                     <tr>
