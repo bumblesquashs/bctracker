@@ -631,11 +631,7 @@ class Server(Bottle):
                 title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
-        active_allocations = [a for a in allocations if a.active]
-        try:
-            allocation = active_allocations[0]
-        except IndexError:
-            allocation = None
+        allocation = next((a for a in allocations if a.active), None)
         try:
             page = int(request.query['page'])
         except (KeyError, ValueError):
