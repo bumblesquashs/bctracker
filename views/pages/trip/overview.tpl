@@ -320,11 +320,15 @@
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
                 % last_headsign = None
+                % has_other_routes = any(d.other_routes for d in departures)
                 <table>
                     <thead>
                         <tr>
                             <th>Time</th>
                             <th>Stop</th>
+                            % if has_other_routes:
+                                <th class="non-mobile">Routes</th>
+                            % end
                         </tr>
                     </thead>
                     <tbody>
@@ -333,12 +337,13 @@
                             % if trip.custom_headsigns:
                                 % if departure.headsign != last_headsign:
                                     <tr class="header">
-                                        <td colspan="2">{{ departure }}</td>
+                                        <td colspan="{{ '3' if has_other_routes else '2' }}">{{ departure }}</td>
                                     </tr>
                                     <tr class="display-none"></tr>
                                 % end
                                 % last_headsign = departure.headsign
                             % end
+                            % other_routes = departure.other_routes
                             <tr>
                                 <td class="{{ 'timing-point' if departure.timepoint else '' }}">
                                     {{ departure.time.format_web(time_format) }}
@@ -346,6 +351,11 @@
                                 <td>
                                     <div class="column">
                                         % include('components/stop', timepoint=departure.timepoint)
+                                        % if other_routes:
+                                            <div class="mobile-only">
+                                                % include('components/route_list', routes=other_routes)
+                                            </div>
+                                        % end
                                         % if not departure.pickup_type.is_normal:
                                             <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                                         % elif departure == departures[-1]:
@@ -358,6 +368,13 @@
                                         % end
                                     </div>
                                 </td>
+                                % if has_other_routes:
+                                    <td class="non-mobile">
+                                        % if other_routes:
+                                            % include('components/route_list', routes=other_routes)
+                                        % end
+                                    </td>
+                                % end
                             </tr>
                         % end
                     </tbody>

@@ -118,6 +118,15 @@ class Departure:
             return self.trip and self == self.trip.last_departure
         return False
     
+    @property
+    def other_routes(self):
+        trip = self.trip
+        stop = self.stop
+        if not trip or not trip.route or not stop:
+            return []
+        route = trip.route
+        return [r for r in stop.routes if r != route]
+    
     def __str__(self):
         if self.headsign:
             if self.context.prefix_headsigns and self.trip.route:
