@@ -594,6 +594,7 @@ class Server(Bottle):
             title=title,
             full_map=bool(position) or bool(last_position),
             vehicle=vehicle,
+            allocation=allocation,
             position=position,
             last_position=last_position,
             nearest_stop=nearest_stop,
@@ -630,6 +631,11 @@ class Server(Bottle):
                 title=f'Unknown {context.vehicle_type}',
                 vehicle_id=vehicle_id
             )
+        active_allocations = [a for a in allocations if a.active]
+        try:
+            allocation = active_allocations[0]
+        except IndexError:
+            allocation = None
         try:
             page = int(request.query['page'])
         except (KeyError, ValueError):
@@ -666,6 +672,7 @@ class Server(Bottle):
             file='vehicle/history',
             title=title,
             vehicle=vehicle,
+            allocation=allocation,
             records=records,
             allocations=sorted(allocations, reverse=True),
             events=events,

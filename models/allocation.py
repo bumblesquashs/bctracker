@@ -58,6 +58,17 @@ class Allocation:
         if self.last_lat and self.last_lon:
             return Position(self.context.system, self.vehicle, lat=self.last_lat, lon=self.last_lon, timestamp=self.last_seen_timestamp, source=self.last_seen_source, offline=True)
         return None
+
+    @property
+    def inactive_status_class(self):
+        days_since = self.last_date.days_since
+        if days_since > 365:
+            return 'long-term-inactive'
+        if days_since > 90:
+            return 'medium-term-inactive'
+        if days_since > 30:
+            return 'short-term-inactive'
+        return None
     
     def __hash__(self):
         return hash(self.id)

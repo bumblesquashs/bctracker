@@ -73,6 +73,14 @@ class Date:
         '''Returns the weekday of this date'''
         return Weekday(self.datetime.weekday())
     
+    @property
+    def days_since(self):
+        '''Returns the number of days since this date'''
+        if self.is_today:
+            return 0
+        today = Date.today(self.timezone)
+        return (today.datetime - self.datetime).days
+    
     def __init__(self, year, month, day, timezone):
         self.year = year
         self.month = month

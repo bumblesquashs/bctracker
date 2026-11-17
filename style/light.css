@@ -176,8 +176,17 @@
     --image-color: #DC5050;
 }
 
-.transfer {
-    --image-color: #666666;
+.status {
+    background-color: #808080;
+    --image-color: #FFFFFF;
+}
+
+.status.medium-term-inactive {
+    background-color: #E6853A;
+}
+
+.status.long-term-inactive {
+    background-color: #DC5050;
 }
 
 .very-ahead {
