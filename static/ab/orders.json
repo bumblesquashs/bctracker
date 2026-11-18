@@ -2,143 +2,143 @@
     "calgary-transit": {
         "chevrolet-arboc-4500-sof-27": [
             [
-                { "year": 2017, "low": 1200, "high": 1336, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2017, "low": 1200, "high": 1336, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2023, "low": 1337, "high": 1356, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2023, "low": 1337, "high": 1356, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2025, "low": 1357, "high": 1516, "livery": "calgary-wave", "cctv": false }
+                { "year": 2025, "low": 1357, "high": 1516, "livery": "calgary-wave" }
             ]
         ],
         "chevrolet-arboc-4500-sof27d": [
             [
-                { "year": 2013, "low": 1824, "high": 1834, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2013, "low": 1824, "high": 1834, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2015, "low": 1846, "high": 1875, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2015, "low": 1846, "high": 1875, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "chevrolet-arboc-4500-sof27g": [
             [
-                { "year": 2013, "low": 1835, "high": 1844, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2013, "low": 1835, "high": 1844, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2015, "low": 1876, "high": 1880, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2015, "low": 1876, "high": 1880, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "new-flyer-d40lf": [
             [
-                { "year": 2002, "low": 7783, "high": 7787, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2002, "id": 7788, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2002, "low": 7789, "high": 7804, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2002, "id": 7805, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2002, "low": 7806, "high": 7817, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2002, "low": 7783, "high": 7787, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2002, "id": 7788, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2002, "low": 7789, "high": 7804, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2002, "id": 7805, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2002, "low": 7806, "high": 7817, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2003, "low": 7818, "high": 7856, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2003, "id": 7857, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2003, "id": 7858, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2003, "low": 7818, "high": 7856, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2003, "id": 7857, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2003, "id": 7858, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2004, "low": 7859, "high": 7880, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2004, "low": 7881, "high": 7887, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2004, "low": 7888, "high": 7889, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2004, "id": 7890, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false }
+                { "year": 2004, "low": 7859, "high": 7880, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2004, "low": 7881, "high": 7887, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2004, "low": 7888, "high": 7889, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2004, "id": 7890, "livery": "calgary-stripes", "air_conditioned": false }
             ],
             [
-                { "year": 2005, "low": 7891, "high": 7920, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2005, "id": 7921, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2005, "low": 7922, "high": 7962, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false }
+                { "year": 2005, "low": 7891, "high": 7920, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2005, "id": 7921, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2005, "low": 7922, "high": 7962, "livery": "calgary-stripes", "air_conditioned": false }
             ],
             [
-                { "year": 2006, "low": 7963, "high": 7980, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false }
+                { "year": 2006, "low": 7963, "high": 7980, "livery": "calgary-stripes", "air_conditioned": false }
             ],
             [
-                { "year": 2007, "low": 7981, "high": 8015, "livery": "calgary-stripes", "air_conditioned": false, "cctv": false },
-                { "year": 2007, "low": 8016, "high": 8065, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2007, "low": 7981, "high": 8015, "livery": "calgary-stripes", "air_conditioned": false },
+                { "year": 2007, "low": 8016, "high": 8065, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "new-flyer-d40lfr": [
             [
-                { "year": 2008, "low": 8066, "high": 8095, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2008, "low": 8066, "high": 8095, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "new-flyer-d60lfr": [
             [
-                { "year": 2007, "low": 6001, "high": 6006, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2007, "low": 6001, "high": 6006, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2007, "low": 6007, "high": 6012, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2008, "low": 6013, "high": 6021, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2007, "low": 6007, "high": 6012, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2008, "low": 6013, "high": 6021, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2008, "low": 6022, "high": 6041, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2008, "low": 6022, "high": 6041, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2009, "low": 6042, "high": 6063, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2009, "low": 6042, "high": 6063, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "new-flyer-xd40": [
             [
-                { "year": 2013, "low": 8205, "high": 8304, "livery": "calgary-wave", "cctv": false },
-                { "year": 2014, "low": 8305, "high": 8354, "livery": "calgary-wave", "cctv": false }
+                { "year": 2013, "low": 8205, "high": 8304, "livery": "calgary-wave" },
+                { "year": 2014, "low": 8305, "high": 8354, "livery": "calgary-wave" }
             ]
         ],
         "new-flyer-xd60": [
             [
-                { "year": 2013, "low": 6064, "high": 6073, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2013, "low": 6064, "high": 6073, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2014, "low": 6074, "high": 6093, "livery": "calgary-wave", "cctv": false }
+                { "year": 2014, "low": 6074, "high": 6093, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2014, "id": 6094, "livery": "calgary-wave", "cctv": false }
+                { "year": 2014, "id": 6094, "livery": "calgary-wave" }
             ]
         ],
         "new-flyer-xn40": [
             [
-                { "year": 2012, "low": 8201, "high": 8202, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2012, "low": 8201, "high": 8202, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "nova-bus-lfs-3": [
             [
-                { "year": 2010, "low": 8101, "high": 8130, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2010, "low": 8101, "high": 8130, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2010, "low": 8131, "high": 8146, "livery": "calgary-wave", "air_conditioned": false, "cctv": false },
-                { "year": 2011, "low": 8147, "high": 8158, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2010, "low": 8131, "high": 8146, "livery": "calgary-wave", "air_conditioned": false },
+                { "year": 2011, "low": 8147, "high": 8158, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2011, "low": 8159, "high": 8180, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2011, "low": 8159, "high": 8180, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2012, "low": 8181, "high": 8200, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2012, "low": 8181, "high": 8200, "livery": "calgary-wave", "air_conditioned": false }
             ]
         ],
         "nova-bus-lfs-cng-4": [
             [
-                { "year": 2013, "low": 8203, "high": 8204, "livery": "calgary-wave", "air_conditioned": false, "cctv": false }
+                { "year": 2013, "low": 8203, "high": 8204, "livery": "calgary-wave", "air_conditioned": false }
             ],
             [
-                { "year": 2018, "low": 8355, "high": 8362, "livery": "calgary-wave", "cctv": false },
-                { "year": 2019, "low": 8363, "high": 8394, "livery": "calgary-wave", "cctv": false }
+                { "year": 2018, "low": 8355, "high": 8362, "livery": "calgary-wave" },
+                { "year": 2019, "low": 8363, "high": 8394, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2019, "low": 8395, "high": 8434, "livery": "calgary-wave", "cctv": false },
-                { "year": 2019, "low": 8435, "high": 8464, "livery": "calgary-wave", "cctv": false }
+                { "year": 2019, "low": 8395, "high": 8434, "livery": "calgary-wave" },
+                { "year": 2019, "low": 8435, "high": 8464, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2022, "low": 8465, "high": 8521, "livery": "calgary-wave", "cctv": false }
+                { "year": 2022, "low": 8465, "high": 8521, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2024, "low": 8522, "high": 8596, "livery": "calgary-wave", "cctv": false }
+                { "year": 2024, "low": 8522, "high": 8596, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2025, "low": 8597, "high": 8656, "livery": "calgary-wave", "cctv": false }
+                { "year": 2025, "low": 8597, "high": 8656, "livery": "calgary-wave" }
             ],
             [
-                { "year": 2026, "low": 8657, "high": 8749, "livery": "calgary-wave", "cctv": false }
+                { "year": 2026, "low": 8657, "high": 8749, "livery": "calgary-wave" }
             ]
         ]
     },
