@@ -56,7 +56,26 @@ Available at https://bctracker.ca
 - Whistler
 - Williams Lake
 
-## Running the project
+## ABTracker
+
+The site can also be configured to run for Alberta agencies instead of British Columbia.
+
+Available at https://abtracker.ca
+
+The following agencies/systems are supported:
+
+- Calgary Transit (Calgary)
+- Edmonton Transit Service (Edmonton)
+- Grande Prairie Transit (Grande Prairie)
+- Lethbridge Transit (Lethbridge) - No realtime
+- Medicine Hat Transit (Medicine Hat)
+- Red Deer Transit (Red Deer) - No realtime
+- Roam (Banff)
+- Woosh (Fort McMurray)
+
+For more information about running the site as ABTracker, see the Basic Configuration section below.
+
+## Running the Project
 
 Server developed and deployed on Linux (Runs fine on Ubuntu 18+, Mint).
 Also has been tested and confirmed to work on macOS.
@@ -74,7 +93,7 @@ When launching the server, a few flags can be passed in to perform specific acti
 - `--updatedb` (`-u`) Updates GTFS data in the database with downloaded CSV data (automatically done when `--reload` is used)
 - `--debug` (`-d`) Enables debug mode when developing
 
-## Configuration
+## Server Configuration
 
 In order to run the project, some configuration needs to be set up first.
 Start by creating a file in the home directory called `server.conf`, with the following sample content:
@@ -86,15 +105,24 @@ server.socket_host: '0.0.0.0'
 log.error_file: 'logs/serv_log.log'
 ```
 
-Additional configuration, including some required properties, is described in the following sections.
+## Feature Configuration
 
-### Basic configuration
+Configure the project's features by creating a `.env` file in the home directory and adding the desired properties from the following sections.
+
+### Basic Configuration
+
+To run the site as ABTracker, set the province code to `AB`.
+By default the code is `BC`, which can also be set manually if desired.
+
+```
+PROVINCE_CODE=AB
+```
 
 If you plan on running multiple instances of BCTracker, you can set a unique cron ID to ensure cron jobs get removed properly per individual server.
 By default this ID is `bctracker-muncher`.
 
 ```
-cron_id: 'some-unique-id'
+CRON_ID=<some-unique-id>
 ```
 
 A secret key can be configured to access the `/admin` page.
@@ -102,7 +130,7 @@ When configured, you must go to `/admin?admin_key=<key>` in order to access serv
 To enable this, add the following to the configuration file:
 
 ```
-admin_key: '<key>'
+ADMIN_KEY=<key>
 ```
 
 Some ferry-based agencies use AIS data instead of normal GTFS realtime.
@@ -110,10 +138,10 @@ This can be enabled using the BCTracker AIS project (sold separately).
 When it's set up, you can point this project to the data files with this config:
 
 ```
-ais_path: '<path>'
+AIS_PATH=<path>
 ```
 
-### Domain configuration
+### Domain Configuration
 
 The current system or agency is determined using the relevant query strings (`system` and `agency`).
 For basic setup, no additional configuration is required - everything will simply work out of the box.
@@ -124,10 +152,10 @@ This means that instead of urls like `https://bctracker.ca/routes?system=victori
 To enable this you need these config lines, along with the proper DNS and proxying rules.
 
 ```
-root_domain: 'https://example.com/{0}'
-system_domain: 'https://{0}.example.com/{1}'
-agency_domain: 'https://{0}.example.com/{1}'
-cookie_domain: 'example.com'
+ROOT_DOMAIN="https://example.com/{0}"
+SYSTEM_DOMAIN="https://{0}.example.com/{1}"
+AGENCY_DOMAIN="https://{0}.example.com/{1}"
+COOKIE_DOMAIN=example.com
 ```
 
 ### Key Configuration
@@ -135,27 +163,27 @@ cookie_domain: 'example.com'
 If analytics is enabled (see below), a Google Analytics tag must be included:
 
 ```
-analytics_key: '<key>'
+ANALYTICS_KEY=<key>
 ```
 
 ### Functionality Configuration
 
 Some functionality can be enabled or disabled through the configuration.
-These properties are defined as `enable_<functionality>` with values of `'true'` or `'false'`.
-If not included, all functionality defaults to `'true'`.
+These properties are defined as `ENABLE_<functionality>` with values of `true` or `false`.
+If not included, all functionality defaults to `true`.
 
 The following functionality toggles are currently available:
-- `analytics`
-- `gtfs_backups`
-- `realtime_backups`
-- `database_backups`
+- `ANALYTICS`
+- `GTFS_BACKUPS`
+- `REALTIME_BACKUPS`
+- `DATABASE_BACKUPS`
 
 Here's an example of what this configuration may look like:
 
 ```
-enable_gtfs_backups: 'false'
-enable_realtime_backups: 'false'
-enable_gtfs_backups: 'true'
+ENABLE_GTFS_BACKUPS=false
+ENABLE_REALTIME_BACKUPS=false
+ENABLE_DATABASE_BACKUPS=true
 ```
 
 ## Certbot wildcard domain renew
