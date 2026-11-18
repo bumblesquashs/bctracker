@@ -3,6 +3,7 @@
 
 % trip = departure.trip
 % stop = departure.stop
+% other_routes = departure.other_routes
 
 <tr class="{{ 'table-button-target display-none' if get('hidden', False) else '' }}">
     <td>
@@ -22,6 +23,11 @@
         <td>
             <div class="column">
                 % include('components/stop', timepoint=departure.timepoint)
+                <div class="mobile-only">
+                    % if other_routes:
+                        % include('components/route_list', routes=other_routes)
+                    % end
+                </div>
                 % if not departure.pickup_type.is_normal:
                     <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                 % elif departure == trip.last_departure:
@@ -36,5 +42,12 @@
         </td>
     % else:
         <td class="lighter-text">Unknown</td>
+    % end
+    % if has_other_routes:
+        <td class="non-mobile">
+            % if other_routes:
+                % include('components/route_list', routes=other_routes)
+            % end
+        </td>
     % end
 </tr>

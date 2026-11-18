@@ -362,11 +362,15 @@
                             <p>Times in brackets are estimates based on current location.</p>
                         % end
                     % end
+                    % has_other_routes = any(d.other_routes for d in upcoming_departures)
                     <table>
                         <thead>
                             <tr>
                                 <th>Time</th>
                                 <th>Stop</th>
+                                % if has_other_routes:
+                                    <th class="non-mobile">Routes</th>
+                                % end
                             </tr>
                         </thead>
                         <tbody>
@@ -375,7 +379,7 @@
                             % end
                             % if len(upcoming_departures) > 5:
                                 <tr id="show-all-upcoming-stops-button" class="table-button" onclick="showAllUpcomingStops()">
-                                    <td colspan="2">
+                                    <td colspan="{{ '3' if has_other_routes else '2' }}">
                                         <div class="row justify-center">
                                             % include('components/svg', name='action/open')
                                             Show Full Schedule
