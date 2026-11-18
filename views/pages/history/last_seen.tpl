@@ -251,7 +251,7 @@
                                                         % if record:
                                                             <td>
                                                                 <div class="column stretch">
-                                                                    <div class="row space-between">
+                                                                    <div class="row">
                                                                         % if record.is_available:
                                                                             % block = record.block
                                                                             <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -292,6 +292,9 @@
                                                     <div class="row">
                                                         % include('components/livery_row', liveries=order.liveries)
                                                         {{! order }}
+                                                        % if all(a.last_date.days_since > 365 for a in order_allocations):
+                                                            % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip=f'No {agency.vehicle_type_plural.lower()} have been tracked in the last 12 months')
+                                                        % end
                                                     </div>
                                                     <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
                                                 </div>
@@ -303,7 +306,7 @@
                                             % record = allocation.last_record
                                             <tr>
                                                 <td>
-                                                    <div class="row space-between">
+                                                    <div class="row">
                                                         % include('components/vehicle')
                                                         % if context.system and not allocation.active:
                                                             % include('components/status', icon='transfer', tooltip='Transferred')

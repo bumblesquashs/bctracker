@@ -15,7 +15,7 @@
         % if allocation and allocation.inactive_status_class:
             % include('components/status', icon='calendar', status_class=allocation.inactive_status_class, tooltip=f'Last tracked {allocation.last_date.format_since()}')
         % elif not allocation:
-            % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip='Never tracked')
+            % include('components/status', icon='not-tracked', status_class='not-tracked', tooltip='Never tracked')
         % end
         % include('components/favourite')
     </h1>

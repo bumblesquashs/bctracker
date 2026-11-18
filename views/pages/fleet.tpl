@@ -148,13 +148,13 @@
                                                                                             % last_seen_context = max(vehicle_allocations).context
                                                                                             <tr>
                                                                                                 <td>
-                                                                                                    <div class="row space-between">
+                                                                                                    <div class="row">
                                                                                                         % include('components/vehicle')
                                                                                                         % allocation = next((a for a in vehicle_allocations if a.active), None)
                                                                                                         % if allocation and allocation.inactive_status_class:
                                                                                                             % include('components/status', icon='calendar', status_class=allocation.inactive_status_class, tooltip=f'Last tracked {allocation.last_seen.format_since()}')
                                                                                                         % elif not allocation:
-                                                                                                            % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip='Never tracked')
+                                                                                                            % include('components/status', icon='not-tracked', status_class='not-tracked', tooltip='Never tracked')
                                                                                                         % end
                                                                                                     </div>
                                                                                                 </td>
@@ -180,7 +180,7 @@
                                                                                                 <td>
                                                                                                     <div class="row space-between">
                                                                                                         % include('components/vehicle', enable_link=False)
-                                                                                                        % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip='Never tracked')
+                                                                                                        % include('components/status', icon='not-tracked', status_class='not-tracked', tooltip='Never tracked')
                                                                                                     </div>
                                                                                                 </td>
                                                                                                 <td class="lighter-text" colspan="4">Unavailable</td>
