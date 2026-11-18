@@ -176,6 +176,12 @@ class Context:
         return DEFAULT_VEHICLE_TYPE_PLURAL
     
     @property
+    def invalid_realtime_percentage(self):
+        if self.agency:
+            return self.agency.invalid_realtime_percentage
+        return DEFAULT_INVALID_REALTIME_PERCENTAGE
+    
+    @property
     def ignore_route_colour(self):
         if self.system:
             return self.system.ignore_route_colour

@@ -5,13 +5,14 @@ from enum import Enum
 class ModelType(Enum):
     '''A type of vehicle model'''
     
-    artic = "Articulated"
-    conventional = "Conventional"
-    decker = "Double Decker"
-    midibus = "Midibus"
-    shuttle = "Shuttle"
-    trolley = "Trolley"
-    ferry = "Ferry"
+    artic = 'Articulated'
+    coach = 'Coach'
+    conventional = 'Conventional'
+    decker = 'Double Decker'
+    midibus = 'Midibus'
+    shuttle = 'Shuttle'
+    trolley = 'Trolley'
+    ferry = 'Ferry'
     
     def __str__(self):
         return self.value

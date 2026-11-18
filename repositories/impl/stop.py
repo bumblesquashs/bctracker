@@ -16,8 +16,11 @@ class StopRepository:
     def create(self, download_id: int, context: Context, row):
         '''Inserts a new stop into the database'''
         stop_id = row['stop_id']
-        number = row['stop_code']
-        if not number:
+        if 'stop_code' in row:
+            number = row['stop_code']
+            if not number:
+                number = stop_id
+        else:
             number = stop_id
         self.database.insert(
             table='stop',

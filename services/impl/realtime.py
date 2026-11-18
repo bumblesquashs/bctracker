@@ -57,7 +57,10 @@ class RealtimeService:
             for index, entity in enumerate(data.entity):
                 vehicle = entity.vehicle
                 try:
-                    vehicle_id = vehicle.vehicle.id
+                    if vehicle.vehicle.HasField('label'):
+                        vehicle_id = vehicle.vehicle.label.lstrip('0')
+                    else:
+                        vehicle_id = vehicle.vehicle.id.lstrip('0')
                     vehicle_name_length = context.vehicle_name_length
                     if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                         vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
@@ -169,8 +172,11 @@ class RealtimeService:
         '''Checks that the realtime data for the given context aligns with the current GTFS for that system'''
         if not context.realtime_enabled:
             return True
+        positions = repositories.position.find_all(context)
+        if not positions:
+            return True
         invalid_count = 0
-        for position in repositories.position.find_all(context):
+        for position in positions:
             trip_id = position.trip_id
             if not trip_id:
                 continue
@@ -182,4 +188,8 @@ class RealtimeService:
                         invalid_count += 1
                 else:
                     invalid_count += 1
+        if context.invalid_realtime_percentage:
+            if len(positions) >= context.max_invalid_positions:
+                return (invalid_count / len(positions)) < context.invalid_realtime_percentage
+            return True
         return invalid_count <= context.max_invalid_positions
