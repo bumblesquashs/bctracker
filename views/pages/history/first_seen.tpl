@@ -42,7 +42,7 @@
                 % if context.system and any(not a.active for a in allocations) and show_help_text:
                     <p>
                         <span>Entries with a</span>
-                        <span class="transfer">
+                        <span class="status transfer">
                             % include('components/svg', name='transfer')
                         </span>
                         <span>have been transferred elsewhere.</span>
@@ -95,10 +95,7 @@
                                             <div class="row space-between">
                                                 % include('components/vehicle')
                                                 % if context.system and not allocation.active:
-                                                    <div class="transfer tooltip-anchor">
-                                                        % include('components/svg', name='transfer')
-                                                        <div class="tooltip right">Transferred</div>
-                                                    </div>
+                                                    % include('components/status', icon='transfer', tooltip='Transferred')
                                                 % end
                                             </div>
                                             <span class="non-desktop smaller-font">

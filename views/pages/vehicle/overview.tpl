@@ -20,6 +20,11 @@
             % end
         % end
         % include('components/vehicle', enable_link=False)
+        % if allocation and allocation.inactive_status_class:
+            % include('components/status', icon='calendar', status_class=allocation.inactive_status_class, tooltip=f'Last tracked {allocation.last_date.format_since()}')
+        % elif not allocation:
+            % include('components/status', icon='not-tracked', status_class='not-tracked', tooltip='Never tracked')
+        % end
         % include('components/favourite')
     </h1>
     % year_model = vehicle.year_model

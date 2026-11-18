@@ -68,6 +68,11 @@ h1 .route {
     min-width: 20px;
 }
 
+h1 .status {
+    padding: 6px;
+    --image-size: 20px;
+}
+
 h1 .stop .stop-number {
     font-size: 20pt;
 }
@@ -920,6 +925,19 @@ table tr.table-button {
     opacity: 0 !important;
 }
 
+.icon-legend .description {
+    font-size: 12pt;
+}
+
+.icon-legend .record-warnings {
+    --image-size: 24px;
+}
+
+.icon-legend .status {
+    padding: 4px;
+    --image-size: 16px;
+}
+
 .info-box {
     display: flex;
     flex-direction: column;
@@ -1658,6 +1676,13 @@ table tr.table-button {
     width: 10px;
     height: 10px;
     border-radius: 2px;
+}
+
+.status {
+    display: inline-block;
+    padding: 3px;
+    border-radius: 50%;
+    --image-size: 12px;
 }
 
 .stop {
