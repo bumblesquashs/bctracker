@@ -925,6 +925,19 @@ table tr.table-button {
     opacity: 0 !important;
 }
 
+.icon-legend .description {
+    font-size: 12pt;
+}
+
+.icon-legend .record-warnings {
+    --image-size: 24px;
+}
+
+.icon-legend .status {
+    padding: 4px;
+    --image-size: 16px;
+}
+
 .info-box {
     display: flex;
     flex-direction: column;

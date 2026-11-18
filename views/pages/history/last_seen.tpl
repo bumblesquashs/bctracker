@@ -74,6 +74,57 @@
             </div>
         </div>
         
+        % show_transfer_legend = context.system and any(not a.active for a in allocations)
+        % show_inactive_legend = any(a.last_date.days_since > 30 for a in allocations)
+        % show_accidental_login_legend = any(a.last_record and a.last_record.warnings for a in allocations)
+        
+        % if show_transfer_legend or show_inactive_legend or show_accidental_login_legend:
+            <div class="section closed">
+                <div class="header" onclick="toggleSection(this)">
+                    <h2>Icon Legend</h2>
+                    % include('components/toggle')
+                </div>
+                <div class="content">
+                    <div class="info-box icon-legend">
+                        % if show_transfer_legend:
+                            <div class="column section gap-5">
+                                <div class="row gap-10">
+                                    % include('components/status', icon='transfer', status_class='transferred')
+                                    <div class="description">{{ context.vehicle_type }} has been transferred elsewhere</div>
+                                </div>
+                            </div>
+                        % end
+                        % if show_inactive_legend:
+                        <div class="column section gap-5">
+                            <div class="row gap-10">
+                                % include('components/status', icon='calendar', status_class='short-term-inactive')
+                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 1 month</div>
+                            </div>
+                            <div class="row gap-10">
+                                % include('components/status', icon='calendar', status_class='medium-term-inactive')
+                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 3 months</div>
+                            </div>
+                            <div class="row gap-10">
+                                % include('components/status', icon='calendar', status_class='long-term-inactive')
+                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 12 months</div>
+                            </div>
+                        </div>
+                        % end
+                        % if show_accidental_login_legend:
+                            <div class="column section gap-5">
+                                <div class="row gap-10">
+                                    <div class="record-warnings">
+                                        % include('components/svg', name='status/warning')
+                                    </div>
+                                    <div class="description">Entry may be an accidental login</div>
+                                </div>
+                            </div>
+                        % end
+                    </div>
+                </div>
+            </div>
+        % end
+        
         % if allocations:
             <div class="section closed">
                 <div class="header" onclick="toggleSection(this)">
@@ -139,54 +190,6 @@
                     <div class="content">
                         % known_allocations = [a for a in agency_allocations if a.vehicle.order_id]
                         % unknown_allocations = [a for a in agency_allocations if not a.vehicle.order_id]
-                        % if show_help_text:
-                            % if any(a.last_record and a.last_record.warnings for a in agency_allocations):
-                                <p>
-                                    <span>Entries with a</span>
-                                    <span class="record-warnings">
-                                        % include('components/svg', name='status/warning')
-                                    </span>
-                                    <span>may be accidental logins.</span>
-                                </p>
-                            % end
-                            % if context.system and any(not a.active for a in agency_allocations):
-                                <p>
-                                    <span>Entries with a</span>
-                                    <span class="status transfer">
-                                        % include('components/svg', name='transfer')
-                                    </span>
-                                    <span>have been transferred elsewhere.</span>
-                                </p>
-                            % end
-                            % all_days_since = {a.last_date.days_since for a in agency_allocations}
-                            % if any(30 < d <= 90 for d in all_days_since):
-                                <p>
-                                    <span>Entries with a</span>
-                                    <span class="status short-term-inactive">
-                                        % include('components/svg', name='calendar')
-                                    </span>
-                                    <span>have not been tracked in over 1 month.</span>
-                                </p>
-                            % end
-                            % if any(90 < d <= 365 for d in all_days_since):
-                                <p>
-                                    <span>Entries with a</span>
-                                    <span class="status medium-term-inactive">
-                                        % include('components/svg', name='calendar')
-                                    </span>
-                                    <span>have not been tracked in over 3 months.</span>
-                                </p>
-                            % end
-                            % if any(365 < d for d in all_days_since):
-                                <p>
-                                    <span>Entries with a</span>
-                                    <span class="status long-term-inactive">
-                                        % include('components/svg', name='calendar')
-                                    </span>
-                                    <span>have not been tracked in over 12 months.</span>
-                                </p>
-                            % end
-                        % end
                         <div class="table-border-wrapper">
                             <table>
                                 <thead>
