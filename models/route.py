@@ -36,6 +36,12 @@ class RouteType(Enum):
     TROLLEY_BUS = '11'
     MONORAIL = '12'
     
+    @property
+    def line_width(self):
+        if self in {RouteType.UNKNOWN, RouteType.BUS, RouteType.FERRY, RouteType.TROLLEY_BUS}:
+            return 3
+        return 6
+    
     @classmethod
     def from_db(cls, value):
         try:
@@ -177,6 +183,8 @@ class Route:
         return self.id == other.id
     
     def __lt__(self, other):
+        if self.type != other.type:
+            return self.type < other.type
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order < other.sort_order
         if self.key == other.key:
@@ -184,6 +192,8 @@ class Route:
         return self.key < other.key
     
     def __gt__(self, other):
+        if self.type != other.type:
+            return self.type > other.type
         if self.sort_order is not None and other.sort_order is not None:
             return self.sort_order > other.sort_order
         if self.key == other.key:

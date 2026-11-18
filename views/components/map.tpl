@@ -79,7 +79,7 @@
                 style: new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: "#" + trip.colour,
-                        width: 4,
+                        width: trip.line_width,
                         lineCap: "butt"
                     })
                 }),

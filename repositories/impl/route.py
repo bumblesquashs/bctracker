@@ -155,6 +155,43 @@ class RouteRepository:
         )
         return [r.get_match(query) for r in routes]
     
+    def find_by_shape(self, context: Context, shape_id: str) -> Route | None:
+        '''Returns the route with the given context and shape ID'''
+        routes = self.database.select(
+            table='trip',
+            columns={
+                'download.agency_id': 'agency_id',
+                'download.system_id': 'system_id',
+                'route.route_id': 'route_id',
+                'route.number': 'number',
+                'route.name': 'name',
+                'route.colour': 'colour',
+                'route.text_colour': 'text_colour',
+                'route.type': 'type',
+                'route.sort_order': 'sort_order',
+            },
+            joins={
+                'download': {
+                    'download.download_id': 'trip.download_id'
+                },
+                'route': {
+                    'route.download_id': 'trip.download_id',
+                    'route.route_id': 'trip.route_id',
+                }
+            },
+            filters={
+                'download.agency_id': context.agency_id,
+                'download.system_id': context.system_id,
+                'trip.shape_id': shape_id,
+            },
+            limit=1,
+            initializer=Route.from_db,
+        )
+        try:
+            return routes[0]
+        except IndexError:
+            return None
+    
     def delete_all(self, context: Context):
         '''Deletes all routes for the given context from the database'''
         download_ids = self.database.select(

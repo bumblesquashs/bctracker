@@ -57,7 +57,7 @@
                     style: new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: "#" + shape.colour,
-                            width: 4,
+                            width: shape.line_width,
                             lineCap: "butt"
                         })
                     }),
