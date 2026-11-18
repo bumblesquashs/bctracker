@@ -1,5 +1,8 @@
 
 from dataclasses import dataclass
+from dotenv import load_dotenv
+
+import os
 
 from models.province import Province
 
@@ -32,32 +35,33 @@ class Settings:
     enable_database_backups: bool = True
     await_realtime: bool = False
     
-    def setup(self, config):
+    @classmethod
+    def from_dotenv(cls):
+        load_dotenv()
+        
         try:
-            province_code = config['province_code']
-            self.province = Province[province_code]
+            province_code = os.getenv('PROVINCE_CODE')
+            province = Province[province_code]
         except:
-            self.province = Province.BC
-        self.ais_path = config.get('ais_path')
-        self.cron_id = config.get('cron_id', 'bctracker-muncher')
-        self.admin_key = config.get('admin_key')
-        try:
-            self.admin_logs_count = int(config['admin_logs_count'])
-        except:
-            pass
+            province = Province.BC
         
-        self.root_domain = config.get('root_domain')
-        self.system_domain = config.get('system_domain')
-        self.agency_domain = config.get('agency_domain')
-        self.cookie_domain = config.get('cookie_domain')
-        
-        self.analytics_key = config.get('analytics_key')
-        
-        self.enable_validation = config.get('enable_validation', 'false') == 'true'
-        self.enable_analytics = config.get('enable_analytics', 'true') == 'true'
-        self.enable_gtfs_backups = config.get('enable_gtfs_backups', 'true') == 'true'
-        self.enable_realtime_backups = config.get('enable_realtime_backups', 'true') == 'true'
-        self.enable_database_backups = config.get('enable_database_backups', 'true') == 'true'
-        self.await_realtime = config.get('await_realtime', 'false') == 'true'
+        return cls(
+            province=province,
+            ais_path=os.getenv('AIS_PATH'),
+            cron_id=os.getenv('CRON_ID', 'bctracker-muncher'),
+            admin_key=os.getenv('ADMIN_KEY'),
+            admin_logs_count=int(os.getenv('ADMIN_LOGS_COUNT', DEFAULT_ADMIN_LOGS_COUNT)),
+            root_domain=os.getenv('ROOT_DOMAIN'),
+            system_domain=os.getenv('SYSTEM_DOMAIN'),
+            agency_domain=os.getenv('AGENCY_DOMAIN'),
+            cookie_domain=os.getenv('COOKIE_DOMAIN'),
+            analytics_key=os.getenv('ANALYTICS_KEY'),
+            enable_validation=os.getenv('ENABLE_VALIDATION', 'false') == 'true',
+            enable_analytics=os.getenv('ENABLE_ANALYTICS', 'true') == 'true',
+            enable_gtfs_backups=os.getenv('ENABLE_GTFS_BACKUPS', 'true') == 'true',
+            enable_realtime_backups=os.getenv('ENABLE_REALTIME_BACKUPS', 'true') == 'true',
+            enable_database_backups=os.getenv('ENABLE_DATABASE_BACKUPS', 'true') == 'true',
+            await_realtime=os.getenv('AWAIT_REALTIME', 'false') == 'true',
+        )
 
-current = Settings()
+current = Settings.from_dotenv()

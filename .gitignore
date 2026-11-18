@@ -6,6 +6,7 @@ logs/
 server.conf
 
 __pycache__/
+.env
 .vscode
 .idea
 .pytest_cache

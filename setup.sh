@@ -9,6 +9,7 @@ pip install wsgi-request-logger
 pip install gtfs-realtime-bindings
 pip install google
 pip install python-crontab
+pip install python-dotenv
 pip install pytest
 
 # Create directories

@@ -124,6 +124,8 @@ class Server(Bottle):
         
         services.log.info('Server started')
         
+        cp.config.update('server.conf')
+        
         self.database.connect()
         
         if args.debug:
