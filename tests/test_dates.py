@@ -14,7 +14,7 @@ timezone = ZoneInfo('America/Vancouver')
 
 class TestParse:
     def test_defaults(self):
-        date = Date.parse('2000-01-01')
+        date = Date.parse('2000-01-01', timezone)
         
         assert date.year == 2000
         assert date.month == 1
@@ -31,7 +31,7 @@ class TestParse:
         assert date.timezone == timezone
     
     def test_custom_format(self):
-        date = Date.parse('20000101', format='%Y%m%d')
+        date = Date.parse('20000101', timezone, format='%Y%m%d')
         
         assert date.year == 2000
         assert date.month == 1
@@ -40,14 +40,14 @@ class TestParse:
     
     def test_custom_format_invalid(self):
         with pytest.raises(ValueError):
-            Date.parse('2000-01-01', format='%Y%m%d')
+            Date.parse('2000-01-01', timezone, format='%Y%m%d')
 
 class TestToday:
     def test_defaults(self):
         now = datetime.now(timezone)
         if now.hour < 4:
             now = now - timedelta(days=1)
-        date = Date.today()
+        date = Date.today(timezone)
         
         assert date.year == now.year
         assert date.month == now.month
@@ -68,40 +68,40 @@ class TestToday:
 
 class TestIsEarlier:
     def test_earlier(self):
-        date = Date.today() - timedelta(days=1)
+        date = Date.today(timezone) - timedelta(days=1)
         
         assert date.is_earlier
     
     def test_later(self):
-        date = Date.today() + timedelta(days=1)
+        date = Date.today(timezone) + timedelta(days=1)
         
         assert not date.is_earlier
 
 class TestIsToday:
     def test_today(self):
-        date = Date.today()
+        date = Date.today(timezone)
         
         assert date.is_today
     
     def test_not_today(self):
-        date = Date.today() + timedelta(days=1)
+        date = Date.today(timezone) + timedelta(days=1)
         
         assert not date.is_today
 
 class TestIsLater:
     def test_later(self):
-        date = Date.today() + timedelta(days=1)
+        date = Date.today(timezone) + timedelta(days=1)
         
         assert date.is_later
     
     def test_earlier(self):
-        date = Date.today() - timedelta(days=1)
+        date = Date.today(timezone) - timedelta(days=1)
         
         assert not date.is_later
 
 class TestDatetime:
     def test(self):
-        date = Date.today()
+        date = Date.today(timezone)
         datetime = date.datetime
         
         assert datetime.year == date.year
@@ -110,7 +110,7 @@ class TestDatetime:
 
 class TestTimezoneName:
     def test_default(self):
-        date = Date.today()
+        date = Date.today(timezone)
         
         assert (date.timezone_name == 'PST' or date.timezone_name == 'PDT' or date.timezone_name == 'MST')
     
@@ -122,7 +122,7 @@ class TestTimezoneName:
 
 class TestWeekday:
     def test_default(self):
-        date = Date.today()
+        date = Date.today(timezone)
         now = datetime.now(timezone)
         if now.hour < 4:
             now = now - timedelta(days=1)

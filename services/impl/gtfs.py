@@ -132,8 +132,9 @@ class GTFSService:
         repositories.route.delete_all(context)
         repositories.point.delete_all(context)
         
-        date = Date.today()
-        time = Time.now()
+        timezone = settings.current.province.default_timezone
+        date = Date.today(timezone)
+        time = Time.now(timezone)
         
         download_id = repositories.download.create(context, date, time, trigger)
         

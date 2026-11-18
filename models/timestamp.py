@@ -6,22 +6,20 @@ from zoneinfo import ZoneInfo
 from models.date import Date
 from models.time import Time
 
-from constants import DEFAULT_TIMEZONE
-
 @dataclass(slots=True)
 class Timestamp:
     
     value: float
-    timezone: ZoneInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo
     accurate_seconds: bool = True
     
     @classmethod
-    def now(cls, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
+    def now(cls, timezone: ZoneInfo, accurate_seconds: bool = True):
         '''Returns the current timestamp'''
         return cls.parse(datetime.now(timezone).timestamp(), timezone, accurate_seconds)
     
     @classmethod
-    def parse(cls, value, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
+    def parse(cls, value: float | None, timezone: ZoneInfo, accurate_seconds: bool = True):
         '''Returns a timestamp with the given value'''
         if not value:
             return None

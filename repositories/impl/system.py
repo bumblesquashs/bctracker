@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 from models.system import System
 
 import repositories
+import settings
 
 @dataclass(slots=True)
 class SystemRepository:
@@ -17,7 +18,7 @@ class SystemRepository:
         self.systems = {}
         repositories.agency.load()
         repositories.region.load()
-        with open(f'./static/systems.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/systems.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = repositories.agency.find(agency_id)
                 for (region_id, region_values) in agency_values.items():

@@ -1,12 +1,15 @@
 
 from dataclasses import dataclass
 
+from models.province import Province
+
 from constants import DEFAULT_ADMIN_LOGS_COUNT
 
 @dataclass(slots=True)
 class Settings:
     
     # Basic settings
+    province: Province = Province.BC
     ais_path: str | None = None
     cron_id: str = 'bctracker-muncher'
     admin_key: str | None = None
@@ -30,6 +33,11 @@ class Settings:
     await_realtime: bool = False
     
     def setup(self, config):
+        try:
+            province_code = config['province_code']
+            self.province = Province[province_code]
+        except:
+            self.province = Province.BC
         self.ais_path = config.get('ais_path')
         self.cron_id = config.get('cron_id', 'bctracker-muncher')
         self.admin_key = config.get('admin_key')

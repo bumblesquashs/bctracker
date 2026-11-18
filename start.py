@@ -2,6 +2,7 @@
 
 import signal
 from argparse import ArgumentParser
+import cherrypy as cp
 
 from database import Database
 from server import Server
@@ -12,13 +13,20 @@ import services
 from repositories.impl import *
 from services.impl import *
 
+import settings
+
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--reload', '-r', action='store_true', help='Re-download all GTFS data')
     parser.add_argument('--updatedb', '-u', action='store_true', help='Updates GTFS in the database with CSV data')
     parser.add_argument('--debug', '-d', action='store_true', help='Prevent page caching and show additional error info')
+        
+    cp.config.update('server.conf')
+    settings.current.setup(cp.config)
+
+    province = settings.current.province
     
-    database = Database()
+    database = Database(province.database_name)
     
     repositories.agency = AgencyRepository()
     repositories.decoration = DecorationRepository()
@@ -41,7 +49,7 @@ if __name__ == '__main__':
     repositories.transfer = TransferRepository(database)
     repositories.trip = TripRepository(database)
     
-    services.log = LogService()
+    services.log = LogService(province.logfile_name)
     services.backup = BackupService(database)
     services.gtfs = GTFSService(database)
     services.realtime = RealtimeService(database)

@@ -75,7 +75,8 @@ class RealtimeService:
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         
-        self.last_updated = Timestamp.now(accurate_seconds=False)
+        timezone = settings.current.province.default_timezone
+        self.last_updated = Timestamp.now(timezone, accurate_seconds=False)
         context.system.last_updated = context.timestamp
     
     def update_records(self):

@@ -1,6 +1,4 @@
 
-from zoneinfo import ZoneInfo
-
 # Agency config
 DEFAULT_PREFIX_HEADSIGNS = False
 DEFAULT_ACCURATE_SECONDS = True
@@ -24,9 +22,6 @@ DEFAULT_IGNORE_ROUTE_COLOUR = None
 DEFAULT_ENABLE_FORCE_GTFS = True
 DEFAULT_GTFS_CUTOFF = None
 DEFAULT_MAX_INVALID_POSITIONS = 0
-
-# Date/time config
-DEFAULT_TIMEZONE = ZoneInfo('America/Vancouver')
 
 # Logging config
 DEFAULT_ADMIN_LOGS_COUNT = 2000

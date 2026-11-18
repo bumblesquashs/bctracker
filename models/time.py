@@ -3,8 +3,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from constants import DEFAULT_TIMEZONE
-
 @dataclass(slots=True)
 class Time:
     '''A specific hour, minute, and second'''
@@ -12,10 +10,10 @@ class Time:
     hour: int | None
     minute: int | None
     second: int | None
-    timezone: ZoneInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo
     
     @classmethod
-    def parse(cls, time_string, timezone=DEFAULT_TIMEZONE, accurate_seconds=False):
+    def parse(cls, time_string: str | None, timezone: ZoneInfo, accurate_seconds: bool = False):
         '''Returns a time parsed from the given string in HH:MM:SS format'''
         if not time_string:
             return cls.unknown(timezone)
@@ -30,24 +28,24 @@ class Time:
         return cls(hour, minute, second, timezone)
     
     @classmethod
-    def now(cls, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
+    def now(cls, timezone: ZoneInfo, accurate_seconds: bool = True):
         '''Returns the current time'''
         return cls.fromdatetime(datetime.now(timezone), timezone, accurate_seconds)
     
     @classmethod
-    def fromdatetime(cls, datetime, timezone=DEFAULT_TIMEZONE, accurate_seconds=True):
+    def fromdatetime(cls, dt: datetime, timezone: ZoneInfo, accurate_seconds: bool = True):
         '''Returns a time from the given datetime'''
-        hour = datetime.hour
+        hour = dt.hour
         if hour < 4:
             hour += 24
         if accurate_seconds:
-            second = datetime.second
+            second = dt.second
         else:
             second = None
-        return cls(hour, datetime.minute, second, timezone)
+        return cls(hour, dt.minute, second, timezone)
     
     @classmethod
-    def unknown(cls, timezone=DEFAULT_TIMEZONE):
+    def unknown(cls, timezone: ZoneInfo):
         '''Returns an unknown time'''
         return cls(None, None, None, timezone)
     

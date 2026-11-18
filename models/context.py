@@ -83,7 +83,7 @@ class Context:
     def timezone(self):
         if self.system:
             return self.system.timezone
-        return DEFAULT_TIMEZONE
+        return settings.current.province.default_timezone
     
     @property
     def prefix_headsigns(self):

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /$
-Allow: /img/bctracker/favicon-*.png
+Allow: /img/logos/*/favicon-*.png
 Disallow: /

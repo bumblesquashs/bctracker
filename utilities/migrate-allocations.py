@@ -32,10 +32,10 @@ import os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from database import Database
-from constants import DEFAULT_TIMEZONE
 
 from models.date import Date
 from models.daterange import DateRange
+from models.province import Province
 
 old_db = Database('bctracker-old')
 new_db = Database('bctracker-new')
@@ -314,7 +314,8 @@ def migrate_records(date: Date):
                 }
             )
 
-date_range = DateRange(Date(2020, 1, 1, DEFAULT_TIMEZONE), Date.today())
+timezone = Province.BC.default_timezone
+date_range = DateRange(Date(2020, 1, 1, timezone), Date.today(timezone))
 for date in date_range:
     print(f'Migrating data for {date.format_long()}')
     
