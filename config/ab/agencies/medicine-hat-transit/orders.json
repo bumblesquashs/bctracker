@@ -1,0 +1,57 @@
+{
+    "chevrolet-arboc-4500-som23d": [
+        [
+            { "year": 2015, "id": 736, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "chevrolet-arboc-4500-som28d": [
+        [
+            { "year": 2013, "id": 731, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false },
+            { "year": 2013, "low": 733, "high": 734, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2014, "id": 735, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "dodge-grand-caravan": [
+        [
+            { "year": 2011, "id": 715, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "id": 716, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "grande-west-vicinity-30": [
+        [
+            { "year": 2019, "low": 743, "high": 747, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "grande-west-vicinity-cng-30": [
+        [
+            { "year": 2019, "low": 748, "high": 753, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-c40lfr": [
+        [
+            { "year": 2012, "low": 760, "high": 761, "livery": "medicine-hat-wave", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-xd40": [
+        [
+            { "year": 2026, "low": 762, "high": 767, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-xn40": [
+        [
+            { "year": 2014, "low": 754, "high": 759, "livery": "medicine-hat-wave", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "ram-trucks-new-england-wheels-promaster-frontrunner": [
+        [
+            { "year": 2019, "low": 720, "high": 726, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2020, "low": 729, "high": 730, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ]
+}

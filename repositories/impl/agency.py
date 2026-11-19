@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass, field
+from glob import glob
 import json
 
 from models.agency import Agency
@@ -14,9 +15,14 @@ class AgencyRepository:
     def load(self):
         '''Loads agency data from the static JSON file'''
         self.agencies = {}
-        with open(f'./static/{settings.current.province.path_id}/agencies.json', 'r') as file:
-            for (id, values) in json.load(file).items():
-                self.agencies[id] = Agency(id, **values)
+        root_path = f'./config/{settings.current.province.path_id}/agencies'
+        file_name = 'agency.json'
+        agency_paths = glob(f'{root_path}/*/{file_name}')
+        for path in agency_paths:
+            with open(path, 'r') as file:
+                values = json.load(file)
+            agency_id = path[len(root_path):-len(file_name)].strip('/')
+            self.agencies[agency_id] = Agency(agency_id, **values)
     
     def find(self, agency_id: str) -> Agency | None:
         '''Returns the agency with the given ID'''

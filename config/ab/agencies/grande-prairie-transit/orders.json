@@ -1,0 +1,41 @@
+{
+    "byd-k7m": [
+        [
+            { "year": 2018, "low": 29, "high": 30, "prefix": "CTB-0", "livery": "grande-prairie-wave", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2019, "low": 32, "high": 34, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "ford-champion-e-450-challenger": [
+        [
+            { "year": 2021, "low": 35, "high": 38, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "grande-west-vicinity-30": [
+        [
+            { "year": 2017, "low": 25, "high": 28, "prefix": "CTB-0", "livery": "grande-prairie-wave", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2018, "id": 31, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-d40lfr": [
+        [
+            { "year": 2009, "low": 13, "high": 16, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2010, "low": 17, "high": 20, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-xd35": [
+        [
+            { "year": 2022, "low": 39, "high": 40, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-4": [
+        [
+            { "year": 2015, "low": 21, "high": 24, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ]
+}

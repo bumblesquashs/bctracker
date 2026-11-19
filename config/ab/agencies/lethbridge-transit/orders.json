@@ -1,0 +1,49 @@
+{
+    "ford-girardin-e450-mbc-iv": [
+        [
+            { "year": 2003, "low": 301, "high": 302, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "grande-west-vicinity-30": [
+        [
+            { "year": 2016, "low": 187, "high": 188, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-d40lf": [
+        [
+            { "year": 2005, "low": 149, "high": 156, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-d40lfr": [
+        [
+            { "year": 2006, "low": 157, "high": 164, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-xd40": [
+        [
+            { "year": 2013, "low": 175, "high": 179, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-3": [
+        [
+            { "year": 2009, "low": 165, "high": 169, "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-4": [
+        [
+            { "year": 2015, "id": 180, "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2016, "low": 181, "high": 186, "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2018, "low": 189, "high": 192, "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2019, "low": 193, "high": 198, "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2020, "low": 199, "high": 203, "air_conditioned": false, "cctv": false }
+        ]
+    ]
+}

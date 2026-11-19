@@ -1,0 +1,216 @@
+{
+    "alexander-dennis-enviro500": [
+        [
+            { "year": 2013, "low": 8001, "high": 8014, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2016, "low": 8015, "high": 8016, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false },
+            { "year": 2016, "low": 8018, "high": 8020, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2017, "low": 8021, "high": 8023, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2018, "low": 8024, "high": 8025, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "byd-k9s": [
+        [
+            { "year": 2017, "low": 1400, "high": 1402, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2018, "low": 1403, "high": 1406, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "chevrolet-arboc-4500-sof-27": [
+        [
+            { "year": 2019, "low": 6931, "high": 6933, "prefix": "P", "livery": "spruce-grove", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2021, "id": 6934, "prefix": "P", "livery": "spruce-grove", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2021, "low": 6971, "high": 6972, "prefix": "P", "livery": "spruce-grove", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "ford-arboc-e-450-sof-27": [
+        [
+            { "low": 5000, "high": 5002, "prefix": "F", "livery": "fort-saskatchewan", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "grande-west-vicinity-30": [
+        [
+            { "year": 2017, "low": 2000, "high": 2015, "livery": "ets" }
+        ],
+        [
+            { "year": 2018, "low": 2016, "high": 2048, "livery": "ets" }
+        ]
+    ],
+    "new-flyer-d40lf": [
+        [
+            { "year": 2002, "low": 4300, "high": 4352 , "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2003, "low": 4353, "high": 4402, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2004, "low": 4403, "high": 4437, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2004, "low": 4438, "high": 4477, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2005, "low": 4478, "high": 4522, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2005, "low": 862, "high": 864, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-d40lfr": [
+        [
+            { "year": 2007, "low": 865, "high": 877, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2007, "low": 4523, "high": 4753, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2009, "low": 878, "high": 880, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false },
+            { "year": 2009, "id": 881, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false },
+            { "year": 2009, "low": 882, "high": 886, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2009, "low": 4754, "high": 4874, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2010, "id": 4875, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2012, "low": 4876, "high": 4879, "livery": "ets", "air_conditioned": false }
+        ]
+    ],
+    "new-flyer-d60lf": [
+        [
+            { "year": 2006, "low": 812, "high": 818, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-d60lfr": [
+        [
+            { "year": 2009, "low": 819, "high": 824, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2011, "low": 4913, "high": 4932, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2012, "low": 825, "high": 826, "prefix": "A", "livery": "st-albert-stripes", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-de40lfr": [
+        [
+            { "year": 2006, "low": 6003, "high": 6004, "livery": "ets", "air_conditioned": false }
+        ]
+    ],
+    "new-flyer-xd40": [
+        [
+            { "year": 2013, "low": 4880, "high": 4888, "livery": "ets", "air_conditioned": false }
+        ],
+        [
+            { "year": 2014, "low": 887, "high": 889, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2015, "low": 890, "high": 894, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2016, "low": 6900, "high": 6905, "livery": "ets", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2017, "low": 6950, "high": 6952, "prefix": "B", "livery": "spruce-grove", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2018, "low": 7000, "high": 7109, "livery": "ets" }
+        ],
+        [
+            { "year": 2019, "low": 7110, "high": 7201, "livery": "ets" }
+        ],
+        [
+            { "year": 2022, "low": 7202, "high": 7218, "livery": "ets" }
+        ],
+        [
+            { "year": 2023, "low": 7219, "high": 7236, "livery": "ets" }
+        ],
+        [
+            { "year": 2024, "low": 7237, "high": 7267, "livery": "ets" }
+        ],
+        [
+            { "year": 2026, "low": 7268, "high": 7309, "livery": "ets" }
+        ]
+    ],
+    "new-flyer-xd60": [
+        [
+            { "year": 2019, "low": 4933, "high": 4967, "livery": "ets" }
+        ],
+        [
+            { "year": 2020, "low": 827, "high": 831, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "new-flyer-xhe40": [
+        [
+            { "year": 2022, "id": 5001, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2022, "id": 6016, "livery": "ets", "air_conditioned": false }
+        ]
+    ],
+    "nova-bus-lfs-2": [
+        [
+            { "year": 2008, "low": 2001, "high": 2009, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-3": [
+        [
+            { "year": 2010, "low": 2010, "high": 2023, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2011, "low": 2024, "high": 2028, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-4": [
+        [
+            { "year": 2020, "low": 2029, "high": 2033, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2022, "low": 2034, "high": 2037, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2025, "low": 940, "high": 944, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2025, "low": 2038, "high": 2042, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ],
+        [
+            { "year": 2026, "low": 945, "high": 951, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-artic-4": [
+        [
+            { "year": 2025, "low": 832, "high": 838, "prefix": "A", "livery": "st-albert-green", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-hev-3": [
+        [
+            { "year": 2010, "low": 3005, "high": 3010, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "nova-bus-lfs-suburban-2": [
+        [
+            { "year": 2007, "low": 930, "high": 936, "prefix": "S", "livery": "strathcona", "air_conditioned": false, "cctv": false }
+        ]
+    ],
+    "proterra-zx5max": [
+        [
+            { "year": 2020, "low": 8000, "high": 8039, "livery": "ets" }
+        ],
+        [
+            { "year": 2022, "low": 8040, "high": 8059, "livery": "ets" }
+        ]
+    ]
+}

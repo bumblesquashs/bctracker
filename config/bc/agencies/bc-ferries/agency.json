@@ -1,0 +1,20 @@
+{
+    "name": "BC Ferries",
+    "website": "https://bcferries.com",
+    "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
+    "realtime_ais": true,
+    "default_system": "bc-ferries",
+    "prefix_headsigns": true,
+    "accurate_seconds": false,
+    "prefer_stop_id": true,
+    "show_stop_number": false,
+    "show_full_orders": true,
+    "show_occupancy": false,
+    "enable_blocks": false,
+    "enable_realtime_trips": false,
+    "ais_colour": "003769",
+    "default_route_colour": "003769",
+    "filter_vehicles_image_name": "ferry",
+    "vehicle_type": "Vessel",
+    "vehicle_type_plural": "Vessels"
+}

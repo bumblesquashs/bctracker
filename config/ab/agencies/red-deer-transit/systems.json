@@ -1,0 +1,8 @@
+{
+    "northern-alberta": {
+        "red-deer": {
+            "name": "Red Deer",
+            "ignore_route_colour": "ffffff"
+        }
+    }
+}

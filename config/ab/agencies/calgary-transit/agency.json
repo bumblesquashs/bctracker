@@ -1,0 +1,12 @@
+{
+    "name": "Calgary Transit",
+    "website": "https://www.calgarytransit.com",
+    "gtfs_url": "https://data.calgary.ca/download/npk7-z3bj/application%2Fx-zip-compressed",
+    "realtime_url": "https://data.calgary.ca/download/am7c-qe3u/application%2Foctet-stream",
+    "default_system": "calgary",
+    "prefix_headsigns": true,
+    "accurate_seconds": false,
+    "show_occupancy": false,
+    "invalid_realtime_percentage": 1.1,
+    "default_route_colour": "CF0000"
+}

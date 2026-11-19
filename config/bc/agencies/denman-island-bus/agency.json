@@ -1,0 +1,9 @@
+{
+    "name": "Denman Island Bus",
+    "website": "https://www.denmanislandbus.ca",
+    "gtfs_url": "https://github.com/colinjstepney/Stepney-Transit-Consulting/raw/refs/heads/main/DENMAN_feed/feed-Denman.zip",
+    "default_system": "denman-island",
+    "prefix_headsigns": true,
+    "prefer_stop_id": true,
+    "show_stop_number": false
+}

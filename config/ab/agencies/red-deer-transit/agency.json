@@ -1,0 +1,8 @@
+{
+    "name": "Red Deer Transit",
+    "website": "https://www.reddeer.ca/city-services/transit/",
+    "gtfs_url": "https://data.reddeer.ca/datasets/gtfsdatafeed/download/zip",
+    "default_system": "red-deer",
+    "prefix_headsigns": true,
+    "show_occupancy": false
+}
