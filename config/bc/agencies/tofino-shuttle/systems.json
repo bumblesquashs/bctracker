@@ -1,7 +1,6 @@
 {
-    "vancouver-island": {
-        "tofino": {
-            "name": "Tofino Free Shuttle"
-        }
+    "tofino": {
+        "name": "Tofino Free Shuttle",
+        "region": "vancouver-island"
     }
 }

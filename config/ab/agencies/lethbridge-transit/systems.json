@@ -1,7 +1,6 @@
 {
-    "southern-alberta": {
-        "lethbridge": {
-            "name": "Lethbridge"
-        }
+    "lethbridge": {
+        "name": "Lethbridge",
+        "region": "southern-alberta"
     }
 }

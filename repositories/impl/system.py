@@ -27,14 +27,14 @@ class SystemRepository:
                 values = json.load(file)
             agency_id = path[len(root_path):-len(file_name)].strip('/')
             agency = repositories.agency.find(agency_id)
-            for (region_id, region_values) in values.items():
-                region = repositories.region.find(region_id)
-                for (system_id, system_values) in region_values.items():
-                    if not agency.enabled:
-                        system_values['enabled'] = False
-                    if 'timezone' in system_values:
-                        system_values['timezone'] = ZoneInfo(system_values['timezone'])
-                    self.systems[system_id] = System(system_id, agency, region, **system_values)
+            for (system_id, system_values) in values.items():
+                if not agency.enabled:
+                    system_values['enabled'] = False
+                if 'region' in system_values:
+                    system_values['region'] = repositories.region.find(system_values['region'])
+                if 'timezone' in system_values:
+                    system_values['timezone'] = ZoneInfo(system_values['timezone'])
+                self.systems[system_id] = System(system_id, agency, **system_values)
     
     def find(self, system_id: str) -> System | None:
         '''Returns the system with the given ID'''

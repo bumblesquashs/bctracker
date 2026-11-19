@@ -1,8 +1,7 @@
 {
-    "northern-alberta": {
-        "edmonton": {
-            "name": "Edmonton",
-            "max_invalid_positions": 20
-        }
+    "edmonton": {
+        "name": "Edmonton",
+        "region": "northern-alberta",
+        "max_invalid_positions": 20
     }
 }

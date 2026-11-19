@@ -1,8 +1,7 @@
 {
-    "northern-alberta": {
-        "grande-prairie": {
-            "name": "Grande Prairie",
-            "ignore_route_colour": "000000"
-        }
+    "grande-prairie": {
+        "name": "Grande Prairie",
+        "region": "northern-alberta",
+        "ignore_route_colour": "000000"
     }
 }

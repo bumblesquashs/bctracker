@@ -1,18 +1,17 @@
 {
-    "southern-alberta": {
-        "calgary": {
-            "name": "Calgary",
-            "max_invalid_positions": 20,
-            "custom_route_colours": {
-                "201": "FF0808",
-                "202": "1074BC",
-                "203": "509E45",
-                "MG": "509E45",
-                "MO": "FFA500",
-                "MP": "800080",
-                "MT": "008080",
-                "MY": "FFD300"
-            }
+    "calgary": {
+        "name": "Calgary",
+        "region": "southern-alberta",
+        "max_invalid_positions": 20,
+        "custom_route_colours": {
+            "201": "FF0808",
+            "202": "1074BC",
+            "203": "509E45",
+            "MG": "509E45",
+            "MO": "FFA500",
+            "MP": "800080",
+            "MT": "008080",
+            "MY": "FFD300"
         }
     }
 }

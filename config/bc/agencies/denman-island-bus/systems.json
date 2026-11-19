@@ -1,7 +1,6 @@
 {
-    "vancouver-island": {
-        "denman-island": {
-            "name": "Denman Island"
-        }
+    "denman-island": {
+        "name": "Denman Island",
+        "region": "vancouver-island"
     }
 }

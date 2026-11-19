@@ -1,7 +1,6 @@
 {
-    "northern-alberta": {
-        "fort-mcmurray": {
-            "name": "Fort McMurray"
-        }
+    "fort-mcmurray": {
+        "name": "Fort McMurray",
+        "region": "northern-alberta"
     }
 }

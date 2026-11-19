@@ -1,7 +1,6 @@
 {
-    "southern-coast": {
-        "vancouver": {
-            "name": "Metro Vancouver"
-        }
+    "vancouver": {
+        "name": "Metro Vancouver",
+        "region": "southern-coast"
     }
 }

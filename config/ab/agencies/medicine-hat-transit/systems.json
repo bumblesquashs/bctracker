@@ -1,7 +1,6 @@
 {
-    "southern-alberta": {
-        "medicine-hat": {
-            "name": "Medicine Hat"
-        }
+    "medicine-hat": {
+        "name": "Medicine Hat",
+        "region": "southern-alberta"
     }
 }

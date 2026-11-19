@@ -1,8 +1,7 @@
 {
-    "southern-alberta": {
-        "banff": {
-            "name": "Banff",
-            "max_invalid_positions": 5
-        }
+    "banff": {
+        "name": "Banff",
+        "region": "southern-alberta",
+        "max_invalid_positions": 5
     }
 }

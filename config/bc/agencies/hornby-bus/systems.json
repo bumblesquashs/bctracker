@@ -1,7 +1,6 @@
 {
-    "vancouver-island": {
-        "hornby-island": {
-            "name": "Hornby Island"
-        }
+    "hornby-island": {
+        "name": "Hornby Island",
+        "region": "vancouver-island"
     }
 }

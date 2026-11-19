@@ -1,7 +1,6 @@
 {
-    "vancouver-island": {
-        "gabriola-island": {
-            "name": "Gabriola Island"
-        }
+    "gabriola-island": {
+        "name": "Gabriola Island",
+        "region": "vancouver-island"
     }
 }
