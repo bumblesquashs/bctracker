@@ -316,6 +316,20 @@
                 % include('components/toggle')
             </div>
             <div class="content">
+                <div class="options-container">
+                    <div class="option" onclick="toggleConnections()">
+                        <div class="checkbox {{ 'selected' if show_connections else '' }}">
+                            % include('components/svg', name='status/check')
+                        </div>
+                        <div>Show Connections</div>
+                    </div>
+                    <script>
+                        function toggleConnections() {
+                            storeCurrentScrollPosition();
+                            window.location = "{{! trip.url(show_connections='false' if show_connections else 'true') }}";
+                        }
+                    </script>
+                </div>
                 % if any(d.timepoint for d in departures) and show_help_text:
                     <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
                 % end
@@ -326,8 +340,8 @@
                         <tr>
                             <th>Time</th>
                             <th>Stop</th>
-                            % if has_other_routes:
-                                <th class="non-mobile">Routes</th>
+                            % if show_connections and has_other_routes:
+                                <th class="non-mobile">Connections</th>
                             % end
                         </tr>
                     </thead>
@@ -351,7 +365,7 @@
                                 <td>
                                     <div class="column">
                                         % include('components/stop', timepoint=departure.timepoint)
-                                        % if other_routes:
+                                        % if show_connections and other_routes:
                                             <div class="mobile-only">
                                                 % include('components/route_list', routes=other_routes)
                                             </div>
@@ -368,7 +382,7 @@
                                         % end
                                     </div>
                                 </td>
-                                % if has_other_routes:
+                                % if show_connections and has_other_routes:
                                     <td class="non-mobile">
                                         % if other_routes:
                                             % include('components/route_list', routes=other_routes)

@@ -359,6 +359,20 @@
                     % include('components/toggle')
                 </div>
                 <div class="content">
+                    <div class="options-container">
+                        <div class="option" onclick="toggleConnections()">
+                            <div class="checkbox {{ 'selected' if show_connections else '' }}">
+                                % include('components/svg', name='status/check')
+                            </div>
+                            <div>Show Connections</div>
+                        </div>
+                        <script>
+                            function toggleConnections() {
+                                storeCurrentScrollPosition();
+                                window.location = "{{! context.url('fleet', vehicle, show_connections='false' if show_connections else 'true') }}";
+                            }
+                        </script>
+                    </div>
                     % if show_help_text:
                         % if any(d.timepoint for d in upcoming_departures):
                             <p>Departures in <span class="timing-point">bold</span> are timing points.</p>
@@ -373,8 +387,8 @@
                             <tr>
                                 <th>Time</th>
                                 <th>Stop</th>
-                                % if has_other_routes:
-                                    <th class="non-mobile">Routes</th>
+                                % if show_connections and has_other_routes:
+                                    <th class="non-mobile">Connections</th>
                                 % end
                             </tr>
                         </thead>

@@ -536,7 +536,8 @@ class Server(Bottle):
             nearest_stop=nearest_stop,
             allocation=allocation,
             favourite=Favourite('vehicle', vehicle),
-            favourites=self.get_favourites()
+            favourites=self.get_favourites(),
+            show_connections=self.query_cookie('show_connections', 'true') != 'false',
         )
     
     def fleet_map(self, context: Context, vehicle_id: str):
@@ -1208,7 +1209,8 @@ class Server(Bottle):
             include_maps=True,
             trip=trip,
             positions=repositories.position.find_all(context, trip_id=trip_id),
-            assignment=repositories.assignment.find_by_context(context, trip.block_id)
+            assignment=repositories.assignment.find_by_context(context, trip.block_id),
+            show_connections=self.query_cookie('show_connections', 'true') != 'false',
         )
     
     def trip_map(self, context: Context, trip_id: str):

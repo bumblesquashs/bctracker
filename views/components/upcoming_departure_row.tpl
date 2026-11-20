@@ -23,11 +23,11 @@
         <td>
             <div class="column">
                 % include('components/stop', timepoint=departure.timepoint)
-                <div class="mobile-only">
-                    % if other_routes:
+                % if show_connections and other_routes:
+                    <div class="mobile-only">
                         % include('components/route_list', routes=other_routes)
-                    % end
-                </div>
+                    </div>
+                % end
                 % if not departure.pickup_type.is_normal:
                     <span class="smaller-font italics">{{ departure.pickup_type }}</span>
                 % elif departure == trip.last_departure:
@@ -43,7 +43,7 @@
     % else:
         <td class="lighter-text">Unknown</td>
     % end
-    % if has_other_routes:
+    % if show_connections and has_other_routes:
         <td class="non-mobile">
             % if other_routes:
                 % include('components/route_list', routes=other_routes)
