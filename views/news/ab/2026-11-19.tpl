@@ -1,7 +1,7 @@
 <div class="news-post">
     <div class="header">
         <h3>ABTracker Out Of Beta</h3>
-        November 18, 2026
+        November 19, 2026
     </div>
     <div class="content">
         <p>
