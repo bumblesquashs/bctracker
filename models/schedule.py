@@ -6,6 +6,7 @@ from models.daterange import DateRange
 from models.weekday import Weekday
 
 import helpers
+import settings
 
 @dataclass(slots=True)
 class Schedule:
@@ -35,7 +36,7 @@ class Schedule:
     
     @property
     def is_today(self):
-        return Date.today() in self.dates
+        return Date.today(settings.current.province.default_timezone) in self.dates
     
     @property
     def added_dates(self):

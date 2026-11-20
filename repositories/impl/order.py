@@ -8,6 +8,7 @@ from models.order import Order
 from models.vehicle import Vehicle
 
 import repositories
+import settings
 
 @dataclass(slots=True)
 class OrderRepository:
@@ -23,7 +24,7 @@ class OrderRepository:
         repositories.model.load()
         repositories.livery.load()
         id = 1
-        with open(f'./static/orders.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/orders.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency = repositories.agency.find(agency_id)
                 agency_orders = {}

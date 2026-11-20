@@ -7,8 +7,6 @@ import calendar
 
 from models.weekday import Weekday
 
-from constants import DEFAULT_TIMEZONE
-
 @dataclass(slots=True)
 class Date:
     '''A specific year, month, and day'''
@@ -16,10 +14,10 @@ class Date:
     year: int
     month: int
     day: int
-    timezone: ZoneInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo
     
     @classmethod
-    def parse(cls, date_string, timezone=DEFAULT_TIMEZONE, format='%Y-%m-%d'):
+    def parse(cls, date_string: str | None, timezone: ZoneInfo, format: str = '%Y-%m-%d'):
         '''Returns a date parsed from a string in the given format'''
         if not date_string:
             return None
@@ -27,16 +25,16 @@ class Date:
         return cls(date.year, date.month, date.day, timezone)
     
     @classmethod
-    def today(cls, timezone=DEFAULT_TIMEZONE):
+    def today(cls, timezone: ZoneInfo):
         '''Returns the current date'''
         return cls.fromdatetime(datetime.now(timezone), timezone)
     
     @classmethod
-    def fromdatetime(cls, datetime, timezone=DEFAULT_TIMEZONE):
+    def fromdatetime(cls, dt: datetime, timezone: ZoneInfo):
         '''Returns a date from the given datetime'''
-        if datetime.hour < 4:
-            datetime = datetime - timedelta(days=1)
-        return cls(datetime.year, datetime.month, datetime.day, timezone)
+        if dt.hour < 4:
+            dt = dt - timedelta(days=1)
+        return cls(dt.year, dt.month, dt.day, timezone)
     
     @property
     def url_id(self):

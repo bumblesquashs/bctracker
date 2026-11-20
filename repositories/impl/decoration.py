@@ -4,6 +4,8 @@ import json
 
 from models.decoration import Decoration
 
+import settings
+
 @dataclass(slots=True)
 class DecorationRepository:
     
@@ -12,7 +14,7 @@ class DecorationRepository:
     def load(self):
         '''Loads decoration data from the static JSON file'''
         self.decorations = {}
-        with open(f'./static/decorations.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/decorations.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency_decorations = {}
                 for (vehicle_id, values) in agency_values.items():

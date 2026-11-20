@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 24 24"
+   id="svg8"
+   sodipodi:docname="bus-coach.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="15.729167"
+     inkscape:cx="8.7417218"
+     inkscape:cy="18.818543"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6" />
+  <g
+     transform="translate(0 22.897)"
+     id="g6">
+    <path
+       d="m 3,-16.397 c -1.11,0 -2,0.89 -2,2 v 8 h 2 c 0,1.6569 1.3431,3 3,3 1.6569,0 3,-1.3431 3,-3 h 4.5 c 0,1.6569 1.3431,3 3,3 1.6569,0 3,-1.3431 3,-3 H 23 v -8 c 0,-1.11 -0.891709,-1.938428 -2,-2 m -18.5,1.5 h 4 v 4 h -4 m 5.5,-4 h 4 v 4 H 8 m 5.5,-4 h 4 v 4 h -4 m 5.5,-3 h 2.5 v 6 H 19 v -6 m -13,6 c 0.82843,0 1.5,0.67157 1.5,1.5 0,0.82843 -0.67157,1.5 -1.5,1.5 -0.82843,0 -1.5,-0.67157 -1.5,-1.5 0,-0.82843 0.67157,-1.5 1.5,-1.5 m 10.5,0 c 0.82843,0 1.5,0.67157 1.5,1.5 0,0.82843 -0.67157,1.5 -1.5,1.5 -0.82843,0 -1.5,-0.67157 -1.5,-1.5 0,-0.82843 0.67157,-1.5 1.5,-1.5 z"
+       id="path2"
+       sodipodi:nodetypes="csccsccsccscccccccccccccccccccssscsssss" />
+  </g>
+</svg>

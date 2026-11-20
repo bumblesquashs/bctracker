@@ -5,10 +5,12 @@ from dataclasses import dataclass, field
 
 from models.row import Row
 
+import settings
+
 @dataclass(slots=True)
 class Database:
     
-    name: str = 'bctracker'
+    name: str = field(default_factory=lambda: settings.current.province.database_name)
     connection: sqlite3.Connection | None = field(default=None, init=False)
     
     def connect(self, foreign_keys=True, script_file='startup'):

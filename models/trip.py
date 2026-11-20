@@ -103,7 +103,7 @@ class Trip:
         departure = self.first_departure
         if departure:
             return departure.time
-        return Time.unknown()
+        return Time.unknown(self.context.timezone)
     
     @property
     def end_time(self):
@@ -111,7 +111,7 @@ class Trip:
         departure = self.last_departure
         if departure:
             return departure.time
-        return Time.unknown()
+        return Time.unknown(self.context.timezone)
     
     @property
     def duration(self):

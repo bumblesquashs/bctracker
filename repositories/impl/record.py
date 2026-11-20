@@ -12,6 +12,8 @@ from models.time import Time
 from models.trip import Trip
 from models.vehicle import Vehicle
 
+import settings
+
 @dataclass(slots=True)
 class RecordRepository:
     
@@ -231,7 +233,7 @@ class RecordRepository:
     
     def delete_stale_trip_records(self):
         '''Removes all old and unused trip records'''
-        date = Date.today() - timedelta(days=90)
+        date = Date.today(settings.current.province.default_timezone) - timedelta(days=90)
         self.database.execute('''
             DELETE FROM trip_record
             WHERE trip_record_id IN (

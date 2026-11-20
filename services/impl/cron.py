@@ -49,7 +49,7 @@ class CronService:
     
     def handle_gtfs(self):
         '''Reloads GTFS every Monday, or for any system where the current GTFS is no longer valid'''
-        date = Date.today()
+        date = Date.today(settings.current.province.default_timezone)
         services.log.info(f'Running GTFS cron job for {date}')
         for system in repositories.system.find_all():
             context = system.context
@@ -82,8 +82,9 @@ class CronService:
         if settings.current.await_realtime:
             while self.server_loading:
                 sleep(1)
-        date = Date.today()
-        time = Time.now(accurate_seconds=False)
+        timezone = settings.current.province.default_timezone
+        date = Date.today(timezone)
+        time = Time.now(timezone, accurate_seconds=False)
         services.log.info(f'Running realtime cron job for {date} at {time}')
         for system in repositories.system.find_all():
             context = system.context

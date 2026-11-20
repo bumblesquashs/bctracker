@@ -21,12 +21,35 @@
             "length_units": "feet",
             "fuel": "Diesel/Electric Hybrid"
         },
+        "new-flyer-xd60": {
+            "manufacturer": "New Flyer",
+            "name": "XD60",
+            "length": 60,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        },
         "new-flyer-xde60": {
             "manufacturer": "New Flyer",
             "name": "XDE60",
             "length": 60,
             "length_units": "feet",
             "fuel": "Diesel/Electric Hybrid"
+        },
+        "nova-bus-lfs-artic-4": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS Artic (4th Gen)",
+            "length": 62,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        }
+    },
+    "coach": {
+        "mci-d45-crt-le": {
+            "manufacturer": "MCI",
+            "name": "D45 CRT LE",
+            "length": 45,
+            "length_units": "feet",
+            "fuel": "Diesel"
         }
     },
     "conventional": {
@@ -128,26 +151,19 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
-        "nova-bus-lfse": {
-            "manufacturer": "Nova Bus",
-            "name": "LFSe",
-            "length": 40,
-            "length_units": "feet",
-            "fuel": "Battery Electric"
-        },
-        "nova-bus-lfse+": {
-            "manufacturer": "Nova Bus",
-            "name": "LFSe+",
-            "length": 40,
-            "length_units": "feet",
-            "fuel": "Battery Electric"
-        },
         "nova-bus-lfs-cng-4": {
             "manufacturer": "Nova Bus",
             "name": "LFS CNG (4th Gen)",
             "length": 40,
             "length_units": "feet",
             "fuel": "CNG"
+        },
+        "nova-bus-lfs-hev-2": {
+            "manufacturer": "Nova Bus",
+            "name": "LFS HEV (2nd Gen)",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Diesel/Electric Hybrid"
         },
         "nova-bus-lfs-hev-3": {
             "manufacturer": "Nova Bus",
@@ -177,6 +193,20 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
+        "nova-bus-lfse": {
+            "manufacturer": "Nova Bus",
+            "name": "LFSe",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
+        "nova-bus-lfse+": {
+            "manufacturer": "Nova Bus",
+            "name": "LFSe+",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
         "obi-orion-v-suburban": {
             "manufacturer": "OBI",
             "name": "Orion V (Suburban)",
@@ -184,9 +214,23 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
+        "proterra-catalyst-be40": {
+            "manufacturer": "Proterra",
+            "name": "Catalyst BE40",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
         "proterra-zx5": {
             "manufacturer": "Proterra",
             "name": "ZX5",
+            "length": 40,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
+        "proterra-zx5max": {
+            "manufacturer": "Proterra",
+            "name": "ZX5MAX",
             "length": 40,
             "length_units": "feet",
             "fuel": "Battery Electric"
@@ -353,6 +397,20 @@
         }
     },
     "midibus": {
+        "byd-k7m": {
+            "manufacturer": "BYD",
+            "name": "K7M",
+            "length": 30,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
+        "byd-k9s": {
+            "manufacturer": "BYD",
+            "name": "K9S",
+            "length": 35,
+            "length_units": "feet",
+            "fuel": "Battery Electric"
+        },
         "dennis-dart-slf-30": {
             "manufacturer": "Dennis",
             "name": "Dart SLF (30')",
@@ -364,6 +422,13 @@
             "manufacturer": "Dennis",
             "name": "Dart SLF (35')",
             "length": 35,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        },
+        "eldorado-national-e-z-rider-ii-max-32": {
+            "manufacturer": "ElDorado National",
+            "name": "E-Z Rider II MAX",
+            "length": 32,
             "length_units": "feet",
             "fuel": "Diesel"
         },
@@ -395,6 +460,20 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
+        "new-flyer-md35": {
+            "manufacturer": "New Flyer",
+            "name": "MD35",
+            "length": 35,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        },
+        "new-flyer-xd35": {
+            "manufacturer": "New Flyer",
+            "name": "XD35",
+            "length": 35,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        },
         "vmc-classic-vi30-cng": {
             "manufacturer": "VMC",
             "name": "Classic Vi30 CNG",
@@ -407,6 +486,20 @@
         "chevrolet-arboc-4500-sof-27": {
             "manufacturer": "Chevrolet/ARBOC",
             "name": "4500/SOF 27",
+            "length": 27,
+            "length_units": "feet",
+            "fuel": "Gasoline"
+        },
+        "chevrolet-arboc-4500-sof27d": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOF27D",
+            "length": 27,
+            "length_units": "feet",
+            "fuel": "Diesel"
+        },
+        "chevrolet-arboc-4500-sof27g": {
+            "manufacturer": "Chevrolet/ARBOC",
+            "name": "4500/SOF27G",
             "length": 27,
             "length_units": "feet",
             "fuel": "Gasoline"
@@ -446,12 +539,27 @@
             "length_units": "feet",
             "fuel": "Gasoline"
         },
+        "dodge-grand-caravan": {
+            "manufacturer": "Dodge",
+            "name": "Grand Caravan"
+        },
+        "ford-arboc-e-450-sof-27": {
+            "manufacturer": "Ford/ARBOC",
+            "name": "E-450/SOF 27",
+            "length": 27,
+            "length_units": "feet",
+            "fuel": "Gasoline"
+        },
         "ford-cbb-e450-polar-v": {
             "manufacturer": "Ford/CBB",
             "name": "E-450/Polar V",
             "length": 24,
             "length_units": "feet",
             "fuel": "Diesel"
+        },
+        "ford-champion-e-450-challenger": {
+            "manufacturer": "Ford/Champion",
+            "name": "E-450/Challenger"
         },
         "ford-girardin-e450-g5": {
             "manufacturer": "Ford/Girardin",
@@ -460,12 +568,21 @@
             "length_units": "feet",
             "fuel": "Gasoline"
         },
+        "ford-girardin-e450-mbc-iv": {
+            "manufacturer": "Ford/Girardin",
+            "name": "E-450/MBC-IV",
+            "fuel": "Diesel"
+        },
         "ford-girardin-t350-mbii": {
             "manufacturer": "Ford/Girardin",
             "name": "T-350/MB-II",
             "length": 23,
             "length_units": "feet",
             "fuel": "Gasoline"
+        },
+        "gmc-glaval-4500-titan-ii": {
+            "manufacturer": "GMC/Glaval",
+            "name": "4500/Titan II"
         },
         "international-eldorado-3200-advantage": {
             "manufacturer": "International/ElDorado",
@@ -487,6 +604,13 @@
             "length": 24,
             "length_units": "feet",
             "fuel": "Diesel"
+        },
+        "ram-trucks-new-england-wheels-promaster-frontrunner": {
+            "manufacturer": "Ram Trucks/New England Wheels",
+            "name": "ProMaster/Frontrunner",
+            "length": 23,
+            "length_units": "feet",
+            "fuel": "Gasoline"
         }
     },
     "trolley": {

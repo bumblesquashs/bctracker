@@ -89,6 +89,11 @@ class Order:
                 del row['version']
             else:
                 version = None
+            if 'prefix' in row:
+                prefix = str(row['prefix'])
+                del row['prefix']
+            else:
+                prefix = None
             if 'id' in row:
                 id = row['id']
                 del row['id']
@@ -112,6 +117,9 @@ class Order:
                         name = id
                 if version:
                     id = f'{id}-{version}'
+                if prefix:
+                    id = f'{prefix}{id}'
+                    name = f'{prefix}{name}'
                 vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
             else:
                 low = row['low']
@@ -131,5 +139,8 @@ class Order:
                         name = id
                     if version:
                         id = f'{id}-{version}'
+                    if prefix:
+                        id = f'{prefix}{id}'
+                        name = f'{prefix}{name}'
                     vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
         return cls(order_id, agency, model, vehicles)

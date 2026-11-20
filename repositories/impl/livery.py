@@ -4,6 +4,8 @@ import json
 
 from models.livery import Livery
 
+import settings
+
 @dataclass(slots=True)
 class LiveryRepository:
     
@@ -12,7 +14,7 @@ class LiveryRepository:
     def load(self):
         '''Loads decoration data from the static JSON file'''
         self.liveries = {}
-        with open(f'./static/liveries.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/liveries.json', 'r') as file:
             for (agency_id, agency_values) in json.load(file).items():
                 agency_liveries = {}
                 for (id, values) in agency_values.items():

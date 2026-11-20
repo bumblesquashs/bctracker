@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>Welcome to BCTracker!</h1>
+    <h1>Welcome to {{ province.site_name }}!</h1>
     % if context.system:
         <div class="row">
             % if context.realtime_enabled:
@@ -39,7 +39,7 @@
             % end
         </div>
     % else:
-        <h2>British Columbia Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+        <h2>{{ province }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
     % end
 </div>
 
@@ -208,7 +208,11 @@
                 % include('components/toggle')
             </div>
             <div class="content">
-                <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                % if province.code == 'BC':
+                    <p>Join the BCTracker Discord server - a home for transit riders and enthusiasts from around British Columbia!</p>
+                % else:
+                    <p>Join the BCTracker Discord server - it's mainly folks in British Columbia but you're welcome too!</p>
+                % end
                 <iframe src="https://discord.com/widget?id=925662392053022720&theme=dark" width="100%" height="300px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>

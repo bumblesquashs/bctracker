@@ -4,6 +4,8 @@ import json
 
 from models.agency import Agency
 
+import settings
+
 @dataclass(slots=True)
 class AgencyRepository:
     
@@ -12,7 +14,7 @@ class AgencyRepository:
     def load(self):
         '''Loads agency data from the static JSON file'''
         self.agencies = {}
-        with open(f'./static/agencies.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/agencies.json', 'r') as file:
             for (id, values) in json.load(file).items():
                 self.agencies[id] = Agency(id, **values)
     

@@ -4,6 +4,8 @@ import json
 
 from models.region import Region
 
+import settings
+
 @dataclass(slots=True)
 class RegionRepository:
     
@@ -12,7 +14,7 @@ class RegionRepository:
     def load(self):
         '''Loads region data from the static JSON file'''
         self.regions = {}
-        with open(f'./static/regions.json', 'r') as file:
+        with open(f'./static/{settings.current.province.path_id}/regions.json', 'r') as file:
             for (id, values) in json.load(file).items():
                 self.regions[id] = Region(id, **values)
     

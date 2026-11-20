@@ -18,21 +18,21 @@
             % if context.system:
                 {{ context }} | {{ title }}
             % else:
-                BCTracker | {{ title }}
+                {{ province.site_name }} | {{ title }}
             % end
         </title>
         
-        <link rel="icon" type="image/png" href="/img/bctracker/favicon-16.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="/img/bctracker/favicon-32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/img/bctracker/favicon-48.png" sizes="48x48" />
-        <link rel="apple-touch-icon" type="image/png" href="/img/bc-tracker/apple-touch-icon.png" sizes="180x180">
+        <link rel="icon" type="image/png" href="/img/logos/{{ province.path_id }}/favicon-16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/img/logos/{{ province.path_id }}/favicon-32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/logos/{{ province.path_id }}/favicon-48.png" sizes="48x48" />
+        <link rel="apple-touch-icon" type="image/png" href="/img/logos/{{ province.path_id }}/apple-touch-icon.png" sizes="180x180">
         
         % if context.system:
             <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
-            <meta name="keywords" content="Transit, British Columbia, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="keywords" content="Transit, {{ province }}, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
-            <meta name="description" content="Transit Schedules and Bus Tracking in BC" />
-            <meta name="keywords" content="Transit, British Columbia, Bus Tracking" />
+            <meta name="description" content="Transit Schedules and Bus Tracking in {{ province.code }}" />
+            <meta name="keywords" content="Transit, {{ province }}, Bus Tracking" />
         % end
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="UTF-8" />
@@ -53,17 +53,17 @@
         % if context.system:
             <meta property="og:title" content="{{ context }} | {{ title }}">
         % else:
-            <meta property="og:title" content="BCTracker | {{ title }}">
+            <meta property="og:title" content="{{ province.site_name }} | {{ title }}">
         % end
         <meta property="og:description" content="Transit schedules and bus tracking" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="{{ context.url(*path) }}" />
-        <meta property="og:image" content="{{ context.url('img', 'bctracker', 'meta-logo.png') }}" />
+        <meta property="og:image" content="{{ context.url('img', 'logos', province.path_id, 'meta-logo.png') }}" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="BCTracker Logo" />
-        <meta property="og:site_name" content="BCTracker" />
+        <meta property="og:image:alt" content="{{ province.site_name }} Logo" />
+        <meta property="og:site_name" content="{{ province.site_name }}" />
         
         <link rel="stylesheet" href="/style/main.css?version={{ version }}" />
         
@@ -308,6 +308,7 @@
         % include('components/svg_script', name='bus')
         % include('components/svg_script', name='ferry')
         % include('components/svg_script', name='model/type/bus-artic')
+        % include('components/svg_script', name='model/type/bus-coach')
         % include('components/svg_script', name='model/type/bus-conventional')
         % include('components/svg_script', name='model/type/bus-decker')
         % include('components/svg_script', name='model/type/bus-midibus')
@@ -323,8 +324,8 @@
     <body class="{{ 'full-map' if full_map else '' }}">
         <div id="navigation-bar">
             <a id="title" href="{{ context.url() }}">
-                % include('components/svg', name='bctracker/bctracker')
-                <div>BCTracker</div>
+                % include('components/svg', name=f'logos/{province.path_id}/logo')
+                <div>{{ province.site_name }}</div>
             </a>
             
             % if context.realtime_enabled:

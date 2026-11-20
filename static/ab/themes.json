@@ -1,0 +1,12 @@
+{
+    "calgary-transit": {
+        "name": "Calgary Transit",
+        "light": true,
+        "dark": true
+    },
+    "edmonton-transit": {
+        "name": "Edmonton Transit Service",
+        "light": true,
+        "dark": true
+    }
+}

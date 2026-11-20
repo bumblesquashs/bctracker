@@ -15,6 +15,7 @@ from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
 from models.model import ModelType
+from models.province import Province
 from models.stop import StopType
 
 import constants
@@ -124,7 +125,6 @@ class Server(Bottle):
         services.log.info('Server started')
         
         cp.config.update('server.conf')
-        settings.current.setup(cp.config)
         
         self.database.connect()
         
@@ -181,6 +181,8 @@ class Server(Bottle):
     def page(self, context: Context, file, title, path=None, path_args=None, enable_refresh=True, include_maps=False, full_map=False, **kwargs):
         '''Returns an HTML page with the given file name and details'''
         is_admin = self.validate_admin()
+
+        province = settings.current.province
         
         time_format = self.query_cookie('time_format')
         vehicle_marker_style = self.query_cookie('vehicle_marker_style')
@@ -205,12 +207,13 @@ class Server(Bottle):
             elif today.month == 12 and today.day == 25:
                 theme = repositories.theme.find('christmas')
             else:
-                theme = repositories.theme.find('bc-transit')
+                theme = repositories.theme.find(province.default_theme_id)
         theme_variant = self.query_cookie('theme_variant')
         high_contrast = self.query_cookie('high_contrast') == 'enabled'
         show_help_text = self.query_cookie('show_help_text', 'yes') == 'yes'
         return template(f'pages/{file}',
             settings=settings.current,
+            province=province,
             version=VERSION,
             title=title,
             path=path or [],
@@ -342,7 +345,8 @@ class Server(Bottle):
     # =============================================================
     
     def home(self, context: Context):
-        news_views = glob('./views/news/*.tpl')
+        province = settings.current.province
+        news_views = glob(f'./views/news/{province.path_id}/*.tpl')
         news_views.sort(reverse=True)
         return self.page(
             context=context,
@@ -354,7 +358,8 @@ class Server(Bottle):
         )
     
     def news(self, context: Context):
-        news_views = glob('./views/news/*.tpl')
+        province = settings.current.province
+        news_views = glob(f'./views/news/{province.path_id}/*.tpl')
         news_views.sort(reverse=True)
         if len(news_views) > constants.RECENT_NEWS_POSTS:
             news_views = news_views[constants.RECENT_NEWS_POSTS:]
@@ -681,17 +686,17 @@ class Server(Bottle):
         )
     
     def bus_overview(self, context: Context, vehicle_id: str):
-        if not context.agency:
+        if not context.agency and settings.current.province == Province.BC:
             context.agency = repositories.agency.find('bc-transit')
         redirect(context.url('fleet', vehicle_id))
     
     def bus_map(self, context: Context, vehicle_id: str):
-        if not context.agency:
+        if not context.agency and settings.current.province == Province.BC:
             context.agency = repositories.agency.find('bc-transit')
         redirect(context.url('fleet', vehicle_id, 'map'))
     
     def bus_history(self, context: Context, vehicle_id: str):
-        if not context.agency:
+        if not context.agency and settings.current.province == Province.BC:
             context.agency = repositories.agency.find('bc-transit')
         redirect(context.url('fleet', vehicle_id, 'history'))
     

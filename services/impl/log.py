@@ -9,13 +9,16 @@ from dataclasses import dataclass
 
 from models.log import Log
 
+import settings
+
 @dataclass(init=False, slots=True)
 class LogService:
     
     name: str
     logger: logging.Logger
     
-    def __init__(self, name: str = 'bctracker'):
+    def __init__(self, name: str | None = None):
+        name = name or settings.current.province.logfile_name
         logger = logging.getLogger(name)
         logger.setLevel(logging.DEBUG)
         

@@ -19,6 +19,8 @@ import repositories
 
 from constants import *
 
+import settings
+
 @dataclass(slots=True)
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
@@ -30,7 +32,7 @@ class System:
     
     remote_id: int | None = None
     enabled: bool = True
-    timezone: ZoneInfo = DEFAULT_TIMEZONE
+    timezone: ZoneInfo = field(default_factory=lambda: settings.current.province.default_timezone)
     ignore_route_colour: str | None = DEFAULT_IGNORE_ROUTE_COLOUR
     enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
     gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF

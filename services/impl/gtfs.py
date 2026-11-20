@@ -55,6 +55,11 @@ class GTFSService:
         
         try:
             calendar_services = read_csv(context, 'calendar', lambda r: Service.from_csv(r, context, service_exceptions, feed_date_range))
+            calendar_service_ids = {s.id for s in calendar_services}
+            missing_service_ids = {s for s in service_exceptions.keys() if s not in calendar_service_ids}
+            for missing_id in missing_service_ids:
+                exceptions = service_exceptions[missing_id]
+                calendar_services.append(Service.combine(context, missing_id, exceptions))
         except:
             calendar_services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
@@ -132,8 +137,9 @@ class GTFSService:
         repositories.route.delete_all(context)
         repositories.point.delete_all(context)
         
-        date = Date.today()
-        time = Time.now()
+        timezone = settings.current.province.default_timezone
+        date = Date.today(timezone)
+        time = Time.now(timezone)
         
         download_id = repositories.download.create(context, date, time, trigger)
         

@@ -91,7 +91,7 @@ class Block:
         try:
             return trips[0].start_time
         except IndexError:
-            return Time.unknown()
+            return Time.unknown(self.context.timezone)
     
     def get_end_time(self, service_group=None, date=None):
         '''Returns the end time of this block'''
@@ -101,7 +101,7 @@ class Block:
         try:
             return trips[-1].end_time
         except IndexError:
-            return Time.unknown()
+            return Time.unknown(self.context.timezone)
     
     def get_duration(self, service_group=None, date=None):
         '''Returns the duration of this block'''
