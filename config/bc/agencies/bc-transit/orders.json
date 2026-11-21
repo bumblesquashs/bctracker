@@ -1,0 +1,859 @@
+[
+    {
+        "year": 2000,
+        "model": "dennis-dart-slf-35",
+        "cctv": false,
+        "vehicles": [
+            { "low": 1, "high": 7, "livery": "green-blue-stripes" },
+            { "low": 8, "high": 18, "livery": "red-blue-stripes" }
+        ]
+    },
+    {
+        "year": 2001,
+        "model": "dennis-dart-slf-35",
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 101, "high": 116 }
+        ]
+    },
+    {
+        "year": 2002,
+        "model": "dennis-dart-slf-35",
+        "cctv": false,
+        "vehicles": [
+            { "low": 221, "high": 228, "livery": "red-blue-stripes" },
+            { "low": 229, "high": 230, "livery": "green-blue-stripes" },
+            { "low": 231, "high": 233, "livery": "red-blue-stripes" },
+            { "id": 234, "livery": "green-blue-stripes" },
+            { "low": 235, "high": 237, "livery": "red-blue-stripes" }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "new-flyer-h40lfr",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 1000, "high": 1019 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1020, "high": 1044 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1045, "high": 1069 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1070, "high": 1114 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1115, "high": 1139 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1140, "high": 1147 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes-green-back",
+        "vehicles": [
+            { "low": 1148, "high": 1185 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "new-flyer-xn40",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 1186, "high": 1202, "livery": "green-blue-stripes-green-back" },
+            { "low": 1203, "high": 1212, "livery": "green-blue-stripes" }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 1213, "high": 1232 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "new-flyer-xn40",
+        "livery": "green-blue-stripes",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 1233, "high": 1253 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "new-flyer-xn40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 1254, "high": 1261 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "new-flyer-xn40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 1262, "high": 1277 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "ford-cbb-e450-polar-v",
+        "livery": "green-blue-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 2173, "high": 2240 }
+        ]
+    },
+    {
+        "year": 2010,
+        "model": "chevrolet-arboc-4500-som23d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2301, "high": 2310 }
+        ]
+    },
+    {
+        "year": 2010,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2311, "high": 2315 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2316, "high": 2339 },
+            { "low": 2342, "high": 2344 },
+            { "low": 2347, "high": 2367 },
+            { "low": 2369, "high": 2377 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "mercedes-benz-sprinter-minibus",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2340, "high": 2341 },
+            { "low": 2345, "high": 2346 },
+            { "id": 2368 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2378, "high": 2449 }
+        ]
+    },
+    {
+        "year": 2011,
+        "model": "mercedes-benz-sprinter-minibus",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "id": 2450 }
+        ]
+    },
+    {
+        "year": 2014,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2451, "high": 2557 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2558, "high": 2618 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "chevrolet-arboc-4500-som28g",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2619, "high": 2624 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2625, "high": 2636 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "chevrolet-arboc-4500-som28g",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2637, "high": 2640 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "chevrolet-arboc-4500-som-28",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2641, "high": 2662 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "chevrolet-arboc-4500-som-28",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 2663, "high": 2687 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2688, "high": 2722 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2723, "high": 2756 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2757, "high": 2784 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "ford-girardin-t350-mbii",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2785, "high": 2801 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2802, "high": 2860 }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 2861, "high": 2895 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-front",
+        "vehicles": [
+            { "low": 2896, "high": 2976 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-front",
+        "vehicles": [
+            { "low": 2977, "high": 2999 },
+            { "low": 3200, "high": 3303 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "grande-west-vicinity-27",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 3001, "high": 3015 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "international-eldorado-3200-aero-elite",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 3016, "high": 3019 },
+            { "id": 3021 },
+            { "id": 3023 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "international-eldorado-3200-aero-elite",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 3024, "high": 3028 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "international-eldorado-3200-advantage",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 3029, "high": 3034 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "international-eldorado-3200-advantage",
+        "livery": "green-front",
+        "vehicles": [
+            { "low": 3035, "high": 3045 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "green-front",
+        "vehicles": [
+            { "low": 3304, "high": 3393 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "grande-west-vicinity-30",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4007, "high": 4061 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "grande-west-vicinity-30",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4062, "high": 4070 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "grande-west-vicinity-30",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4071, "high": 4073 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "grande-west-vicinity-cng-30",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4200, "high": 4233 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "vmc-classic-vi30-cng",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4234, "high": 4248 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "grande-west-vicinity-35",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4400, "high": 4432 }
+        ]
+    },
+    {
+        "model": "grande-west-vicinity-35",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 4433, "high": 4446, "year": 2018 },
+            { "low": 4447, "high": 4474, "year": 2019 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "nova-bus-lfs-4",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 6000, "high": 6029 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfse+",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7010, "high": 7011 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfse+",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7012, "high": 7034 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "nova-bus-lfse+",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7035, "high": 7042 }
+        ]
+    },
+    {
+        "year": 2027,
+        "model": "nova-bus-lfse+",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7043, "high": 7071 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "new-flyer-xe40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7500, "high": 7524 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "new-flyer-xe40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7525, "high": 7532 }
+        ]
+    },
+    {
+        "year": 2027,
+        "model": "new-flyer-xe40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 7533, "high": 7562 }
+        ]
+    },
+    {
+        "year": 2027,
+        "model": "new-flyer-xde40",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 8000, "high": 8104 }
+        ]
+    },
+    {
+        "year": 1991,
+        "model": "new-flyer-d40lf",
+        "version": 1,
+        "livery": "red-blue-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 8001, "high": 8009 }
+        ]
+    },
+    {
+        "year": 1992,
+        "model": "new-flyer-d40lf",
+        "version": 1,
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 8010, "high": 8025, "air_conditioned": false },
+            { "low": 8026, "high": 8033 }
+        ]
+    },
+    {
+        "year": 1994,
+        "model": "new-flyer-d40lf",
+        "version": 1,
+        "livery": "red-blue-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 8034, "high": 8047 },
+            { "id": 8048, "livery": "green-blue-stripes" }
+        ]
+    },
+    {
+        "year": 1995,
+        "model": "new-flyer-d40lf",
+        "version": 1,
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 8049, "high": 8063, "air_conditioned": false },
+            { "id": 8064, "livery": "green-blue-stripes", "air_conditioned": false },
+            { "id": 8065, "air_conditioned": false },
+            { "low": 8066, "high": 8071 },
+            { "id": 8072, "livery": "green-blue-stripes" },
+            { "low": 8073, "high": 8077 },
+            { "id": 8078, "livery": "green-blue-stripes" },
+            { "low": 8079, "high": 8091 },
+            { "id": 8092, "livery": "green-blue-stripes" },
+            { "low": 8093, "high": 8094 }
+        ]
+    },
+    {
+        "year": 1996,
+        "model": "new-flyer-d40lf",
+        "version": 1,
+        "livery": "red-blue-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 8095, "high": 8099 },
+            { "id": 8100, "livery": "green-blue-stripes" },
+            { "low": 8101, "high": 8102 },
+            { "id": 8103,  "livery": "green-blue-stripes" },
+            { "low": 8104, "high": 8113 },
+            { "id": 8114, "livery": "green-blue-stripes" },
+            { "low": 8115, "high": 8117 }
+        ]
+    },
+    {
+        "year": 2000,
+        "model": "dennis-trident-iii",
+        "cctv": false,
+        "vehicles": [
+            { "id": 9001, "livery": "red-blue-stripes" },
+            { "low": 9002, "high": 9010, "livery": "green-blue-stripes" }
+        ]
+    },
+    {
+        "year": 2002,
+        "model": "transbus-trident-iii",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9021, "high": 9039 }
+        ]
+    },
+    {
+        "year": 2004,
+        "model": "alexander-dennis-enviro500",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9041, "high": 9049 }
+        ]
+    },
+    {
+        "year": 2000,
+        "model": "dennis-dart-slf-35",
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 9051, "high": 9078 }
+        ]
+    },
+    {
+        "year": 2001,
+        "model": "dennis-dart-slf-35",
+        "cctv": false,
+        "vehicles": [
+            { "low": 9081, "high": 9083, "livery": "red-blue-stripes" },
+            { "id": 9084, "livery": "green-blue-stripes" },
+            { "id": 9085, "livery": "red-blue-stripes" }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "byd-k9",
+        "demo": true,
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "id": 9092 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "proterra-zx5",
+        "demo": true,
+        "vehicles": [
+            { "id": 9093 }
+        ]
+    },
+    {
+        "year": 2005,
+        "model": "new-flyer-de40lf",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "id": 9101 },
+            { "low": 9102, "high": 9104, "livery": "red-blue-stripes" },
+            { "low": 9105, "high": 9106 }
+        ]
+    },
+    {
+        "year": 2006,
+        "model": "nova-bus-lfs-2",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9201, "high": 9231 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "nova-bus-lfs-2",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9232, "high": 9267 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "nova-bus-lfs-2",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9268, "high": 9289 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "nova-bus-lfs-suburban-2",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9290, "high": 9300 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "nova-bus-lfs-2",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9301, "high": 9318 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-3",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9319, "high": 9433 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "nova-bus-lfs-3",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "id": 9434 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "nova-bus-lfs-3",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9435, "high": 9446 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "nova-bus-lfs-4",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9447, "high": 9486 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "alexander-dennis-enviro500",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9501, "high": 9526 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "alexander-dennis-enviro500h",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "id": 9527 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "alexander-dennis-enviro500",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "id": 9528 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "alexander-dennis-enviro500",
+        "livery": "green-blue-stripes",
+        "vehicles": [
+            { "low": 9529, "high": 9531 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "alexander-dennis-enviro500-lhd",
+        "livery": "green-blue-stripes",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 9532, "high": 9542 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "alexander-dennis-enviro500-lhd",
+        "livery": "green-blue-stripes",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 9543, "high": 9550 }
+        ]
+    },
+    {
+        "model": "alexander-dennis-enviro500-lhd",
+        "livery": "green-front",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 9551, "high": 9579, "year": 2025 },
+            { "low": 9580, "high": 9589, "year": 2026 }
+        ]
+    },
+    {
+        "year": 1996,
+        "model": "new-flyer-d40lf",
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 9701, "high": 9723 },
+            { "id": 9724, "livery": "green-blue-stripes" },
+            { "low": 9725, "high": 9749 }
+        ]
+    },
+    {
+        "model": "new-flyer-d40lf",
+        "livery": "green-blue-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 9750, "high": 9751, "year": 1995 },
+            { "low": 9752, "high": 9760, "year": 1996 }
+        ]
+    },
+    {
+        "year": 1998,
+        "model": "new-flyer-d40lf",
+        "livery": "green-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 9815, "high": 9828, "air_conditioned": false },
+            { "low": 9831, "high": 9854 },
+            { "id": 9855, "livery": "red-blue-stripes" },
+            { "id": 9856 },
+            { "low": 9861, "high": 9878 },
+            { "low": 9881, "high": 9891, "air_conditioned": false }
+        ]
+    },
+    {
+        "year": 1999,
+        "model": "dennis-dart-slf-30",
+        "livery": "red-blue-stripes",
+        "cctv": false,
+        "vehicles": [
+            { "low": 9901, "high": 9904 },
+            { "low": 9905, "high": 9909, "livery": "green-blue-stripes" },
+            { "low": 9910, "high": 9928 },
+            { "id": 9929, "livery": "green-blue-stripes" },
+            { "low": 9930, "high": 9943 },
+            { "low": 9944, "high": 9947, "livery": "green-blue-stripes" },
+            { "low": 9948, "high": 9951 }
+        ]
+    },
+    {
+        "visible": false,
+        "vehicles": [
+            { "id": 0 },
+            { "id": 46 },
+            { "id": 49 },
+            { "id": 53 },
+            { "id": 65 },
+            { "low": 92, "high": 94 },
+            { "low": 990, "high": 999 },
+            { "id": 1717 },
+            { "id": 7404 },
+            { "id": 7812 },
+            { "id": 8888 },
+            { "low": 9980, "high": 9999 }
+        ]
+    }
+]

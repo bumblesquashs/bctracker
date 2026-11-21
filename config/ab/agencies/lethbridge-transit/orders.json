@@ -1,0 +1,100 @@
+[
+    {
+        "year": 2005,
+        "model": "new-flyer-d40lf",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 149, "high": 156 }
+        ]
+    },
+    {
+        "year": 2006,
+        "model": "new-flyer-d40lfr",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 157, "high": 164 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-3",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 165, "high": 169 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "new-flyer-xd40",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 175, "high": 179 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false, "cctv": false,
+        "vehicles": [
+            { "id": 180 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 181, "high": 186 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "grande-west-vicinity-30",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 187, "high": 188 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 189, "high": 192 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 193, "high": 198 }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 199, "high": 203 }
+        ]
+    },
+    {
+        "model": "ford-girardin-e450-mbc-iv",
+        "year": 2003,
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 301, "high": 302 }
+        ]
+    }
+]

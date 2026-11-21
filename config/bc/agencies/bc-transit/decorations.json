@@ -1,0 +1,61 @@
+{
+    "1032": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "1086": {
+        "text": "🏳️‍🌈",
+        "description": "Pride Bus",
+        "enabled": false
+    },
+    "1109": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "1254": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "4017": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "6021": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "6022": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "7520": {
+        "text": "🎨",
+        "description": "Indigenous Artwork",
+        "artist": "Elder Butch",
+        "website": "https://www.bctransit.com/indigenous-bus-design/"
+    },
+    "9093": {
+        "text": "⚡",
+        "description": "Battery Bus Demo"
+    },
+    "9387": {
+        "text": "🏳️‍🌈",
+        "description": "Pride Bus",
+        "enabled": false
+    },
+    "9434": {
+        "text": "🎅",
+        "description": "Santa Bus",
+        "enabled": false
+    },
+    "9458": {
+        "text": "🏳️‍🌈",
+        "description": "Pride Bus"
+    }
+}

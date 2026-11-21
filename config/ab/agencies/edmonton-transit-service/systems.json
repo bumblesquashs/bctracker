@@ -1,0 +1,7 @@
+{
+    "edmonton": {
+        "name": "Edmonton",
+        "region": "northern-alberta",
+        "max_invalid_positions": 20
+    }
+}

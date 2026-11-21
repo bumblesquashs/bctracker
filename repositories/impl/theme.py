@@ -14,7 +14,7 @@ class ThemeRepository:
     def load(self):
         '''Loads theme data from the static JSON file'''
         self.themes = {}
-        with open(f'./static/{settings.current.province.path_id}/themes.json', 'r') as file:
+        with open(f'./config/{settings.current.province.path_id}/themes.json', 'r') as file:
             for (id, values) in json.load(file).items():
                 self.themes[id] = Theme(id, **values)
     

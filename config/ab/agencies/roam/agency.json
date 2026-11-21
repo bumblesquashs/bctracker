@@ -1,0 +1,15 @@
+{
+    "name": "Roam",
+    "website": "https://roamtransit.com/",
+    "gtfs_url": "https://bowvalley.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/",
+    "realtime_url": "https://bowvalley.tmix.se/gtfs-realtime/vehicleupdates.pb",
+    "default_system": "banff",
+    "accurate_seconds": false,
+    "vehicle_name_length": 4,
+    "prefix_headsigns": true,
+    "prefer_stop_id": true,
+    "show_stop_number": false,
+    "distance_scale": 1000,
+    "enable_blocks": false,
+    "invalid_realtime_percentage": 0.5
+}

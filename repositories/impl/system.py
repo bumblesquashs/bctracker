@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass, field
+from glob import glob
 import json
 from zoneinfo import ZoneInfo
 
@@ -18,17 +19,22 @@ class SystemRepository:
         self.systems = {}
         repositories.agency.load()
         repositories.region.load()
-        with open(f'./static/{settings.current.province.path_id}/systems.json', 'r') as file:
-            for (agency_id, agency_values) in json.load(file).items():
-                agency = repositories.agency.find(agency_id)
-                for (region_id, region_values) in agency_values.items():
-                    region = repositories.region.find(region_id)
-                    for (id, values) in region_values.items():
-                        if not agency.enabled:
-                            values['enabled'] = False
-                        if 'timezone' in values:
-                            values['timezone'] = ZoneInfo(values['timezone'])
-                        self.systems[id] = System(id, agency, region, **values)
+        root_path = f'./config/{settings.current.province.path_id}/agencies'
+        file_name = 'systems.json'
+        agency_paths = glob(f'{root_path}/*/{file_name}')
+        for path in agency_paths:
+            with open(path, 'r') as file:
+                values = json.load(file)
+            agency_id = path[len(root_path):-len(file_name)].strip('/')
+            agency = repositories.agency.find(agency_id)
+            for (system_id, system_values) in values.items():
+                if not agency.enabled:
+                    system_values['enabled'] = False
+                if 'region' in system_values:
+                    system_values['region'] = repositories.region.find(system_values['region'])
+                if 'timezone' in system_values:
+                    system_values['timezone'] = ZoneInfo(system_values['timezone'])
+                self.systems[system_id] = System(system_id, agency, **system_values)
     
     def find(self, system_id: str) -> System | None:
         '''Returns the system with the given ID'''

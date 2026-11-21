@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass, field
+from glob import glob
 import json
 
 from models.decoration import Decoration
@@ -14,12 +15,14 @@ class DecorationRepository:
     def load(self):
         '''Loads decoration data from the static JSON file'''
         self.decorations = {}
-        with open(f'./static/{settings.current.province.path_id}/decorations.json', 'r') as file:
-            for (agency_id, agency_values) in json.load(file).items():
-                agency_decorations = {}
-                for (vehicle_id, values) in agency_values.items():
-                    agency_decorations[vehicle_id] = Decoration(agency_id, vehicle_id, **values)
-                self.decorations[agency_id] = agency_decorations
+        root_path = f'./config/{settings.current.province.path_id}/agencies'
+        file_name = 'decorations.json'
+        agency_paths = glob(f'{root_path}/*/{file_name}')
+        for path in agency_paths:
+            with open(path, 'r') as file:
+                values = json.load(file)
+            agency_id = path[len(root_path):-len(file_name)].strip('/')
+            self.decorations[agency_id] = {k: Decoration(agency_id, k, **v) for k, v in values.items()}
     
     def find(self, agency_id: str, vehicle_id: str) -> Decoration | None:
         '''Returns the decorations with the given vehicle ID'''
