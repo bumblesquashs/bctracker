@@ -1,10 +1,12 @@
 {
-    "name": "Lethbridge Transit",
-    "website": "https://myride.lethbridge.ca/",
-    "gtfs_url": "https://gis.lethbridge.ca/OpenData/DataSets/GTFS_Transit_Data.zip",
-    "default_system": "lethbridge",
+    "name": "Medicine Hat Transit",
+    "website": "https://www.medicinehat.ca/en/roads-parking-and-transportation/transit.aspx",
+    "gtfs_url": "https://medicinehat.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/",
+    "realtime_url": "https://medicinehat.tmix.se/gtfs-realtime/vehicleupdates.pb",
+    "default_system": "medicine-hat",
+    "vehicle_name_length": 3,
     "prefix_headsigns": true,
-    "accurate_seconds": false,
     "distance_scale": 1000,
+    "enable_blocks": false,
     "show_occupancy": false
 }
