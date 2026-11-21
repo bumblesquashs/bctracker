@@ -1,9 +1,10 @@
 {
-    "name": "Grande Prairie Transit",
-    "website": "https://cityofgp.com/roads-transportation/public-transit",
-    "gtfs_url": "https://gpt.mapstrat.com/current/google_transit.zip",
-    "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
-    "default_system": "grande-prairie",
+    "name": "Lethbridge Transit",
+    "website": "https://myride.lethbridge.ca/",
+    "gtfs_url": "https://gis.lethbridge.ca/OpenData/DataSets/GTFS_Transit_Data.zip",
+    "default_system": "lethbridge",
     "prefix_headsigns": true,
+    "accurate_seconds": false,
+    "distance_scale": 1000,
     "show_occupancy": false
 }
