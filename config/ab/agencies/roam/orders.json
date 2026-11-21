@@ -1,96 +1,201 @@
-{
-    "chevrolet-arboc-4500-sof27d": [
-        [
-            { "year": 2012, "low": 1007, "high": 1008, "air_conditioned": false, "cctv": false }
+[
+    {
+        "year": 2008,
+        "model": "nova-bus-lfs-hev-2",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1001, "high": 1004 }
         ]
-    ],
-    "ford-champion-e-450-challenger": [
-        [
-            { "year": 2024, "low": 1052, "high": 1054, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2026, "id": 1056, "air_conditioned": false, "cctv": false },
-            { "year": 2026, "id": 1058, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2012,
+        "model": "nova-bus-lfs-3",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1005, "high": 1006 }
         ]
-    ],
-    "grande-west-vicinity-30": [
-        [
-            { "year": 2016, "low": 1011, "high": 1012, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2018, "id": 1021, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2012,
+        "model": "chevrolet-arboc-4500-sof27d",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1007, "high": 1008 }
         ]
-    ],
-    "mci-d45-crt-le": [
-        [
-            { "year": 2019, "low": 1026, "high": 1029, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2024, "low": 1042, "high": 1045, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2016,
+        "model": "grande-west-vicinity-30",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1011, "high": 1012 }
         ]
-    ],
-    "nova-bus-lfs-3": [
-        [
-            { "year": 2012, "low": 1005, "high": 1006, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2016,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1013, "high": 1014 }
         ]
-    ],
-    "nova-bus-lfs-4": [
-        [
-            { "year": 2016, "low": 1013, "high": 1014, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2017, "id": 1015, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2018, "low": 1017, "high": 1019, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2019, "low": 1022, "high": 1024, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2017,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1015 }
         ]
-    ],
-    "nova-bus-lfs-hev-2": [
-        [
-            { "year": 2008, "low": 1001, "high": 1004, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2018,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1017, "high": 1019 }
         ]
-    ],
-    "nova-bus-lfs-hev-4": [
-        [
-            { "year": 2025, "low": 1049, "high": 1051, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2018,
+        "model": "grande-west-vicinity-30",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1021 }
         ]
-    ],
-    "nova-bus-lfse+": [
-        [
-            { "year": 2025, "low": 1046, "high": 1048, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2019,
+        "model": "nova-bus-lfs-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1022, "high": 1024 }
         ]
-    ],
-    "proterra-catalyst-be40": [
-        [
-            { "year": 2019, "id": 1034, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2019,
+        "model": "mci-d45-crt-le",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1026, "high": 1029 }
         ]
-    ],
-    "proterra-zx5": [
-        [
-            { "year": 2021, "low": 1030, "high": 1031, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2023, "id": 1032, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2021, "id": 1033, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2022, "id": 1035, "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2023, "low": 1036, "high": 1039, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2021,
+        "model": "proterra-zx5",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1030, "high": 1031 }
         ]
-    ],
-    "unknown": [
-        [
-            { "low": 0, "high": 30, "visible": false },
-            { "id": 1111, "visible": false },
-            { "low": 7404, "high": 7405, "visible": false },
-            { "low": 9980, "high": 9999, "visible": false }
+    },
+    {
+        "year": 2023,
+        "model": "proterra-zx5",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1032 }
         ]
-    ]
-}
+    },
+    {
+        "year": 2021,
+        "model": "proterra-zx5",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1033 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "proterra-catalyst-be40",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1034 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "proterra-zx5",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1035 }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "proterra-zx5",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1036, "high": 1039 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "mci-d45-crt-le",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1042, "high": 1045 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfse+",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1046, "high": 1048 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfs-hev-4",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1049, "high": 1051 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "ford-champion-e450-challenger",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1052, "high": 1054 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "ford-champion-e450-challenger",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 1056 },
+            { "id": 1058 }
+        ]
+    },
+    {
+        "visible": false,
+        "vehicles": [
+            { "low": 0, "high": 30 },
+            { "id": 1111 },
+            { "low": 7404, "high": 7405 },
+            { "low": 9980, "high": 9999 }
+        ]
+    }
+]

@@ -35,14 +35,12 @@ class OrderRepository:
             agency = repositories.agency.find(agency_id)
             orders = {}
             vehicles = {}
-            for (model_id, model_values) in values.items():
-                model = repositories.model.find(model_id)
-                for values in model_values:
-                    order = Order.from_json(id, agency, model, values)
-                    orders[id] = order
-                    for vehicle in order.vehicles:
-                        vehicles[vehicle.id] = vehicle
-                    id += 1
+            for order_data in values:
+                order = Order.from_json(id, agency, order_data)
+                orders[id] = order
+                for vehicle in order.vehicles:
+                    vehicles[vehicle.id] = vehicle
+                id += 1
             self.orders[agency_id] = orders
             self.vehicles[agency_id] = vehicles
     

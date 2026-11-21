@@ -392,7 +392,7 @@
             "length_units": "metres",
             "fuel": "Diesel"
         },
-        "none": {
+        "unclassed": {
             "name": "(Unclassed)"
         }
     },
@@ -543,7 +543,7 @@
             "manufacturer": "Dodge",
             "name": "Grand Caravan"
         },
-        "ford-arboc-e-450-sof-27": {
+        "ford-arboc-e450-sof-27": {
             "manufacturer": "Ford/ARBOC",
             "name": "E-450/SOF 27",
             "length": 27,
@@ -557,7 +557,7 @@
             "length_units": "feet",
             "fuel": "Diesel"
         },
-        "ford-champion-e-450-challenger": {
+        "ford-champion-e450-challenger": {
             "manufacturer": "Ford/Champion",
             "name": "E-450/Challenger"
         },

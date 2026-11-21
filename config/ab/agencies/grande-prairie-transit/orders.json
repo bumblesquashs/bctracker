@@ -1,41 +1,101 @@
-{
-    "byd-k7m": [
-        [
-            { "year": 2018, "low": 29, "high": 30, "prefix": "CTB-0", "livery": "grande-prairie-wave", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2019, "low": 32, "high": 34, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+[
+    {
+        "year": 2009,
+        "model": "new-flyer-d40lfr",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 13, "high": 16 }
         ]
-    ],
-    "ford-champion-e-450-challenger": [
-        [
-            { "year": 2021, "low": 35, "high": 38, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2010,
+        "model": "new-flyer-d40lfr",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 17, "high": 20 }
         ]
-    ],
-    "grande-west-vicinity-30": [
-        [
-            { "year": 2017, "low": 25, "high": 28, "prefix": "CTB-0", "livery": "grande-prairie-wave", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2018, "id": 31, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2015,
+        "model": "nova-bus-lfs-4",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 21, "high": 24 }
         ]
-    ],
-    "new-flyer-d40lfr": [
-        [
-            { "year": 2009, "low": 13, "high": 16, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2010, "low": 17, "high": 20, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2017,
+        "model": "grande-west-vicinity-30",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-wave",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 25, "high": 28 }
         ]
-    ],
-    "new-flyer-xd35": [
-        [
-            { "year": 2022, "low": 39, "high": 40, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2018,
+        "model": "byd-k7m",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-wave",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 29, "high": 30 }
         ]
-    ],
-    "nova-bus-lfs-4": [
-        [
-            { "year": 2015, "low": 21, "high": 24, "prefix": "CTB-0", "livery": "grande-prairie-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2018,
+        "model": "grande-west-vicinity-30",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 31 }
         ]
-    ]
-}
+    },
+    {
+        "year": 2019,
+        "model": "byd-k7m",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 32, "high": 34 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "ford-champion-e450-challenger",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 35, "high": 38 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "new-flyer-xd35",
+        "prefix": "CTB-0",
+        "livery": "grande-prairie-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 39, "high": 40 }
+        ]
+    }
+]

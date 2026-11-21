@@ -1,57 +1,121 @@
-{
-    "chevrolet-arboc-4500-som23d": [
-        [
-            { "year": 2015, "id": 736, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+[
+    {
+        "year": 2011,
+        "model": "dodge-grand-caravan",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 715 }
         ]
-    ],
-    "chevrolet-arboc-4500-som28d": [
-        [
-            { "year": 2013, "id": 731, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false },
-            { "year": 2013, "low": 733, "high": 734, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2014, "id": 735, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "model": "dodge-grand-caravan",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 716 }
         ]
-    ],
-    "dodge-grand-caravan": [
-        [
-            { "year": 2011, "id": 715, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "id": 716, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2019,
+        "model": "ram-trucks-new-england-wheels-promaster-frontrunner",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 720, "high": 726 }
         ]
-    ],
-    "grande-west-vicinity-30": [
-        [
-            { "year": 2019, "low": 743, "high": 747, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2020,
+        "model": "ram-trucks-new-england-wheels-promaster-frontrunner",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 729, "high": 730 }
         ]
-    ],
-    "grande-west-vicinity-cng-30": [
-        [
-            { "year": 2019, "low": 748, "high": 753, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2013,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 731 },
+            { "low": 733, "high": 734 }
         ]
-    ],
-    "new-flyer-c40lfr": [
-        [
-            { "year": 2012, "low": 760, "high": 761, "livery": "medicine-hat-wave", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2014,
+        "model": "chevrolet-arboc-4500-som28d",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 735 }
         ]
-    ],
-    "new-flyer-xd40": [
-        [
-            { "year": 2026, "low": 762, "high": 767, "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2015,
+        "model": "chevrolet-arboc-4500-som23d",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 736 }
         ]
-    ],
-    "new-flyer-xn40": [
-        [
-            { "year": 2014, "low": 754, "high": 759, "livery": "medicine-hat-wave", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2019,
+        "model": "grande-west-vicinity-30",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 743, "high": 747 }
         ]
-    ],
-    "ram-trucks-new-england-wheels-promaster-frontrunner": [
-        [
-            { "year": 2019, "low": 720, "high": 726, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
-        ],
-        [
-            { "year": 2020, "low": 729, "high": 730, "livery": "medicine-hat-stripes", "air_conditioned": false, "cctv": false }
+    },
+    {
+        "year": 2019,
+        "model": "grande-west-vicinity-cng-30",
+        "livery": "medicine-hat-stripes",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 748, "high": 753 }
         ]
-    ]
-}
+    },
+    {
+        "year": 2014,
+        "model": "new-flyer-xn40",
+        "livery": "medicine-hat-wave",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 754, "high": 759 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "new-flyer-c40lfr",
+        "livery": "medicine-hat-wave",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 760, "high": 761 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "new-flyer-xd40",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 762, "high": 767 }
+        ]
+    }
+]
