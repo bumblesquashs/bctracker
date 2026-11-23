@@ -5,5 +5,13 @@
     "realtime_url": "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
     "default_system": "edmonton",
     "accurate_seconds": false,
-    "invalid_realtime_percentage": 0.5
+    "invalid_realtime_percentage": 0.5,
+    "order_defaults": {
+        "livery": "ets",
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    }
 }

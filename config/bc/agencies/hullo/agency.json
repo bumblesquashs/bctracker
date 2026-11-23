@@ -5,10 +5,18 @@
     "default_system": "hullo",
     "enabled": false,
     "ais_colour": "FF3503",
-    "show_full_orders": true,
     "show_occupancy": false,
     "enable_realtime_trips": false,
     "filter_vehicles_image_name": "ferry",
     "vehicle_type": "Vessel",
-    "vehicle_type_plural": "Vessels"
+    "vehicle_type_plural": "Vessels",
+    "order_defaults": {
+        "show_all": true,
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true,
+            "wifi": true
+        }
+    }
 }

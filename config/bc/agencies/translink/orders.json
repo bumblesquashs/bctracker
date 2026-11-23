@@ -3,7 +3,9 @@
         "year": 2007,
         "model": "nova-bus-lfs-2",
         "livery": "sweep-r-west-van-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 701, "high": 706 }
         ]
@@ -12,7 +14,9 @@
         "year": 2009,
         "model": "nova-bus-lfs-3",
         "livery": "sweep-r-west-van-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 901, "high": 909 }
         ]
@@ -37,7 +41,9 @@
         "year": 2005,
         "model": "new-flyer-e40lf",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "id": 2101 }
         ]
@@ -45,7 +51,9 @@
     {
         "model": "new-flyer-e40lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 2102, "high": 2186, "year": 2006 },
             { "low": 2187, "high": 2199, "year": 2007 },
@@ -56,7 +64,9 @@
         "year": 2007,
         "model": "new-flyer-e60lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 2501, "high": 2540 }
         ]
@@ -65,7 +75,9 @@
         "year": 2009,
         "model": "new-flyer-e60lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 2541, "high": 2574 }
         ]
@@ -74,8 +86,10 @@
         "year": 1998,
         "model": "new-flyer-c40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 3283, "high": 3299 },
             { "low": 3301, "high": 3308 }
@@ -85,7 +99,9 @@
         "year": 2006,
         "model": "new-flyer-c40lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 3309, "high": 3358 }
         ]
@@ -93,8 +109,10 @@
     {
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 7101, "high": 7123, "year": 1995 },
             { "low": 7124, "high": 7150, "year": 1996 }
@@ -104,8 +122,10 @@
         "year": 1996,
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 7151, "high": 7243 }
         ]
@@ -114,8 +134,10 @@
         "year": 1998,
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 7247, "high": 7297 }
         ]
@@ -124,8 +146,10 @@
         "year": 1999,
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "id": 7299 },
             { "low": 7301, "high": 7374 }
@@ -135,8 +159,10 @@
         "year": 2000,
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 7375, "high": 7399 },
             { "low": 7401, "high": 7429 }
@@ -146,8 +172,10 @@
         "year": 2001,
         "model": "new-flyer-d40lf",
         "livery": "sweep",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 7430, "high": 7446 }
         ]
@@ -156,7 +184,9 @@
         "year": 2006,
         "model": "new-flyer-d40lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 7447, "high": 7499 },
             { "low": 7501, "high": 7504 }
@@ -166,8 +196,10 @@
         "year": 1998,
         "model": "new-flyer-d60lf",
         "livery": "b-line",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "id": 8001 },
             { "id": 8002, "livery": "sweep" },
@@ -180,8 +212,10 @@
         "year": 1999,
         "model": "new-flyer-d60lf",
         "livery": "b-line",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 8022, "high": 8028 },
             { "id": 8029, "livery": "sweep" },
@@ -192,8 +226,10 @@
         "year": 2000,
         "model": "new-flyer-d60lf",
         "livery": "b-line",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "id": 8048 },
             { "id": 8049, "livery": "sweep" },
@@ -209,7 +245,9 @@
         "year": 2007,
         "model": "new-flyer-d60lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 8102, "high": 8117 }
         ]
@@ -218,7 +256,9 @@
         "year": 2009,
         "model": "new-flyer-de60lfr",
         "livery": "sweep-r-charcoal",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 8118, "high": 8156 }
         ]
@@ -265,7 +305,9 @@
         "year": 2009,
         "model": "nova-bus-lfs-hev-3",
         "livery": "sweep-r-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 9401, "high": 9499 },
             { "low": 9501, "high": 9542 }
@@ -275,7 +317,9 @@
         "year": 2009,
         "model": "nova-bus-lfs-3",
         "livery": "sweep-r-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 9543, "high": 9581 },
             { "low": 9583, "high": 9590 }
@@ -285,7 +329,9 @@
         "year": 2007,
         "model": "nova-bus-lfs-2",
         "livery": "sweep-r-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 9605, "high": 9699 },
             { "low": 9701, "high": 9725 }
@@ -295,7 +341,9 @@
         "year": 2008,
         "model": "nova-bus-lfs-2",
         "livery": "sweep-r-light",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 9726, "high": 9791 },
             { "low": 9797, "high": 9799 }
@@ -459,7 +507,9 @@
         "year": 2019,
         "model": "alexander-dennis-enviro500-lhd",
         "livery": "blue-top",
-        "usb_charging": true,
+        "amenities": {
+            "usb_charging": true
+        },
         "vehicles": [
             { "low": 19401, "high": 19432 }
         ]
@@ -492,7 +542,9 @@
         "year": 2021,
         "model": "alexander-dennis-enviro500-lhd",
         "livery": "blue-top",
-        "usb_charging": true,
+        "amenities": {
+            "usb_charging": true
+        },
         "vehicles": [
             { "low": 21401, "high": 21425 }
         ]

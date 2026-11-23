@@ -5,5 +5,11 @@
     "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
     "default_system": "grande-prairie",
     "prefix_headsigns": true,
-    "show_occupancy": false
+    "show_occupancy": false,
+    "order_defaults": {
+        "livery": "grande-prairie-stripes",
+        "amenities": {
+            "accessible": true
+        }
+    }
 }

@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 from dataclasses import dataclass, field
 
+from models.amenity import Amenity
 from models.model import Model
 
 import helpers
@@ -29,17 +30,7 @@ class Vehicle:
     length_units: str | None = None
     fuel: str | None = None
     capacity: dict[str, str] = field(default_factory=dict)
-    accessible: bool = True
-    air_conditioned: bool = True
-    usb_charging: bool = False
-    cctv: bool = True
-    wifi: bool = False
-    dining: bool = False
-    gift_shop: bool = False
-    cabins: bool = False
-    kids_area: bool = False
-    pet_area: bool = False
-    work_area: bool = False
+    amenities: list[Amenity] = field(default_factory=list)
     
     key: tuple = field(init=False)
     
@@ -70,10 +61,6 @@ class Vehicle:
         if self.model and self.model.type:
             return self.model.type.generic_name
         return 'Vehicle'
-    
-    @property
-    def has_amenities(self):
-        return any([self.accessible, self.air_conditioned, self.usb_charging, self.cctv])
     
     def __post_init__(self):
         self.key = helpers.key(self.name)

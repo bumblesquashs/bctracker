@@ -8,5 +8,13 @@
     "accurate_seconds": false,
     "show_occupancy": false,
     "invalid_realtime_percentage": 1.1,
-    "default_route_colour": "CF0000"
+    "default_route_colour": "CF0000",
+    "order_defaults": {
+        "livery": "calgary-wave",
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    }
 }

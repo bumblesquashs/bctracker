@@ -20,7 +20,7 @@
         % end
     </div>
     % if len(order.vehicles) > 1:
-        % if order.agency.show_full_orders:
+        % if order.show_all:
             <div class="column center">
                 % for order_vehicle in order.vehicles:
                     % include('components/vehicle', vehicle=order_vehicle, enable_link=order_vehicle != vehicle)

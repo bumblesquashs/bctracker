@@ -6,5 +6,13 @@
     "prefix_headsigns": true,
     "accurate_seconds": false,
     "vehicle_name_length": 4,
-    "distance_scale": 1000
+    "distance_scale": 1000,
+    "order_defaults": {
+        "livery": "green-blue-stripes",
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    }
 }

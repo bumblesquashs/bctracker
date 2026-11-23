@@ -2,5 +2,12 @@
     "name": "Translink",
     "website": "https://translink.ca",
     "default_system": "vancouver",
-    "enabled": false
+    "enabled": false,
+    "order_defaults": {
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    }
 }

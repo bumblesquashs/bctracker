@@ -270,75 +270,15 @@
                                 </div>
                             % end
                         % end
-                        % if vehicle.has_amenities:
+                        % if vehicle.amenities:
                             <div class="row section">
                                 <div class="name">Amenities</div>
                                 <div class="value">
                                     <div class="row gap-5 wrap justify-right">
-                                        % if vehicle.accessible:
+                                        % for amenity in vehicle.amenities:
                                             <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/accessible')
-                                                <div class="tooltip right">Accessible</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.air_conditioned:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/air-conditioned')
-                                                <div class="tooltip right">Air conditioned</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.usb_charging:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/usb')
-                                                <div class="tooltip right">USB charging ports</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.cctv:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/cctv')
-                                                <div class="tooltip right">CCTV cameras</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.wifi:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/wifi')
-                                                <div class="tooltip right">WIFI</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.dining:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/dining')
-                                                <div class="tooltip right">Dining</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.gift_shop:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/gift-shop')
-                                                <div class="tooltip right">Gift shop</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.cabins:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/cabins')
-                                                <div class="tooltip right">Cabins</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.kids_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/kids-area')
-                                                <div class="tooltip right">Kids area</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.pet_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/pet-area')
-                                                <div class="tooltip right">Pet area</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.work_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/work-area')
-                                                <div class="tooltip right">Work area</div>
+                                                % include('components/svg', name=f'amenities/{amenity.icon}')
+                                                <div class="tooltip right">{{ amenity }}</div>
                                             </div>
                                         % end
                                     </div>

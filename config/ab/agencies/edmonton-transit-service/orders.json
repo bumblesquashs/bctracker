@@ -2,7 +2,6 @@
     {
         "year": 2017,
         "model": "grande-west-vicinity-30",
-        "livery": "ets",
         "vehicles": [
             { "low": 2000, "high": 2015 }
         ]
@@ -10,7 +9,6 @@
     {
         "year": 2018,
         "model": "grande-west-vicinity-30",
-        "livery": "ets",
         "vehicles": [
             { "low": 2016, "high": 2048 }
         ]
@@ -18,8 +16,9 @@
     {
         "year": 2002,
         "model": "new-flyer-d40lf",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4300, "high": 4352 }
         ]
@@ -27,8 +26,9 @@
     {
         "year": 2003,
         "model": "new-flyer-d40lf",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4353, "high": 4402 }
         ]
@@ -36,8 +36,9 @@
     {
         "year": 2004,
         "model": "new-flyer-d40lf",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4403, "high": 4437 }
         ]
@@ -45,8 +46,9 @@
     {
         "year": 2004,
         "model": "new-flyer-d40lf",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4438, "high": 4477 }
         ]
@@ -54,8 +56,9 @@
     {
         "year": 2005,
         "model": "new-flyer-d40lf",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4478, "high": 4522 }
         ]
@@ -63,8 +66,9 @@
     {
         "year": 2007,
         "model": "new-flyer-d40lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4523, "high": 4753 }
         ]
@@ -72,8 +76,9 @@
     {
         "year": 2009,
         "model": "new-flyer-d40lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4754, "high": 4874 }
         ]
@@ -81,8 +86,9 @@
     {
         "year": 2010,
         "model": "new-flyer-d40lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "id": 4875 }
         ]
@@ -90,8 +96,9 @@
     {
         "year": 2012,
         "model": "new-flyer-d40lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4876, "high": 4879 }
         ]
@@ -99,8 +106,9 @@
     {
         "year": 2013,
         "model": "new-flyer-xd40",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4880, "high": 4888 }
         ]
@@ -108,8 +116,9 @@
     {
         "year": 2011,
         "model": "new-flyer-d60lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 4913, "high": 4932 }
         ]
@@ -117,7 +126,6 @@
     {
         "year": 2019,
         "model": "new-flyer-xd60",
-        "livery": "ets",
         "vehicles": [
             { "low": 4933, "high": 4967 }
         ]
@@ -125,8 +133,9 @@
     {
         "year": 2006,
         "model": "new-flyer-de40lfr",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "low": 6003, "high": 6004 }
         ]
@@ -134,8 +143,9 @@
     {
         "year": 2022,
         "model": "new-flyer-xhe40",
-        "livery": "ets",
-        "air_conditioned": false,
+        "amenities": {
+            "air_conditioned": false
+        },
         "vehicles": [
             { "id": 6016 }
         ]
@@ -143,9 +153,10 @@
     {
         "year": 2016,
         "model": "new-flyer-xd40",
-        "livery": "ets",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 6900, "high": 6905 }
         ]
@@ -153,7 +164,6 @@
     {
         "year": 2018,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7000, "high": 7109 }
         ]
@@ -161,7 +171,6 @@
     {
         "year": 2019,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7110, "high": 7201 }
         ]
@@ -169,7 +178,6 @@
     {
         "year": 2022,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7202, "high": 7218 }
         ]
@@ -177,7 +185,6 @@
     {
         "year": 2023,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7219, "high": 7236 }
         ]
@@ -185,7 +192,6 @@
     {
         "year": 2024,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7237, "high": 7267 }
         ]
@@ -193,7 +199,6 @@
     {
         "year": 2026,
         "model": "new-flyer-xd40",
-        "livery": "ets",
         "vehicles": [
             { "low": 7268, "high": 7309 }
         ]
@@ -201,7 +206,6 @@
     {
         "year": 2020,
         "model": "proterra-zx5max",
-        "livery": "ets",
         "vehicles": [
             { "low": 8000, "high": 8039 }
         ]
@@ -209,7 +213,6 @@
     {
         "year": 2022,
         "model": "proterra-zx5max",
-        "livery": "ets",
         "vehicles": [
             { "low": 8040, "high": 8059 }
         ]
@@ -219,8 +222,10 @@
         "model": "new-flyer-d60lf",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 812, "high": 818 }
         ]
@@ -230,8 +235,10 @@
         "model": "new-flyer-d60lfr",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 819, "high": 824 }
         ]
@@ -241,8 +248,10 @@
         "model": "new-flyer-d60lfr",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 825, "high": 826 }
         ]
@@ -252,8 +261,10 @@
         "model": "new-flyer-xd60",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 827, "high": 831 }
         ]
@@ -263,8 +274,10 @@
         "model": "nova-bus-lfs-artic-4",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 832, "high": 838 }
         ]
@@ -274,8 +287,10 @@
         "model": "new-flyer-d40lf",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 862, "high": 864 }
         ]
@@ -285,8 +300,10 @@
         "model": "new-flyer-d40lfr",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 865, "high": 877 }
         ]
@@ -296,8 +313,10 @@
         "model": "new-flyer-d40lfr",
         "prefix": "A",
         "livery": "st-albert-stripes",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 878, "high": 880 },
             { "id": 881, "livery": "st-albert-green" },
@@ -309,8 +328,10 @@
         "model": "new-flyer-xd40",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 887, "high": 889 }
         ]
@@ -320,8 +341,10 @@
         "model": "new-flyer-xd40",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 890, "high": 894 }
         ]
@@ -331,8 +354,10 @@
         "model": "nova-bus-lfs-4",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 940, "high": 944 }
         ]
@@ -342,8 +367,10 @@
         "model": "nova-bus-lfs-4",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 945, "high": 951 }
         ]
@@ -353,8 +380,10 @@
         "model": "byd-k9s",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 1400, "high": 1402 }
         ]
@@ -364,8 +393,10 @@
         "model": "byd-k9s",
         "prefix": "A",
         "livery": "st-albert-green",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 1403, "high": 1406 }
         ]
@@ -374,8 +405,10 @@
         "model": "ford-arboc-e450-sof-27",
         "prefix": "F",
         "livery": "fort-saskatchewan",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 5000, "high": 5002 }
         ]
@@ -385,8 +418,10 @@
         "model": "chevrolet-arboc-4500-sof-27",
         "prefix": "P",
         "livery": "spruce-grove",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 6931, "high": 6933 }
         ]
@@ -396,8 +431,10 @@
         "model": "chevrolet-arboc-4500-sof-27",
         "prefix": "P",
         "livery": "spruce-grove",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "id": 6934 }
         ]
@@ -407,8 +444,10 @@
         "model": "new-flyer-xd40",
         "prefix": "P",
         "livery": "spruce-grove",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 6950, "high": 6952 }
         ]
@@ -418,8 +457,10 @@
         "model": "chevrolet-arboc-4500-sof-27",
         "prefix": "P",
         "livery": "spruce-grove",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 6971, "high": 6972 }
         ]
@@ -429,8 +470,10 @@
         "model": "nova-bus-lfs-suburban-2",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 930, "high": 936 }
         ]
@@ -440,8 +483,10 @@
         "model": "ova-bus-lfs-2",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2001, "high": 2009 }
         ]
@@ -451,8 +496,10 @@
         "model": "nova-bus-lfs-3",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2010, "high": 2023 }
         ]
@@ -462,8 +509,10 @@
         "model": "nova-bus-lfs-3",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2024, "high": 2028 }
         ]
@@ -473,8 +522,10 @@
         "model": "nova-bus-lfs-4",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2029, "high": 2033 }
         ]
@@ -484,8 +535,10 @@
         "model": "nova-bus-lfs-4",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2034, "high": 2037 }
         ]
@@ -495,8 +548,10 @@
         "model": "nova-bus-lfs-4",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 2038, "high": 2042 }
         ]
@@ -506,8 +561,10 @@
         "model": "nova-bus-lfs-hev-3",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 3005, "high": 3010 }
         ]
@@ -517,8 +574,10 @@
         "model": "new-flyer-xhe40",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "id": 5001 }
         ]
@@ -528,8 +587,10 @@
         "model": "alexander-dennis-enviro500",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 8001, "high": 8014 }
         ]
@@ -539,8 +600,10 @@
         "model": "alexander-dennis-enviro500",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 8015, "high": 8016 },
             { "low": 8018, "high": 8020 }
@@ -551,8 +614,10 @@
         "model": "alexander-dennis-enviro500",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 8021, "high": 8023 }
         ]
@@ -562,8 +627,10 @@
         "model": "alexander-dennis-enviro500",
         "prefix": "S",
         "livery": "strathcona",
-        "air_conditioned": false,
-        "cctv": false,
+        "amenities": {
+            "air_conditioned": false,
+            "cctv": false
+        },
         "vehicles": [
             { "low": 8024, "high": 8025 }
         ]

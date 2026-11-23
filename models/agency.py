@@ -1,5 +1,5 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from models.context import Context
 
@@ -23,7 +23,6 @@ class Agency:
     prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
     prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
     show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
-    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
     show_occupancy: bool = DEFAULT_SHOW_OCCUPANCY
     vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
     distance_scale: int = DEFAULT_DISTANCE_SCALE
@@ -35,6 +34,7 @@ class Agency:
     vehicle_type: str = DEFAULT_VEHICLE_TYPE
     vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
     invalid_realtime_percentage: int = DEFAULT_INVALID_REALTIME_PERCENTAGE
+    order_defaults: dict = field(default_factory=dict)
     
     @property
     def context(self):

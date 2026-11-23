@@ -2,8 +2,6 @@
     {
         "year": 2008,
         "model": "nova-bus-lfs-hev-2",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1001, "high": 1004 }
         ]
@@ -11,8 +9,6 @@
     {
         "year": 2012,
         "model": "nova-bus-lfs-3",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1005, "high": 1006 }
         ]
@@ -20,8 +16,6 @@
     {
         "year": 2012,
         "model": "chevrolet-arboc-4500-sof27d",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1007, "high": 1008 }
         ]
@@ -29,8 +23,6 @@
     {
         "year": 2016,
         "model": "grande-west-vicinity-30",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1011, "high": 1012 }
         ]
@@ -38,8 +30,6 @@
     {
         "year": 2016,
         "model": "nova-bus-lfs-4",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1013, "high": 1014 }
         ]
@@ -47,8 +37,6 @@
     {
         "year": 2017,
         "model": "nova-bus-lfs-4",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1015 }
         ]
@@ -56,8 +44,6 @@
     {
         "year": 2018,
         "model": "nova-bus-lfs-4",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1017, "high": 1019 }
         ]
@@ -65,8 +51,6 @@
     {
         "year": 2018,
         "model": "grande-west-vicinity-30",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1021 }
         ]
@@ -74,8 +58,6 @@
     {
         "year": 2019,
         "model": "nova-bus-lfs-4",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1022, "high": 1024 }
         ]
@@ -83,8 +65,6 @@
     {
         "year": 2019,
         "model": "mci-d45-crt-le",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1026, "high": 1029 }
         ]
@@ -92,8 +72,6 @@
     {
         "year": 2021,
         "model": "proterra-zx5",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1030, "high": 1031 }
         ]
@@ -101,8 +79,6 @@
     {
         "year": 2023,
         "model": "proterra-zx5",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1032 }
         ]
@@ -110,8 +86,6 @@
     {
         "year": 2021,
         "model": "proterra-zx5",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1033 }
         ]
@@ -119,8 +93,6 @@
     {
         "year": 2019,
         "model": "proterra-catalyst-be40",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1034 }
         ]
@@ -128,8 +100,6 @@
     {
         "year": 2022,
         "model": "proterra-zx5",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1035 }
         ]
@@ -137,8 +107,6 @@
     {
         "year": 2023,
         "model": "proterra-zx5",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1036, "high": 1039 }
         ]
@@ -146,8 +114,6 @@
     {
         "year": 2024,
         "model": "mci-d45-crt-le",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1042, "high": 1045 }
         ]
@@ -155,8 +121,6 @@
     {
         "year": 2025,
         "model": "nova-bus-lfse+",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1046, "high": 1048 }
         ]
@@ -164,8 +128,6 @@
     {
         "year": 2025,
         "model": "nova-bus-lfs-hev-4",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1049, "high": 1051 }
         ]
@@ -173,8 +135,6 @@
     {
         "year": 2024,
         "model": "ford-champion-e450-challenger",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "low": 1052, "high": 1054 }
         ]
@@ -182,8 +142,6 @@
     {
         "year": 2026,
         "model": "ford-champion-e450-challenger",
-        "air_conditioned": false,
-        "cctv": false,
         "vehicles": [
             { "id": 1056 },
             { "id": 1058 }
