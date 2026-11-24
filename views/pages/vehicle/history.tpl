@@ -7,11 +7,8 @@
 
 <div id="page-header">
     <h1 class="row">
-        % if model:
-            % title_prefix = model.type.title_prefix
-            % if title_prefix:
-                <span>{{ title_prefix }}</span>
-            % end
+        % if model and model.type.category.prefix_title:
+            <span>{{ model.type.category }}</span>
         % end
         % include('components/vehicle', enable_link=False)
         % if allocation and allocation.inactive_status_class:
@@ -75,14 +72,14 @@
             <div class="content">
                 % if total_items == 0:
                     <div class="placeholder">
-                        <h3>This {{ vehicle.type_generic_name.lower() }} doesn't have any recorded history</h3>
+                        <h3>This {{ str(vehicle.model_category).lower() }} doesn't have any recorded history</h3>
                         % if context.enable_realtime_trips:
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                                <li>It may not have been in service since {{ province.site_name }} started recording {{ context.vehicle_type.lower() }} history</li>
+                                <li>It may not have been in service since {{ province.site_name }} started recording {{ context.format_model_category().lower() }} history</li>
                                 <li>It may not have functional tracking equipment installed</li>
-                                % if model is None or model.type == ModelType.shuttle:
+                                % if model is None or model.type == ModelType.SHUTTLE_BUS:
                                     <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                                 % end
                             </ol>

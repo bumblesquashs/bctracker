@@ -9,6 +9,7 @@
     "show_occupancy": false,
     "invalid_realtime_percentage": 1.1,
     "default_route_colour": "CF0000",
+    "default_model_category": "bus",
     "order_defaults": {
         "livery": "calgary-wave",
         "amenities": {

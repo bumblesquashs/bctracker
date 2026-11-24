@@ -11,7 +11,7 @@
     <p>
         Add up to 20 favourites using the
         % include('components/svg', name='action/non-favourite')
-        button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
+        button on {{ context.format_model_category(2).lower() }}, routes, and stops.
     </p>
 % end
 
@@ -24,7 +24,7 @@
         % if vehicle_favourites:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>{{ context.vehicle_type_plural }}</h2>
+                    <h2>{{ context.format_model_category(2) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
@@ -166,7 +166,7 @@
                                     <table class="open-only">
                                         <thead>
                                             <tr>
-                                                <th>{{ value.context.vehicle_type }}</th>
+                                                <th>{{ value.context.format_model_category() }}</th>
                                                 <th class="non-mobile">Headsign</th>
                                                 <th>Trip</th>
                                             </tr>
@@ -204,7 +204,7 @@
                                 % else:
                                     <div class="placeholder open-only">
                                         % if value.context.realtime_enabled and value.context.enable_realtime_trips:
-                                            <p>No active {{ value.context.vehicle_type_plural.lower() }} right now</p>
+                                            <p>No active {{ value.context.format_model_category(0).lower() }} right now</p>
                                         % else:
                                             <p>Realtime information is not available for this route</p>
                                         % end
@@ -255,7 +255,7 @@
                                                     <th class="non-mobile">Headsign</th>
                                                     <th>Trip</th>
                                                     % if value.context.realtime_enabled and value.context.enable_realtime_trips:
-                                                        <th>{{ value.context.vehicle_type }}</th>
+                                                        <th>{{ value.context.format_model_category() }}</th>
                                                     % end
                                                 </tr>
                                             </thead>

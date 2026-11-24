@@ -3,6 +3,7 @@
     "website": "https://translink.ca",
     "default_system": "vancouver",
     "enabled": false,
+    "default_model_category": "bus",
     "order_defaults": {
         "amenities": {
             "accessible": true,

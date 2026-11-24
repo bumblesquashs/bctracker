@@ -4,5 +4,6 @@
     "gtfs_url": "https://data.reddeer.ca/datasets/gtfsdatafeed/download/zip",
     "default_system": "red-deer",
     "prefix_headsigns": true,
-    "show_occupancy": false
+    "show_occupancy": false,
+    "default_model_category": "bus"
 }

@@ -7,6 +7,7 @@
     "accurate_seconds": false,
     "distance_scale": 1000,
     "show_occupancy": false,
+    "default_model_category": "bus",
     "order_defaults": {
         "amenities": {
             "accessible": true

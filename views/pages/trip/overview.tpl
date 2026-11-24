@@ -170,18 +170,14 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    % if len(positions) == 1:
-                        <h2>Active {{ context.vehicle_type }}</h2>
-                    % else:
-                        <h2>Active {{ context.vehicle_type_plural }}</h2>
-                    % end
+                    <h2>Active {{ context.format_model_category(count=len(positions)) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="non-mobile">Model</th>
                                 <th>Next Stop</th>
                             </tr>
@@ -225,18 +221,18 @@
             % position = repositories.position.find(vehicle.agency.id, vehicle.id)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Scheduled {{ context.vehicle_type }}</h2>
+                    <h2>Scheduled {{ context.format_model_category() }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     % if show_help_text:
-                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                        <p>This {{ str(vehicle.model_category).lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
                     % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{{ context.vehicle_type }}</th>
+                                    <th>{{ context.format_model_category() }}</th>
                                     <th class="non-mobile">Model</th>
                                     <th>Current Headsign</th>
                                     <th class="desktop-only">Current Trip</th>

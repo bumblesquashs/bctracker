@@ -16,7 +16,7 @@ class ModelRepository:
             values = json.load(file)
         for (id, model_values) in values.items():
             type_id = model_values['type']
-            model_values['type'] = ModelType[type_id]
+            model_values['type'] = ModelType[type_id.upper()]
             self.models[id] = Model(id, **model_values)
     
     def find(self, model_id: str) -> Model | None:

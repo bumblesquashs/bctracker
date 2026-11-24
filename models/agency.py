@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 
 from models.context import Context
+from models.model import ModelCategory
 
 from constants import *
 
@@ -30,9 +31,7 @@ class Agency:
     enable_realtime_trips: bool = DEFAULT_ENABLE_REALTIME_TRIPS
     ais_colour: str | None = DEFAULT_AIS_COLOUR
     default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
-    filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
-    vehicle_type: str = DEFAULT_VEHICLE_TYPE
-    vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
+    default_model_category: ModelCategory = DEFAULT_MODEL_CATEGORY
     invalid_realtime_percentage: int = DEFAULT_INVALID_REALTIME_PERCENTAGE
     order_defaults: dict = field(default_factory=dict)
     

@@ -6,11 +6,7 @@
         <div class="column center">
             <div class="order-title">{{! order }}</div>
             <div class="content lighter-text smaller-font">
-                % if len(order.vehicles) == 1:
-                    1 {{ context.vehicle_type.lower() }}
-                % else:
-                    {{ len(order.vehicles) }} {{ context.vehicle_type_plural.lower() }}
-                % end
+                {{ len(order.vehicles) }} {{ context.format_model_category(count=len(order.vehicles)).lower() }}
             </div>
         </div>
         % if livery:

@@ -100,7 +100,7 @@
                                         % if upcoming_departures:
                                             % if stop.context.realtime_enabled and stop.context.enable_realtime_trips and show_help_text:
                                                 <p>
-                                                    <span>{{ context.vehicle_type_plural }} with a</span>
+                                                    <span>{{ context.format_model_category(2) }} with a</span>
                                                     <span class="scheduled">
                                                         % include('components/svg', name='schedule')
                                                     </span>
@@ -117,7 +117,7 @@
                                                         % end
                                                         <th>Trip</th>
                                                         % if stop.context.realtime_enabled and stop.context.enable_realtime_trips:
-                                                            <th>{{ context.vehicle_type }}</th>
+                                                            <th>{{ context.format_model_category() }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>

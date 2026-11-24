@@ -6,6 +6,7 @@
     "default_system": "edmonton",
     "accurate_seconds": false,
     "invalid_realtime_percentage": 0.5,
+    "default_model_category": "bus",
     "order_defaults": {
         "livery": "ets",
         "amenities": {

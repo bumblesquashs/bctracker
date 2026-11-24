@@ -14,7 +14,6 @@ from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
-from models.model import ModelType
 from models.province import Province
 from models.stop import StopType
 
@@ -477,14 +476,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -493,7 +492,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         order = repositories.order.find_order(context, vehicle.order_id)
@@ -513,7 +512,7 @@ class Server(Bottle):
             upcoming_departures = []
         model = vehicle.model
         nearest_stop_position = position or last_position
-        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and nearest_stop_position.source == 'ais':
             stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
                 stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
@@ -522,8 +521,8 @@ class Server(Bottle):
                 nearest_stop = None
         else:
             nearest_stop = None
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -554,14 +553,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -570,7 +569,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         position = repositories.position.find(context.agency_id, vehicle_id)
@@ -580,7 +579,7 @@ class Server(Bottle):
             last_position = None
         model = vehicle.model
         nearest_stop_position = position or last_position
-        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and nearest_stop_position.source == 'ais':
             stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
                 stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
@@ -589,8 +588,8 @@ class Server(Bottle):
                 nearest_stop = None
         else:
             nearest_stop = None
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -617,14 +616,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -633,7 +632,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         allocation = next((a for a in allocations if a.active), None)
@@ -664,8 +663,8 @@ class Server(Bottle):
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
         model = vehicle.model
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -714,7 +713,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             file='history/last_seen',
-            title=f'{context.vehicle_type} History',
+            title=f'{context.format_model_category()} History',
             path=['history'],
             path_args={
                 'days': days
@@ -731,7 +730,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             file='history/first_seen',
-            title=f'{context.vehicle_type} History',
+            title=f'{context.format_model_category()} History',
             path=['history', 'first-seen'],
             allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.vehicle), reverse=True),
             show_transfers=show_transfers

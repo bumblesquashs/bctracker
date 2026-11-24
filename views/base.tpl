@@ -28,8 +28,8 @@
         <link rel="apple-touch-icon" type="image/png" href="/img/logos/{{ province.path_id }}/apple-touch-icon.png" sizes="180x180">
         
         % if context.system:
-            <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
-            <meta name="keywords" content="Transit, {{ province }}, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and {{ context.format_model_category() }} Tracking" />
+            <meta name="keywords" content="Transit, {{ province }}, {{ context.format_model_category() }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in {{ province.code }}" />
             <meta name="keywords" content="Transit, {{ province }}, Bus Tracking" />
@@ -305,17 +305,16 @@
             }
         </script>
         
-        % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='ferry')
-        % include('components/svg_script', name='model/type/bus-artic')
-        % include('components/svg_script', name='model/type/bus-coach')
-        % include('components/svg_script', name='model/type/bus-conventional')
-        % include('components/svg_script', name='model/type/bus-decker')
-        % include('components/svg_script', name='model/type/bus-midibus')
-        % include('components/svg_script', name='model/type/bus-trolley')
-        % include('components/svg_script', name='model/type/bus-shuttle')
-        % include('components/svg_script', name='model/type/ferry')
-        % include('components/svg_script', name='ghost')
+        % include('components/svg_script', name='model/type/artic-bus')
+        % include('components/svg_script', name='model/type/coach-bus')
+        % include('components/svg_script', name='model/type/conventional-bus')
+        % include('components/svg_script', name='model/type/double-decker-bus')
+        % include('components/svg_script', name='model/type/midi-bus')
+        % include('components/svg_script', name='model/type/shuttle-bus')
+        % include('components/svg_script', name='model/type/trolley-bus')
+        % include('components/svg_script', name='model/type/roro-ferry')
+        % include('components/svg_script', name='model/type/passenger-ferry')
+        % include('components/svg_script', name='model/type/ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
         % include('components/svg_script', name='block')
@@ -656,8 +655,8 @@
                         <div class="flex-1">Filters:</div>
                         % if context.realtime_enabled:
                             <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
-                                % include('components/svg', name=context.filter_vehicles_image_name)
-                                <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
+                                % include('components/svg', name=context.default_model_category.icon)
+                                <div class="tooltip left">Include {{ context.format_model_category(2) }}</div>
                             </div>
                         % end
                         <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
@@ -885,8 +884,8 @@
                 
                 const vehicleName = document.createElement("div");
                 vehicleName.classList.add("name");
-                if (result.data.title_prefix) {
-                    vehicleName.innerHTML = result.data.title_prefix + " " + result.data.name;
+                if (result.data.prefix_title) {
+                    vehicleName.innerHTML = result.data.model_category + " " + result.data.name;
                 } else {
                     vehicleName.innerHTML = result.data.name;
                 }

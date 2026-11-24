@@ -24,9 +24,9 @@
         <i>{{ context }} realtime information is not supported.</i>
         <i>See the routes map <a href="{{ context.url('routes/map') }}">here</a></i>
     % elif context.system:
-        <i>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</i>
+        <i>There are no {{ context }} {{ context.format_model_category(0).lower() }} out right now</i>
     % else:
-        <i>There are no {{ context.vehicle_type_plural.lower() }} out right now</i>
+        <i>There are no {{ context.format_model_category(0).lower() }} out right now</i>
     % end
 </div>
 
@@ -60,7 +60,7 @@
                         <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                             % include('components/svg', name='status/check')
                         </div>
-                        <span>Show NIS {{ context.vehicle_type_plural }}</span>
+                        <span>Show NIS {{ context.format_model_category(2) }}</span>
                     </div>
                 </div>
             </div>

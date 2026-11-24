@@ -146,18 +146,14 @@ class Position:
             'text_colour': self.text_colour,
             'offline': self.offline,
             'source': self.source,
-            'show_occupancy': self.context.show_occupancy
+            'show_occupancy': self.context.show_occupancy,
+            'vehicle_icon': self.vehicle.icon,
         }
         year_model = self.vehicle.year_model
         if year_model:
             data['vehicle_year_model'] = year_model.replace("'", '&apos;')
         else:
             data['vehicle_year_model'] = 'Unknown Year/Model'
-        model = self.vehicle.model
-        if model and model.type:
-            data['vehicle_icon'] = f'model/type/{model.type.image_name}'
-        else:
-            data['vehicle_icon'] = 'ghost'
         decoration = self.vehicle.find_decoration()
         if decoration and decoration.enabled:
             data['decoration'] = str(decoration)

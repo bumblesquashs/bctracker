@@ -4,6 +4,7 @@ from glob import glob
 import json
 
 from models.agency import Agency
+from models.model import ModelCategory
 
 import settings
 
@@ -22,6 +23,8 @@ class AgencyRepository:
             with open(path, 'r') as file:
                 values = json.load(file)
             agency_id = path[len(root_path):-len(file_name)].strip('/')
+            if 'default_model_category' in values:
+                values['default_model_category'] = ModelCategory[values['default_model_category'].upper()]
             self.agencies[agency_id] = Agency(agency_id, **values)
     
     def find(self, agency_id: str) -> Agency | None:

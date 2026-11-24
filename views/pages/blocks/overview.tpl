@@ -50,7 +50,7 @@
                                     % if context.realtime_enabled and context.enable_realtime_trips:
                                         <div class="section row">
                                             <div class="name column">
-                                                <div>Assigned {{ context.vehicle_type_plural }}</div>
+                                                <div>Assigned {{ context.format_model_category(2) }}</div>
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
@@ -81,7 +81,7 @@
                                                 <th class="non-mobile">End Time</th>
                                                 <th class="desktop-only">Duration</th>
                                                 % if context.realtime_enabled and context.enable_realtime_trips:
-                                                    <th>{{ context.vehicle_type }}</th>
+                                                    <th>{{ context.format_model_category() }}</th>
                                                     <th class="non-mobile">Model</th>
                                                 % end
                                             </tr>

@@ -6,7 +6,7 @@
     % if context.system:
         <div class="row">
             % if context.realtime_enabled:
-                <h2>{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+                <h2>{{ context }} Transit Schedules and {{ context.format_model_category() }} Tracking</h2>
             % else:
                 <h2>{{ context }} Transit Schedules</h2>
             % end
@@ -39,7 +39,7 @@
             % end
         </div>
     % else:
-        <h2>{{ province }} Transit Schedules and {{ context.vehicle_type }} Tracking</h2>
+        <h2>{{ province }} Transit Schedules and {{ context.format_model_category() }} Tracking</h2>
     % end
 </div>
 
@@ -89,7 +89,7 @@
                 
                 % if context.realtime_enabled:
                     <form onsubmit="vehicleSearch()" action="javascript:void(0)">
-                        <label for="vehicle_search">{{ context.vehicle_type }} Number or Name:</label>
+                        <label for="vehicle_search">{{ context.format_model_category() }} Number or Name:</label>
                         <div class="input-container">
                             <input type="text" id="vehicle_search" name="vehicle_search" method="post" size="10">
                             <input type="submit" value="Search" class="button">
@@ -148,8 +148,8 @@
                     <div class="item">
                         <div class="column center">
                             % include('components/svg', name='realtime')
-                            <h3>{{ context.vehicle_type }} Tracking</h3>
-                            <p>See all {{ context.vehicle_type_plural.lower() }} that are currently active, including current route and location</p>
+                            <h3>{{ context.format_model_category() }} Tracking</h3>
+                            <p>See all {{ context.format_model_category(2).lower() }} that are currently active, including current route and location</p>
                         </div>
                         <div class="button-container">
                             <a class="button" href="{{ context.url('realtime') }}">List</a>

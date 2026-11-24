@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from constants import *
 
 from models.date import Date
+from models.model import ModelCategory
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -158,22 +159,10 @@ class Context:
         return DEFAULT_ROUTE_COLOUR
     
     @property
-    def filter_vehicles_image_name(self):
+    def default_model_category(self):
         if self.agency:
-            return self.agency.filter_vehicles_image_name
-        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
-    
-    @property
-    def vehicle_type(self):
-        if self.agency:
-            return self.agency.vehicle_type
-        return DEFAULT_VEHICLE_TYPE
-    
-    @property
-    def vehicle_type_plural(self):
-        if self.agency:
-            return self.agency.vehicle_type_plural
-        return DEFAULT_VEHICLE_TYPE_PLURAL
+            return self.agency.default_model_category
+        return DEFAULT_MODEL_CATEGORY
     
     @property
     def invalid_realtime_percentage(self):
@@ -301,11 +290,22 @@ class Context:
     def find_vehicle(self, id: str) -> Vehicle:
         return repositories.order.find_vehicle(self, id)
     
+    def format_model_category(self, count: int = 1):
+        match self.default_model_category:
+            case ModelCategory.BUS:
+                return 'Bus' if count == 1 else 'Buses'
+            case ModelCategory.TRAIN:
+                return 'Train' if count == 1 else 'Trains'
+            case ModelCategory.FERRY:
+                return 'Vessel' if count == 1 else 'Vessels'
+            case ModelCategory.VEHICLE:
+                return 'Vehicle' if count == 1 else 'Vehicles'
+    
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''
         values = []
         if self.realtime_enabled:
-            values.append(self.vehicle_type_plural.lower())
+            values.append(self.format_model_category(2).lower())
         values.append('routes')
         values.append('stops')
         if self.enable_blocks:

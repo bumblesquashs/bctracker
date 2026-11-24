@@ -63,18 +63,14 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    % if len(positions) == 1:
-                        <h2>Active {{ context.vehicle_type }}</h2>
-                    % else:
-                        <h2>Active {{ context.vehicle_type_plural }}</h2>
-                    % end
+                    <h2>Active {{ context.format_model_category(count=len(positions)) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 % if context.enable_blocks:
@@ -165,7 +161,7 @@
                                     <div class="content">
                                         % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
                                             <p>
-                                                <span>{{ context.vehicle_type_plural }} with a</span>
+                                                <span>{{ context.format_model_category(2) }} with a</span>
                                                 <span class="scheduled">
                                                     % include('components/svg', name='schedule')
                                                 </span>
@@ -185,7 +181,7 @@
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
                                                         % if context.realtime_enabled and context.enable_realtime_trips:
-                                                            <th>{{ context.vehicle_type }}</th>
+                                                            <th>{{ context.format_model_category() }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>

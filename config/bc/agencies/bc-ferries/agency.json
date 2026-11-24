@@ -13,9 +13,7 @@
     "enable_realtime_trips": false,
     "ais_colour": "003769",
     "default_route_colour": "003769",
-    "filter_vehicles_image_name": "ferry",
-    "vehicle_type": "Vessel",
-    "vehicle_type_plural": "Vessels",
+    "default_model_category": "ferry",
     "order_defaults": {
         "show_all": true,
         "amenities": {

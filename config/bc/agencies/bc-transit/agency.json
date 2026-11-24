@@ -7,6 +7,7 @@
     "accurate_seconds": false,
     "vehicle_name_length": 4,
     "distance_scale": 1000,
+    "default_model_category": "bus",
     "order_defaults": {
         "livery": "green-blue-stripes",
         "amenities": {

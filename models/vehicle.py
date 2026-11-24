@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 from dataclasses import dataclass, field
 
 from models.amenity import Amenity
-from models.model import Model
+from models.model import Model, ModelType, ModelCategory
 
 import helpers
 import repositories
@@ -57,10 +57,16 @@ class Vehicle:
         return None
     
     @property
-    def type_generic_name(self):
-        if self.model and self.model.type:
-            return self.model.type.generic_name
-        return 'Vehicle'
+    def icon(self) -> str:
+        if self.model:
+            return self.model.type.icon
+        return 'model/type/ghost'
+    
+    @property
+    def model_category(self) -> ModelCategory:
+        if self.model:
+            return self.model.type.category
+        return ModelCategory.VEHICLE
     
     def __post_init__(self):
         self.key = helpers.key(self.name)
@@ -68,7 +74,7 @@ class Vehicle:
     def __str__(self):
         if self.is_known:
             return self.name
-        return f'Unknown {self.agency.vehicle_type}'
+        return f'Unknown {self.context.format_model_category()}'
     
     def __hash__(self):
         return hash((self.agency, self.id))

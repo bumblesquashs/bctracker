@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>{{ context.vehicle_type }} History</h1>
+    <h1>{{ context.format_model_category() }} History</h1>
     <div class="tab-button-bar">
         <a href="{{ context.url('history') }}" class="tab-button">Last Seen</a>
         <span class="tab-button current">First Seen</span>
@@ -53,7 +53,7 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 % if not context.system:
                                     <th class="non-mobile">System</th>
@@ -167,7 +167,7 @@
                             % include('components/systems')
                         </div>
                     % else:
-                        <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded</h3>
+                        <h3>No {{ context }} {{ context.format_model_category(0).lower() }} have been recorded</h3>
                         <p>Please check again later!</p>
                     % end
                 </div>

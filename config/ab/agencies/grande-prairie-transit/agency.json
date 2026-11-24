@@ -6,6 +6,7 @@
     "default_system": "grande-prairie",
     "prefix_headsigns": true,
     "show_occupancy": false,
+    "default_model_category": "bus",
     "order_defaults": {
         "livery": "grande-prairie-stripes",
         "amenities": {

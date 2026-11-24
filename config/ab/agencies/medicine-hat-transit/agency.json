@@ -9,6 +9,7 @@
     "distance_scale": 1000,
     "enable_blocks": false,
     "show_occupancy": false,
+    "default_model_category": "bus",
     "order_defaults": {
         "livery": "medicine-hat-stripes",
         "amenities": {

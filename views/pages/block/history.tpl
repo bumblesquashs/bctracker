@@ -64,7 +64,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>{{ context.vehicle_type }}</th>
+                                        <th>{{ context.format_model_category() }}</th>
                                         <th class="desktop-only">Model</th>
                                         <th class="no-wrap non-mobile">First Seen</th>
                                         <th class="no-wrap">Last Seen</th>
@@ -111,7 +111,7 @@
                             <ol>
                                 <li>It may be a new block introduced in the last service change</li>
                                 <li>It may not be operating due to driver or vehicle shortages</li>
-                                <li>It may have only been done by {{ context.vehicle_type_plural.lower() }} without functional tracking equipment installed</li>
+                                <li>It may have only been done by {{ context.format_model_category(2).lower() }} without functional tracking equipment installed</li>
                             </ol>
                             <p>Please check again later!</p>
                         </div>
