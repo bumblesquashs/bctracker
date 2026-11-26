@@ -87,7 +87,7 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th class="non-mobile">System</th>
-                                                % if value.context.enable_blocks:
+                                                % if value.context.config.enable_blocks:
                                                     <th>Block</th>
                                                 % end
                                                 <th>Routes</th>
@@ -104,7 +104,7 @@
                                                             <div class="smaller-font">{{ record.context }}</div>
                                                         </div>
                                                     </td>
-                                                    % if value.context.enable_blocks:
+                                                    % if value.context.config.enable_blocks:
                                                         <td>
                                                             <div class="row">
                                                                 % if record.is_available:
@@ -179,7 +179,7 @@
                                                         <div class="row">
                                                             % include('components/vehicle', vehicle=position.vehicle)
                                                             <div class="row gap-5">
-                                                                % if position.context.show_occupancy:
+                                                                % if position.context.config.show_occupancy:
                                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                 % end
                                                                 % include('components/adherence', adherence=position.adherence)
@@ -203,7 +203,7 @@
                                     </table>
                                 % else:
                                     <div class="placeholder open-only">
-                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
+                                        % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
                                             <p>No active {{ value.context.format_model_category(0).lower() }} right now</p>
                                         % else:
                                             <p>Realtime information is not available for this route</p>
@@ -254,7 +254,7 @@
                                                     <th>Time</th>
                                                     <th class="non-mobile">Headsign</th>
                                                     <th>Trip</th>
-                                                    % if value.context.realtime_enabled and value.context.enable_realtime_trips:
+                                                    % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
                                                         <th>{{ value.context.format_model_category() }}</th>
                                                     % end
                                                 </tr>
@@ -285,14 +285,14 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
+                                                        % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
                                                             <td>
                                                                 <div class="row">
                                                                     % if trip.id in positions:
                                                                         % position = positions[trip.id]
                                                                         % include('components/vehicle', vehicle=position.vehicle)
                                                                         <div class="row gap-5">
-                                                                            % if position.context.show_occupancy:
+                                                                            % if position.context.config.show_occupancy:
                                                                                 % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                             % end
                                                                             % include('components/adherence', adherence=position.adherence)

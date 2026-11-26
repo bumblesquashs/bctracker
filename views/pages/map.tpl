@@ -13,14 +13,14 @@
 <div id="page-header">
     <div class="row">
         <h1 class="flex-1">Map</h1>
-        % if context.realtime_enabled:
+        % if context.config.realtime_enabled:
             % include('components/settings_toggle')
         % end
     </div>
 </div>
 
 <div id="no-vehicles-message" class="{{ 'display-none' if positions else '' }} column">
-    % if not context.realtime_enabled:
+    % if not context.config.realtime_enabled:
         <i>{{ context }} realtime information is not supported.</i>
         <i>See the routes map <a href="{{ context.url('routes/map') }}">here</a></i>
     % elif context.system:
@@ -30,7 +30,7 @@
     % end
 </div>
 
-% if context.realtime_enabled:
+% if context.config.realtime_enabled:
     <div id="settings" class="container collapsed">
         <div class="section">
             <div class="header">
@@ -785,7 +785,7 @@
     }
 </script>
 
-% if context.realtime_enabled:
+% if context.config.realtime_enabled:
     <script>
         setTimeout(function() {
             if (automaticRefresh) {

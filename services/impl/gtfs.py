@@ -30,7 +30,7 @@ class GTFSService:
     
     def load(self, context: Context, trigger: DownloadTrigger, force_download=False, update_db=False):
         '''Loads the GTFS for the given context into memory'''
-        if not context.system.gtfs_enabled:
+        if not context.config.gtfs_enabled:
             return
         
         context.system.gtfs_downloaded = path.exists(f'data/gtfs/{context.system_id}')
@@ -47,8 +47,8 @@ class GTFSService:
         
         try:
             feed_info = read_csv(context, 'feed_info', lambda r: r)[0]
-            start_date = Date.parse(feed_info['feed_start_date'], context.timezone, '%Y%m%d')
-            end_date = Date.parse(feed_info['feed_end_date'], context.timezone, '%Y%m%d')
+            start_date = Date.parse(feed_info['feed_start_date'], context.config.timezone, '%Y%m%d')
+            end_date = Date.parse(feed_info['feed_end_date'], context.config.timezone, '%Y%m%d')
             feed_date_range = DateRange(start_date, end_date)
         except:
             feed_date_range = None
@@ -63,9 +63,9 @@ class GTFSService:
         except:
             calendar_services = [Service.combine(context, service_id, exceptions) for (service_id, exceptions) in service_exceptions.items()]
         
-        gtfs_cutoff = context.gtfs_cutoff
+        gtfs_cutoff = context.config.gtfs_cutoff
         if gtfs_cutoff:
-            cutoff_date = Date.parse(gtfs_cutoff, context.timezone)
+            cutoff_date = Date.parse(gtfs_cutoff, context.config.timezone)
             if cutoff_date > context.today:
                 calendar_services = [s for s in calendar_services if s.schedule.date_range.start <= cutoff_date]
                 filter_service_ids = {s.id for s in calendar_services}
@@ -93,7 +93,7 @@ class GTFSService:
         context.system.routes = {r.id: r for r in routes}
         context.system.routes_by_number = {r.number: r for r in routes}
         
-        if context.enable_blocks:
+        if context.config.enable_blocks:
             block_trips = {}
             for trip in trips:
                 block_trips.setdefault(trip.block_id, []).append(trip)
@@ -117,7 +117,7 @@ class GTFSService:
             else:
                 remove(data_zip_path)
             context.system.gtfs_downloaded = False
-        with requests.get(context.system.gtfs_url, stream=True) as r:
+        with requests.get(context.config.format_gtfs_url(), stream=True) as r:
             with open(data_zip_path, 'wb') as f:
                 for chunk in r.iter_content(128):
                     f.write(chunk)
@@ -158,7 +158,7 @@ class GTFSService:
     
     def validate(self, context: Context):
         '''Checks that the GTFS for the given context is up-to-date'''
-        if not context.system.gtfs_enabled:
+        if not context.config.gtfs_enabled:
             return True
         if not context.system.gtfs_downloaded:
             return False

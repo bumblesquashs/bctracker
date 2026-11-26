@@ -64,7 +64,7 @@ class PositionRepository:
             route_id = None
         try:
             if data.HasField('timestamp'):
-                timestamp = Timestamp.parse(data.timestamp, context.timezone)
+                timestamp = Timestamp.parse(data.timestamp, context.config.timezone)
             else:
                 timestamp = None
         except AttributeError:

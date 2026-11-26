@@ -1,15 +1,7 @@
 {
     "name": "Calgary Transit",
     "website": "https://www.calgarytransit.com",
-    "gtfs_url": "https://data.calgary.ca/download/npk7-z3bj/application%2Fx-zip-compressed",
-    "realtime_url": "https://data.calgary.ca/download/am7c-qe3u/application%2Foctet-stream",
     "default_system": "calgary",
-    "prefix_headsigns": true,
-    "accurate_seconds": false,
-    "show_occupancy": false,
-    "invalid_realtime_percentage": 1.1,
-    "default_route_colour": "CF0000",
-    "default_model_category": "bus",
     "order_defaults": {
         "livery": "calgary-wave",
         "amenities": {
@@ -17,5 +9,26 @@
             "air_conditioned": true,
             "cctv": true
         }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "custom_route_colours": {
+            "201": "FF0808",
+            "202": "1074BC",
+            "203": "509E45",
+            "MG": "509E45",
+            "MO": "FFA500",
+            "MP": "800080",
+            "MT": "008080",
+            "MY": "FFD300"
+        },
+        "default_model_category": "bus",
+        "default_route_colour": "CF0000",
+        "gtfs_url": "https://data.calgary.ca/download/npk7-z3bj/application%2Fx-zip-compressed",
+        "invalid_realtime_percentage": 1.1,
+        "max_invalid_positions": 20,
+        "prefix_headsigns": true,
+        "realtime_url": "https://data.calgary.ca/download/am7c-qe3u/application%2Foctet-stream",
+        "show_occupancy": false
     }
 }

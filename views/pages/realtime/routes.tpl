@@ -16,7 +16,7 @@
     </div>
 </div>
 
-% if context.enable_realtime_trips:
+% if context.config.enable_realtime_trips:
     <div class="options-container">
         <div class="option" onclick="toggleNISVehicles()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
@@ -56,7 +56,7 @@
                                 <th>{{ route.context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                % if route.context.enable_blocks:
+                                % if route.context.config.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th class="non-mobile">Trip</th>
@@ -84,7 +84,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.show_occupancy:
+                                                    % if position.context.config.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)
@@ -115,7 +115,7 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if route.context.enable_blocks:
+                                    % if route.context.config.enable_blocks:
                                         % block = trip.block
                                         <td class="non-mobile">
                                             % if block:
@@ -137,7 +137,7 @@
             </div>
         % end
         
-        % no_trip_available_positions = sorted([p for p in positions if not p.context.enable_realtime_trips])
+        % no_trip_available_positions = sorted([p for p in positions if not p.context.config.enable_realtime_trips])
         % if no_trip_available_positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -194,7 +194,7 @@
             </div>
         % end
         
-        % no_route_positions = sorted([p for p in positions if p.context.enable_realtime_trips and not p.trip])
+        % no_route_positions = sorted([p for p in positions if p.context.config.enable_realtime_trips and not p.trip])
         % if no_route_positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
@@ -271,7 +271,7 @@
                 <h3>There are no {{ context.format_model_category(0).lower() }} in service right now</h3>
                 <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
             % end
-        % elif not context.realtime_enabled:
+        % elif not context.config.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">

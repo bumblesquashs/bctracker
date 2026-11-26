@@ -6,9 +6,9 @@
 
 % show_divider = get('show_divider', False)
 % show_time_estimate = get('show_time_estimate', False)
-% enable_blocks = get('enable_blocks', context.enable_blocks)
-% enable_realtime_trips = get('enable_realtime_trips', context.enable_realtime_trips)
-% realtime_enabled = get('realtime_enabled', context.realtime_enabled)
+% enable_blocks = get('enable_blocks', context.config.enable_blocks)
+% enable_realtime_trips = get('enable_realtime_trips', context.config.enable_realtime_trips)
+% realtime_enabled = get('realtime_enabled', context.config.realtime_enabled)
 
 <tr class="{{'divider' if show_divider else ''}}">
     <td>
@@ -84,7 +84,7 @@
                         % if trip.id in positions:
                             % position = positions[trip.id]
                             <div class="row gap-5">
-                                % if position.context.show_occupancy:
+                                % if position.context.config.show_occupancy:
                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                 % end
                                 % include('components/adherence', adherence=position.adherence)

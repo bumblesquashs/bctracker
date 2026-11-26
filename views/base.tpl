@@ -116,7 +116,7 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.8.0/ol.css">
         % end
         
-        % if enable_refresh and context.realtime_enabled:
+        % if enable_refresh and context.config.realtime_enabled:
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -152,7 +152,7 @@
             const svgs = {};
             const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
             const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
-            const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
+            const showStopNumbers = "{{ context.config.show_stop_number }}" == "True";     
             
             function getSVG(name) {
                 return svgs[name];
@@ -327,7 +327,7 @@
                 <div>{{ province.site_name }}</div>
             </a>
             
-            % if context.realtime_enabled:
+            % if context.config.realtime_enabled:
                 <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
                 <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
                 <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
@@ -339,7 +339,7 @@
             
             <a class="navigation-button desktop-only" href="{{ context.url('routes') }}">Routes</a>
             <a class="navigation-button desktop-only" href="{{ context.url('stops') }}">Stops</a>
-            % if context.enable_blocks:
+            % if context.config.enable_blocks:
                 <a class="navigation-button desktop-only" href="{{ context.url('blocks') }}">Blocks</a>
             % else:
                 <div class="navigation-button desktop-only disabled">Blocks</div>
@@ -402,7 +402,7 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            % if context.realtime_enabled:
+            % if context.config.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ context.url('map') }}">
                     % include('components/svg', name='map')
                     <span>Map</span>
@@ -437,7 +437,7 @@
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
-            % if context.enable_blocks:
+            % if context.config.enable_blocks:
                 <a class="menu-button" href="{{ context.url('blocks') }}">
                     % include('components/svg', name='block')
                     <span>Blocks</span>
@@ -526,7 +526,7 @@
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
                 % end
             </div>
-            % if context.realtime_enabled:
+            % if context.config.realtime_enabled:
                 <div id="refresh-button" class="disabled tooltip-anchor">
                     % include('components/svg', name='action/refresh')
                 </div>
@@ -653,9 +653,9 @@
                     </div>
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
-                        % if context.realtime_enabled:
+                        % if context.config.realtime_enabled:
                             <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
-                                % include('components/svg', name=context.default_model_category.icon)
+                                % include('components/svg', name=context.config.default_model_category.icon)
                                 <div class="tooltip left">Include {{ context.format_model_category(2) }}</div>
                             </div>
                         % end
@@ -667,7 +667,7 @@
                             % include('components/svg', name='stop')
                             <div class="tooltip left">Include Stops</div>
                         </div>
-                        % if context.enable_blocks:
+                        % if context.config.enable_blocks:
                             <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
                                 % include('components/svg', name='block')
                                 <div class="tooltip left">Include Blocks</div>

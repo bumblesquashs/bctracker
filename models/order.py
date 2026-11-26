@@ -114,15 +114,16 @@ class Order:
             
             for id in ids:
                 name = vehicle_data.pop('name', None)
-                if agency.vehicle_name_length:
+                vehicle_name_length = agency.config.vehicle_name_length
+                if vehicle_name_length:
                     if type(id) is int:
                         if not name:
-                            name = f'{id:0{agency.vehicle_name_length}d}'
+                            name = f'{id:0{vehicle_name_length}d}'
                         id = str(id)
                     else:
                         id = str(id)
                         if not name:
-                            name = id[:agency.vehicle_name_length]
+                            name = id[:vehicle_name_length]
                 else:
                     id = str(id)
                     if not name:

@@ -1,16 +1,19 @@
 {
     "name": "Grande Prairie Transit",
     "website": "https://cityofgp.com/roads-transportation/public-transit",
-    "gtfs_url": "https://gpt.mapstrat.com/current/google_transit.zip",
-    "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
     "default_system": "grande-prairie",
-    "prefix_headsigns": true,
-    "show_occupancy": false,
-    "default_model_category": "bus",
     "order_defaults": {
         "livery": "grande-prairie-stripes",
         "amenities": {
             "accessible": true
         }
+    },
+    "config": {
+        "default_model_category": "bus",
+        "gtfs_url": "https://gpt.mapstrat.com/current/google_transit.zip",
+        "ignore_route_colour": "000000",
+        "prefix_headsigns": true,
+        "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
+        "show_occupancy": false
     }
 }

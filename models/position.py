@@ -58,7 +58,7 @@ class Position:
         else:
             adherence = Adherence(adherence_value, layover)
         occupancy = Occupancy.from_db(row['occupancy'])
-        timestamp = Timestamp.parse(row['timestamp'], context.timezone)
+        timestamp = Timestamp.parse(row['timestamp'], context.config.timezone)
         source = row['source']
         return cls(context.system, vehicle, trip_id, stop_id, block_id, route_id, sequence, lat, lon, bearing, speed, adherence, occupancy, timestamp, source)
     
@@ -106,8 +106,9 @@ class Position:
         route = self.route
         if route:
             return route.colour
-        if not self.offline and self.source == 'ais' and self.context.ais_colour:
-            return self.context.ais_colour
+        config = self.context.config
+        if not self.offline and self.source == 'ais' and config.ais_colour:
+            return config.ais_colour
         return '989898'
     
     @property
@@ -116,8 +117,9 @@ class Position:
         route = self.route
         if route:
             return route.text_colour
-        if not self.offline and self.source == 'ais' and self.context.ais_colour:
-            return helpers.generate_text_colour(self.context.ais_colour)
+        config = self.context.config
+        if not self.offline and self.source == 'ais' and config.ais_colour:
+            return helpers.generate_text_colour(config.ais_colour)
         return helpers.generate_text_colour('989898')
     
     @property
@@ -146,7 +148,7 @@ class Position:
             'text_colour': self.text_colour,
             'offline': self.offline,
             'source': self.source,
-            'show_occupancy': self.context.show_occupancy,
+            'show_occupancy': self.context.config.show_occupancy,
             'vehicle_icon': self.vehicle.icon,
         }
         year_model = self.vehicle.year_model

@@ -1,13 +1,7 @@
 {
     "name": "Hullo",
     "website": "https://hullo.com",
-    "realtime_ais": true,
     "default_system": "hullo",
-    "enabled": false,
-    "ais_colour": "FF3503",
-    "show_occupancy": false,
-    "enable_realtime_trips": false,
-    "default_model_category": "ferry",
     "order_defaults": {
         "show_all": true,
         "amenities": {
@@ -16,5 +10,13 @@
             "cctv": true,
             "wifi": true
         }
+    },
+    "config": {
+        "ais_colour": "FF3503",
+        "default_model_category": "ferry",
+        "enable_realtime_trips": false,
+        "enabled": false,
+        "realtime_ais": true,
+        "show_occupancy": false
     }
 }

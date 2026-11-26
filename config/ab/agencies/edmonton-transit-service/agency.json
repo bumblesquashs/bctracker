@@ -1,12 +1,7 @@
 {
     "name": "Edmonton Transit Service",
     "website": "https://www.edmonton.ca/edmonton-transit-system-ets",
-    "gtfs_url": "https://gtfs.edmonton.ca/TMGTFSRealTimeWebService/GTFS/gtfs.zip",
-    "realtime_url": "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
     "default_system": "edmonton",
-    "accurate_seconds": false,
-    "invalid_realtime_percentage": 0.5,
-    "default_model_category": "bus",
     "order_defaults": {
         "livery": "ets",
         "amenities": {
@@ -14,5 +9,13 @@
             "air_conditioned": true,
             "cctv": true
         }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "default_model_category": "bus",
+        "gtfs_url": "https://gtfs.edmonton.ca/TMGTFSRealTimeWebService/GTFS/gtfs.zip",
+        "invalid_realtime_percentage": 0.5,
+        "max_invalid_positions": 20,
+        "realtime_url": "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb"
     }
 }

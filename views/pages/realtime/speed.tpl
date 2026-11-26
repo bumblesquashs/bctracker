@@ -12,7 +12,7 @@
     </div>
 </div>
 
-% if context.enable_realtime_trips:
+% if context.config.enable_realtime_trips:
     <div class="options-container">
         <div class="option" onclick="toggleNISVehicles()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
@@ -33,10 +33,10 @@
                     % if not context.system:
                         <th class="desktop-only">System</th>
                     % end
-                    % if context.enable_realtime_trips:
+                    % if context.config.enable_realtime_trips:
                         <th class="desktop-only">Speed</th>
                         <th>Headsign</th>
-                        % if context.enable_blocks:
+                        % if context.config.enable_blocks:
                             <th class="non-mobile">Block</th>
                         % end
                         <th class="non-mobile">Trip</th>
@@ -60,7 +60,7 @@
                                 <div class="row">
                                     % include('components/vehicle')
                                     <div class="row gap-5">
-                                        % if position.context.show_occupancy:
+                                        % if position.context.config.show_occupancy:
                                             % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                         % end
                                         % include('components/adherence', adherence=position.adherence)
@@ -77,9 +77,9 @@
                         % if not context.system:
                             <td class="desktop-only">{{ position.context }}</td>
                         % end
-                        % if context.enable_realtime_trips:
+                        % if context.config.enable_realtime_trips:
                             <td class="desktop-only no-wrap">{{ position.speed }} km/h</td>
-                            % if position.context.enable_realtime_trips:
+                            % if position.context.config.enable_realtime_trips:
                                 % if trip:
                                     <td>
                                         <div class="column">
@@ -97,7 +97,7 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if context.enable_blocks:
+                                    % if context.config.enable_blocks:
                                         % block = trip.block
                                         <td class="non-mobile">
                                             % if block:
@@ -109,7 +109,7 @@
                                         % include('components/trip')
                                     </td>
                                 % else:
-                                    <td colspan="{{ '3' if context.enable_blocks else '2' }}">
+                                    <td colspan="{{ '3' if context.config.enable_blocks else '2' }}">
                                         <div class="column">
                                             <span class="lighter-text">Not In Service</span>
                                             <span class="non-desktop smaller-font no-wrap">{{ position.speed }} km/h</span>
@@ -126,7 +126,7 @@
                                     % include('components/stop')
                                 </td>
                             % else:
-                                <td colspan="{{ '4' if context.enable_blocks else '3' }}">{{ position.speed }} km/h</td>
+                                <td colspan="{{ '4' if context.config.enable_blocks else '3' }}">{{ position.speed }} km/h</td>
                             % end
                         % else:
                             <td class="no-wrap">{{ position.speed }} km/h</td>
@@ -152,7 +152,7 @@
                 <h3>There are no {{ context.format_model_category(0).lower() }} in service right now</h3>
                 <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
             % end
-        % elif not context.realtime_enabled:
+        % elif not context.config.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">

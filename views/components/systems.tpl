@@ -2,7 +2,7 @@
 % from models.context import Context
 
 % if get('realtime_only', False):
-	% available_systems = [s for s in systems if s.realtime_enabled]
+	% available_systems = [s for s in systems if s.config.realtime_enabled]
 % else:
 	% available_systems = systems
 % end

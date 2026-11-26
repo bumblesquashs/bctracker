@@ -124,7 +124,7 @@ class Route:
     @property
     def url_id(self):
         '''The ID to use when making route URLs'''
-        if self.context.prefer_route_id:
+        if self.context.config.prefer_route_id:
             return self.id.replace('/', '-and-')
         return self.number.replace('/', '-and-')
     
@@ -157,7 +157,7 @@ class Route:
     def headsigns(self):
         '''Returns all headsigns from this route'''
         headsigns = self.cache.headsigns
-        if self.context.prefix_headsigns:
+        if self.context.config.prefix_headsigns:
             return [f'{self.number} {h}' for h in headsigns]
         return headsigns
     

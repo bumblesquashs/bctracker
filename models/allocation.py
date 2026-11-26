@@ -39,7 +39,7 @@ class Allocation:
     def first_time(self):
         if self.first_record:
             return self.first_record.first_seen
-        return Time.unknown(self.context.timezone)
+        return Time.unknown(self.context.config.timezone)
     
     @property
     def last_date(self):
@@ -51,7 +51,7 @@ class Allocation:
     def last_time(self):
         if self.last_record:
             return self.last_record.last_seen
-        return Time.unknown(self.context.timezone)
+        return Time.unknown(self.context.config.timezone)
     
     @property
     def last_position(self):
@@ -84,7 +84,7 @@ class Allocation:
         id = row['id']
         context = row.context()
         vehicle = context.find_vehicle(row['vehicle_id'])
-        first_seen = Date.parse(row['first_seen'], context.timezone)
+        first_seen = Date.parse(row['first_seen'], context.config.timezone)
         if 'first_record_id' in row:
             row.values['first_record_allocation_id'] = id
             row.values['first_record_agency_id'] = context.agency_id
@@ -93,7 +93,7 @@ class Allocation:
             first_record = row.obj('first_record', Record.from_db)
         else:
             first_record = None
-        last_seen = Date.parse(row['last_seen'], context.timezone)
+        last_seen = Date.parse(row['last_seen'], context.config.timezone)
         if 'last_record_id' in row:
             row.values['last_record_allocation_id'] = id
             row.values['last_record_agency_id'] = context.agency_id
@@ -108,6 +108,6 @@ class Allocation:
         last_stop_id = row['last_stop_id']
         last_stop_number = row['last_stop_number']
         last_stop_name = row['last_stop_name']
-        last_seen_timestamp = Timestamp.parse(row['last_seen_timestamp'], context.timezone)
+        last_seen_timestamp = Timestamp.parse(row['last_seen_timestamp'], context.config.timezone)
         last_seen_source = row['last_seen_source']
         return cls(id, context, vehicle, first_seen, first_record, last_seen, last_record, active, last_lat, last_lon, last_stop_id, last_stop_number, last_stop_name, last_seen_timestamp, last_seen_source)

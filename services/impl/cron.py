@@ -92,7 +92,7 @@ class CronService:
                 try:
                     if system.reload_backoff.check():
                         system.reload_backoff.increase_target()
-                        services.gtfs.load(context, DownloadTrigger.INVALID_POSITIONS, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.INVALID_POSITIONS, context.config.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')

@@ -16,7 +16,7 @@
     </div>
 </div>
 
-% if context.enable_realtime_trips:
+% if context.config.enable_realtime_trips:
     <div class="options-container">
         <div class="option" onclick="toggleNISVehicles()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
@@ -42,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if context.enable_realtime_trips and show_nis:
+                                    % if context.config.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -58,9 +58,9 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if context.enable_realtime_trips and show_nis:
+                                        % if context.config.enable_realtime_trips and show_nis:
                                             <td class="align-right">
-                                                % if agency.enable_realtime_trips:
+                                                % if agency.config.enable_realtime_trips:
                                                     {{ sum(1 for p in agency_positions if p.trip) }}
                                                 % else:
                                                     N/A
@@ -108,9 +108,9 @@
                                         % if not context.system:
                                             <th class="desktop-only">System</th>
                                         % end
-                                        % if agency.enable_realtime_trips:
+                                        % if agency.config.enable_realtime_trips:
                                             <th>Headsign</th>
-                                            % if agency.enable_blocks:
+                                            % if agency.config.enable_blocks:
                                                 <th class="non-mobile">Block</th>
                                             % end
                                             <th class="non-mobile">Trip</th>
@@ -130,7 +130,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in unknown_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
+                                            % include('components/realtime_row', enable_blocks=agency.config.enable_blocks, enable_realtime_trips=agency.config.enable_realtime_trips)
                                         % end
                                     % end
                                     % for order in agency_orders:
@@ -148,7 +148,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in order_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
+                                            % include('components/realtime_row', enable_blocks=agency.config.enable_blocks, enable_realtime_trips=agency.config.enable_realtime_trips)
                                         % end
                                     % end
                                 </tbody>
@@ -175,7 +175,7 @@
                 <h3>There are no {{ context.format_model_category(0).lower() }} in service right now</h3>
                 <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
             % end
-        % elif not context.realtime_enabled:
+        % elif not context.config.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">

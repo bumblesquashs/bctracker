@@ -30,7 +30,7 @@ class ServiceException:
     def from_csv(cls, row, context: Context):
         '''Returns a service exception initialized from the given CSV row'''
         service_id = row['service_id']
-        date = Date.parse(row['date'], context.timezone, '%Y%m%d')
+        date = Date.parse(row['date'], context.config.timezone, '%Y%m%d')
         type = ServiceExceptionType(int(row['exception_type']))
         return cls(service_id, date, type)
     
@@ -52,8 +52,8 @@ class Service:
     def from_csv(cls, row, context: Context, exceptions, feed_date_range):
         '''Returns a service initialized from the given CSV row'''
         id = row['service_id']
-        start_date = Date.parse(row['start_date'], context.timezone, '%Y%m%d')
-        end_date = Date.parse(row['end_date'], context.timezone, '%Y%m%d')
+        start_date = Date.parse(row['start_date'], context.config.timezone, '%Y%m%d')
+        end_date = Date.parse(row['end_date'], context.config.timezone, '%Y%m%d')
         date_range = DateRange(start_date, end_date)
         mon = row['monday'] == '1'
         tue = row['tuesday'] == '1'

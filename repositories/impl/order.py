@@ -48,12 +48,13 @@ class OrderRepository:
         try:
             return self.vehicles[context.agency_id][id]
         except:
-            if context.vehicle_name_length:
+            vehicle_name_length = context.config.vehicle_name_length
+            if vehicle_name_length:
                 try:
                     int_id = int(id)
-                    name = f'{int_id:0{context.vehicle_name_length}d}'
+                    name = f'{int_id:0{vehicle_name_length}d}'
                 except:
-                    name = id[:context.vehicle_name_length]
+                    name = id[:vehicle_name_length]
             else:
                 name = id
             return Vehicle(context.agency, id, name)
@@ -79,7 +80,7 @@ class OrderRepository:
         for agency_vehicles in self.vehicles.values():
             if id in agency_vehicles:
                 vehicle = agency_vehicles[id]
-                if vehicle.agency.enabled and vehicle.visible:
+                if vehicle.agency.config.enabled and vehicle.visible:
                     vehicles.append(vehicle)
         return vehicles
     
@@ -92,7 +93,7 @@ class OrderRepository:
         except KeyError:
             vehicles = [b for a in self.vehicles.values() for b in a.values()]
         for vehicle in vehicles:
-            if not vehicle.agency.enabled or not vehicle.visible:
+            if not vehicle.agency.config.enabled or not vehicle.visible:
                 continue
             value = 0
             name = vehicle.name.lower()

@@ -1,13 +1,6 @@
 {
     "name": "BC Transit",
     "website": "https://bctransit.com",
-    "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
-    "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
-    "prefix_headsigns": true,
-    "accurate_seconds": false,
-    "vehicle_name_length": 4,
-    "distance_scale": 1000,
-    "default_model_category": "bus",
     "order_defaults": {
         "livery": "green-blue-stripes",
         "amenities": {
@@ -15,5 +8,14 @@
             "air_conditioned": true,
             "cctv": true
         }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "default_model_category": "bus",
+        "distance_scale": 1000,
+        "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
+        "prefix_headsigns": true,
+        "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
+        "vehicle_name_length": 4
     }
 }

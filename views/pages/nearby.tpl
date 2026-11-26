@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="content">
                                         % if upcoming_departures:
-                                            % if stop.context.realtime_enabled and stop.context.enable_realtime_trips and show_help_text:
+                                            % if stop.context.config.realtime_enabled and stop.context.config.enable_realtime_trips and show_help_text:
                                                 <p>
                                                     <span>{{ context.format_model_category(2) }} with a</span>
                                                     <span class="scheduled">
@@ -112,11 +112,11 @@
                                                     <tr>
                                                         <th>Time</th>
                                                         <th class="non-mobile">Headsign</th>
-                                                        % if stop.context.enable_blocks:
+                                                        % if stop.context.config.enable_blocks:
                                                             <th class="desktop-only">Block</th>
                                                         % end
                                                         <th>Trip</th>
-                                                        % if stop.context.realtime_enabled and stop.context.enable_realtime_trips:
+                                                        % if stop.context.config.realtime_enabled and stop.context.config.enable_realtime_trips:
                                                             <th>{{ context.format_model_category() }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
@@ -128,7 +128,7 @@
                                                         % if not last_time:
                                                             % last_time = departure.time
                                                         % end
-                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour, enable_blocks=stop.context.enable_blocks, enable_realtime_trips=stop.context.enable_realtime_trips, realtime_enabled=stop.context.realtime_enabled)
+                                                        % include('components/departure_row', show_divider=departure.time.hour > last_time.hour, enable_blocks=stop.context.config.enable_blocks, enable_realtime_trips=stop.context.config.enable_realtime_trips, realtime_enabled=stop.context.config.realtime_enabled)
                                                         % last_time = departure.time
                                                     % end
                                                 </tbody>

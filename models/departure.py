@@ -86,7 +86,7 @@ class Departure:
         trip_id = row['trip_id']
         sequence = row['sequence']
         stop_id = row['stop_id']
-        time = Time.parse(row['time'], context.timezone, context.accurate_seconds)
+        time = Time.parse(row['time'], context.config.timezone, context.config.accurate_seconds)
         pickup_type = PickupType.from_db(row['pickup_type'])
         dropoff_type = DropoffType.from_db(row['dropoff_type'])
         timepoint = row['timepoint'] == 1
@@ -129,7 +129,7 @@ class Departure:
     
     def __str__(self):
         if self.headsign:
-            if self.context.prefix_headsigns and self.trip.route:
+            if self.context.config.prefix_headsigns and self.trip.route:
                 return f'{self.trip.route.number} {self.headsign}'
             return self.headsign
         return str(self.trip)

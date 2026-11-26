@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                         % end
-                        % if context.enable_blocks:
+                        % if context.config.enable_blocks:
                             % if block:
                                 <div class="section">
                                     % include('components/block_timeline', date=today)
@@ -142,7 +142,7 @@
                                 <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
-                        % if position.context.show_occupancy:
+                        % if position.context.config.show_occupancy:
                             <div class="row section">
                                 <div class="name">Occupancy</div>
                                 <div class="value">
@@ -159,7 +159,7 @@
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                        % if context.enable_blocks and block:
+                        % if context.config.enable_blocks and block:
                             <div class="row section">
                                 <div class="name">Block</div>
                                 <div class="value">
@@ -368,7 +368,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th class="desktop-only">System</th>
-                                    % if context.enable_blocks:
+                                    % if context.config.enable_blocks:
                                         <th>Block</th>
                                         <th class="desktop-only">Routes</th>
                                     % else:
@@ -398,7 +398,7 @@
                                             </div>
                                         </td>
                                         <td class="desktop-only">{{ record.context }}</td>
-                                        % if context.enable_blocks:
+                                        % if context.config.enable_blocks:
                                             <td>
                                                 <div class="column stretch">
                                                     <div class="row space-between">
@@ -435,7 +435,7 @@
                 % else:
                     <div class="placeholder">
                         <h3>This {{ str(vehicle.model_category).lower() }} doesn't have any recorded history</h3>
-                        % if context.enable_realtime_trips:
+                        % if context.config.enable_realtime_trips:
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
