@@ -2,6 +2,11 @@
     "name": "Woosh",
     "website": "https://www.rmwb.ca/en/transit/transit.aspx",
     "default_system": "fort-mcmurray",
+    "liveries": {
+        "woosh": {
+            "name": "Woosh"
+        }
+    },
     "order_defaults": {
         "livery": "woosh",
         "amenities": {

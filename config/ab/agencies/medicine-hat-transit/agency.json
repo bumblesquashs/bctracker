@@ -2,6 +2,14 @@
     "name": "Medicine Hat Transit",
     "website": "https://www.medicinehat.ca/en/roads-parking-and-transportation/transit.aspx",
     "default_system": "medicine-hat",
+    "liveries": {
+        "medicine-hat-stripes": {
+            "name": "Stripes"
+        },
+        "medicine-hat-wave": {
+            "name": "Wave"
+        }
+    },
     "order_defaults": {
         "livery": "medicine-hat-stripes",
         "amenities": {

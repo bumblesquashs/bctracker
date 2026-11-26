@@ -2,6 +2,14 @@
     "name": "Grande Prairie Transit",
     "website": "https://cityofgp.com/roads-transportation/public-transit",
     "default_system": "grande-prairie",
+    "liveries": {
+        "grande-prairie-stripes": {
+            "name": "Stripes"
+        },
+        "grande-prairie-wave": {
+            "name": "Waves"
+        }
+    },
     "order_defaults": {
         "livery": "grande-prairie-stripes",
         "amenities": {

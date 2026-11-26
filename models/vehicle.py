@@ -8,10 +8,9 @@ if TYPE_CHECKING:
 from dataclasses import dataclass, field
 
 from models.amenity import Amenity
-from models.model import Model, ModelType, ModelCategory
+from models.model import Model, ModelCategory
 
 import helpers
-import repositories
 
 @dataclass(slots=True)
 class Vehicle:
@@ -92,4 +91,4 @@ class Vehicle:
     
     def find_decoration(self):
         '''Returns the decoration for this vehicle, if one exists'''
-        return repositories.decoration.find(self.agency.id, self.id)
+        return self.agency.get_decoration(self.id)

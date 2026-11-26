@@ -23,7 +23,6 @@ class OrderRepository:
         self.vehicles = {}
         repositories.agency.load()
         repositories.model.load()
-        repositories.livery.load()
         id = 1
         root_path = f'./config/{settings.current.province.path_id}/agencies'
         file_name = 'orders.json'

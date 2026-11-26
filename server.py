@@ -102,7 +102,6 @@ class Server(Bottle):
         self.add('/api/stops', self.api_stops, validate=False)
         self.add('/api/route-indicators', self.api_route_indicators, validate=False)
         self.add('/api/search', self.api_search, method='POST', validate=False)
-        self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-systems', self.api_admin_reload_systems, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-themes', self.api_admin_reload_themes, method='POST', add_context=False, require_admin=True, validate=False)
@@ -135,7 +134,6 @@ class Server(Bottle):
         if args.updatedb:
             services.log.debug('Forcing database refresh')
         
-        repositories.decoration.load()
         repositories.order.load()
         repositories.system.load()
         repositories.theme.load()
@@ -503,7 +501,7 @@ class Server(Bottle):
             last_position = None
         records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=20)
         if vehicle.livery:
-            livery = repositories.livery.find(context.agency_id, vehicle.livery)
+            livery = context.agency.get_livery(vehicle.livery)
         else:
             livery = None
         if position and position.trip and position.sequence is not None:
@@ -1874,10 +1872,6 @@ class Server(Bottle):
             'results': [m.get_json() for m in matches[min:max]],
             'total': len(matches)
         }
-    
-    def api_admin_reload_decorations(self):
-        repositories.decoration.load()
-        return 'Success'
     
     def api_admin_reload_orders(self):
         repositories.order.load()

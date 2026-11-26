@@ -21,7 +21,6 @@
             </div>
             <div class="content">
                 <div class="button-container">
-                    <div class="button" onclick="reloadDecorations()">Reload Decorations</div>
                     <div class="button" onclick="reloadOrders()">Reload Orders</div>
                     <div class="button" onclick="reloadSystems()">Reload Systems</div>
                     <div class="button" onclick="reloadThemes()">Reload Themes</div>
@@ -156,12 +155,6 @@
 </div>
 
 <script>
-    function reloadDecorations() {
-        const request = new XMLHttpRequest();
-        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-decorations"), true);
-        request.send();
-    }
-    
     function reloadOrders() {
         const request = new XMLHttpRequest();
         request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-orders"), true);

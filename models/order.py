@@ -38,7 +38,7 @@ class Order:
     @property
     def liveries(self):
         livery_ids = {v.livery for v in self.vehicles if v.livery}
-        liveries = {repositories.livery.find(self.agency.id, id) for id in livery_ids}
+        liveries = {self.agency.get_livery(id) for id in livery_ids}
         return sorted(l for l in liveries if l)
     
     def __post_init__(self):

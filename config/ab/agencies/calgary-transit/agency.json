@@ -2,6 +2,14 @@
     "name": "Calgary Transit",
     "website": "https://www.calgarytransit.com",
     "default_system": "calgary",
+    "liveries": {
+        "calgary-stripes": {
+            "name": "Three Stripes"
+        },
+        "calgary-wave": {
+            "name": "Wave"
+        }
+    },
     "order_defaults": {
         "livery": "calgary-wave",
         "amenities": {

@@ -6,6 +6,8 @@ from zoneinfo import ZoneInfo
 
 from models.agency import Agency
 from models.config import Config
+from models.decoration import Decoration
+from models.livery import Livery
 from models.model import ModelCategory
 
 import settings
@@ -25,6 +27,12 @@ class AgencyRepository:
             with open(path, 'r') as file:
                 values = json.load(file)
             agency_id = path[len(root_path):-len(file_name)].strip('/')
+            if 'decorations' in values:
+                decoration_values = values['decorations']
+                values['decorations'] = {k: Decoration(agency_id, k, **v) for k, v in decoration_values.items()}
+            if 'liveries' in values:
+                livery_values = values['liveries']
+                values['liveries'] = {k: Livery(agency_id, k, **v) for k, v in livery_values.items()}
             if 'config' in values:
                 config_values = values['config']
                 if 'default_model_category' in config_values:

@@ -3,6 +3,8 @@ from dataclasses import dataclass, field
 
 from models.config import Config
 from models.context import Context
+from models.decoration import Decoration
+from models.livery import Livery
 
 from constants import *
 
@@ -14,6 +16,8 @@ class Agency:
     name: str
     website: str | None = None
     default_system: str | None = None
+    decorations: dict[str: Decoration] = field(default_factory=dict)
+    liveries: dict[str: Livery] = field(default_factory=dict)
     order_defaults: dict = field(default_factory=dict)
     
     config: Config = field(default_factory=lambda: Config())
@@ -40,3 +44,15 @@ class Agency:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    def get_decoration(self, id: str) -> Decoration | None:
+        try:
+            return self.decorations[id]
+        except KeyError:
+            return None
+    
+    def get_livery(self, id: str) -> Livery | None:
+        try:
+            return self.liveries[id]
+        except KeyError:
+            return None
