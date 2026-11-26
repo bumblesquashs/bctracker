@@ -9,7 +9,7 @@
     </div>
 </div>
 
-% if context.config.enable_blocks:
+% if config.enable_blocks:
     % if context.system:
         <div class="page-container">
             <div class="sidebar container flex-1">

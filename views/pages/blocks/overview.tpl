@@ -9,7 +9,7 @@
     </div>
 </div>
 
-% if context.config.enable_blocks:
+% if config.enable_blocks:
     % if context.system:
         % blocks = context.system.get_blocks()
         % if blocks:
@@ -47,7 +47,7 @@
                                         <div class="name">Total Blocks</div>
                                         <div class="value">{{ len(today_blocks) }}</div>
                                     </div>
-                                    % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                    % if config.realtime_enabled and config.enable_realtime_trips:
                                         <div class="section row">
                                             <div class="name column">
                                                 <div>Assigned {{ context.format_model_category(2) }}</div>
@@ -80,7 +80,7 @@
                                                 <th class="non-mobile">Start Time</th>
                                                 <th class="non-mobile">End Time</th>
                                                 <th class="desktop-only">Duration</th>
-                                                % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                                % if config.realtime_enabled and config.enable_realtime_trips:
                                                     <th>{{ context.format_model_category() }}</th>
                                                     <th class="non-mobile">Model</th>
                                                 % end
@@ -103,7 +103,7 @@
                                                     <td class="non-mobile">{{ start_time }}</td>
                                                     <td class="non-mobile">{{ end_time }}</td>
                                                     <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
-                                                    % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                                    % if config.realtime_enabled and config.enable_realtime_trips:
                                                         % if block.id in recorded_vehicles:
                                                             % vehicle = recorded_vehicles[block.id]
                                                             <td>

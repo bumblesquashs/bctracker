@@ -216,6 +216,7 @@ class Server(Bottle):
             path=path or [],
             path_args=path_args or {},
             context=context,
+            config=context.config,
             enable_refresh=enable_refresh,
             include_maps=include_maps or full_map,
             full_map=full_map,

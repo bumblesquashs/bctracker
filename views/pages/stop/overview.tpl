@@ -220,7 +220,7 @@
                                 % recorded_today = repositories.record.find_recorded_today(child_stop.context, trip_ids)
                                 % assignments = {a.block_id: a for a in repositories.assignment.find_all(child_stop.context, stop_id=child_stop.id)}
                                 % positions = {p.trip.id: p for p in repositories.position.find_all(child_stop.context, trip_id=trip_ids)}
-                                % if context.config.realtime_enabled and context.config.enable_realtime_trips and show_help_text:
+                                % if config.realtime_enabled and config.enable_realtime_trips and show_help_text:
                                     <p>
                                         <span>{{ context.format_model_category(2) }} with a</span>
                                         <span class="scheduled">
@@ -234,11 +234,11 @@
                                         <tr>
                                             <th>Time</th>
                                             <th class="non-mobile">Headsign</th>
-                                            % if context.config.enable_blocks:
+                                            % if config.enable_blocks:
                                                 <th class="desktop-only">Block</th>
                                             % end
                                             <th>Trip</th>
-                                            % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                            % if config.realtime_enabled and config.enable_realtime_trips:
                                                 <th>{{ context.format_model_category() }}</th>
                                                 <th class="desktop-only">Model</th>
                                             % end
@@ -288,7 +288,7 @@
                         % upcoming_count = 3 + floor(len(stop.routes) / 3)
                         % upcoming_departures = [d for d in departures if d.time.is_now or d.time.is_later][:upcoming_count]
                         % if upcoming_departures:
-                            % if context.config.realtime_enabled and context.config.enable_realtime_trips and show_help_text:
+                            % if config.realtime_enabled and config.enable_realtime_trips and show_help_text:
                                 <p>
                                     <span>{{ context.format_model_category(2) }} with a</span>
                                     <span class="scheduled">
@@ -303,11 +303,11 @@
                                     <tr>
                                         <th>Time</th>
                                         <th class="non-mobile">Headsign</th>
-                                        % if context.config.enable_blocks:
+                                        % if config.enable_blocks:
                                             <th class="desktop-only">Block</th>
                                         % end
                                         <th>Trip</th>
-                                        % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                        % if config.realtime_enabled and config.enable_realtime_trips:
                                             <th>{{ context.format_model_category() }}</th>
                                             <th class="desktop-only">Model</th>
                                         % end
@@ -363,7 +363,7 @@
                             % end
                             % include('components/departure_board')
                         % else:
-                            % if context.config.realtime_enabled and context.config.enable_realtime_trips and show_help_text:
+                            % if config.realtime_enabled and config.enable_realtime_trips and show_help_text:
                                 <p>
                                     <span>{{ context.format_model_category(2) }} with a</span>
                                     <span class="scheduled">
@@ -377,11 +377,11 @@
                                     <tr>
                                         <th>Time</th>
                                         <th class="non-mobile">Headsign</th>
-                                        % if context.config.enable_blocks:
+                                        % if config.enable_blocks:
                                             <th class="desktop-only">Block</th>
                                         % end
                                         <th>Trip</th>
-                                        % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                        % if config.realtime_enabled and config.enable_realtime_trips:
                                             <th>{{ context.format_model_category() }}</th>
                                             <th class="desktop-only">Model</th>
                                         % end

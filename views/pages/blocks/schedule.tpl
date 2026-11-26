@@ -9,7 +9,7 @@
     </div>
 </div>
 
-% if context.config.enable_blocks:
+% if config.enable_blocks:
     % if context.system:
         % blocks = context.system.get_blocks()
         % if blocks:

@@ -73,7 +73,7 @@
                                                                     <th class="non-mobile">Start Time</th>
                                                                     <th class="mobile-only">Start</th>
                                                                     <th class="non-mobile">Headsign</th>
-                                                                    % if context.config.enable_blocks:
+                                                                    % if config.enable_blocks:
                                                                         <th class="non-mobile">Block</th>
                                                                     % end
                                                                     <th>Trip</th>
@@ -93,7 +93,7 @@
                                                                         <td class="non-mobile">
                                                                             % include('components/headsign')
                                                                         </td>
-                                                                        % if context.config.enable_blocks:
+                                                                        % if config.enable_blocks:
                                                                             <td class="non-mobile">
                                                                                 % block = trip.block
                                                                                 <a href="{{ block.url() }}">{{ block.id }}</a>

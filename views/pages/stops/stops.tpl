@@ -69,7 +69,7 @@
                                     <div class="radio-button {{ 'selected' if sort == 'name' else '' }}"></div>
                                     <div>Stop Name</div>
                                 </div>
-                                % if context.config.show_stop_number:
+                                % if config.show_stop_number:
                                     <div class="option" onclick="setSort('number')">
                                         <div class="radio-button {{ 'selected' if sort == 'number' else '' }}"></div>
                                         <div>Stop Number</div>

@@ -15,7 +15,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
-        % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+        % if config.realtime_enabled and config.enable_realtime_trips:
             <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>
@@ -48,7 +48,7 @@
                             <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
-                    % if context.config.enable_blocks:
+                    % if config.enable_blocks:
                         % block = trip.block
                         % if block:
                             <div class="section">
@@ -88,7 +88,7 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / trip.context.config.distance_scale
+                        % km = length / config.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>
@@ -127,7 +127,7 @@
                         <thead>
                             <tr>
                                 <th>Trip</th>
-                                % if context.config.enable_blocks:
+                                % if config.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th>Service Days</th>
@@ -140,7 +140,7 @@
                                     <td>
                                         % include('components/trip', trip=related_trip)
                                     </td>
-                                    % if context.config.enable_blocks:
+                                    % if config.enable_blocks:
                                         <td class="non-mobile">
                                             % if block:
                                                 <a href="{{ block.url() }}">{{ block.id }}</a>

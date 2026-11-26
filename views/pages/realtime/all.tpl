@@ -16,7 +16,7 @@
     </div>
 </div>
 
-% if context.config.enable_realtime_trips:
+% if config.enable_realtime_trips:
     <div class="options-container">
         <div class="option" onclick="toggleNISVehicles()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
@@ -42,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if context.config.enable_realtime_trips and show_nis:
+                                    % if config.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -58,7 +58,7 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if context.config.enable_realtime_trips and show_nis:
+                                        % if config.enable_realtime_trips and show_nis:
                                             <td class="align-right">
                                                 % if agency.config.enable_realtime_trips:
                                                     {{ sum(1 for p in agency_positions if p.trip) }}
@@ -175,7 +175,7 @@
                 <h3>There are no {{ context.format_model_category(0).lower() }} in service right now</h3>
                 <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
             % end
-        % elif not context.config.realtime_enabled:
+        % elif not config.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">

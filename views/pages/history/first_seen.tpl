@@ -58,8 +58,8 @@
                                 % if not context.system:
                                     <th class="non-mobile">System</th>
                                 % end
-                                % if context.config.enable_realtime_trips:
-                                    % if context.config.enable_blocks:
+                                % if config.enable_realtime_trips:
+                                    % if config.enable_blocks:
                                         <th>Block</th>
                                         <th class="desktop-only">Routes</th>
                                     % else:
@@ -109,9 +109,9 @@
                                     % if not context.system:
                                         <td class="non-mobile">{{ allocation.context }}</td>
                                     % end
-                                    % if context.config.enable_realtime_trips:
+                                    % if config.enable_realtime_trips:
                                         % if allocation.context.config.enable_realtime_trips:
-                                            % if context.config.enable_blocks:
+                                            % if config.enable_blocks:
                                                 % if record:
                                                     <td>
                                                         <div class="column stretch">
@@ -160,7 +160,7 @@
                     % if not context.system:
                         <h3>No vehicle history found</h3>
                         <p>Something has probably gone terribly wrong if you're seeing this.</p>
-                    % elif not context.config.realtime_enabled:
+                    % elif not config.realtime_enabled:
                         <h3>{{ context }} realtime information is not supported</h3>
                         <p>You can browse schedule data using the links above, or choose a different system.</p>
                         <div class="non-desktop">

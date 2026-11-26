@@ -5,7 +5,7 @@
     <h1>Welcome to {{ province.site_name }}!</h1>
     % if context.system:
         <div class="row">
-            % if context.config.realtime_enabled:
+            % if config.realtime_enabled:
                 <h2>{{ context }} Transit Schedules and {{ context.format_model_category() }} Tracking</h2>
             % else:
                 <h2>{{ context }} Transit Schedules</h2>
@@ -87,7 +87,7 @@
                     }
                 </script>
                 
-                % if context.config.realtime_enabled:
+                % if config.realtime_enabled:
                     <form onsubmit="vehicleSearch()" action="javascript:void(0)">
                         <label for="vehicle_search">{{ context.format_model_category() }} Number or Name:</label>
                         <div class="input-container">
@@ -113,7 +113,7 @@
                     </div>
                 </form>
                 
-                % if context.config.enable_blocks:
+                % if config.enable_blocks:
                     <form onsubmit="blockSearch()" action="javascript:void(0)">
                         <label for="block_search">Block ID:</label>
                         <div class="input-container">
@@ -166,7 +166,7 @@
                         <div class="button-container">
                             <a class="button" href="{{ context.url('routes') }}">Routes</a>
                             <a class="button" href="{{ context.url('stops') }}">Stops</a>
-                            % if context.config.enable_blocks:
+                            % if config.enable_blocks:
                                 <a class="button" href="{{ context.url('blocks') }}">Blocks</a>
                             % end
                         </div>

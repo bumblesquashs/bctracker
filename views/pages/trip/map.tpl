@@ -13,7 +13,7 @@
     <div class="tab-button-bar">
         <a href="{{ trip.url() }}" class="tab-button">Overview</a>
         <span class="tab-button current">Map</span>
-        % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+        % if config.realtime_enabled and config.enable_realtime_trips:
             <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>

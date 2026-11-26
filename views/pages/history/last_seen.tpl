@@ -391,7 +391,7 @@
                                 <h3>No {{ context.format_model_category(0).lower()  }} history found</h3>
                                 <p>Something has probably gone terribly wrong if you're seeing this.</p>
                             % end
-                        % elif not context.config.realtime_enabled:
+                        % elif not config.realtime_enabled:
                             <h3>{{ context }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">

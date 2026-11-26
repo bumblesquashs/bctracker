@@ -73,7 +73,7 @@
                                 <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                % if context.config.enable_blocks:
+                                % if config.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th class="non-mobile">Trip</th>
@@ -120,7 +120,7 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if context.config.enable_blocks:
+                                    % if config.enable_blocks:
                                         <td class="non-mobile">
                                             % block = trip.block
                                             <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -159,7 +159,7 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if context.config.realtime_enabled and context.config.enable_realtime_trips and show_help_text:
+                                        % if config.realtime_enabled and config.enable_realtime_trips and show_help_text:
                                             <p>
                                                 <span>{{ context.format_model_category(2) }} with a</span>
                                                 <span class="scheduled">
@@ -175,12 +175,12 @@
                                                         <th class="non-mobile">Start Time</th>
                                                         <th class="mobile-only">Start</th>
                                                         <th class="desktop-only">Headsign</th>
-                                                        % if context.config.enable_blocks:
+                                                        % if config.enable_blocks:
                                                             <th class="non-mobile">Block</th>
                                                         % end
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
-                                                        % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                                        % if config.realtime_enabled and config.enable_realtime_trips:
                                                             <th>{{ context.format_model_category() }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
@@ -199,7 +199,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/headsign')
                                                             </td>
-                                                            % if context.config.enable_blocks:
+                                                            % if config.enable_blocks:
                                                                 <td class="non-mobile">
                                                                     % block = trip.block
                                                                     <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -216,7 +216,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/stop', stop=first_stop)
                                                             </td>
-                                                            % if context.config.realtime_enabled and context.config.enable_realtime_trips:
+                                                            % if config.realtime_enabled and config.enable_realtime_trips:
                                                                 % if trip.id in recorded_today:
                                                                     % vehicle = recorded_today[trip.id]
                                                                     <td>
