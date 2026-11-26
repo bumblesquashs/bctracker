@@ -1,0 +1,9 @@
+{
+    "name": "Grande Prairie Transit",
+    "website": "https://cityofgp.com/roads-transportation/public-transit",
+    "gtfs_url": "https://gpt.mapstrat.com/current/google_transit.zip",
+    "realtime_url": "http://gpt.mapstrat.com/current/gtfrealtime_VehiclePositions.bin",
+    "default_system": "grande-prairie",
+    "prefix_headsigns": true,
+    "show_occupancy": false
+}

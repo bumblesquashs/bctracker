@@ -1,0 +1,360 @@
+[
+    {
+        "year": 1976,
+        "model": "c-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            {
+                "id": "queen-of-alberni",
+                "name": "Queen of Alberni",
+                "capacity": {
+                    "Passengers/Crew": 1200,
+                    "Vehicles": 280
+                }
+            },
+            { "id": "queen-of-coquitlam", "name": "Queen of Coquitlam" },
+            { "id": "queen-of-cowichan", "name": "Queen of Cowichan" }
+        ]
+    },
+    {
+        "year": 1981,
+        "model": "c-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "queen-of-oak-bay", "name": "Queen of Oak Bay" },
+            { "id": "queen-of-surrey", "name": "Queen of Surrey" }
+        ]
+    },
+    {
+        "year": 1997,
+        "model": "century-class",
+        "vehicles": [
+            { "id": "skeena-queen", "name": "Skeena Queen" }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "coastal-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "coastal-celebration", "name": "Coastal Celebration" },
+            { "id": "coastal-inspiration", "name": "Coastal Inspiration" },
+            { "id": "coastal-renaissance", "name": "Coastal Renaissance" }
+        ]
+    },
+    {
+        "model": "i-class",
+        "length": 96,
+        "dining": true,
+        "pet_area": true,
+        "vehicles": [
+            {
+                "id": "queen-of-capilano",
+                "name": "Queen of Capilano",
+                "year": 1991,
+                "capacity": {
+                    "Passengers/Crew": 600,
+                    "Vehicles": 100
+                }
+            },
+            {
+                "id": "queen-of-cumberland",
+                "name": "Queen of Cumberland",
+                "year": 1992,
+                "capacity": {
+                    "Passengers/Crew": 462,
+                    "Vehicles": 80
+                },
+                "kids_area": true,
+                "work_area": true
+            }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "i-class",
+        "length": 102,
+        "capacity": {
+            "Passengers/Crew": 462,
+            "Vehicles": 112
+        },
+        "dining": true,
+        "pet_area": true,
+        "vehicles": [
+            { "id": "malaspina-sky", "name": "Malaspina Sky" }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "island-class",
+        "pet_area": true,
+        "vehicles": [
+            { "id": "island-aurora", "name": "Island Aurora" },
+            { "id": "island-discovery", "name": "Island Discovery" }
+        ]
+    },
+    {
+        "model": "island-class",
+        "pet_area": true,
+        "vehicles": [
+            { "id": "island-kuluta", "name": "Island K'ulut'a", "year": 2020 },
+            { "id": "island-nagalis", "name": "Island Nagalis", "year": 2020 },
+            { "id": "island-gwawis", "name": "Island G̲wawis", "year": 2021 },
+            { "id": "island-kwigwis", "name": "Island Kwigwis", "year": 2021 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "island-class",
+        "pet_area": true,
+        "vehicles": [
+            { "id": "island-xwsaluxul", "name": "Island xwsaĺux̌ul" },
+            { "id": "island-sarlequun", "name": "Island sarlequun" },
+            { "id": "island-gwayam", "name": "Island Gwa̲’ya̲m" },
+            { "id": "island-kasa", "name": "Island K’asa" }
+        ]
+    },
+    {
+        "model": "k-class",
+        "vehicles": [
+            {
+                "id": "klitsa",
+                "name": "Klitsa",
+                "year": 1972,
+                "length": 47.55,
+                "capacity": {
+                    "Passengers/Crew": 150,
+                    "Vehicles": 19
+                }
+            },
+            {
+                "id": "kahloke",
+                "name": "Kahloke",
+                "year": 1973,
+                "length": 54.71,
+                "capacity": {
+                    "Passengers/Crew": 200,
+                    "Vehicles": 21
+                }
+            },
+            {
+                "id": "kwuna",
+                "name": "Kwuna",
+                "year": 1975,
+                "length": 71.64,
+                "capacity": {
+                    "Passengers/Crew": 150,
+                    "Vehicles": 16
+                }
+            }
+        ]
+    },
+    {
+        "year": 1985,
+        "model": "k-class",
+        "length": 52.21,
+        "capacity": {
+            "Passengers/Crew": 269,
+            "Vehicles": 26
+        },
+        "vehicles": [
+            { "id": "puneluxutth", "name": "Pune'luxutth" }
+        ]
+    },
+    {
+        "year": 1960,
+        "model": "n-class",
+        "vehicles": [
+            { "id": "spirit-of-lax-kwalaams", "name": "Spirit of Lax Kw'alaams" }
+        ]
+    },
+    {
+        "year": 1977,
+        "model": "q-class",
+        "length": 74.68,
+        "capacity": {
+            "Passengers/Crew": 300,
+            "Vehicles": 44
+        },
+        "vehicles": [
+            { "id": "quinitsa", "name": "Quinitsa" }
+        ]
+    },
+    {
+        "year": 1982,
+        "model": "q-class",
+        "length": 86.85,
+        "capacity": {
+            "Passengers/Crew": 400,
+            "Vehicles": 63
+        },
+        "vehicles": [
+            { "id": "quinsam", "name": "Quinsam" }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "salish-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "salish-eagle", "name": "Salish Eagle" },
+            { "id": "salish-raven", "name": "Salish Raven" },
+            { "id": "salish-orca", "name": "Salish Orca" }
+        ]
+    },
+    {
+        "year": 2020,
+        "model": "salish-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "salish-heron", "name": "Salish Heron" }
+        ]
+    },
+    {
+        "model": "spirit-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "spirit-of-british-columbia", "name": "Spirit of British Columbia", "year": 1993 },
+            { "id": "spirit-of-vancouver-island", "name": "Spirit of Vancouver Island", "year": 1994 }
+        ]
+    },
+    {
+        "model": "summit-class",
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "summit-arbutus", "name": "Summit Arbutus" },
+            { "id": "summit-cedar", "name": "Summit Cedar" },
+            { "id": "summit-maple", "name": "Summit Maple" },
+            { "id": "summit-spruce", "name": "Summit Spruce" }
+        ]
+    },
+    {
+        "year": 1969,
+        "model": "t-class",
+        "vehicles": [
+            {
+                "id": "quadra-queen-ii",
+                "name": "Quadra Queen II",
+                "length": 49.61
+            },
+            {
+                "id": "tachek",
+                "name": "Tachek",
+                "length": 49.53
+            }
+        ]
+    },
+    {
+        "year": 1964,
+        "model": "v-class",
+        "length": 129.9,
+        "capacity": {
+            "Passengers/Crew": 1332,
+            "Vehicles": 254
+        },
+        "dining": true,
+        "gift_shop": true,
+        "kids_area": true,
+        "pet_area": true,
+        "work_area": true,
+        "vehicles": [
+            { "id": "queen-of-new-west", "name": "Queen of New Westminster" }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "unclassed",
+        "length": 78.5,
+        "length_units": "metres",
+        "fuel": "Cable",
+        "capacity": {
+            "Passengers/Crew": 150,
+            "Vehicles": 45
+        },
+        "pet_area": true,
+        "vehicles": [
+            { "id": "baynes-sound-connector", "name": "Baynes Sound Connector" }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "unclassed",
+        "length": 151.75,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 638,
+            "Vehicles": 115
+        },
+        "dining": true,
+        "gift_shop": true,
+        "cabins": true,
+        "kids_area": true,
+        "pet_area": true,
+        "vehicles": [
+            { "id": "northern-expedition", "name": "Northern Expedition" }
+        ]
+    },
+    {
+        "year": 2004,
+        "model": "unclassed",
+        "length": 117,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 500,
+            "Vehicles": 87
+        },
+        "dining": true,
+        "gift_shop": true,
+        "cabins": true,
+        "kids_area": true,
+        "pet_area": true,
+        "vehicles": [
+            { "id": "northern-adventure", "name": "Northern Adventure" }
+        ]
+    },
+    {
+        "year": 2000,
+        "model": "unclassed",
+        "length": 76.38,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 150,
+            "Vehicles": 35
+        },
+        "dining": true,
+        "vehicles": [
+            { "id": "northern-sea-wolf", "name": "Northern Sea Wolf" }
+        ]
+    }
+]

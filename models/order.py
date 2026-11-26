@@ -81,25 +81,54 @@ class Order:
             return None
     
     @classmethod
-    def from_json(cls, order_id: int, agency: Agency, model: Model | None, rows: list):
-        vehicles = []
-        for row in rows:
-            if 'version' in row:
-                version = row['version']
-                del row['version']
+    def from_json(cls, order_id: int, agency: Agency, data: dict):
+        model = repositories.model.find(data.get('model'))
+        vehicles: list[Vehicle] = []
+        for vehicle_data in data['vehicles']:
+            keys = [
+                'year',
+                'visible',
+                'version',
+                'demo',
+                'prefix',
+                'livery',
+                'length',
+                'length_units',
+                'fuel',
+                'capacity',
+                'accessible',
+                'air_conditioned',
+                'usb_charging',
+                'cctv',
+                'wifi',
+                'dining',
+                'gift_shop',
+                'cabins',
+                'kids_area',
+                'pet_area',
+                'work_area',
+            ]
+            for key in keys:
+                if key not in vehicle_data and key in data:
+                    vehicle_data[key] = data[key]
+            
+            if 'version' in vehicle_data:
+                version = vehicle_data['version']
+                del vehicle_data['version']
             else:
                 version = None
-            if 'prefix' in row:
-                prefix = str(row['prefix'])
-                del row['prefix']
+            if 'prefix' in vehicle_data:
+                prefix = str(vehicle_data['prefix'])
+                del vehicle_data['prefix']
             else:
                 prefix = None
-            if 'id' in row:
-                id = row['id']
-                del row['id']
+            
+            if 'id' in vehicle_data:
+                id = vehicle_data['id']
+                del vehicle_data['id']
                 try:
-                    name = row['name']
-                    del row['name']
+                    name = vehicle_data['name']
+                    del vehicle_data['name']
                 except:
                     name = None
                 if agency.vehicle_name_length:
@@ -120,12 +149,12 @@ class Order:
                 if prefix:
                     id = f'{prefix}{id}'
                     name = f'{prefix}{name}'
-                vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+                vehicles.append(Vehicle(agency, id, name, order_id, model, **vehicle_data))
             else:
-                low = row['low']
-                high = row['high']
-                del row['low']
-                del row['high']
+                low = vehicle_data['low']
+                high = vehicle_data['high']
+                del vehicle_data['low']
+                del vehicle_data['high']
                 for id in range(low, high + 1):
                     if agency.vehicle_name_length:
                         if type(id) is int:
@@ -142,5 +171,5 @@ class Order:
                     if prefix:
                         id = f'{prefix}{id}'
                         name = f'{prefix}{name}'
-                    vehicles.append(Vehicle(agency, id, name, order_id, model, **row))
+                    vehicles.append(Vehicle(agency, id, name, order_id, model, **vehicle_data))
         return cls(order_id, agency, model, vehicles)

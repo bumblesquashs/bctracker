@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass, field
+from glob import glob
 import json
 
 from models.livery import Livery
@@ -14,12 +15,14 @@ class LiveryRepository:
     def load(self):
         '''Loads decoration data from the static JSON file'''
         self.liveries = {}
-        with open(f'./static/{settings.current.province.path_id}/liveries.json', 'r') as file:
-            for (agency_id, agency_values) in json.load(file).items():
-                agency_liveries = {}
-                for (id, values) in agency_values.items():
-                    agency_liveries[id] = Livery(agency_id, id, **values)
-                self.liveries[agency_id] = agency_liveries
+        root_path = f'./config/{settings.current.province.path_id}/agencies'
+        file_name = 'liveries.json'
+        agency_paths = glob(f'{root_path}/*/{file_name}')
+        for path in agency_paths:
+            with open(path, 'r') as file:
+                values = json.load(file)
+            agency_id = path[len(root_path):-len(file_name)].strip('/')
+            self.liveries[agency_id] = {k: Livery(agency_id, k, **v) for k, v in values.items()}
     
     def find(self, agency_id: str, id: str) -> Livery | None:
         '''Returns the livery with the given ID'''

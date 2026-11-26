@@ -1,0 +1,116 @@
+[
+    {
+        "year": 2015,
+        "model": "new-flyer-md35",
+        "prefix": "19-",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 109, "high": 112 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-md35",
+        "prefix": "19-",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 113, "high": 121 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "gmc-glaval-4500-titan-ii",
+        "prefix": "19-",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 122, "high": 126 }
+        ]
+    },
+    {
+        "year": 2010,
+        "model": "nova-bus-lfs-3",
+        "prefix": "19-",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 900 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "new-flyer-d40lf",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1950, "high": 1961 }
+        ]
+    },
+    {
+        "year": 2010,
+        "model": "new-flyer-d40lfr",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1962, "high": 1975 }
+        ]
+    },
+    {
+        "year": 2011,
+        "model": "new-flyer-xd40",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1976, "high": 1983 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "new-flyer-xd40",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1984, "high": 1988 }
+        ]
+    },
+    {
+        "year": 2013,
+        "model": "new-flyer-xd40",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1989, "high": 1994 }
+        ]
+    },
+    {
+        "year": 2014,
+        "model": "eldorado-national-e-z-rider-ii-max-32",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1995, "high": 1996 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "new-flyer-xd40",
+        "livery": "woosh",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 1997, "high": 1999 },
+            { "low": 100, "high": 108, "prefix": "19-" }
+        ]
+    }
+]

@@ -1,0 +1,6 @@
+{
+    "name": "Translink",
+    "website": "https://translink.ca",
+    "default_system": "vancouver",
+    "enabled": false
+}

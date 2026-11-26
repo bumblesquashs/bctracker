@@ -1,0 +1,7 @@
+{
+    "banff": {
+        "name": "Banff",
+        "region": "southern-alberta",
+        "max_invalid_positions": 5
+    }
+}

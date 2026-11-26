@@ -12,11 +12,12 @@ class ModelRepository:
     def load(self):
         '''Loads model data from the static JSON file'''
         self.models = {}
-        with open(f'./static/models.json', 'r') as file:
-            for (type_id, type_values) in json.load(file).items():
-                type = ModelType[type_id]
-                for (id, values) in type_values.items():
-                    self.models[id] = Model(id, type, **values)
+        with open(f'./config/models.json', 'r') as file:
+            values = json.load(file)
+        for (id, model_values) in values.items():
+            type_id = model_values['type']
+            model_values['type'] = ModelType[type_id]
+            self.models[id] = Model(id, **model_values)
     
     def find(self, model_id: str) -> Model | None:
         '''Returns the model with the given ID'''

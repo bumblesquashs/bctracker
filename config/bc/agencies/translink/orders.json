@@ -1,0 +1,644 @@
+[
+    {
+        "year": 2007,
+        "model": "nova-bus-lfs-2",
+        "livery": "sweep-r-west-van-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 701, "high": 706 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-3",
+        "livery": "sweep-r-west-van-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 901, "high": 909 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "new-flyer-xd40",
+        "livery": "sweep-r-west-van-light",
+        "vehicles": [
+            { "low": 1201, "high": 1217 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xd40",
+        "vehicles": [
+            { "low": 1601, "high": 1605, "livery": "sweep-r-west-van-charcoal" },
+            { "low": 1606, "high": 1614, "livery": "sweep-r-charcoal" }
+        ]
+    },
+    {
+        "year": 2005,
+        "model": "new-flyer-e40lf",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "id": 2101 }
+        ]
+    },
+    {
+        "model": "new-flyer-e40lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 2102, "high": 2186, "year": 2006 },
+            { "low": 2187, "high": 2199, "year": 2007 },
+            { "low": 2201, "high": 2289, "year": 2007 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "new-flyer-e60lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 2501, "high": 2540 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "new-flyer-e60lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 2541, "high": 2574 }
+        ]
+    },
+    {
+        "year": 1998,
+        "model": "new-flyer-c40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 3283, "high": 3299 },
+            { "low": 3301, "high": 3308 }
+        ]
+    },
+    {
+        "year": 2006,
+        "model": "new-flyer-c40lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 3309, "high": 3358 }
+        ]
+    },
+    {
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 7101, "high": 7123, "year": 1995 },
+            { "low": 7124, "high": 7150, "year": 1996 }
+        ]
+    },
+    {
+        "year": 1996,
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 7151, "high": 7243 }
+        ]
+    },
+    {
+        "year": 1998,
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 7247, "high": 7297 }
+        ]
+    },
+    {
+        "year": 1999,
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 7299 },
+            { "low": 7301, "high": 7374 }
+        ]
+    },
+    {
+        "year": 2000,
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 7375, "high": 7399 },
+            { "low": 7401, "high": 7429 }
+        ]
+    },
+    {
+        "year": 2001,
+        "model": "new-flyer-d40lf",
+        "livery": "sweep",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 7430, "high": 7446 }
+        ]
+    },
+    {
+        "year": 2006,
+        "model": "new-flyer-d40lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 7447, "high": 7499 },
+            { "low": 7501, "high": 7504 }
+        ]
+    },
+    {
+        "year": 1998,
+        "model": "new-flyer-d60lf",
+        "livery": "b-line",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 8001 },
+            { "id": 8002, "livery": "sweep" },
+            { "low": 8003, "high": 8009 },
+            { "id": 8010, "livery": "sweep" },
+            { "low": 8011, "high": 8021 }
+        ]
+    },
+    {
+        "year": 1999,
+        "model": "new-flyer-d60lf",
+        "livery": "b-line",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "low": 8022, "high": 8028 },
+            { "id": 8029, "livery": "sweep" },
+            { "low": 8030, "high": 8047 }
+        ]
+    },
+    {
+        "year": 2000,
+        "model": "new-flyer-d60lf",
+        "livery": "b-line",
+        "air_conditioned": false,
+        "cctv": false,
+        "vehicles": [
+            { "id": 8048 },
+            { "id": 8049, "livery": "sweep" },
+            { "low": 8050, "high": 8052 },
+            { "low": 8053, "high": 8054, "livery": "sweep" },
+            { "low": 8055, "high": 8092 },
+            { "id": 8093, "livery": "sweep" },
+            { "low": 8094, "high": 8099 },
+            { "id": 8101 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "new-flyer-d60lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 8102, "high": 8117 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "new-flyer-de60lfr",
+        "livery": "sweep-r-charcoal",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 8118, "high": 8156 }
+        ]
+    },
+    {
+        "year": 2001,
+        "model": "obi-orion-v-suburban",
+        "livery": "sweep-suburban-grey",
+        "vehicles": [
+            { "low": 9201, "high": 9209 },
+            { "id": 9210, "livery": "sweep-suburban-white" },
+            { "low": 9211, "high": 9224 },
+            { "id": 9225, "livery": "sweep-suburban-white" },
+            { "low": 9226, "high": 9236 },
+            { "id": 9237, "livery": "sweep-suburban-white" },
+            { "id": 9238 },
+            { "id": 9239, "livery": "sweep-suburban-white" },
+            { "id": 9240 },
+            { "id": 9241, "livery": "sweep-suburban-white" },
+            { "low": 9242, "high": 9244 },
+            { "id": 9245, "livery": "sweep-suburban-white" },
+            { "id": 9246 },
+            { "id": 9247, "livery": "sweep-suburban-white" },
+            { "low": 9248, "high": 9255 },
+            { "id": 9256, "livery": "sweep-suburban-white" },
+            { "low": 9257, "high": 9259 },
+            { "id": 9260, "livery": "sweep-suburban-white" },
+            { "low": 9261, "high": 9263 },
+            { "low": 9264, "high": 9265, "livery": "sweep-suburban-white" },
+            { "low": 9266, "high": 9270 },
+            { "id": 9271, "livery": "sweep-suburban-white" },
+            { "low": 9272, "high": 9276 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "obi-orion-v-suburban",
+        "livery": "sweep-suburban-grey",
+        "vehicles": [
+            { "low": 9277, "high": 9285 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-hev-3",
+        "livery": "sweep-r-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 9401, "high": 9499 },
+            { "low": 9501, "high": 9542 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-3",
+        "livery": "sweep-r-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 9543, "high": 9581 },
+            { "low": 9583, "high": 9590 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "nova-bus-lfs-2",
+        "livery": "sweep-r-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 9605, "high": 9699 },
+            { "low": 9701, "high": 9725 }
+        ]
+    },
+    {
+        "year": 2008,
+        "model": "nova-bus-lfs-2",
+        "livery": "sweep-r-light",
+        "air_conditioned": false,
+        "vehicles": [
+            { "low": 9726, "high": 9791 },
+            { "low": 9797, "high": 9799 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "new-flyer-xde60",
+        "livery": "sweep-r-light",
+        "vehicles": [
+            { "low": 12001, "high": 12023 },
+            { "id": 12024, "livery": "sweep-r-charcoal" },
+            { "id": 12025 }
+        ]
+    },
+    {
+        "year": 2014,
+        "model": "new-flyer-xn40",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 14001, "high": 14045 }
+        ]
+    },
+    {
+        "year": 2015,
+        "model": "new-flyer-xde60",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 15001, "high": 15021 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xn40",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 16001, "high": 16051 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xd40",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 16101, "high": 16130 },
+            { "id": 16137 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xde60",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 16201, "high": 16226 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 16501, "high": 16562 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "chevrolet-arboc-4500-som-28",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 17501, "high": 17505 }
+        ]
+    },
+    {
+        "year": 2017,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 17506, "high": 17564 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "new-flyer-xde60",
+        "livery": "rapidbus",
+        "vehicles": [
+            { "low": 18001, "high": 18063 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "new-flyer-xn40",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 18101, "high": 18206 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "nova-bus-lfs-hev-4",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 18301, "high": 18404 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "nova-bus-lfs-suburban-4",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 18451, "high": 18473 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "chevrolet-arboc-4500-som-28",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 18501, "high": 18509 }
+        ]
+    },
+    {
+        "year": 2018,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "low": 18510, "high": 18527 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "new-flyer-xde60",
+        "livery": "rapidbus",
+        "vehicles": [
+            { "low": 19001, "high": 19047 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "new-flyer-xn40",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 19101, "high": 19147 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "nova-bus-lfse",
+        "vehicles": [
+            { "low": 19301, "high": 19302 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "new-flyer-xe40",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 19303, "high": 19304 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "alexander-dennis-enviro500-lhd",
+        "livery": "blue-top",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 19401, "high": 19432 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "chevrolet-arboc-4500-som-28",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 19501, "high": 19549 }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 19550, "high": 19554 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "new-flyer-xde60",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 21001, "high": 21025 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "alexander-dennis-enviro500-lhd",
+        "livery": "blue-top",
+        "usb_charging": true,
+        "vehicles": [
+            { "low": 21401, "high": 21425 }
+        ]
+    },
+    {
+        "year": 2021,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 21501, "high": 21562 }
+        ]
+    },
+    {
+        "year": 2022,
+        "model": "new-flyer-xde60",
+        "vehicles": [
+            { "low": 22001, "high": 22005, "livery": "blue-top" },
+            { "low": 22006, "high": 22015, "livery": "rapidbus" }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "new-flyer-xde60",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 23001, "high": 23015 }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "nova-bus-lfse+",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 23201, "high": 23215 }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 23601, "high": 23606 }
+        ]
+    },
+    {
+        "year": 2023,
+        "model": "ford-girardin-e450-g5",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 23651, "high": 23665 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "new-flyer-xde60",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 24001, "high": 24016 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "nova-bus-lfs-cng-4",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 24101, "high": 24150 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 24501, "high": 24548 }
+        ]
+    },
+    {
+        "year": 2024,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 24601, "high": 24634 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfs-cng-4",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 25101, "high": 25184 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "nova-bus-lfse+",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 25201, "high": 25207 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "chevrolet-arboc-4500-sof-27",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 25501, "high": 25527 }
+        ]
+    },
+    {
+        "year": 2025,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "blue-top",
+        "vehicles": [
+            { "low": 25601, "high": 25627 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "nova-bus-lfs-cng-4",
+        "livery": "blue-sweep",
+        "vehicles": [
+            { "low": 26101, "high": 26130 }
+        ]
+    },
+    {
+        "year": 2026,
+        "model": "chevrolet-girardin-4500-g5",
+        "livery": "blue-charcoal-sweep",
+        "vehicles": [
+            { "low": 26601, "high": 26624 }
+        ]
+    },
+    {
+        "year": 2027,
+        "model": "solaris-trollino-12",
+        "livery": "blue-charcoal-sweep",
+        "vehicles": [
+            { "low": 27001, "high": 27183 }
+        ]
+    },
+    {
+        "year": 2028,
+        "model": "solaris-trollino-18",
+        "livery": "blue-charcoal-sweep",
+        "vehicles": [
+            { "low": 28201, "high": 28292 }
+        ]
+    }
+]

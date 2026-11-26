@@ -1,0 +1,9 @@
+{
+    "name": "Edmonton Transit Service",
+    "website": "https://www.edmonton.ca/edmonton-transit-system-ets",
+    "gtfs_url": "https://gtfs.edmonton.ca/TMGTFSRealTimeWebService/GTFS/gtfs.zip",
+    "realtime_url": "http://gtfs.edmonton.ca/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
+    "default_system": "edmonton",
+    "accurate_seconds": false,
+    "invalid_realtime_percentage": 0.5
+}
