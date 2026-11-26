@@ -2,6 +2,8 @@
 from enum import IntEnum
 
 class Amenity(IntEnum):
+    '''A service available to passengers on a vehicle'''
+    
     ACCESSIBLE = 0
     AIR_CONDITIONED = 1
     USB_CHARGING = 2

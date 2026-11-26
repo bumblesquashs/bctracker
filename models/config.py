@@ -8,6 +8,7 @@ import settings
 
 @dataclass
 class Config:
+    '''Settings available to an agency or system'''
     
     accurate_seconds: bool = True
     ais_colour: str | None = None

@@ -7,7 +7,7 @@ class ModelCategory(Enum):
     
     BUS = 'Bus'
     TRAIN = 'Train'
-    FERRY = 'Ferry'
+    FERRY = 'Vessel'
     VEHICLE = 'Vehicle'
     
     @property
