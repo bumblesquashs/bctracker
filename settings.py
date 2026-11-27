@@ -26,6 +26,7 @@ class Settings:
     
     # Key settings
     analytics_key: str | None = None
+    translink_api_key: str | None = None
     
     # Functionality settings
     enable_validation: bool = False
@@ -56,6 +57,7 @@ class Settings:
             agency_domain=os.getenv('AGENCY_DOMAIN'),
             cookie_domain=os.getenv('COOKIE_DOMAIN'),
             analytics_key=os.getenv('ANALYTICS_KEY'),
+            translink_api_key=os.getenv('TRANSLINK_API_KEY'),
             enable_validation=os.getenv('ENABLE_VALIDATION', 'false') == 'true',
             enable_analytics=os.getenv('ENABLE_ANALYTICS', 'true') == 'true',
             enable_gtfs_backups=os.getenv('ENABLE_GTFS_BACKUPS', 'true') == 'true',

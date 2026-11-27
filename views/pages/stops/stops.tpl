@@ -1,4 +1,6 @@
 
+% from models.route import RouteType
+
 % rebase('base')
 
 <div id="page-header">
@@ -122,7 +124,8 @@
                         </div>
                         <div class="section">
                             <div class="options-container">
-                                % for route in context.system.get_routes():
+                                % routes = [r for r in context.system.get_routes() if r.type != RouteType.UNKNOWN]
+                                % for route in routes:
                                     <div class="option space-between" onclick="toggleRouteFilter('{{ route.url_id }}')">
                                         <div class="row">
                                             % include('components/route')

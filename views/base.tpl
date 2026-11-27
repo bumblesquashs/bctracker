@@ -306,6 +306,7 @@
         </script>
         
         % include('components/svg_script', name='model/type/artic-bus')
+        % include('components/svg_script', name='model/type/artic-trolley-bus')
         % include('components/svg_script', name='model/type/coach-bus')
         % include('components/svg_script', name='model/type/conventional-bus')
         % include('components/svg_script', name='model/type/double-decker-bus')

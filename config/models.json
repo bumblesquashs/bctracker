@@ -155,6 +155,17 @@
             "Passengers": 354
         }
     },
+    "damen-seabus": {
+        "name": "Seabus",
+        "manufacturer": "Damen",
+        "type": "passenger_ferry",
+        "length": 34,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 400
+        }
+    },
     "dennis-dart-slf-30": {
         "manufacturer": "Dennis",
         "name": "Dart SLF (30')",
@@ -421,7 +432,7 @@
     "new-flyer-e60lfr": {
         "manufacturer": "New Flyer",
         "name": "E60LFR",
-        "type": "trolley_bus",
+        "type": "artic_trolley_bus",
         "length": 60,
         "length_units": "feet",
         "fuel": "Trolley Electric"
@@ -662,7 +673,7 @@
     "solaris-trollino-18": {
         "manufacturer": "Solaris",
         "name": "Trollino 18",
-        "type": "trolley_bus",
+        "type": "artic_trolley_bus",
         "length": 18,
         "length_units": "metres",
         "fuel": "Trolley Electric"
@@ -712,6 +723,17 @@
         "length_units": "metres",
         "fuel": "Diesel"
     },
+    "victoria-shipyards-seabus": {
+        "name": "Seabus",
+        "manufacturer": "Victoria Shipyards",
+        "type": "passenger_ferry",
+        "length": 33.54,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 400
+        }
+    },
     "vmc-classic-vi30-cng": {
         "manufacturer": "VMC",
         "name": "Classic Vi30 CNG",
@@ -723,5 +745,16 @@
     "unclassed": {
         "name": "(Unclassed)",
         "type": "roro_ferry"
+    },
+    "yarrows-shipbuilders-seabus": {
+        "name": "Seabus",
+        "manufacturer": "Yarrows Shipbuilders Limited",
+        "type": "passenger_ferry",
+        "length": 34.29,
+        "length_units": "metres",
+        "fuel": "Diesel",
+        "capacity": {
+            "Passengers/Crew": 400
+        }
     }
 }

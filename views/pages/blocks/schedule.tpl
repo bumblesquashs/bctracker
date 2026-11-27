@@ -11,7 +11,7 @@
 
 % if config.enable_blocks:
     % if context.system:
-        % blocks = context.system.get_blocks()
+        % blocks = [b for b in context.system.get_blocks() if not b.get_start_time().is_unknown]
         % if blocks:
             % sheets = context.system.get_sheets()
             <div class="page-container">

@@ -11,7 +11,7 @@
 
 % if config.enable_blocks:
     % if context.system:
-        % blocks = context.system.get_blocks()
+        % blocks = [b for b in context.system.get_blocks() if not b.get_start_time(date=today).is_unknown]
         % if blocks:
             % today_blocks = sorted([b for b in blocks if today in b.schedule], key=lambda b: (b.get_start_time(date=today), b.get_end_time(date=today)))
             % blocks_so_far = [b for b in today_blocks if b.get_start_time(date=today) <= now]

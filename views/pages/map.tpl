@@ -101,6 +101,12 @@
                             <div>Speed</div>
                         </div>
                     % end
+                    % if vehicle_marker_style == 'livery':
+                        <div class="option" onclick="setVehicleMarkerStyle('livery')">
+                            <div id="vehicle-marker-style-livery" class="radio-button {{ 'selected' if vehicle_marker_style == 'livery' else '' }}"></div>
+                            <div>Livery</div>
+                        </div>
+                    % end
                 </div>
             </div>
         </div>
@@ -327,19 +333,27 @@
             content.appendChild(model);
             
             if (!position.offline && position.source !== "ais") {
-                const headsign = document.createElement("div");
+                const headsignElement = document.createElement("div");
                 if (position.headsign === "Not In Service") {
-                    headsign.innerHTML = position.headsign;
+                    headsignElement.innerHTML = position.headsign;
                 } else {
-                    headsign.className = "headsign";
+                    headsignElement.className = "headsign";
                 
                     const routeLine = document.createElement("div");
                     routeLine.className = "route-line";
                     routeLine.style.backgroundColor = "#" + position.colour;
                     
-                    headsign.innerHTML = routeLine.outerHTML + position.headsign;
+                    let headsign = "";
+                    if (position.enable_stacked_headsigns && position.headsign.includes("/")) {
+                        const headsignParts = position.headsign.split("/", 2);
+                        headsign = "<div class='column'>" + headsignParts[0].trim() + "<div class='lighter-text'>" + headsignParts[1].trim() + "</div></div>";
+                    } else {
+                        headsign = position.headsign;
+                    }
+
+                    headsignElement.innerHTML = routeLine.outerHTML + headsign;
                 }
-                content.appendChild(headsign);
+                content.appendChild(headsignElement);
             }
             
             if (position.stop_name) {

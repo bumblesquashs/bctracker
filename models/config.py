@@ -20,6 +20,8 @@ class Config:
     enable_force_gtfs: bool = True
     enable_blocks: bool = True
     enable_realtime_trips: bool = True
+    enable_route_variants: bool = True
+    enable_stacked_headsigns: bool = False
     enabled: bool = True
     force_gtfs_enabled: bool = False
     force_realtime_enabled: bool = False
@@ -32,6 +34,7 @@ class Config:
     prefer_stop_id: bool = False
     prefix_headsigns: bool = False
     realtime_ais: bool = False
+    realtime_update_frequency: int = 1
     realtime_url: str | None = None
     remote_id: int | None = None
     show_occupancy: bool = True
@@ -57,9 +60,11 @@ class Config:
     
     def format_realtime_url(self):
         '''Returns the URL to load realtime for this system'''
-        if self.realtime_enabled:
+        if self.realtime_enabled and self.realtime_url:
             url = self.realtime_url
-            if self.remote_id:
+            if '$REMOTE_ID' in url and self.remote_id:
                 url = url.replace('$REMOTE_ID', str(self.remote_id))
+            if '$TRANSLINK_API_KEY' in url and settings.current.translink_api_key:
+                url = url.replace('$TRANSLINK_API_KEY', str(settings.current.translink_api_key))
             return url
         return None

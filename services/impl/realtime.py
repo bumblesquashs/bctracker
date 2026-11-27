@@ -23,10 +23,14 @@ class RealtimeService:
     database: Database
     last_updated: Timestamp | None = None
     
-    def update(self, context: Context):
+    def update(self, context: Context, force: bool = False):
         '''Downloads realtime data for the given context and stores it in the database'''
         if not context.config.realtime_enabled:
             return
+        if context.config.realtime_update_frequency and not force:
+            time = context.now
+            if time.minute % context.config.realtime_update_frequency != 0:
+                return
         data_path = f'data/realtime/{context.system_id}.bin'
         
         if path.exists(data_path):
@@ -49,7 +53,8 @@ class RealtimeService:
         
         if context.config.realtime_url:
             data = protobuf.FeedMessage()
-            with requests.get(context.config.format_realtime_url(), timeout=10) as r:
+            headers = {'User-Agent': 'BCTracker'}
+            with requests.get(context.config.format_realtime_url(), headers=headers, timeout=10) as r:
                 if settings.current.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)

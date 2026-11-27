@@ -672,7 +672,7 @@
     {
         "year": 2026,
         "model": "chevrolet-girardin-4500-g5",
-        "livery": "blue-charcoal-sweep",
+        "livery": "blue-sweep-charcoal",
         "vehicles": [
             { "low": 26601, "high": 26624 }
         ]
@@ -680,7 +680,7 @@
     {
         "year": 2027,
         "model": "solaris-trollino-12",
-        "livery": "blue-charcoal-sweep",
+        "livery": "blue-sweep-charcoal",
         "vehicles": [
             { "low": 27001, "high": 27183 }
         ]
@@ -688,9 +688,121 @@
     {
         "year": 2028,
         "model": "solaris-trollino-18",
-        "livery": "blue-charcoal-sweep",
+        "livery": "blue-sweep-charcoal",
         "vehicles": [
             { "low": 28201, "high": 28292 }
+        ]
+    },
+    {
+        "year": 2007,
+        "model": "nova-bus-lfs-2",
+        "livery": "sweep-r-west-van-light",
+        "amenities": {
+            "air_conditioned": false
+        },
+        "vehicles": [
+            { "id": 80701, "name": 701 },
+            { "id": 80702, "name": 702 },
+            { "id": 80703, "name": 703 },
+            { "id": 80704, "name": 704 },
+            { "id": 80705, "name": 705 },
+            { "id": 80706, "name": 706 }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "nova-bus-lfs-3",
+        "livery": "sweep-r-west-van-light",
+        "amenities": {
+            "air_conditioned": false
+        },
+        "vehicles": [
+            { "id": 80901, "name": 901 },
+            { "id": 80902, "name": 902 },
+            { "id": 80903, "name": 903 },
+            { "id": 80904, "name": 904 },
+            { "id": 80905, "name": 905 },
+            { "id": 80906, "name": 906 },
+            { "id": 80907, "name": 907 },
+            { "id": 80908, "name": 908 },
+            { "id": 80909, "name": 909 }
+        ]
+    },
+    {
+        "year": 2012,
+        "model": "new-flyer-xd40",
+        "livery": "sweep-r-west-van-light",
+        "vehicles": [
+            { "id": 81201, "name": 1201 },
+            { "id": 81202, "name": 1202 },
+            { "id": 81203, "name": 1203 },
+            { "id": 81204, "name": 1204 },
+            { "id": 81205, "name": 1205 },
+            { "id": 81206, "name": 1206 },
+            { "id": 81207, "name": 1207 },
+            { "id": 81208, "name": 1208 },
+            { "id": 81209, "name": 1209 },
+            { "id": 81210, "name": 1210 },
+            { "id": 81211, "name": 1211 },
+            { "id": 81212, "name": 1212 },
+            { "id": 81213, "name": 1213 },
+            { "id": 81214, "name": 1214 },
+            { "id": 81215, "name": 1215 },
+            { "id": 81216, "name": 1216 },
+            { "id": 81217, "name": 1217 }
+        ]
+    },
+    {
+        "year": 2016,
+        "model": "new-flyer-xd40",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "id": 16601, "name": 1601 },
+            { "id": 16602, "name": 1602 },
+            { "id": 16603, "name": 1603 },
+            { "id": 16604, "name": 1604 },
+            { "id": 16605, "name": 1605 },
+            { "id": 16139, "name": 1606 },
+            { "id": 16140, "name": 1607 },
+            { "id": 16131, "name": 1608 },
+            { "id": 16138, "name": 1609 },
+            { "id": 16134, "name": 1610 },
+            { "id": 16135, "name": 1611 },
+            { "id": 16136, "name": 1612 },
+            { "id": 16132, "name": 1613 },
+            { "id": 16133, "name": 1614 }
+        ]
+    },
+    {
+        "year": 1976,
+        "model": "yarrows-shipbuilders-seabus",
+        "vehicles": [
+            { "id": "burrard-beaver", "name": "Burrard Beaver", "livery": "sweep-r-charcoal" },
+            { "id": "burrard-otter", "name": "Burrard Otter", "livery": "sweep" }
+        ]
+    },
+    {
+        "year": 2009,
+        "model": "victoria-shipyards-seabus",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "id": "burrard-pacific-breeze", "name": "Burrard Pacific Breeze" }
+        ]
+    },
+    {
+        "year": 2014,
+        "model": "damen-seabus",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "id": "burrard-otter-ii", "name": "Burrard Otter II" }
+        ]
+    },
+    {
+        "year": 2019,
+        "model": "damen-seabus",
+        "livery": "sweep-r-charcoal",
+        "vehicles": [
+            { "id": "burrard-chinook", "name": "Burrard Chinook" }
         ]
     }
 ]

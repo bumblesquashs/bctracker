@@ -42,6 +42,7 @@ class ModelType(Enum):
     '''A type of vehicle model'''
     
     ARTIC_BUS = 'Articulated Bus'
+    ARTIC_TROLLEY_BUS = 'Articulated Trolley Bus'
     COACH_BUS = 'Coach Bus'
     CONVENTIONAL_BUS = 'Conventional Bus'
     DOUBLE_DECKER_BUS = 'Double Decker Bus'
@@ -60,6 +61,8 @@ class ModelType(Enum):
     def category(self) -> ModelCategory:
         match self:
             case ModelType.ARTIC_BUS:
+                return ModelCategory.BUS
+            case ModelType.ARTIC_TROLLEY_BUS:
                 return ModelCategory.BUS
             case ModelType.COACH_BUS:
                 return ModelCategory.BUS

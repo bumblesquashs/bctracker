@@ -148,6 +148,7 @@ class Position:
             'text_colour': self.text_colour,
             'offline': self.offline,
             'source': self.source,
+            'enable_stacked_headsigns': self.context.config.enable_stacked_headsigns,
             'show_occupancy': self.context.config.show_occupancy,
             'vehicle_icon': self.vehicle.icon,
         }

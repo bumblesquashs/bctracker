@@ -19,7 +19,8 @@
         },
         "9407": {
             "text": "🧧",
-            "description": "Lunar New Year Bus"
+            "description": "Lunar New Year Bus",
+            "enabled": false
         },
         "9540": {
             "text": "🦌",
@@ -58,7 +59,8 @@
         },
         "18044": {
             "text": "🌾",
-            "description": "Vaisakhi Bus"
+            "description": "Vaisakhi Bus",
+            "enabled": false
         },
         "18330": {
             "text": "🦌",
@@ -94,6 +96,12 @@
         "23201": {
             "text": "⚡",
             "description": "Battery Bus Demo"
+        },
+        "burrard-chinook": {
+            "text": "🐟",
+            "description": "st’aqʷəy’ | Chinook | kwu7s",
+            "artist": "Kelly Cannel, Siobhan Joseph, and Angela George",
+            "website": "https://buzzer.translink.ca/2021/07/translinks-burrard-chinook-seabus-sails-into-service/"
         }
     },
     "liveries": {
@@ -126,6 +134,12 @@
         },
         "blue-top": {
             "name": "Blue Top"
+        },
+        "blue-sweep-charcoal": {
+            "name": "Blue Sweep (Charcoal)"
+        },
+        "blue-sweep": {
+            "name": "Blue Sweep"
         }
     },
     "order_defaults": {
@@ -136,7 +150,21 @@
         }
     },
     "config": {
+        "ais_colour": "746661",
+        "custom_route_numbers": {
+            "30053": "EL",
+            "30052": "ML",
+            "13686": "CL",
+            "6771": "SB"
+        },
+        "default_route_colour": "0082C8",
+        "enable_route_variants": false,
+        "enable_stacked_headsigns": true,
         "enabled": false,
-        "default_model_category": "bus"
+        "gtfs_url": "https://gtfs-static.translink.ca/gtfs/google_transit.zip",
+        "realtime_ais": true,
+        "realtime_update_frequency": 2,
+        "realtime_url": "https://gtfsapi.translink.ca/v3/gtfsposition?apikey=$TRANSLINK_API_KEY",
+        "show_occupancy": false
     }
 }

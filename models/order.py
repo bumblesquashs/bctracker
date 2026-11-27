@@ -113,7 +113,10 @@ class Order:
                 ids = list(range(low, high + 1))
             
             for id in ids:
-                name = vehicle_data.pop('name', None)
+                try:
+                    name = str(vehicle_data.pop('name'))
+                except:
+                    name = None
                 vehicle_name_length = agency.config.vehicle_name_length
                 if vehicle_name_length:
                     if type(id) is int:

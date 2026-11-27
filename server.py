@@ -15,6 +15,7 @@ from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
 from models.province import Province
+from models.route import RouteType
 from models.stop import StopType
 
 import constants
@@ -150,7 +151,7 @@ class Server(Bottle):
                     services.gtfs.load(context, DownloadTrigger.LAUNCH_FLAG, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
                         services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, context.config.enable_force_gtfs)
-                    services.realtime.update(context)
+                    services.realtime.update(context, force=True)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
                 if not system.gtfs_downloaded or not services.realtime.validate(context):
@@ -449,7 +450,7 @@ class Server(Bottle):
             file='realtime/speed',
             title='Realtime',
             path=['realtime', 'speed'],
-            positions=positions,
+            positions=[p for p in positions if p.speed is not None],
             show_nis=show_nis
         )
     
@@ -781,11 +782,12 @@ class Server(Bottle):
             title='Routes',
             path=['routes'],
             enable_refresh=False,
-            routes=sorted(routes)
+            routes=sorted(r for r in routes if r.type != RouteType.UNKNOWN)
         )
     
     def routes_map(self, context: Context):
         routes = repositories.route.find_all(context)
+        routes = [r for r in routes if r.type != RouteType.UNKNOWN]
         show_route_numbers = self.query_cookie('show_route_numbers', 'true') != 'false'
         points = repositories.point.find_all(context)
         points_by_shape_id = {}
@@ -1946,7 +1948,7 @@ class Server(Bottle):
             return 'Invalid system'
         context = system.context
         try:
-            services.realtime.update(context)
+            services.realtime.update(context, force=True)
             services.realtime.update_records()
             if not services.realtime.validate(context):
                 system.reload_backoff.increase_value()
