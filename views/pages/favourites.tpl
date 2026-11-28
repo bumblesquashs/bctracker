@@ -11,7 +11,7 @@
     <p>
         Add up to 20 favourites using the
         % include('components/svg', name='action/non-favourite')
-        button on {{ context.vehicle_type_plural.lower() }}, routes, and stops.
+        button on {{ context.format_model_category(2).lower() }}, routes, and stops.
     </p>
 % end
 
@@ -24,7 +24,7 @@
         % if vehicle_favourites:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>{{ context.vehicle_type_plural }}</h2>
+                    <h2>{{ context.format_model_category(2) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
@@ -87,7 +87,7 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th class="non-mobile">System</th>
-                                                % if value.context.enable_blocks:
+                                                % if value.context.config.enable_blocks:
                                                     <th>Block</th>
                                                 % end
                                                 <th>Routes</th>
@@ -104,7 +104,7 @@
                                                             <div class="smaller-font">{{ record.context }}</div>
                                                         </div>
                                                     </td>
-                                                    % if value.context.enable_blocks:
+                                                    % if value.context.config.enable_blocks:
                                                         <td>
                                                             <div class="row">
                                                                 % if record.is_available:
@@ -166,7 +166,7 @@
                                     <table class="open-only">
                                         <thead>
                                             <tr>
-                                                <th>{{ value.context.vehicle_type }}</th>
+                                                <th>{{ value.context.format_model_category() }}</th>
                                                 <th class="non-mobile">Headsign</th>
                                                 <th>Trip</th>
                                             </tr>
@@ -179,7 +179,7 @@
                                                         <div class="row">
                                                             % include('components/vehicle', vehicle=position.vehicle)
                                                             <div class="row gap-5">
-                                                                % if position.context.show_occupancy:
+                                                                % if position.context.config.show_occupancy:
                                                                     % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                 % end
                                                                 % include('components/adherence', adherence=position.adherence)
@@ -203,8 +203,8 @@
                                     </table>
                                 % else:
                                     <div class="placeholder open-only">
-                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
-                                            <p>No active {{ value.context.vehicle_type_plural.lower() }} right now</p>
+                                        % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
+                                            <p>No active {{ value.context.format_model_category(0).lower() }} right now</p>
                                         % else:
                                             <p>Realtime information is not available for this route</p>
                                         % end
@@ -254,8 +254,8 @@
                                                     <th>Time</th>
                                                     <th class="non-mobile">Headsign</th>
                                                     <th>Trip</th>
-                                                    % if value.context.realtime_enabled and value.context.enable_realtime_trips:
-                                                        <th>{{ value.context.vehicle_type }}</th>
+                                                    % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
+                                                        <th>{{ value.context.format_model_category() }}</th>
                                                     % end
                                                 </tr>
                                             </thead>
@@ -285,14 +285,14 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        % if value.context.realtime_enabled and value.context.enable_realtime_trips:
+                                                        % if value.context.config.realtime_enabled and value.context.config.enable_realtime_trips:
                                                             <td>
                                                                 <div class="row">
                                                                     % if trip.id in positions:
                                                                         % position = positions[trip.id]
                                                                         % include('components/vehicle', vehicle=position.vehicle)
                                                                         <div class="row gap-5">
-                                                                            % if position.context.show_occupancy:
+                                                                            % if position.context.config.show_occupancy:
                                                                                 % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                             % end
                                                                             % include('components/adherence', adherence=position.adherence)

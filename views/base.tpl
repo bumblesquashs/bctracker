@@ -28,8 +28,8 @@
         <link rel="apple-touch-icon" type="image/png" href="/img/logos/{{ province.path_id }}/apple-touch-icon.png" sizes="180x180">
         
         % if context.system:
-            <meta name="description" content="{{ context }} Transit Schedules and {{ context.vehicle_type }} Tracking" />
-            <meta name="keywords" content="Transit, {{ province }}, {{ context.vehicle_type }} Tracking, {{ context }}, {{ context.agency }}" />
+            <meta name="description" content="{{ context }} Transit Schedules and {{ context.format_model_category() }} Tracking" />
+            <meta name="keywords" content="Transit, {{ province }}, {{ context.format_model_category() }} Tracking, {{ context }}, {{ context.agency }}" />
         % else:
             <meta name="description" content="Transit Schedules and Bus Tracking in {{ province.code }}" />
             <meta name="keywords" content="Transit, {{ province }}, Bus Tracking" />
@@ -116,7 +116,7 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.8.0/ol.css">
         % end
         
-        % if enable_refresh and context.realtime_enabled:
+        % if enable_refresh and config.realtime_enabled:
             <script>
                 const date = new Date();
                 const timeToNextUpdate = 60 - date.getSeconds();
@@ -152,7 +152,7 @@
             const svgs = {};
             const currentAgencyID = "{{ context.agency_id is None }}" === "True" ? null : "{{ context.agency_id }}";
             const currentSystemID = "{{ context.system_id is None }}" === "True" ? null : "{{ context.system_id }}";   
-            const showStopNumbers = "{{ context.show_stop_number }}" == "True";     
+            const showStopNumbers = "{{ config.show_stop_number }}" == "True";     
             
             function getSVG(name) {
                 return svgs[name];
@@ -305,17 +305,16 @@
             }
         </script>
         
-        % include('components/svg_script', name='bus')
-        % include('components/svg_script', name='ferry')
-        % include('components/svg_script', name='model/type/bus-artic')
-        % include('components/svg_script', name='model/type/bus-coach')
-        % include('components/svg_script', name='model/type/bus-conventional')
-        % include('components/svg_script', name='model/type/bus-decker')
-        % include('components/svg_script', name='model/type/bus-midibus')
-        % include('components/svg_script', name='model/type/bus-trolley')
-        % include('components/svg_script', name='model/type/bus-shuttle')
-        % include('components/svg_script', name='model/type/ferry')
-        % include('components/svg_script', name='ghost')
+        % include('components/svg_script', name='model/type/artic-bus')
+        % include('components/svg_script', name='model/type/coach-bus')
+        % include('components/svg_script', name='model/type/conventional-bus')
+        % include('components/svg_script', name='model/type/double-decker-bus')
+        % include('components/svg_script', name='model/type/midi-bus')
+        % include('components/svg_script', name='model/type/shuttle-bus')
+        % include('components/svg_script', name='model/type/trolley-bus')
+        % include('components/svg_script', name='model/type/roro-ferry')
+        % include('components/svg_script', name='model/type/passenger-ferry')
+        % include('components/svg_script', name='model/type/ghost')
         % include('components/svg_script', name='stop')
         % include('components/svg_script', name='route')
         % include('components/svg_script', name='block')
@@ -328,7 +327,7 @@
                 <div>{{ province.site_name }}</div>
             </a>
             
-            % if context.realtime_enabled:
+            % if config.realtime_enabled:
                 <a class="navigation-button non-mobile" href="{{ context.url('map') }}">Map</a>
                 <a class="navigation-button non-mobile" href="{{ context.url('realtime') }}">Realtime</a>
                 <a class="navigation-button desktop-only" href="{{ context.url('history') }}">History</a>
@@ -340,7 +339,7 @@
             
             <a class="navigation-button desktop-only" href="{{ context.url('routes') }}">Routes</a>
             <a class="navigation-button desktop-only" href="{{ context.url('stops') }}">Stops</a>
-            % if context.enable_blocks:
+            % if config.enable_blocks:
                 <a class="navigation-button desktop-only" href="{{ context.url('blocks') }}">Blocks</a>
             % else:
                 <div class="navigation-button desktop-only disabled">Blocks</div>
@@ -403,7 +402,7 @@
             </div>
         </div>
         <div id="navigation-menu" class="non-desktop display-none">
-            % if context.realtime_enabled:
+            % if config.realtime_enabled:
                 <a class="menu-button mobile-only" href="{{ context.url('map') }}">
                     % include('components/svg', name='map')
                     <span>Map</span>
@@ -438,7 +437,7 @@
                 % include('components/svg', name='stop')
                 <span>Stops</span>
             </a>
-            % if context.enable_blocks:
+            % if config.enable_blocks:
                 <a class="menu-button" href="{{ context.url('blocks') }}">
                     % include('components/svg', name='block')
                     <span>Blocks</span>
@@ -527,7 +526,7 @@
                     <div id="last-updated">Updated {{ last_updated.format_web(time_format) }}</div>
                 % end
             </div>
-            % if context.realtime_enabled:
+            % if config.realtime_enabled:
                 <div id="refresh-button" class="disabled tooltip-anchor">
                     % include('components/svg', name='action/refresh')
                 </div>
@@ -654,10 +653,10 @@
                     </div>
                     <div id="search-filters">
                         <div class="flex-1">Filters:</div>
-                        % if context.realtime_enabled:
+                        % if config.realtime_enabled:
                             <div id="search-filter-vehicle" class="button tooltip-anchor" onclick="toggleSearchVehicleFilter()">
-                                % include('components/svg', name=context.filter_vehicles_image_name)
-                                <div class="tooltip left">Include {{ context.vehicle_type_plural }}</div>
+                                % include('components/svg', name=config.default_model_category.icon)
+                                <div class="tooltip left">Include {{ context.format_model_category(2) }}</div>
                             </div>
                         % end
                         <div id="search-filter-route" class="button tooltip-anchor" onclick="toggleSearchRouteFilter()">
@@ -668,7 +667,7 @@
                             % include('components/svg', name='stop')
                             <div class="tooltip left">Include Stops</div>
                         </div>
-                        % if context.enable_blocks:
+                        % if config.enable_blocks:
                             <div id="search-filter-block" class="button tooltip-anchor" onclick="toggleSearchBlockFilter()">
                                 % include('components/svg', name='block')
                                 <div class="tooltip left">Include Blocks</div>
@@ -885,8 +884,8 @@
                 
                 const vehicleName = document.createElement("div");
                 vehicleName.classList.add("name");
-                if (result.data.title_prefix) {
-                    vehicleName.innerHTML = result.data.title_prefix + " " + result.data.name;
+                if (result.data.prefix_title) {
+                    vehicleName.innerHTML = result.data.model_category + " " + result.data.name;
                 } else {
                     vehicleName.innerHTML = result.data.name;
                 }

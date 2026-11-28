@@ -1,10 +1,100 @@
 {
     "name": "BC Transit",
     "website": "https://bctransit.com",
-    "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
-    "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
-    "prefix_headsigns": true,
-    "accurate_seconds": false,
-    "vehicle_name_length": 4,
-    "distance_scale": 1000
+    "decorations": {
+        "1032": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "1086": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus",
+            "enabled": false
+        },
+        "1109": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "1254": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "4017": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "6021": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "6022": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "7520": {
+            "text": "🎨",
+            "description": "Indigenous Artwork",
+            "artist": "Elder Butch",
+            "website": "https://www.bctransit.com/indigenous-bus-design/"
+        },
+        "9093": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "9387": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus",
+            "enabled": false
+        },
+        "9434": {
+            "text": "🎅",
+            "description": "Santa Bus",
+            "enabled": false
+        },
+        "9458": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus"
+        }
+    },
+    "liveries": {
+        "red-blue-stripes": {
+            "name": "Red/Blue Stripes",
+            "theme": "bc-transit-classic"
+        },
+        "green-blue-stripes": {
+            "name": "Green/Blue Stripes",
+            "theme": "bc-transit"
+        },
+        "green-blue-stripes-green-back": {
+            "name": "Green/Blue Stripes with Green Back",
+            "theme": "bc-transit"
+        },
+        "green-front": {
+            "name": "Green Front",
+            "theme": "bc-transit-green"
+        }
+    },
+    "order_defaults": {
+        "livery": "green-blue-stripes",
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "default_model_category": "bus",
+        "distance_scale": 1000,
+        "gtfs_url": "https://bct.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/?operatorIds=$REMOTE_ID",
+        "prefix_headsigns": true,
+        "realtime_url": "https://bct.tmix.se/gtfs-realtime/vehicleupdates.pb?operatorIds=$REMOTE_ID",
+        "vehicle_name_length": 4
+    }
 }

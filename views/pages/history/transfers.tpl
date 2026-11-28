@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>{{ context.vehicle_type }} History</h1>
+    <h1>{{ context.format_model_category() }} History</h1>
     <div class="tab-button-bar">
         <a href="{{ context.url('history') }}" class="tab-button">Last Seen</a>
         <a href="{{ context.url('history', 'first-seen') }}" class="tab-button">First Seen</a>
@@ -106,7 +106,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>{{ context.vehicle_type }}</th>
+                                        <th>{{ context.format_model_category() }}</th>
                                         <th class="desktop-only">Model</th>
                                         <th class="non-mobile">From</th>
                                         <th class="non-mobile">To</th>
@@ -183,20 +183,20 @@
                         % if not context.system:
                             <h3>No transfers found</h3>
                             <p>Something has probably gone terribly wrong if you're seeing this.</p>
-                        % elif not context.realtime_enabled:
+                        % elif not config.realtime_enabled:
                             <h3>{{ context }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif filter == 'from':
-                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred from {{ context }}</h3>
+                            <h3>No {{ context.format_model_category(0).lower() }} have been transferred from {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % elif filter == 'to':
-                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to {{ context }}</h3>
+                            <h3>No {{ context.format_model_category(0).lower() }} have been transferred to {{ context }}</h3>
                             <p>Please choose a different filter or check again later!</p>
                         % else:
-                            <h3>No {{ context.vehicle_type_plural.lower() }} have been transferred to or from {{ context }}</h3>
+                            <h3>No {{ context.format_model_category(0).lower() }} have been transferred to or from {{ context }}</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

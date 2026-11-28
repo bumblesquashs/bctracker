@@ -4,6 +4,8 @@ from glob import glob
 import json
 from zoneinfo import ZoneInfo
 
+from models.config import Config
+from models.model import ModelCategory
 from models.system import System
 
 import repositories
@@ -28,12 +30,18 @@ class SystemRepository:
             agency_id = path[len(root_path):-len(file_name)].strip('/')
             agency = repositories.agency.find(agency_id)
             for (system_id, system_values) in values.items():
-                if not agency.enabled:
-                    system_values['enabled'] = False
                 if 'region' in system_values:
                     system_values['region'] = repositories.region.find(system_values['region'])
-                if 'timezone' in system_values:
-                    system_values['timezone'] = ZoneInfo(system_values['timezone'])
+                if 'config' in system_values:
+                    config_values = system_values['config']
+                    if 'default_model_category' in config_values:
+                        config_values['default_model_category'] = ModelCategory[config_values['default_model_category'].upper()]
+                    if 'timezone' in config_values:
+                        config_values['timezone'] = ZoneInfo(config_values['timezone'])
+                    config_values = vars(agency.config) | config_values
+                    system_values['config'] = Config(**config_values)
+                else:
+                    system_values['config'] = agency.config
                 self.systems[system_id] = System(system_id, agency, **system_values)
     
     def find(self, system_id: str) -> System | None:
@@ -43,5 +51,5 @@ class SystemRepository:
     def find_all(self, enabled_only: bool = True) -> list[System]:
         '''Returns all systems'''
         if enabled_only:
-            return [s for s in self.systems.values() if s.enabled]
+            return [s for s in self.systems.values() if s.config.enabled]
         return self.systems.values()

@@ -87,7 +87,7 @@ class Stop:
     @property
     def url_id(self):
         '''The ID to use when making stop URLs'''
-        if self.context.prefer_stop_id:
+        if self.context.config.prefer_stop_id:
             return self.id
         return self.number
     
@@ -133,18 +133,19 @@ class Stop:
     
     def get_json(self):
         '''Returns a representation of this stop in JSON-compatible format'''
-        number = self.number if self.context.show_stop_number else None
+        context = self.context
+        number = self.number if context.config.show_stop_number else None
         return {
             'system_id': self.system.id,
             'system_name': str(self.system),
-            'agency_id': self.context.agency_id,
+            'agency_id': context.agency_id,
             'number': number,
             'name': self.name.replace("'", '&apos;'),
             'lat': self.lat,
             'lon': self.lon,
             'routes': [r.get_json() for r in self.routes],
             'url_id': self.url_id,
-            'show_stop_number': self.agency.show_stop_number
+            'show_stop_number': context.config.show_stop_number
         }
     
     def get_match(self, query: str):
@@ -153,7 +154,7 @@ class Stop:
         number = self.number.lower()
         name = self.name.lower()
         value = 0
-        if query in number and self.context.show_stop_number:
+        if query in number and self.context.config.show_stop_number:
             value += (len(query) / len(number)) * 100
             if number.startswith(query):
                 value += len(query)

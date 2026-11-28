@@ -1,12 +1,29 @@
 {
     "name": "Medicine Hat Transit",
     "website": "https://www.medicinehat.ca/en/roads-parking-and-transportation/transit.aspx",
-    "gtfs_url": "https://medicinehat.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/",
-    "realtime_url": "https://medicinehat.tmix.se/gtfs-realtime/vehicleupdates.pb",
     "default_system": "medicine-hat",
-    "vehicle_name_length": 3,
-    "prefix_headsigns": true,
-    "distance_scale": 1000,
-    "enable_blocks": false,
-    "show_occupancy": false
+    "liveries": {
+        "medicine-hat-stripes": {
+            "name": "Stripes"
+        },
+        "medicine-hat-wave": {
+            "name": "Wave"
+        }
+    },
+    "order_defaults": {
+        "livery": "medicine-hat-stripes",
+        "amenities": {
+            "accessible": true
+        }
+    },
+    "config": {
+        "default_model_category": "bus",
+        "distance_scale": 1000,
+        "enable_blocks": false,
+        "gtfs_url": "https://medicinehat.tmix.se/Tmix.Cap.TdExport.WebApi/gtfs/",
+        "prefix_headsigns": true,
+        "realtime_url": "https://medicinehat.tmix.se/gtfs-realtime/vehicleupdates.pb",
+        "show_occupancy": false,
+        "vehicle_name_length": 3
+    }
 }

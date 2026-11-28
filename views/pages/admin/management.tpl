@@ -21,7 +21,6 @@
             </div>
             <div class="content">
                 <div class="button-container">
-                    <div class="button" onclick="reloadDecorations()">Reload Decorations</div>
                     <div class="button" onclick="reloadOrders()">Reload Orders</div>
                     <div class="button" onclick="reloadSystems()">Reload Systems</div>
                     <div class="button" onclick="reloadThemes()">Reload Themes</div>
@@ -71,8 +70,8 @@
                                                         % include('components/agency_logo', agency=system.agency)
                                                         <div class="column">
                                                             {{ system }}
-                                                            <div class="mobile-only smaller-font {{ 'positive' if system.enabled else 'negative' }}">
-                                                                {{ 'Enabled' if system.enabled else 'Disabled' }}
+                                                            <div class="mobile-only smaller-font {{ 'positive' if system.config.enabled else 'negative' }}">
+                                                                {{ 'Enabled' if system.config.enabled else 'Disabled' }}
                                                             </div>
                                                             <div class="mobile-only smaller-font row">
                                                                 % include('components/percentage', numerator=progress, denominator=total, low_cutoff=60, high_cutoff=90, inverted=True)
@@ -85,8 +84,8 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="non-mobile {{ 'positive' if system.enabled else 'negative' }}">
-                                                    % if system.enabled:
+                                                <td class="non-mobile {{ 'positive' if system.config.enabled else 'negative' }}">
+                                                    % if system.config.enabled:
                                                         % include('components/svg', name='status/enabled')
                                                     % else:
                                                         % include('components/svg', name='status/disabled')
@@ -103,7 +102,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    % if system.gtfs_enabled:
+                                                    % if system.config.gtfs_enabled:
                                                         <div class="row">
                                                             <div class="positive">
                                                                 % include('components/svg', name='status/enabled')
@@ -119,7 +118,7 @@
                                                     % end
                                                 </td>
                                                 <td>
-                                                    % if system.realtime_enabled:
+                                                    % if system.config.realtime_enabled:
                                                         <div class="row">
                                                             <div class="positive">
                                                                 % include('components/svg', name='status/enabled')
@@ -156,12 +155,6 @@
 </div>
 
 <script>
-    function reloadDecorations() {
-        const request = new XMLHttpRequest();
-        request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-decorations"), true);
-        request.send();
-    }
-    
     function reloadOrders() {
         const request = new XMLHttpRequest();
         request.open("POST", getURL(currentAgencyID, currentSystemID, "api/admin/reload-orders"), true);

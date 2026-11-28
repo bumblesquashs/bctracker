@@ -1,8 +1,12 @@
 {
     "name": "Red Deer Transit",
     "website": "https://www.reddeer.ca/city-services/transit/",
-    "gtfs_url": "https://data.reddeer.ca/datasets/gtfsdatafeed/download/zip",
     "default_system": "red-deer",
-    "prefix_headsigns": true,
-    "show_occupancy": false
+    "config": {
+        "default_model_category": "bus",
+        "gtfs_url": "https://data.reddeer.ca/datasets/gtfsdatafeed/download/zip",
+        "ignore_route_colour": "ffffff",
+        "prefix_headsigns": true,
+        "show_occupancy": false
+    }
 }

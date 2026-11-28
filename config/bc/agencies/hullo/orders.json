@@ -2,7 +2,6 @@
     {
         "year": 2023,
         "model": "damen-fast-ferry-4212",
-        "wifi": true,
         "vehicles": [
             { "id": "spuhels", "name": "spuhéls" },
             { "id": "sthuqi", "name": "sthuqi’" }

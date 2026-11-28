@@ -2,5 +2,141 @@
     "name": "Translink",
     "website": "https://translink.ca",
     "default_system": "vancouver",
-    "enabled": false
+    "decorations": {
+        "902": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Olive)",
+            "enabled": false
+        },
+        "7112": {
+            "text": "📣",
+            "description": "Community Outreach Bus"
+        },
+        "7455": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Dasher)",
+            "enabled": false
+        },
+        "9407": {
+            "text": "🧧",
+            "description": "Lunar New Year Bus"
+        },
+        "9540": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Vixen)",
+            "enabled": false
+        },
+        "9543": {
+            "text": "🚲",
+            "description": "Bike Bus",
+            "enabled": false
+        },
+        "9544": {
+            "text": "🚲",
+            "description": "Bike Bus",
+            "enabled": false
+        },
+        "9545": {
+            "text": "🚲",
+            "description": "Bike Bus",
+            "enabled": false
+        },
+        "9546": {
+            "text": "🚲",
+            "description": "Bike Bus",
+            "enabled": false
+        },
+        "9683": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Dancer)",
+            "enabled": false
+        },
+        "9798": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Blitzen)",
+            "enabled": false
+        },
+        "18044": {
+            "text": "🌾",
+            "description": "Vaisakhi Bus"
+        },
+        "18330": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Rudolph)",
+            "enabled": false
+        },
+        "18386": {
+            "text": "🏳️‍🌈",
+            "description": "Pride Bus",
+            "enabled": false
+        },
+        "19301": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "19302": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "19303": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "19304": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        },
+        "21504": {
+            "text": "🦌",
+            "description": "Reindeer Bus (Prancer)",
+            "enabled": false
+        },
+        "23201": {
+            "text": "⚡",
+            "description": "Battery Bus Demo"
+        }
+    },
+    "liveries": {
+        "b-line": {
+            "name": "B-Line"
+        },
+        "sweep": {
+            "name": "Sweep"
+        },
+        "sweep-suburban-white": {
+            "name": "Sweep Suburban (White)"
+        },
+        "sweep-suburban-grey": {
+            "name": "Sweep Suburban (Grey)"
+        },
+        "sweep-r-light": {
+            "name": "Sweep-R (Light Grey)"
+        },
+        "sweep-r-charcoal": {
+            "name": "Sweep-R (Charcoal)"
+        },
+        "sweep-r-west-van-light": {
+            "name": "Sweep-R (West Vancouver Light)"
+        },
+        "sweep-r-west-van-charcoal": {
+            "name": "Sweep-R (West Vancouver Charcoal)"
+        },
+        "rapidbus": {
+            "name": "RapidBus"
+        },
+        "blue-top": {
+            "name": "Blue Top"
+        }
+    },
+    "order_defaults": {
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    },
+    "config": {
+        "enabled": false,
+        "default_model_category": "bus"
+    }
 }

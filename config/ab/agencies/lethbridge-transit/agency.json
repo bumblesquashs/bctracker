@@ -1,10 +1,18 @@
 {
     "name": "Lethbridge Transit",
     "website": "https://myride.lethbridge.ca/",
-    "gtfs_url": "https://gis.lethbridge.ca/OpenData/DataSets/GTFS_Transit_Data.zip",
     "default_system": "lethbridge",
-    "prefix_headsigns": true,
-    "accurate_seconds": false,
-    "distance_scale": 1000,
-    "show_occupancy": false
+    "order_defaults": {
+        "amenities": {
+            "accessible": true
+        }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "default_model_category": "bus",
+        "distance_scale": 1000,
+        "gtfs_url": "https://gis.lethbridge.ca/OpenData/DataSets/GTFS_Transit_Data.zip",
+        "prefix_headsigns": true,
+        "show_occupancy": false
+    }
 }

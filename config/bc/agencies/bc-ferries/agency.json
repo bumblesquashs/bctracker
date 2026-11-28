@@ -1,20 +1,52 @@
 {
     "name": "BC Ferries",
     "website": "https://bcferries.com",
-    "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
-    "realtime_ais": true,
     "default_system": "bc-ferries",
-    "prefix_headsigns": true,
-    "accurate_seconds": false,
-    "prefer_stop_id": true,
-    "show_stop_number": false,
-    "show_full_orders": true,
-    "show_occupancy": false,
-    "enable_blocks": false,
-    "enable_realtime_trips": false,
-    "ais_colour": "003769",
-    "default_route_colour": "003769",
-    "filter_vehicles_image_name": "ferry",
-    "vehicle_type": "Vessel",
-    "vehicle_type_plural": "Vessels"
+    "order_defaults": {
+        "show_all": true,
+        "amenities": {
+            "accessible": true,
+            "air_conditioned": true,
+            "cctv": true
+        }
+    },
+    "config": {
+        "accurate_seconds": false,
+        "ais_colour": "003769",
+        "custom_route_numbers": {
+            "12443": "1",
+            "12444": "2",
+            "12394": "3",
+            "12427": "4",
+            "12422": "5/9",
+            "12426": "6",
+            "12395": "7",
+            "12400": "8",
+            "12434": "10",
+            "12441": "11",
+            "12402": "12",
+            "12401": "13",
+            "12396": "17",
+            "12397": "18",
+            "12425": "19",
+            "12405": "20",
+            "12428": "21",
+            "12429": "22",
+            "12430": "23",
+            "12431": "24",
+            "12432": "25",
+            "12442": "26",
+            "12393": "30"
+        },
+        "default_model_category": "ferry",
+        "default_route_colour": "003769",
+        "enable_blocks": false,
+        "enable_realtime_trips": false,
+        "gtfs_url": "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip",
+        "prefer_stop_id": true,
+        "prefix_headsigns": true,
+        "realtime_ais": true,
+        "show_occupancy": false,
+        "show_stop_number": false
+    }
 }

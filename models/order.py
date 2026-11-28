@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 
 from models.agency import Agency
+from models.amenity import Amenity
 from models.model import Model
 from models.vehicle import Vehicle
 
@@ -15,6 +16,7 @@ class Order:
     agency: Agency
     model: Model | None
     vehicles: list[Vehicle]
+    show_all: bool = False
     
     key: tuple = field(init=False)
     years: int = field(init=False)
@@ -36,7 +38,7 @@ class Order:
     @property
     def liveries(self):
         livery_ids = {v.livery for v in self.vehicles if v.livery}
-        liveries = {repositories.livery.find(self.agency.id, id) for id in livery_ids}
+        liveries = {self.agency.get_livery(id) for id in livery_ids}
         return sorted(l for l in liveries if l)
     
     def __post_init__(self):
@@ -82,64 +84,46 @@ class Order:
     
     @classmethod
     def from_json(cls, order_id: int, agency: Agency, data: dict):
-        model = repositories.model.find(data.get('model'))
+        defaults = agency.order_defaults.copy()
+        default_amenities = defaults.pop('amenities', {})
+        
+        data = defaults | data
+        
+        model = repositories.model.find(data.pop('model', None))
+        order_amenities = data.pop('amenities', {})
+        order_vehicles = data.pop('vehicles', [])
+        show_all = data.pop('show_all', False)
+        
         vehicles: list[Vehicle] = []
-        for vehicle_data in data['vehicles']:
-            keys = [
-                'year',
-                'visible',
-                'version',
-                'demo',
-                'prefix',
-                'livery',
-                'length',
-                'length_units',
-                'fuel',
-                'capacity',
-                'accessible',
-                'air_conditioned',
-                'usb_charging',
-                'cctv',
-                'wifi',
-                'dining',
-                'gift_shop',
-                'cabins',
-                'kids_area',
-                'pet_area',
-                'work_area',
-            ]
-            for key in keys:
-                if key not in vehicle_data and key in data:
-                    vehicle_data[key] = data[key]
+        for vehicle_data in order_vehicles:
+            vehicle_data = data | vehicle_data
             
-            if 'version' in vehicle_data:
-                version = vehicle_data['version']
-                del vehicle_data['version']
-            else:
-                version = None
-            if 'prefix' in vehicle_data:
-                prefix = str(vehicle_data['prefix'])
-                del vehicle_data['prefix']
-            else:
-                prefix = None
+            vehicle_amenities = vehicle_data.pop('amenities', {})
+            amenities = default_amenities | order_amenities | vehicle_amenities
+            vehicle_data['amenities'] = Amenity.parse(amenities)
+            
+            version = vehicle_data.pop('version', None)
+            prefix = vehicle_data.pop('version', None)
             
             if 'id' in vehicle_data:
-                id = vehicle_data['id']
-                del vehicle_data['id']
-                try:
-                    name = vehicle_data['name']
-                    del vehicle_data['name']
-                except:
-                    name = None
-                if agency.vehicle_name_length:
+                ids = [vehicle_data.pop('id')]
+            else:
+                low = vehicle_data.pop('low')
+                high = vehicle_data.pop('high')
+                ids = list(range(low, high + 1))
+            
+            for id in ids:
+                name = vehicle_data.pop('name', None)
+                vehicle_name_length = agency.config.vehicle_name_length
+                if vehicle_name_length:
                     if type(id) is int:
                         if not name:
-                            name = f'{id:0{agency.vehicle_name_length}d}'
+                            name = f'{id:0{vehicle_name_length}d}'
                         id = str(id)
                     else:
                         id = str(id)
                         if not name:
-                            name = id[:agency.vehicle_name_length]
+                            name = id[:vehicle_name_length]
                 else:
                     id = str(id)
                     if not name:
@@ -150,26 +134,4 @@ class Order:
                     id = f'{prefix}{id}'
                     name = f'{prefix}{name}'
                 vehicles.append(Vehicle(agency, id, name, order_id, model, **vehicle_data))
-            else:
-                low = vehicle_data['low']
-                high = vehicle_data['high']
-                del vehicle_data['low']
-                del vehicle_data['high']
-                for id in range(low, high + 1):
-                    if agency.vehicle_name_length:
-                        if type(id) is int:
-                            name = f'{id:0{agency.vehicle_name_length}d}'
-                            id = str(id)
-                        else:
-                            id = str(id)
-                            name = id[:agency.vehicle_name_length]
-                    else:
-                        id = str(id)
-                        name = id
-                    if version:
-                        id = f'{id}-{version}'
-                    if prefix:
-                        id = f'{prefix}{id}'
-                        name = f'{prefix}{name}'
-                    vehicles.append(Vehicle(agency, id, name, order_id, model, **vehicle_data))
-        return cls(order_id, agency, model, vehicles)
+        return cls(order_id, agency, model, vehicles, show_all)

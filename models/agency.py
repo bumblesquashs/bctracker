@@ -1,7 +1,10 @@
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+from models.config import Config
 from models.context import Context
+from models.decoration import Decoration
+from models.livery import Livery
 
 from constants import *
 
@@ -11,30 +14,13 @@ class Agency:
     
     id: str
     name: str
-    
     website: str | None = None
-    gtfs_url: str | None = None
-    realtime_url: str | None = None
-    realtime_ais: bool = False
     default_system: str | None = None
-    enabled: bool = True
-    prefix_headsigns: bool = DEFAULT_PREFIX_HEADSIGNS
-    accurate_seconds: bool = DEFAULT_ACCURATE_SECONDS
-    prefer_route_id: bool = DEFAULT_PREFER_ROUTE_ID
-    prefer_stop_id: bool = DEFAULT_PREFER_STOP_ID
-    show_stop_number: bool = DEFAULT_SHOW_STOP_NUMBER
-    show_full_orders: bool = DEFAULT_SHOW_FULL_ORDERS
-    show_occupancy: bool = DEFAULT_SHOW_OCCUPANCY
-    vehicle_name_length: int | None = DEFAULT_VEHICLE_NAME_LENGTH
-    distance_scale: int = DEFAULT_DISTANCE_SCALE
-    enable_blocks: bool = DEFAULT_ENABLE_BLOCKS
-    enable_realtime_trips: bool = DEFAULT_ENABLE_REALTIME_TRIPS
-    ais_colour: str | None = DEFAULT_AIS_COLOUR
-    default_route_colour: str | None = DEFAULT_ROUTE_COLOUR
-    filter_vehicles_image_name: str = DEFAULT_FILTER_VEHICLES_IMAGE_NAME
-    vehicle_type: str = DEFAULT_VEHICLE_TYPE
-    vehicle_type_plural: str = DEFAULT_VEHICLE_TYPE_PLURAL
-    invalid_realtime_percentage: int = DEFAULT_INVALID_REALTIME_PERCENTAGE
+    decorations: dict[str: Decoration] = field(default_factory=dict)
+    liveries: dict[str: Livery] = field(default_factory=dict)
+    order_defaults: dict = field(default_factory=dict)
+    
+    config: Config = field(default_factory=lambda: Config())
     
     @property
     def context(self):
@@ -44,16 +30,6 @@ class Agency:
     def url_id(self):
         '''The ID to use when making agency URLs'''
         return self.id
-    
-    @property
-    def gtfs_enabled(self):
-        '''Checks if GTFS is enabled for this agency'''
-        return self.enabled and self.gtfs_url
-    
-    @property
-    def realtime_enabled(self):
-        '''Checks if realtime is enabled for this agency'''
-        return self.enabled and (self.realtime_url or self.realtime_ais)
     
     def __str__(self):
         return self.name
@@ -68,3 +44,15 @@ class Agency:
     
     def __lt__(self, other):
         return str(self) < str(other)
+    
+    def get_decoration(self, id: str) -> Decoration | None:
+        try:
+            return self.decorations[id]
+        except KeyError:
+            return None
+    
+    def get_livery(self, id: str) -> Livery | None:
+        try:
+            return self.liveries[id]
+        except KeyError:
+            return None

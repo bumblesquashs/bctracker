@@ -29,5 +29,5 @@ class Transfer:
         new_allocation_id = row['new_allocation_id']
         new_context = row.context('new_allocation_agency_id', 'new_allocation_system_id')
         new_vehicle = new_context.find_vehicle(row['new_allocation_vehicle_id'])
-        date = Date.parse(row['date'], new_context.timezone)
+        date = Date.parse(row['date'], new_context.config.timezone)
         return cls(id, date, old_allocation_id, old_context, old_vehicle, new_allocation_id, new_context, new_vehicle)

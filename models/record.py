@@ -34,16 +34,16 @@ class Record:
         allocation_id = row['allocation_id']
         context = row.context()
         vehicle = context.find_vehicle(row['vehicle_id'])
-        date = Date.parse(row['date'], context.timezone)
+        date = Date.parse(row['date'], context.config.timezone)
         block_id = row['block_id']
         try:
             route_numbers = [n.strip() for n in row['route_numbers'].split(',')]
         except:
             route_numbers = []
-        start_time = Time.parse(row['start_time'], context.timezone, context.accurate_seconds)
-        end_time = Time.parse(row['end_time'], context.timezone, context.accurate_seconds)
-        first_seen = Time.parse(row['first_seen'], context.timezone, context.accurate_seconds)
-        last_seen = Time.parse(row['last_seen'], context.timezone, context.accurate_seconds)
+        start_time = Time.parse(row['start_time'], context.config.timezone, context.config.accurate_seconds)
+        end_time = Time.parse(row['end_time'], context.config.timezone, context.config.accurate_seconds)
+        first_seen = Time.parse(row['first_seen'], context.config.timezone, context.config.accurate_seconds)
+        last_seen = Time.parse(row['last_seen'], context.config.timezone, context.config.accurate_seconds)
         return cls(id, allocation_id, context, vehicle, date, block_id, route_numbers, start_time, end_time, first_seen, last_seen)
     
     @property
@@ -82,10 +82,10 @@ class Record:
         if total_minutes is not None and total_seen_minutes is not None:
             if not self.date.is_today and (total_seen_minutes / total_minutes) < 0.1 and total_seen_minutes <= 10:
                 if total_seen_minutes == 1:
-                    self.warnings.append(f'{self.vehicle.type_generic_name} was logged in for only 1 minute')
+                    self.warnings.append(f'{self.vehicle.model_category} was logged in for only 1 minute')
                 else:
-                    self.warnings.append(f'{self.vehicle.type_generic_name} was logged in for only {total_seen_minutes} minutes')
+                    self.warnings.append(f'{self.vehicle.model_category} was logged in for only {total_seen_minutes} minutes')
             if (self.start_time.get_minutes() - self.last_seen.get_minutes()) > 30:
-                self.warnings.append(f'{self.vehicle.type_generic_name} was logged in before block started')
+                self.warnings.append(f'{self.vehicle.model_category} was logged in before block started')
             if (self.first_seen.get_minutes() - self.end_time.get_minutes()) > 30:
-                self.warnings.append(f'{self.vehicle.type_generic_name} was logged in after block ended')
+                self.warnings.append(f'{self.vehicle.model_category} was logged in after block ended')

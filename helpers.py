@@ -63,10 +63,11 @@ def format_hour(hour, time_format='30hr'):
 
 def generate_colour(context: Context, number: str):
     '''Generate a random colour based on context and route number'''
-    if number in context.custom_route_colours:
-        return context.custom_route_colours[number]
-    if context.default_route_colour:
-        return context.default_route_colour
+    config = context.config
+    if number in config.custom_route_colours:
+        return config.custom_route_colours[number]
+    if config.default_route_colour:
+        return config.default_route_colour
     seed(context.system_id)
     number_digits = ''.join([d for d in number if d.isdigit()])
     if len(number_digits) == 0:

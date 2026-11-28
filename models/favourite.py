@@ -25,13 +25,13 @@ class Favourite:
             value = context.find_vehicle(parts[2])
         elif type == 'route':
             context = Context.find(system_id=parts[1])
-            if context.prefer_route_id:
+            if context.config.prefer_route_id:
                 value = repositories.route.find(context, route_id=parts[2])
             else:
                 value = repositories.route.find(context, number=parts[2])
         elif type == 'stop':
             context = Context.find(system_id=parts[1])
-            if context.prefer_stop_id:
+            if context.config.prefer_stop_id:
                 value = repositories.stop.find(context, stop_id=parts[2])
             else:
                 value = repositories.stop.find(context, number=parts[2])
@@ -47,13 +47,13 @@ class Favourite:
             number = self.value.id
         elif self.type == 'route':
             source = self.value.context.system_id
-            if self.value.context.prefer_route_id:
+            if self.value.context.config.prefer_route_id:
                 number = self.value.id
             else:
                 number = self.value.number
         elif self.type == 'stop':
             source = self.value.context.system_id
-            if self.value.context.prefer_stop_id:
+            if self.value.context.config.prefer_stop_id:
                 number = self.value.id
             else:
                 number = self.value.number

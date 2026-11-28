@@ -158,7 +158,7 @@
                                                         <tr>
                                                             <th>Time</th>
                                                             <th class="non-mobile">Headsign</th>
-                                                            % if context.enable_blocks:
+                                                            % if config.enable_blocks:
                                                                 <th class="non-mobile">Block</th>
                                                             % end
                                                             <th>Trip</th>
@@ -187,7 +187,7 @@
                                                                         % end
                                                                     </div>
                                                                 </td>
-                                                                % if context.enable_blocks:
+                                                                % if config.enable_blocks:
                                                                     <td class="non-mobile">
                                                                         % if block:
                                                                             <a href="{{ block.url() }}">{{ block.id }}</a>

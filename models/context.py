@@ -11,7 +11,9 @@ from dataclasses import dataclass
 
 from constants import *
 
+from models.config import Config
 from models.date import Date
+from models.model import ModelCategory
 from models.time import Time
 from models.timestamp import Timestamp
 
@@ -24,6 +26,8 @@ class Context:
     
     agency: Agency | None
     system: System | None
+    
+    config: Config
     
     @classmethod
     def find(cls, agency_id=None, system_id=None):
@@ -50,22 +54,6 @@ class Context:
         return None
     
     @property
-    def gtfs_enabled(self):
-        if self.system:
-            return self.system.gtfs_enabled
-        if self.agency:
-            return self.agency.gtfs_enabled
-        return True
-    
-    @property
-    def realtime_enabled(self):
-        if self.system:
-            return self.system.realtime_enabled
-        if self.agency:
-            return self.agency.realtime_enabled
-        return True
-    
-    @property
     def gtfs_loaded(self):
         if self.system:
             return self.system.gtfs_loaded
@@ -80,142 +68,16 @@ class Context:
         return all(s.realtime_loaded for s in systems)
     
     @property
-    def timezone(self):
-        if self.system:
-            return self.system.timezone
-        return settings.current.province.default_timezone
-    
-    @property
-    def prefix_headsigns(self):
-        if self.agency:
-            return self.agency.prefix_headsigns
-        return DEFAULT_PREFIX_HEADSIGNS
-    
-    @property
-    def accurate_seconds(self):
-        if self.agency:
-            return self.agency.accurate_seconds
-        return DEFAULT_ACCURATE_SECONDS
-    
-    @property
-    def prefer_route_id(self):
-        if self.agency:
-            return self.agency.prefer_route_id
-        return DEFAULT_PREFER_ROUTE_ID
-    
-    @property
-    def prefer_stop_id(self):
-        if self.agency:
-            return self.agency.prefer_stop_id
-        return DEFAULT_PREFER_STOP_ID
-    
-    @property
-    def show_stop_number(self):
-        if self.agency:
-            return self.agency.show_stop_number
-        return DEFAULT_SHOW_STOP_NUMBER
-    
-    @property
-    def show_occupancy(self):
-        if self.agency:
-            return self.agency.show_occupancy
-        return DEFAULT_SHOW_OCCUPANCY
-    
-    @property
-    def vehicle_name_length(self):
-        if self.agency:
-            return self.agency.vehicle_name_length
-        return DEFAULT_VEHICLE_NAME_LENGTH
-    
-    @property
-    def distance_scale(self):
-        if self.agency:
-            return self.agency.distance_scale
-        return DEFAULT_DISTANCE_SCALE
-    
-    @property
-    def enable_blocks(self):
-        if self.agency:
-            return self.agency.enable_blocks
-        return DEFAULT_ENABLE_BLOCKS
-    
-    @property
-    def enable_realtime_trips(self):
-        if self.agency:
-            return self.agency.enable_realtime_trips
-        return DEFAULT_ENABLE_REALTIME_TRIPS
-    
-    @property
-    def ais_colour(self):
-        if self.agency:
-            return self.agency.ais_colour
-        return DEFAULT_AIS_COLOUR
-    
-    @property
-    def default_route_colour(self):
-        if self.agency:
-            return self.agency.default_route_colour
-        return DEFAULT_ROUTE_COLOUR
-    
-    @property
-    def filter_vehicles_image_name(self):
-        if self.agency:
-            return self.agency.filter_vehicles_image_name
-        return DEFAULT_FILTER_VEHICLES_IMAGE_NAME
-    
-    @property
-    def vehicle_type(self):
-        if self.agency:
-            return self.agency.vehicle_type
-        return DEFAULT_VEHICLE_TYPE
-    
-    @property
-    def vehicle_type_plural(self):
-        if self.agency:
-            return self.agency.vehicle_type_plural
-        return DEFAULT_VEHICLE_TYPE_PLURAL
-    
-    @property
-    def invalid_realtime_percentage(self):
-        if self.agency:
-            return self.agency.invalid_realtime_percentage
-        return DEFAULT_INVALID_REALTIME_PERCENTAGE
-    
-    @property
-    def ignore_route_colour(self):
-        if self.system:
-            return self.system.ignore_route_colour
-        return DEFAULT_IGNORE_ROUTE_COLOUR
-    
-    @property
-    def gtfs_cutoff(self):
-        if self.system:
-            return self.system.gtfs_cutoff
-        return DEFAULT_GTFS_CUTOFF
-    
-    @property
-    def max_invalid_positions(self):
-        if self.system:
-            return self.system.max_invalid_positions
-        return DEFAULT_MAX_INVALID_POSITIONS
-    
-    @property
-    def custom_route_colours(self):
-        if self.system:
-            return self.system.custom_route_colours
-        return {}
-    
-    @property
     def today(self) -> Date:
-        return Date.today(self.timezone)
+        return Date.today(self.config.timezone)
     
     @property
     def now(self) -> Time:
-        return Time.now(self.timezone, self.accurate_seconds)
+        return Time.now(self.config.timezone, self.config.accurate_seconds)
     
     @property
     def timestamp(self) -> Timestamp:
-        return Timestamp.now(self.timezone, self.accurate_seconds)
+        return Timestamp.now(self.config.timezone, self.config.accurate_seconds)
     
     def __init__(self, agency: Agency | None = None, system: System | None = None):
         if agency and system and agency != system.agency:
@@ -224,6 +86,15 @@ class Context:
             agency = system.agency
         self.agency = agency
         self.system = system
+        if system:
+            self.config = system.config
+        elif agency:
+            self.config = agency.config
+        else:
+            self.config = Config(
+                force_gtfs_enabled=True,
+                force_realtime_enabled=True,
+            )
     
     def __str__(self):
         if self.system:
@@ -301,14 +172,25 @@ class Context:
     def find_vehicle(self, id: str) -> Vehicle:
         return repositories.order.find_vehicle(self, id)
     
+    def format_model_category(self, count: int = 1):
+        match self.config.default_model_category:
+            case ModelCategory.BUS:
+                return 'Bus' if count == 1 else 'Buses'
+            case ModelCategory.TRAIN:
+                return 'Train' if count == 1 else 'Trains'
+            case ModelCategory.FERRY:
+                return 'Vessel' if count == 1 else 'Vessels'
+            case ModelCategory.VEHICLE:
+                return 'Vehicle' if count == 1 else 'Vehicles'
+    
     def search_placeholder_text(self):
         '''Search placeholder text to display for this context'''
         values = []
-        if self.realtime_enabled:
-            values.append(self.vehicle_type_plural.lower())
+        if self.config.realtime_enabled:
+            values.append(self.format_model_category(2).lower())
         values.append('routes')
         values.append('stops')
-        if self.enable_blocks:
+        if self.config.enable_blocks:
             values.append('blocks')
         if self.system:
             if len(values) == 1:

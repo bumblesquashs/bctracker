@@ -8,7 +8,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ context.url('blocks', block, 'map') }}" class="tab-button">Map</a>
-        % if context.realtime_enabled and context.enable_realtime_trips:
+        % if config.realtime_enabled and config.enable_realtime_trips:
             <a href="{{ context.url('blocks', block, 'history') }}" class="tab-button">History</a>
         % end
     </div>
@@ -169,17 +169,13 @@
         % if positions:
             <div class="section">
                 <div class="header">
-                    % if len(positions) == 1:
-                        <h2>Active {{ context.vehicle_type }}</h2>
-                    % else:
-                        <h2>Active {{ context.vehicle_type_plural }}</h2>
-                    % end
+                    <h2>Active {{ context.format_model_category(count=len(positions)) }}</h2>
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
                                 <th class="non-mobile">Trip</th>
@@ -197,7 +193,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.show_occupancy:
+                                                    % if position.context.config.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)
@@ -243,17 +239,17 @@
             % position = repositories.position.find(vehicle.agency.id, vehicle.id)
             <div class="section">
                 <div class="header">
-                    <h2>Scheduled {{ context.vehicle_type }}</h2>
+                    <h2>Scheduled {{ context.format_model_category() }}</h2>
                 </div>
                 <div class="content">
                     % if show_help_text:
-                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this block but may be swapped off.</p>
+                        <p>This {{ str(vehicle.model_category).lower() }} is currently assigned to this block but may be swapped off.</p>
                     % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{{ context.vehicle_type }}</th>
+                                    <th>{{ context.format_model_category() }}</th>
                                     <th class="non-mobile">Model</th>
                                     <th>Current Headsign</th>
                                     <th class="desktop-only">Current Trip</th>

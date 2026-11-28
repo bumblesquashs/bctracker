@@ -103,7 +103,7 @@ class Trip:
         departure = self.first_departure
         if departure:
             return departure.time
-        return Time.unknown(self.context.timezone)
+        return Time.unknown(self.context.config.timezone)
     
     @property
     def end_time(self):
@@ -111,7 +111,7 @@ class Trip:
         departure = self.last_departure
         if departure:
             return departure.time
-        return Time.unknown(self.context.timezone)
+        return Time.unknown(self.context.config.timezone)
     
     @property
     def duration(self):
@@ -174,7 +174,7 @@ class Trip:
         self.sheets = self.system.copy_sheets([self.service])
     
     def __str__(self):
-        if self.context.prefix_headsigns and self.route:
+        if self.context.config.prefix_headsigns and self.route:
             return f'{self.route.number} {self.headsign}'
         return self.headsign
     

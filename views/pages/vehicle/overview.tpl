@@ -13,11 +13,8 @@
 
 <div id="page-header">
     <h1 class="row">
-        % if model:
-            % title_prefix = model.type.title_prefix
-            % if title_prefix:
-                <span>{{ title_prefix }}</span>
-            % end
+        % if model and model.type.category.prefix_title:
+            <span>{{ model.type.category }}</span>
         % end
         % include('components/vehicle', enable_link=False)
         % if allocation and allocation.inactive_status_class:
@@ -107,7 +104,7 @@
                                 </div>
                             </div>
                         % end
-                        % if context.enable_blocks:
+                        % if config.enable_blocks:
                             % if block:
                                 <div class="section">
                                     % include('components/block_timeline', date=today)
@@ -145,7 +142,7 @@
                                 <a href="{{ position.context.url() }}">{{ position.context }}</a>
                             </div>
                         </div>
-                        % if position.context.show_occupancy:
+                        % if position.context.config.show_occupancy:
                             <div class="row section">
                                 <div class="name">Occupancy</div>
                                 <div class="value">
@@ -162,7 +159,7 @@
                                 <div class="value">{{ position.speed }} km/h</div>
                             </div>
                         % end
-                        % if context.enable_blocks and block:
+                        % if config.enable_blocks and block:
                             <div class="row section">
                                 <div class="name">Block</div>
                                 <div class="value">
@@ -270,75 +267,15 @@
                                 </div>
                             % end
                         % end
-                        % if vehicle.has_amenities:
+                        % if vehicle.amenities:
                             <div class="row section">
                                 <div class="name">Amenities</div>
                                 <div class="value">
                                     <div class="row gap-5 wrap justify-right">
-                                        % if vehicle.accessible:
+                                        % for amenity in vehicle.amenities:
                                             <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/accessible')
-                                                <div class="tooltip right">Accessible</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.air_conditioned:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/air-conditioned')
-                                                <div class="tooltip right">Air conditioned</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.usb_charging:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/usb')
-                                                <div class="tooltip right">USB charging ports</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.cctv:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/cctv')
-                                                <div class="tooltip right">CCTV cameras</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.wifi:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/wifi')
-                                                <div class="tooltip right">WIFI</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.dining:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/dining')
-                                                <div class="tooltip right">Dining</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.gift_shop:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/gift-shop')
-                                                <div class="tooltip right">Gift shop</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.cabins:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/cabins')
-                                                <div class="tooltip right">Cabins</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.kids_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/kids-area')
-                                                <div class="tooltip right">Kids area</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.pet_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/pet-area')
-                                                <div class="tooltip right">Pet area</div>
-                                            </div>
-                                        % end
-                                        % if vehicle.work_area:
-                                            <div class="tooltip-anchor amenity">
-                                                % include('components/svg', name='amenities/work-area')
-                                                <div class="tooltip right">Work area</div>
+                                                % include('components/svg', name=f'amenities/{amenity.icon}')
+                                                <div class="tooltip right">{{ amenity }}</div>
                                             </div>
                                         % end
                                     </div>
@@ -445,7 +382,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th class="desktop-only">System</th>
-                                    % if context.enable_blocks:
+                                    % if config.enable_blocks:
                                         <th>Block</th>
                                         <th class="desktop-only">Routes</th>
                                     % else:
@@ -475,7 +412,7 @@
                                             </div>
                                         </td>
                                         <td class="desktop-only">{{ record.context }}</td>
-                                        % if context.enable_blocks:
+                                        % if config.enable_blocks:
                                             <td>
                                                 <div class="column stretch">
                                                     <div class="row space-between">
@@ -511,14 +448,14 @@
                     </div>
                 % else:
                     <div class="placeholder">
-                        <h3>This {{ vehicle.type_generic_name.lower() }} doesn't have any recorded history</h3>
-                        % if context.enable_realtime_trips:
+                        <h3>This {{ str(vehicle.model_category).lower() }} doesn't have any recorded history</h3>
+                        % if config.enable_realtime_trips:
                             <p>There are a few reasons why that might be the case:</p>
                             <ol>
                                 <li>It may be operating in a transit system that doesn't currently provide realtime information</li>
-                                <li>It may not have been in service since {{ province.site_name }} started recording {{ context.vehicle_type.lower() }} history</li>
+                                <li>It may not have been in service since {{ province.site_name }} started recording {{ context.format_model_category().lower() }} history</li>
                                 <li>It may not have functional tracking equipment installed</li>
-                                % if model and model.type == ModelType.shuttle:
+                                % if model and model.type == ModelType.SHUTTLE_BUS:
                                     <li>It may be operating as a HandyDART vehicle, which is not available in realtime</li>
                                 % end
                             </ol>

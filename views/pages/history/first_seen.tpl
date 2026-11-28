@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>{{ context.vehicle_type }} History</h1>
+    <h1>{{ context.format_model_category() }} History</h1>
     <div class="tab-button-bar">
         <a href="{{ context.url('history') }}" class="tab-button">Last Seen</a>
         <span class="tab-button current">First Seen</span>
@@ -53,13 +53,13 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 % if not context.system:
                                     <th class="non-mobile">System</th>
                                 % end
-                                % if context.enable_realtime_trips:
-                                    % if context.enable_blocks:
+                                % if config.enable_realtime_trips:
+                                    % if config.enable_blocks:
                                         <th>Block</th>
                                         <th class="desktop-only">Routes</th>
                                     % else:
@@ -109,9 +109,9 @@
                                     % if not context.system:
                                         <td class="non-mobile">{{ allocation.context }}</td>
                                     % end
-                                    % if context.enable_realtime_trips:
-                                        % if allocation.context.enable_realtime_trips:
-                                            % if context.enable_blocks:
+                                    % if config.enable_realtime_trips:
+                                        % if allocation.context.config.enable_realtime_trips:
+                                            % if config.enable_blocks:
                                                 % if record:
                                                     <td>
                                                         <div class="column stretch">
@@ -160,14 +160,14 @@
                     % if not context.system:
                         <h3>No vehicle history found</h3>
                         <p>Something has probably gone terribly wrong if you're seeing this.</p>
-                    % elif not context.realtime_enabled:
+                    % elif not config.realtime_enabled:
                         <h3>{{ context }} realtime information is not supported</h3>
                         <p>You can browse schedule data using the links above, or choose a different system.</p>
                         <div class="non-desktop">
                             % include('components/systems')
                         </div>
                     % else:
-                        <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded</h3>
+                        <h3>No {{ context }} {{ context.format_model_category(0).lower() }} have been recorded</h3>
                         <p>Please check again later!</p>
                     % end
                 </div>

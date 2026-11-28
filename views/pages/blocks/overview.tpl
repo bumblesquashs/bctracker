@@ -9,7 +9,7 @@
     </div>
 </div>
 
-% if context.enable_blocks:
+% if config.enable_blocks:
     % if context.system:
         % blocks = context.system.get_blocks()
         % if blocks:
@@ -47,10 +47,10 @@
                                         <div class="name">Total Blocks</div>
                                         <div class="value">{{ len(today_blocks) }}</div>
                                     </div>
-                                    % if context.realtime_enabled and context.enable_realtime_trips:
+                                    % if config.realtime_enabled and config.enable_realtime_trips:
                                         <div class="section row">
                                             <div class="name column">
-                                                <div>Assigned {{ context.vehicle_type_plural }}</div>
+                                                <div>Assigned {{ context.format_model_category(2) }}</div>
                                                 <div class="lighter-text smaller-font">As of {{ now.format_web(time_format) }}</div>
                                             </div>
                                             <div class="value">
@@ -80,8 +80,8 @@
                                                 <th class="non-mobile">Start Time</th>
                                                 <th class="non-mobile">End Time</th>
                                                 <th class="desktop-only">Duration</th>
-                                                % if context.realtime_enabled and context.enable_realtime_trips:
-                                                    <th>{{ context.vehicle_type }}</th>
+                                                % if config.realtime_enabled and config.enable_realtime_trips:
+                                                    <th>{{ context.format_model_category() }}</th>
                                                     <th class="non-mobile">Model</th>
                                                 % end
                                             </tr>
@@ -103,7 +103,7 @@
                                                     <td class="non-mobile">{{ start_time }}</td>
                                                     <td class="non-mobile">{{ end_time }}</td>
                                                     <td class="desktop-only">{{ block.get_duration(date=today) }}</td>
-                                                    % if context.realtime_enabled and context.enable_realtime_trips:
+                                                    % if config.realtime_enabled and config.enable_realtime_trips:
                                                         % if block.id in recorded_vehicles:
                                                             % vehicle = recorded_vehicles[block.id]
                                                             <td>
@@ -168,7 +168,7 @@
                 <tbody>
                     % available_systems = [s for s in systems if s.agency == context.agency] if context.agency else systems
                     % for region in regions:
-                        % region_systems = [s for s in available_systems if s.region == region and s.agency.enable_blocks]
+                        % region_systems = [s for s in available_systems if s.region == region and s.config.enable_blocks]
                         % if region_systems:
                             <tr class="header">
                                 <td colspan="3">{{ region }}</td>

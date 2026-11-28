@@ -1,7 +1,6 @@
 {
     "red-deer": {
         "name": "Red Deer",
-        "region": "northern-alberta",
-        "ignore_route_colour": "ffffff"
+        "region": "northern-alberta"
     }
 }

@@ -63,21 +63,17 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    % if len(positions) == 1:
-                        <h2>Active {{ context.vehicle_type }}</h2>
-                    % else:
-                        <h2>Active {{ context.vehicle_type_plural }}</h2>
-                    % end
+                    <h2>Active {{ context.format_model_category(count=len(positions)) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="desktop-only">Model</th>
                                 <th>Headsign</th>
-                                % if context.enable_blocks:
+                                % if config.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th class="non-mobile">Trip</th>
@@ -95,7 +91,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.show_occupancy:
+                                                    % if position.context.config.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)
@@ -124,7 +120,7 @@
                                             % end
                                         </div>
                                     </td>
-                                    % if context.enable_blocks:
+                                    % if config.enable_blocks:
                                         <td class="non-mobile">
                                             % block = trip.block
                                             <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -163,9 +159,9 @@
                                         % include('components/toggle')
                                     </div>
                                     <div class="content">
-                                        % if context.realtime_enabled and context.enable_realtime_trips and show_help_text:
+                                        % if config.realtime_enabled and config.enable_realtime_trips and show_help_text:
                                             <p>
-                                                <span>{{ context.vehicle_type_plural }} with a</span>
+                                                <span>{{ context.format_model_category(2) }} with a</span>
                                                 <span class="scheduled">
                                                     % include('components/svg', name='schedule')
                                                 </span>
@@ -179,13 +175,13 @@
                                                         <th class="non-mobile">Start Time</th>
                                                         <th class="mobile-only">Start</th>
                                                         <th class="desktop-only">Headsign</th>
-                                                        % if context.enable_blocks:
+                                                        % if config.enable_blocks:
                                                             <th class="non-mobile">Block</th>
                                                         % end
                                                         <th>Trip</th>
                                                         <th class="desktop-only">First Stop</th>
-                                                        % if context.realtime_enabled and context.enable_realtime_trips:
-                                                            <th>{{ context.vehicle_type }}</th>
+                                                        % if config.realtime_enabled and config.enable_realtime_trips:
+                                                            <th>{{ context.format_model_category() }}</th>
                                                             <th class="desktop-only">Model</th>
                                                         % end
                                                     </tr>
@@ -203,7 +199,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/headsign')
                                                             </td>
-                                                            % if context.enable_blocks:
+                                                            % if config.enable_blocks:
                                                                 <td class="non-mobile">
                                                                     % block = trip.block
                                                                     <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -220,7 +216,7 @@
                                                             <td class="desktop-only">
                                                                 % include('components/stop', stop=first_stop)
                                                             </td>
-                                                            % if context.realtime_enabled and context.enable_realtime_trips:
+                                                            % if config.realtime_enabled and config.enable_realtime_trips:
                                                                 % if trip.id in recorded_today:
                                                                     % vehicle = recorded_today[trip.id]
                                                                     <td>
@@ -230,7 +226,7 @@
                                                                                 % if trip.id in trip_positions:
                                                                                     % position = trip_positions[trip.id]
                                                                                     <div class="row gap-5">
-                                                                                        % if position.context.show_occupancy:
+                                                                                        % if position.context.config.show_occupancy:
                                                                                             % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                                                         % end
                                                                                         % include('components/adherence', adherence=position.adherence)

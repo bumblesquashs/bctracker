@@ -39,7 +39,7 @@
                         </td>
                         <td class="non-desktop">
                             <div class="column">
-                                % if system.realtime_enabled and system.realtime_loaded:
+                                % if system.config.realtime_enabled and system.realtime_loaded:
                                     % positions = system.get_positions()
                                     % allocations = system.get_allocations()
                                     <div class="row gap-5">
@@ -59,7 +59,7 @@
                                         {{ sum(1 for a in allocations if a.last_record) }}
                                     </div>
                                 % end
-                                % if system.gtfs_enabled and system.gtfs_loaded:
+                                % if system.config.gtfs_enabled and system.gtfs_loaded:
                                     <div class="row gap-5">
                                         <span class="bold">Routes:</span>
                                         {{ len(system.get_routes()) }}
@@ -79,7 +79,7 @@
                                 % end
                             </div>
                         </td>
-                        % if system.realtime_enabled:
+                        % if system.config.realtime_enabled:
                             % if system.realtime_loaded:
                                 <td class="desktop-only align-right">{{ len(positions) }}</td>
                                 <td class="desktop-only align-right">{{ sum(1 for p in positions if p.trip) }}</td>
@@ -91,8 +91,8 @@
                         % else:
                             <td class="lighter-text desktop-only" colspan="4">Unavailable</td>
                         % end
-                        % if system.gtfs_enabled:
-                            % if system.gtfs_enabled:
+                        % if system.config.gtfs_enabled:
+                            % if system.gtfs_loaded:
                                 <td class="desktop-only align-right">{{ len(system.get_routes()) }}</td>
                                 <td class="desktop-only align-right">{{ len(system.get_stops()) }}</td>
                                 <td class="desktop-only align-right">{{ len(system.get_blocks()) }}</td>

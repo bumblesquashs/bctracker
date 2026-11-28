@@ -15,7 +15,7 @@
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>
         <a href="{{ trip.url('map') }}" class="tab-button">Map</a>
-        % if context.realtime_enabled and context.enable_realtime_trips:
+        % if config.realtime_enabled and config.enable_realtime_trips:
             <a href="{{ trip.url('history') }}" class="tab-button">History</a>
         % end
     </div>
@@ -48,7 +48,7 @@
                             <div class="lighter-text">Unknown Route</div>
                         % end
                     </div>
-                    % if context.enable_blocks:
+                    % if config.enable_blocks:
                         % block = trip.block
                         % if block:
                             <div class="section">
@@ -88,7 +88,7 @@
                     </div>
                     % length = trip.length
                     % if length is not None:
-                        % km = length / trip.context.agency.distance_scale
+                        % km = length / config.distance_scale
                         % hours = (float(trip.end_time.get_minutes() - trip.start_time.get_minutes())) / 60
                         <div class="row section">
                             <div class="name">Length</div>
@@ -127,7 +127,7 @@
                         <thead>
                             <tr>
                                 <th>Trip</th>
-                                % if context.enable_blocks:
+                                % if config.enable_blocks:
                                     <th class="non-mobile">Block</th>
                                 % end
                                 <th>Service Days</th>
@@ -140,7 +140,7 @@
                                     <td>
                                         % include('components/trip', trip=related_trip)
                                     </td>
-                                    % if context.enable_blocks:
+                                    % if config.enable_blocks:
                                         <td class="non-mobile">
                                             % if block:
                                                 <a href="{{ block.url() }}">{{ block.id }}</a>
@@ -170,18 +170,14 @@
         % if positions:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    % if len(positions) == 1:
-                        <h2>Active {{ context.vehicle_type }}</h2>
-                    % else:
-                        <h2>Active {{ context.vehicle_type_plural }}</h2>
-                    % end
+                    <h2>Active {{ context.format_model_category(count=len(positions)) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <table>
                         <thead>
                             <tr>
-                                <th>{{ context.vehicle_type }}</th>
+                                <th>{{ context.format_model_category() }}</th>
                                 <th class="non-mobile">Model</th>
                                 <th>Next Stop</th>
                             </tr>
@@ -197,7 +193,7 @@
                                             <div class="row">
                                                 % include('components/vehicle')
                                                 <div class="row gap-5">
-                                                    % if position.context.show_occupancy:
+                                                    % if position.context.config.show_occupancy:
                                                         % include('components/occupancy', occupancy=position.occupancy, show_tooltip=True)
                                                     % end
                                                     % include('components/adherence', adherence=position.adherence)
@@ -225,18 +221,18 @@
             % position = repositories.position.find(vehicle.agency.id, vehicle.id)
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>Scheduled {{ context.vehicle_type }}</h2>
+                    <h2>Scheduled {{ context.format_model_category() }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     % if show_help_text:
-                        <p>This {{ vehicle.type_generic_name.lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
+                        <p>This {{ str(vehicle.model_category).lower() }} is currently assigned to this trip's block but may be swapped off before this trip runs.</p>
                     % end
                     <div class="table-border-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>{{ context.vehicle_type }}</th>
+                                    <th>{{ context.format_model_category() }}</th>
                                     <th class="non-mobile">Model</th>
                                     <th>Current Headsign</th>
                                     <th class="desktop-only">Current Trip</th>

@@ -14,7 +14,6 @@ from models.download import DownloadTrigger
 from models.event import Event
 from models.favourite import Favourite, FavouriteSet
 from models.log import LogLevel
-from models.model import ModelType
 from models.province import Province
 from models.stop import StopType
 
@@ -103,7 +102,6 @@ class Server(Bottle):
         self.add('/api/stops', self.api_stops, validate=False)
         self.add('/api/route-indicators', self.api_route_indicators, validate=False)
         self.add('/api/search', self.api_search, method='POST', validate=False)
-        self.add('/api/admin/reload-decorations', self.api_admin_reload_decorations, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-orders', self.api_admin_reload_orders, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-systems', self.api_admin_reload_systems, method='POST', add_context=False, require_admin=True, validate=False)
         self.add('/api/admin/reload-themes', self.api_admin_reload_themes, method='POST', add_context=False, require_admin=True, validate=False)
@@ -136,7 +134,6 @@ class Server(Bottle):
         if args.updatedb:
             services.log.debug('Forcing database refresh')
         
-        repositories.decoration.load()
         repositories.order.load()
         repositories.system.load()
         repositories.theme.load()
@@ -152,7 +149,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context, DownloadTrigger.LAUNCH_FLAG, args.reload, args.updatedb)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, context.config.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')
@@ -219,6 +216,7 @@ class Server(Bottle):
             path=path or [],
             path_args=path_args or {},
             context=context,
+            config=context.config,
             enable_refresh=enable_refresh,
             include_maps=include_maps or full_map,
             full_map=full_map,
@@ -477,14 +475,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -493,7 +491,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         order = repositories.order.find_order(context, vehicle.order_id)
@@ -504,7 +502,7 @@ class Server(Bottle):
             last_position = None
         records = repositories.record.find_all(context.without_system(), vehicle_id=vehicle_id, limit=20)
         if vehicle.livery:
-            livery = repositories.livery.find(context.agency_id, vehicle.livery)
+            livery = context.agency.get_livery(vehicle.livery)
         else:
             livery = None
         if position and position.trip and position.sequence is not None:
@@ -513,7 +511,7 @@ class Server(Bottle):
             upcoming_departures = []
         model = vehicle.model
         nearest_stop_position = position or last_position
-        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and nearest_stop_position.source == 'ais':
             stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
                 stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
@@ -522,8 +520,8 @@ class Server(Bottle):
                 nearest_stop = None
         else:
             nearest_stop = None
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -555,14 +553,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -571,7 +569,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         position = repositories.position.find(context.agency_id, vehicle_id)
@@ -581,7 +579,7 @@ class Server(Bottle):
             last_position = None
         model = vehicle.model
         nearest_stop_position = position or last_position
-        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and model and model.type == ModelType.ferry:
+        if nearest_stop_position and nearest_stop_position.lat is not None and nearest_stop_position.lon is not None and nearest_stop_position.source == 'ais':
             stops = repositories.stop.find_all(nearest_stop_position.context)
             if stops:
                 stops = sorted(stops, key=lambda s: s.get_distance(nearest_stop_position.lat, nearest_stop_position.lon))
@@ -590,8 +588,8 @@ class Server(Bottle):
                 nearest_stop = None
         else:
             nearest_stop = None
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -618,14 +616,14 @@ class Server(Bottle):
                 return self.page(
                     context=context,
                     file='vehicle/choose',
-                    title=f'Choose a {context.vehicle_type}',
+                    title=f'Choose a {context.format_model_category()}',
                     vehicle_id=vehicle_id,
                     vehicles=sorted(vehicles)
                 )
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         vehicle = context.find_vehicle(vehicle_id)
@@ -634,7 +632,7 @@ class Server(Bottle):
             return self.page(
                 context=context,
                 file='vehicle/invalid',
-                title=f'Unknown {context.vehicle_type}',
+                title=f'Unknown {context.format_model_category()}',
                 vehicle_id=vehicle_id
             )
         allocation = next((a for a in allocations if a.active), None)
@@ -665,8 +663,8 @@ class Server(Bottle):
         for transfer in transfers:
             events.append(Event(transfer.date, 'Transferred',  f'{transfer.old_context} to {transfer.new_context}'))
         model = vehicle.model
-        if model and model.type.title_prefix:
-            title = f'{model.type.title_prefix} {vehicle}'
+        if model and model.type.category.prefix_title:
+            title = f'{model.type.category} {vehicle}'
         else:
             title = str(vehicle)
         return self.page(
@@ -715,7 +713,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             file='history/last_seen',
-            title=f'{context.vehicle_type} History',
+            title=f'{context.format_model_category()} History',
             path=['history'],
             path_args={
                 'days': days
@@ -732,7 +730,7 @@ class Server(Bottle):
         return self.page(
             context=context,
             file='history/first_seen',
-            title=f'{context.vehicle_type} History',
+            title=f'{context.format_model_category()} History',
             path=['history', 'first-seen'],
             allocations=sorted(allocations, key=lambda a: (a.first_date, a.first_time, a.vehicle), reverse=True),
             show_transfers=show_transfers
@@ -839,7 +837,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=[]
             )
-        if context.prefer_route_id:
+        if context.config.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -890,7 +888,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=[]
             )
-        if context.prefer_route_id:
+        if context.config.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -937,7 +935,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=[]
             )
-        if context.prefer_route_id:
+        if context.config.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -982,7 +980,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=[]
             )
-        if context.prefer_route_id:
+        if context.config.prefer_route_id:
             route = context.system.get_route(route_id=route_number)
         else:
             route = context.system.get_route(number=route_number)
@@ -995,7 +993,7 @@ class Server(Bottle):
                 route_number=route_number,
                 alt_routes=sorted(alt_routes)
             )
-        date = Date.parse(date_string, context.timezone)
+        date = Date.parse(date_string, context.config.timezone)
         return self.page(
             context=context,
             file='route/date',
@@ -1008,7 +1006,7 @@ class Server(Bottle):
         )
     
     def blocks_overview(self, context: Context):
-        if context.system and context.realtime_enabled:
+        if context.system and context.config.realtime_enabled:
             recorded_vehicles = repositories.record.find_recorded_today_by_block(context)
         else:
             recorded_vehicles = {}
@@ -1030,7 +1028,7 @@ class Server(Bottle):
         )
     
     def blocks_schedule_date(self, context: Context, date_string: str):
-        date = Date.parse(date_string, context.timezone)
+        date = Date.parse(date_string, context.config.timezone)
         return self.page(
             context=context,
             file='blocks/date',
@@ -1317,7 +1315,7 @@ class Server(Bottle):
         else:
             routes_filter = []
         sort = self.query_options('sort', ['name', 'number'])
-        if sort == 'number' and not context.show_stop_number:
+        if sort == 'number' and not context.config.show_stop_number:
             sort = 'name'
         if sort != 'name':
             path_args['sort'] = sort
@@ -1406,7 +1404,7 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=[]
             )
-        if context.prefer_stop_id:
+        if context.config.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1479,7 +1477,7 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=[]
             )
-        if context.prefer_stop_id:
+        if context.config.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1531,7 +1529,7 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=[]
             )
-        if context.prefer_stop_id:
+        if context.config.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1583,7 +1581,7 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=[]
             )
-        if context.prefer_stop_id:
+        if context.config.prefer_stop_id:
             stop = context.system.get_stop(stop_id=stop_number)
         else:
             stop = context.system.get_stop(number=stop_number)
@@ -1596,7 +1594,7 @@ class Server(Bottle):
                 stop_number=stop_number,
                 alt_stops=sorted(alt_stops)
             )
-        date = Date.parse(date_string, context.timezone)
+        date = Date.parse(date_string, context.config.timezone)
         routes_query = request.query.get('routes')
         if routes_query:
             routes_filter = {r for r in routes_query.split(',') if r}
@@ -1721,9 +1719,9 @@ class Server(Bottle):
         system = random.choice(systems)
         context = system.context
         options = ['route', 'stop', 'trip']
-        if context.enable_blocks:
+        if context.config.enable_blocks:
             options.append('block')
-        if system.realtime_enabled:
+        if context.config.realtime_enabled:
             options.append('vehicle')
         selection = random.choice(options)
         match selection:
@@ -1861,10 +1859,10 @@ class Server(Bottle):
         include_blocks = int(request.forms.get('include_blocks', 1)) == 1
         matches = []
         if query != '':
-            if context.realtime_enabled and include_vehicles:
+            if context.config.realtime_enabled and include_vehicles:
                 vehicle_ids = repositories.allocation.find_vehicle_ids(context)
                 matches += repositories.order.find_matches(context, query, vehicle_ids)
-            if include_blocks and context.enable_blocks and len(query) >= 5:
+            if include_blocks and context.config.enable_blocks and len(query) >= 5:
                 matches += repositories.trip.find_block_matches(context, query)
             if include_routes:
                 matches += repositories.route.find_matches(context, query)
@@ -1877,10 +1875,6 @@ class Server(Bottle):
             'results': [m.get_json() for m in matches[min:max]],
             'total': len(matches)
         }
-    
-    def api_admin_reload_decorations(self):
-        repositories.decoration.load()
-        return 'Success'
     
     def api_admin_reload_orders(self):
         repositories.order.load()
@@ -1896,7 +1890,7 @@ class Server(Bottle):
                 try:
                     services.gtfs.load(context, DownloadTrigger.ADMIN)
                     if not services.gtfs.validate(context):
-                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, system.enable_force_gtfs)
+                        services.gtfs.load(context, DownloadTrigger.NEAR_END_DATE, context.config.enable_force_gtfs)
                     services.realtime.update(context)
                 except Exception as e:
                     services.log.error(f'Error loading data for {context}: {e}')

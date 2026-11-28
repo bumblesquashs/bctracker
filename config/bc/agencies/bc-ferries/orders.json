@@ -2,11 +2,13 @@
     {
         "year": 1976,
         "model": "c-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             {
                 "id": "queen-of-alberni",
@@ -23,11 +25,13 @@
     {
         "year": 1981,
         "model": "c-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "queen-of-oak-bay", "name": "Queen of Oak Bay" },
             { "id": "queen-of-surrey", "name": "Queen of Surrey" }
@@ -43,11 +47,13 @@
     {
         "year": 2007,
         "model": "coastal-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "coastal-celebration", "name": "Coastal Celebration" },
             { "id": "coastal-inspiration", "name": "Coastal Inspiration" },
@@ -57,8 +63,10 @@
     {
         "model": "i-class",
         "length": 96,
-        "dining": true,
-        "pet_area": true,
+        "amenities": {
+            "dining": true,
+            "pet_area": true
+        },
         "vehicles": [
             {
                 "id": "queen-of-capilano",
@@ -77,8 +85,10 @@
                     "Passengers/Crew": 462,
                     "Vehicles": 80
                 },
-                "kids_area": true,
-                "work_area": true
+                "amenities": {
+                    "kids_area": true,
+                    "work_area": true
+                }
             }
         ]
     },
@@ -90,8 +100,10 @@
             "Passengers/Crew": 462,
             "Vehicles": 112
         },
-        "dining": true,
-        "pet_area": true,
+        "amenities": {
+            "dining": true,
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "malaspina-sky", "name": "Malaspina Sky" }
         ]
@@ -99,7 +111,9 @@
     {
         "year": 2019,
         "model": "island-class",
-        "pet_area": true,
+        "amenities": {
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "island-aurora", "name": "Island Aurora" },
             { "id": "island-discovery", "name": "Island Discovery" }
@@ -107,7 +121,9 @@
     },
     {
         "model": "island-class",
-        "pet_area": true,
+        "amenities": {
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "island-kuluta", "name": "Island K'ulut'a", "year": 2020 },
             { "id": "island-nagalis", "name": "Island Nagalis", "year": 2020 },
@@ -118,7 +134,9 @@
     {
         "year": 2026,
         "model": "island-class",
-        "pet_area": true,
+        "amenities": {
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "island-xwsaluxul", "name": "Island xwsaĺux̌ul" },
             { "id": "island-sarlequun", "name": "Island sarlequun" },
@@ -207,11 +225,13 @@
     {
         "year": 2016,
         "model": "salish-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "salish-eagle", "name": "Salish Eagle" },
             { "id": "salish-raven", "name": "Salish Raven" },
@@ -221,22 +241,26 @@
     {
         "year": 2020,
         "model": "salish-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "salish-heron", "name": "Salish Heron" }
         ]
     },
     {
         "model": "spirit-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "spirit-of-british-columbia", "name": "Spirit of British Columbia", "year": 1993 },
             { "id": "spirit-of-vancouver-island", "name": "Spirit of Vancouver Island", "year": 1994 }
@@ -244,11 +268,13 @@
     },
     {
         "model": "summit-class",
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "summit-arbutus", "name": "Summit Arbutus" },
             { "id": "summit-cedar", "name": "Summit Cedar" },
@@ -280,11 +306,13 @@
             "Passengers/Crew": 1332,
             "Vehicles": 254
         },
-        "dining": true,
-        "gift_shop": true,
-        "kids_area": true,
-        "pet_area": true,
-        "work_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "kids_area": true,
+            "pet_area": true,
+            "work_area": true
+        },
         "vehicles": [
             { "id": "queen-of-new-west", "name": "Queen of New Westminster" }
         ]
@@ -299,7 +327,9 @@
             "Passengers/Crew": 150,
             "Vehicles": 45
         },
-        "pet_area": true,
+        "amenities": {
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "baynes-sound-connector", "name": "Baynes Sound Connector" }
         ]
@@ -314,11 +344,13 @@
             "Passengers/Crew": 638,
             "Vehicles": 115
         },
-        "dining": true,
-        "gift_shop": true,
-        "cabins": true,
-        "kids_area": true,
-        "pet_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "cabins": true,
+            "kids_area": true,
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "northern-expedition", "name": "Northern Expedition" }
         ]
@@ -333,11 +365,13 @@
             "Passengers/Crew": 500,
             "Vehicles": 87
         },
-        "dining": true,
-        "gift_shop": true,
-        "cabins": true,
-        "kids_area": true,
-        "pet_area": true,
+        "amenities": {
+            "dining": true,
+            "gift_shop": true,
+            "cabins": true,
+            "kids_area": true,
+            "pet_area": true
+        },
         "vehicles": [
             { "id": "northern-adventure", "name": "Northern Adventure" }
         ]
@@ -352,7 +386,9 @@
             "Passengers/Crew": 150,
             "Vehicles": 35
         },
-        "dining": true,
+        "amenities": {
+            "dining": true
+        },
         "vehicles": [
             { "id": "northern-sea-wolf", "name": "Northern Sea Wolf" }
         ]

@@ -1,10 +1,10 @@
 
 from dataclasses import dataclass, field
-from zoneinfo import ZoneInfo
 
 from models.agency import Agency
 from models.backoff import Backoff
 from models.block import Block
+from models.config import Config
 from models.context import Context
 from models.date import Date
 from models.region import Region
@@ -19,8 +19,6 @@ import repositories
 
 from constants import *
 
-import settings
-
 @dataclass(slots=True)
 class System:
     '''A city or region with a defined set of routes, stops, trips, and other relevant data'''
@@ -30,15 +28,7 @@ class System:
     region: Region
     name: str
     
-    remote_id: int | None = None
-    enabled: bool = True
-    timezone: ZoneInfo = field(default_factory=lambda: settings.current.province.default_timezone)
-    ignore_route_colour: str | None = DEFAULT_IGNORE_ROUTE_COLOUR
-    enable_force_gtfs: bool = DEFAULT_ENABLE_FORCE_GTFS
-    gtfs_cutoff: str | None = DEFAULT_GTFS_CUTOFF
-    max_invalid_positions: int = DEFAULT_MAX_INVALID_POSITIONS
-    custom_route_colours: dict[str, str] = field(default_factory=dict)
-    custom_route_numbers: dict[str, str] = field(default_factory=dict)
+    config: Config = field(default_factory=lambda: Config())
     
     gtfs_downloaded: bool | None = field(default=None, init=False)
     gtfs_loaded: bool = field(default=False, init=False)
@@ -66,36 +56,6 @@ class System:
     def realtime_loaded(self):
         '''Checks if realtime data has been loaded'''
         return self.last_updated is not None
-    
-    @property
-    def gtfs_enabled(self):
-        '''Checks if GTFS data is enabled for this system'''
-        return self.enabled and self.agency.gtfs_enabled
-    
-    @property
-    def gtfs_url(self):
-        '''Returns the URL to load GTFS for this system'''
-        if self.gtfs_enabled:
-            url = self.agency.gtfs_url
-            if self.remote_id:
-                url = url.replace('$REMOTE_ID', str(self.remote_id))
-            return url
-        return None
-    
-    @property
-    def realtime_enabled(self):
-        '''Checks if realtime data is enabled for this system'''
-        return self.enabled and self.agency.realtime_enabled
-    
-    @property
-    def realtime_url(self):
-        '''Returns the URL to load realtime for this system'''
-        if self.realtime_enabled:
-            url = self.agency.realtime_url
-            if self.remote_id:
-                url = url.replace('$REMOTE_ID', str(self.remote_id))
-            return url
-        return None
     
     @property
     def schedule(self):

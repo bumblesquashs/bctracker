@@ -3,9 +3,9 @@
 
 <div id="page-header">
     <h1>Realtime</h1>
-    <h2>Currently active {{ context.vehicle_type_plural.lower() }}</h2>
+    <h2>Currently active {{ context.format_model_category(2).lower() }}</h2>
     <div class="tab-button-bar">
-        <span class="tab-button current">All {{ context.vehicle_type_plural }}</span>
+        <span class="tab-button current">All {{ context.format_model_category(2) }}</span>
         <a href="{{ context.url('realtime', 'routes') }}" class="tab-button">By Route</a>
         <a href="{{ context.url('realtime', 'models') }}" class="tab-button">By Model</a>
         % if show_speed:
@@ -16,13 +16,13 @@
     </div>
 </div>
 
-% if context.enable_realtime_trips:
+% if config.enable_realtime_trips:
     <div class="options-container">
         <div class="option" onclick="toggleNISVehicles()">
             <div id="show-nis-checkbox" class="checkbox {{ 'selected' if show_nis else '' }}">
                 % include('components/svg', name='status/check')
             </div>
-            <div>Show NIS {{ context.vehicle_type_plural }}</div>
+            <div>Show NIS {{ context.format_model_category(2) }}</div>
         </div>
     </div>
 % end
@@ -42,7 +42,7 @@
                             <thead>
                                 <tr>
                                     <th>Agency</th>
-                                    % if context.enable_realtime_trips and show_nis:
+                                    % if config.enable_realtime_trips and show_nis:
                                         <th class="no-wrap align-right">In Service</th>
                                     % end
                                     <th class="align-right">Total</th>
@@ -58,9 +58,9 @@
                                                 <a href="#{{ agency.id }}">{{ agency }}</a>
                                             </div>
                                         </td>
-                                        % if context.enable_realtime_trips and show_nis:
+                                        % if config.enable_realtime_trips and show_nis:
                                             <td class="align-right">
-                                                % if agency.enable_realtime_trips:
+                                                % if agency.config.enable_realtime_trips:
                                                     {{ sum(1 for p in agency_positions if p.trip) }}
                                                 % else:
                                                     N/A
@@ -104,13 +104,13 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>{{ agency.vehicle_type }}</th>
+                                        <th>{{ agency.context.format_model_category() }}</th>
                                         % if not context.system:
                                             <th class="desktop-only">System</th>
                                         % end
-                                        % if agency.enable_realtime_trips:
+                                        % if agency.config.enable_realtime_trips:
                                             <th>Headsign</th>
-                                            % if agency.enable_blocks:
+                                            % if agency.config.enable_blocks:
                                                 <th class="non-mobile">Block</th>
                                             % end
                                             <th class="non-mobile">Trip</th>
@@ -130,7 +130,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in unknown_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
+                                            % include('components/realtime_row', enable_blocks=agency.config.enable_blocks, enable_realtime_trips=agency.config.enable_realtime_trips)
                                         % end
                                     % end
                                     % for order in agency_orders:
@@ -148,7 +148,7 @@
                                         </tr>
                                         <tr class="display-none"></tr>
                                         % for position in order_positions:
-                                            % include('components/realtime_row', enable_blocks=agency.enable_blocks, enable_realtime_trips=agency.enable_realtime_trips)
+                                            % include('components/realtime_row', enable_blocks=agency.config.enable_blocks, enable_realtime_trips=agency.config.enable_realtime_trips)
                                         % end
                                     % end
                                 </tbody>
@@ -165,17 +165,17 @@
     <div class="placeholder">
         % if not context.system:
             % if show_nis:
-                <h3>There are no {{ context.vehicle_type_plural.lower() }} out right now</h3>
+                <h3>There are no {{ context.format_model_category(0).lower() }} out right now</h3>
                 <p>
                     None of our current agencies operate late night service, so this should be the case overnight.
                     If you look out your window and the sun is shining, there may be an issue getting up-to-date info.
                 </p>
                 <p>Please check again later!</p>
             % else:
-                <h3>There are no {{ context.vehicle_type_plural.lower() }} in service right now</h3>
-                <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
+                <h3>There are no {{ context.format_model_category(0).lower() }} in service right now</h3>
+                <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
             % end
-        % elif not context.realtime_enabled:
+        % elif not config.realtime_enabled:
             <h3>{{ context }} realtime information is not supported</h3>
             <p>You can browse schedule data using the links above, or choose a different system.</p>
             <div class="non-desktop">
@@ -185,10 +185,10 @@
             <h3>{{ context }} realtime information is unavailable</h3>
             <p>System data is currently loading and will be available soon.</p>
         % elif not show_nis:
-            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} in service right now</h3>
-            <p>You can see all active {{ context.vehicle_type_plural.lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.vehicle_type_plural }}</b> checkbox.</p>
+            <h3>There are no {{ context }} {{ context.format_model_category(0).lower() }} in service right now</h3>
+            <p>You can see all active {{ context.format_model_category(2).lower() }}, including ones not in service, by selecting the <b>Show NIS {{ context.format_model_category(2) }}</b> checkbox.</p>
         % else:
-            <h3>There are no {{ context }} {{ context.vehicle_type_plural.lower() }} out right now</h3>
+            <h3>There are no {{ context }} {{ context.format_model_category(0).lower() }} out right now</h3>
             <p>Please check again later!</p>
         % end
     </div>

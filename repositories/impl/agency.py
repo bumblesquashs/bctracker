@@ -2,8 +2,13 @@
 from dataclasses import dataclass, field
 from glob import glob
 import json
+from zoneinfo import ZoneInfo
 
 from models.agency import Agency
+from models.config import Config
+from models.decoration import Decoration
+from models.livery import Livery
+from models.model import ModelCategory
 
 import settings
 
@@ -22,6 +27,19 @@ class AgencyRepository:
             with open(path, 'r') as file:
                 values = json.load(file)
             agency_id = path[len(root_path):-len(file_name)].strip('/')
+            if 'decorations' in values:
+                decoration_values = values['decorations']
+                values['decorations'] = {k: Decoration(agency_id, k, **v) for k, v in decoration_values.items()}
+            if 'liveries' in values:
+                livery_values = values['liveries']
+                values['liveries'] = {k: Livery(agency_id, k, **v) for k, v in livery_values.items()}
+            if 'config' in values:
+                config_values = values['config']
+                if 'default_model_category' in config_values:
+                    config_values['default_model_category'] = ModelCategory[config_values['default_model_category'].upper()]
+                if 'timezone' in config_values:
+                    config_values['timezone'] = ZoneInfo(config_values['timezone'])
+                values['config'] = Config(**config_values)
             self.agencies[agency_id] = Agency(agency_id, **values)
     
     def find(self, agency_id: str) -> Agency | None:
@@ -31,5 +49,5 @@ class AgencyRepository:
     def find_all(self, enabled_only: bool = True) -> list[Agency]:
         '''Returns all agencies'''
         if enabled_only:
-            return sorted([a for a in self.agencies.values() if a.enabled])
+            return sorted([a for a in self.agencies.values() if a.config.enabled])
         return sorted(self.agencies.values())

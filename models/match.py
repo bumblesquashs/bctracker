@@ -48,8 +48,9 @@ class Match:
                     'id': self.entity.id,
                     'name': self.entity.name,
                     'year_model': self.entity.year_model,
-                    'title_prefix': self.entity.model.type.title_prefix if self.entity.model else None,
-                    'icon': f'model/type/{self.entity.model.type.image_name}' if self.entity.model else 'ghost',
+                    'model_category': str(self.entity.model_category),
+                    'prefix_title': self.entity.model_category.prefix_title,
+                    'icon': self.entity.icon,
                     'decoration': decoration.text if decoration and decoration.enabled else None,
                 }
         return {

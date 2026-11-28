@@ -30,7 +30,7 @@
             % if context.system:
                 <p>
                     Please note that this list includes vehicles from every system.
-                    To see only {{ context }} {{ context.vehicle_type_plural.lower() }}, visit the <a href="{{ context.url('history') }}">history</a> page.
+                    To see only {{ context }} {{ context.format_model_category(2).lower() }}, visit the <a href="{{ context.url('history') }}">history</a> page.
                 </p>
             % end
         </div>

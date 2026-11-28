@@ -25,7 +25,7 @@ class RealtimeService:
     
     def update(self, context: Context):
         '''Downloads realtime data for the given context and stores it in the database'''
-        if not context.realtime_enabled:
+        if not context.config.realtime_enabled:
             return
         data_path = f'data/realtime/{context.system_id}.bin'
         
@@ -38,7 +38,7 @@ class RealtimeService:
                 remove(data_path)
         repositories.position.delete_all(context)
         
-        if context.agency.realtime_ais and settings.current.ais_path:
+        if context.config.realtime_ais and settings.current.ais_path:
             with open(f'{settings.current.ais_path}/{context.agency_id}.json', 'r') as file:
                 ais_data = json.load(file)
             for (vehicle_id, data) in ais_data.items():
@@ -47,9 +47,9 @@ class RealtimeService:
                 except Exception as e:
                     services.log.error(f'Failed to save vehicle position for {vehicle_id} in {context}: {e}')
         
-        if context.system.realtime_url:
+        if context.config.realtime_url:
             data = protobuf.FeedMessage()
-            with requests.get(context.system.realtime_url, timeout=10) as r:
+            with requests.get(context.config.format_realtime_url(), timeout=10) as r:
                 if settings.current.enable_realtime_backups:
                     with open(data_path, 'wb') as f:
                         f.write(r.content)
@@ -61,7 +61,7 @@ class RealtimeService:
                         vehicle_id = vehicle.vehicle.label.lstrip('0')
                     else:
                         vehicle_id = vehicle.vehicle.id.lstrip('0')
-                    vehicle_name_length = context.vehicle_name_length
+                    vehicle_name_length = context.config.vehicle_name_length
                     if vehicle_name_length and len(vehicle_id) > vehicle_name_length:
                         vehicle_id = vehicle_id[-vehicle_name_length:].lstrip('0')
                     if vehicle_id == '':
@@ -122,7 +122,7 @@ class RealtimeService:
                     first_record = None
                     last_record = None
                 
-                if context.enable_blocks:
+                if context.config.enable_blocks:
                     if position.trip and position.block_id and position.block:
                         assignment = repositories.assignment.find(position.block_id, allocation_id, date)
                         if not assignment or assignment.allocation_id != allocation_id:
@@ -170,7 +170,7 @@ class RealtimeService:
     
     def validate(self, context: Context):
         '''Checks that the realtime data for the given context aligns with the current GTFS for that system'''
-        if not context.realtime_enabled:
+        if not context.config.realtime_enabled:
             return True
         positions = repositories.position.find_all(context)
         if not positions:
@@ -188,8 +188,8 @@ class RealtimeService:
                         invalid_count += 1
                 else:
                     invalid_count += 1
-        if context.invalid_realtime_percentage:
-            if len(positions) >= context.max_invalid_positions:
-                return (invalid_count / len(positions)) < context.invalid_realtime_percentage
+        if context.config.invalid_realtime_percentage:
+            if len(positions) >= context.config.max_invalid_positions:
+                return (invalid_count / len(positions)) < context.config.invalid_realtime_percentage
             return True
-        return invalid_count <= context.max_invalid_positions
+        return invalid_count <= context.config.max_invalid_positions

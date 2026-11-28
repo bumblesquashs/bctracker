@@ -2,7 +2,7 @@
 % rebase('base')
 
 <div id="page-header">
-    <h1>{{ context.vehicle_type }} History</h1>
+    <h1>{{ context.format_model_category() }} History</h1>
     <div class="tab-button-bar">
         <span class="tab-button current">Last Seen</span>
         <a href="{{ context.url('history', 'first-seen') }}" class="tab-button">First Seen</a>
@@ -90,7 +90,7 @@
                             <div class="column section gap-5">
                                 <div class="row gap-10">
                                     % include('components/status', icon='transfer', status_class='transferred')
-                                    <div class="description">{{ context.vehicle_type }} has been transferred elsewhere</div>
+                                    <div class="description">{{ context.format_model_category() }} has been transferred elsewhere</div>
                                 </div>
                             </div>
                         % end
@@ -98,15 +98,15 @@
                         <div class="column section gap-5">
                             <div class="row gap-10">
                                 % include('components/status', icon='calendar', status_class='short-term-inactive')
-                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 1 month</div>
+                                <div class="description">{{ context.format_model_category() }} has not been tracked in over 1 month</div>
                             </div>
                             <div class="row gap-10">
                                 % include('components/status', icon='calendar', status_class='medium-term-inactive')
-                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 3 months</div>
+                                <div class="description">{{ context.format_model_category() }} has not been tracked in over 3 months</div>
                             </div>
                             <div class="row gap-10">
                                 % include('components/status', icon='calendar', status_class='long-term-inactive')
-                                <div class="description">{{ context.vehicle_type }} has not been tracked in over 12 months</div>
+                                <div class="description">{{ context.format_model_category() }} has not been tracked in over 12 months</div>
                             </div>
                         </div>
                         % end
@@ -183,7 +183,7 @@
                                 {{ agency }}
                             </h2>
                         % else:
-                            <h2>{{ context.vehicle_type_plural }}</h2>
+                            <h2>{{ context.format_model_category(2) }}</h2>
                         % end
                         % include('components/toggle')
                     </div>
@@ -194,13 +194,13 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>{{ agency.vehicle_type }}</th>
+                                        <th>{{ agency.context.format_model_category() }}</th>
                                         <th>Last Seen</th>
                                         % if not context.system:
                                             <th class="non-mobile">System</th>
                                         % end
-                                        % if agency.enable_realtime_trips:
-                                            % if agency.enable_blocks:
+                                        % if agency.config.enable_realtime_trips:
+                                            % if agency.config.enable_blocks:
                                                 <th>Block</th>
                                                 <th class="desktop-only">Routes</th>
                                             % else:
@@ -246,8 +246,8 @@
                                                 % if not context.system:
                                                     <td class="non-mobile">{{ allocation.context }}</td>
                                                 % end
-                                                % if agency.enable_realtime_trips:
-                                                    % if agency.enable_blocks:
+                                                % if agency.config.enable_realtime_trips:
+                                                    % if agency.config.enable_blocks:
                                                         % if record:
                                                             <td>
                                                                 <div class="column stretch">
@@ -293,7 +293,7 @@
                                                         % include('components/livery_row', liveries=order.liveries)
                                                         {{! order }}
                                                         % if all(a.last_date.days_since > 365 for a in order_allocations):
-                                                            % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip=f'No {agency.vehicle_type_plural.lower()} have been tracked in the last 12 months')
+                                                            % include('components/status', icon='calendar', status_class='long-term-inactive', tooltip=f'No {agency.context.format_model_category(0).lower()} have been tracked in the last 12 months')
                                                         % end
                                                     </div>
                                                     <div>{{ len(order_allocations) }} / {{ len(order.vehicles) }}</div>
@@ -327,8 +327,8 @@
                                                 % if not context.system:
                                                     <td class="non-mobile">{{ allocation.context }}</td>
                                                 % end
-                                                % if agency.enable_realtime_trips:
-                                                    % if agency.enable_blocks:
+                                                % if agency.config.enable_realtime_trips:
+                                                    % if agency.config.enable_blocks:
                                                         % if record:
                                                             <td>
                                                                 <div class="column stretch">
@@ -378,30 +378,30 @@
         % else:
             <div class="section">
                 <div class="header" onclick="toggleSection(this)">
-                    <h2>{{ context.vehicle_type_plural }}</h2>
+                    <h2>{{ context.format_model_category(2) }}</h2>
                     % include('components/toggle')
                 </div>
                 <div class="content">
                     <div class="placeholder">
                         % if not context.system:
                             % if days:
-                                <h3>No vehicle history found for selected date range</h3>
+                                <h3>No {{ context.format_model_category(0).lower() }} history found for selected date range</h3>
                                 <p>Please choose a different date range or check again later!</p>
                             % else:
-                                <h3>No vehicle history found</h3>
+                                <h3>No {{ context.format_model_category(0).lower()  }} history found</h3>
                                 <p>Something has probably gone terribly wrong if you're seeing this.</p>
                             % end
-                        % elif not context.realtime_enabled:
+                        % elif not config.realtime_enabled:
                             <h3>{{ context }} realtime information is not supported</h3>
                             <p>You can browse schedule data using the links above, or choose a different system.</p>
                             <div class="non-desktop">
                                 % include('components/systems')
                             </div>
                         % elif days:
-                            <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded for the selected date range</h3>
+                            <h3>No {{ context }} {{ context.format_model_category(0).lower() }} have been recorded for the selected date range</h3>
                             <p>Please choose a different date range or check again later!</p>
                         % else:
-                            <h3>No {{ context }} {{ context.vehicle_type_plural.lower() }} have been recorded</h3>
+                            <h3>No {{ context }} {{ context.format_model_category(0).lower() }} have been recorded</h3>
                             <p>Please check again later!</p>
                         % end
                     </div>

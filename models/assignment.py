@@ -22,7 +22,7 @@ class Assignment:
         block_id = row['block_id']
         allocation_id = row['allocation_id']
         vehicle_id = row['vehicle_id']
-        date = Date.parse(row['date'], context.timezone)
+        date = Date.parse(row['date'], context.config.timezone)
         return cls(block_id, allocation_id, context, vehicle_id, date)
     
     @property

@@ -5,11 +5,8 @@
 
 <div id="page-header">
     <h1 class="row">
-        % if model:
-            % title_prefix = model.type.title_prefix
-            % if title_prefix:
-                <span>{{ title_prefix }}</span>
-            % end
+        % if model and model.type.category.prefix_title:
+            <span>{{ model.type.category }}</span>
         % end
         % include('components/vehicle', enable_link=False)
         % if allocation and allocation.inactive_status_class:
