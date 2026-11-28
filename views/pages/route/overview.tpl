@@ -33,10 +33,21 @@
                             <div class="name">Type</div>
                             <div class="value">{{ route.type }} Service</div>
                         </div>
-                        <div class="column section">
+                        <div class="column section gap-5">
                             % headsigns = route.headsigns
                             % for headsign in headsigns:
-                                <div>{{ headsign }}</div>
+                                <div class="headsign">
+                                    <div class="route-line" style="background-color: #{{ route.colour }}"></div>
+                                    % if config.enable_stacked_headsigns and '/' in headsign:
+                                        % parts = headsign.split('/', 1)
+                                        <div class="column">
+                                            <div>{{ parts[0].strip() }}</div>
+                                            <div class="smaller-font lighter-text">{{ parts[1].strip() }}</div>
+                                        </div>
+                                    % else:
+                                        <div>{{ headsign }}</div>
+                                    % end
+                                </div>
                             % end
                         </div>
                         % if config.enable_route_variants:

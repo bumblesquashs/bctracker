@@ -81,6 +81,14 @@ h2 .custom-headsigns {
     --image-size: 24px;
 }
 
+h2 .headsign {
+    gap: 10px;
+}
+
+h2 .headsign .smaller-font {
+    font-size: 16pt;
+}
+
 h2 .route {
     font-size: 16pt;
     min-width: 16px;

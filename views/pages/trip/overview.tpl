@@ -6,11 +6,7 @@
 <div id="page-header">
     <h1>Trip {{! trip.display_id }}</h1>
     <h2>
-        % if trip.custom_headsigns:
-            % include('components/custom_headsigns', custom_headsigns=trip.custom_headsigns)
-        % else:
-            {{ trip }}
-        % end
+        % include('components/headsign')
     </h2>
     <div class="tab-button-bar">
         <span class="tab-button current">Overview</span>

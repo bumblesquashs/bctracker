@@ -217,6 +217,7 @@ class Route:
     
     def get_indicator_json(self):
         '''Returns a representation of the map indicator for this route in JSON-compatible format'''
+        enable_stacked_headsigns = self.context.config.enable_stacked_headsigns
         headsigns = self.headsigns
         json = []
         for point in self.indicator_points:
@@ -232,6 +233,7 @@ class Route:
                 'lat': point.lat,
                 'lon': point.lon,
                 'url_id': self.url_id,
+                'enable_stacked_headsigns': enable_stacked_headsigns,
                 'headsigns': headsigns,
             })
         return json

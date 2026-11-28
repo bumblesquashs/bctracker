@@ -114,6 +114,11 @@
                     routeLine.className = "route-line";
                     routeLine.style.backgroundColor = "#" + route.colour;
                     
+                    if (route.enable_stacked_headsigns && headsign.includes("/")) {
+                        const headsignParts = headsign.split("/", 2);
+                        headsign = "<div class='column'>" + headsignParts[0].trim() + "<div class='lighter-text'>" + headsignParts[1].trim() + "</div></div>";
+                    }
+                    
                     headsignRow.innerHTML = routeLine.outerHTML + headsign;
                     
                     headsignSection.appendChild(headsignRow);
